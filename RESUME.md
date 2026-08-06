@@ -61,3 +61,22 @@ GW1 your picks are not public, so edit `v2/my_squad.txt` instead.
 - FPL's fixture difficulty correlates only −0.60 with real clean-sheet
   probability. Do not trust it.
 - Realistic ceiling for predicting player points/90 is Spearman ~0.46.
+
+---
+
+## Deployed
+
+**https://fpl-2026.vercel.app** — public, works on a phone.
+
+- **This week** tab: captain, XI, transfers, injury flags, price pressure.
+  Enter your FPL team id once (stored in the browser) and it reads your real
+  squad. Before Gameweek 1 your picks are not public, so it uses whatever you
+  built in the Build tab.
+- Prices, injuries and your squad are read **live** on every visit through
+  `app/api/fpl.ts`, a proxy that exists because the FPL API sends no CORS header
+  and browsers cannot call it directly.
+- Projections are rebuilt every **Thursday 07:00 UTC** by
+  `.github/workflows/weekly.yml`, which commits the new data and triggers a
+  Vercel deploy. Repo: github.com/teatimedev/fpl-2026 (private).
+- Vercel root directory is `app`. That is dashboard state, not in git — if the
+  project is ever recreated it must be set again or GitHub builds fail.
