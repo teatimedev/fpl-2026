@@ -253,6 +253,28 @@ def poisson_at_least(mean, k):
     return max(0.0, min(1.0, 1.0 - cum))
 
 
+def expected_floor_div(mean, n, cap=20):
+    """E[floor(X / n)] for X ~ Poisson(mean).
+
+    FPL's scoring uses floors, not rates: a defender loses 1 point per TWO goals
+    conceded, a keeper gains 1 per THREE saves. Charging `mean / n` instead is
+    wrong in a way that does not average out — the floor discards the remainder
+    every match, so `mean / n` always overstates the count. At a typical 1.4
+    expected goals conceded the true penalty is 0.47 a match, not 0.70, so every
+    defender and goalkeeper was being over-charged by about a quarter of a point
+    a game, which is most of a defender's margin.
+    """
+    if mean <= 0:
+        return 0.0
+    term = math.exp(-mean)
+    total = 0.0
+    for k in range(cap + 1):
+        if k:
+            term *= mean / k
+        total += (k // n) * term
+    return total
+
+
 def defcon_hit_prob(mean, k, evidence):
     """P(a player clears his DefCon threshold in a match).
 
@@ -344,10 +366,9 @@ def project(players, view, priors):
                 if CS_PTS[pos]:
                     pts += CS_PTS[pos] * f['cs'] * start_rate
                 if pos in ('GKP', 'DEF'):
-                    pts -= (f['xgc'] / 2.0) * start_rate
+                    pts -= expected_floor_div(f['xgc'], 2) * start_rate
                 if pos == 'GKP':
-                    pts += (saves90 * frac / 3.0) * start_rate
-                    pts += 0.15 * f['cs'] * start_rate      # save-point bonus
+                    pts += expected_floor_div(saves90 * frac, 3) * start_rate
                 thr = DC_THRESHOLD[pos]
                 if thr and dc90 > 0:
                     pts += 2.0 * defcon_hit_prob(dc90 * frac, thr, w_dc) * p_play

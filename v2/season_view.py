@@ -37,13 +37,26 @@ PROMOTED_BLEND = {'COV': 1.0, 'HUL': 1.0, 'IPS': 0.6}   # weight on the prior
 
 
 def build_ratings(model):
-    """2026/27 attack and defence for all 20 clubs, after both adjustments."""
+    """2026/27 attack and defence for all 20 clubs, after both adjustments.
+
+    Both adjustments must be expressed RELATIVE TO THE LEAGUE MEAN. Defence
+    ratings are deliberately not centred on zero — their level carries the
+    overall goal rate of the league (see teams_model.fit) — so multiplying a
+    defence rating by 0.8 would shrink it towards zero rather than towards
+    average, which is a different and wrong operation. The promoted-club prior
+    is likewise stored as an offset from the mean, not as an absolute rating.
+    """
     cx = sqlite3.connect(DB)
     shorts = [r[0] for r in cx.execute('SELECT short FROM team').fetchall()]
     cx.close()
 
-    pa = model['promoted_prior']['atk']
-    pdf = model['promoted_prior']['dfn']
+    # league means of the clubs that actually have a record
+    known = [t for t in shorts if t in model['atk']]
+    mean_a = sum(model['atk'][t] for t in known) / len(known)
+    mean_d = sum(model['dfn'][t] for t in known) / len(known)
+
+    pa = mean_a + model['promoted_prior']['atk']      # prior is an offset
+    pdf = mean_d + model['promoted_prior']['dfn']
 
     atk, dfn, notes = {}, {}, {}
     for t in shorts:
@@ -59,8 +72,8 @@ def build_ratings(model):
             d = w * pdf + (1 - w) * d
             why.append(f'promoted — blended {w:.0%} towards the promoted prior')
         if t in NEW_MANAGER:
-            a *= MANAGER_SHRINK
-            d *= MANAGER_SHRINK
+            a = mean_a + (a - mean_a) * MANAGER_SHRINK
+            d = mean_d + (d - mean_d) * MANAGER_SHRINK
             why.append(f'new manager — shrunk {1 - MANAGER_SHRINK:.0%} to the mean')
         atk[t], dfn[t], notes[t] = a, d, '; '.join(why)
     return atk, dfn, notes

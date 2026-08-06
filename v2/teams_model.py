@@ -113,9 +113,21 @@ def fit(matches, half_life_days=340.0, ref_date=None):
     res = minimize(negloglik, x0, args=(hi, ai, hg, ag, w, n),
                    method='L-BFGS-B', bounds=bounds,
                    options={'maxiter': 3000, 'ftol': 1e-10})
+    # Only ONE direction is unidentifiable: adding a constant to every attack
+    # rating and the same constant to every defence rating leaves every lambda
+    # unchanged. Pinning the attack mean to zero (the penalty above) fixes it.
+    #
+    # The defence mean must then be left alone. It is not a free parameter — it
+    # carries the overall goal level of the league, jointly with home advantage.
+    # Re-centring it post-fit multiplies EVERY expected-goal value by
+    # exp(mean(dfn)): with a fitted mean of -0.238 that scaled all goals by 0.79,
+    # dropping the model from 2.91 goals a match (actual: 2.95) to 2.29, and
+    # inflating clean-sheet probability by 32-38%. The 1X2 validation did not
+    # catch it because scaling both sides' goals together barely moves
+    # win/draw/loss, while it wrecks clean sheets — which is most of what a
+    # defender is worth in FPL.
     atk = res.x[:n] - res.x[:n].mean()
     dfn = res.x[n:2 * n]
-    dfn = dfn - dfn.mean()
     return dict(teams=teams, atk=dict(zip(teams, atk)), dfn=dict(zip(teams, dfn)),
                 home_adv=float(res.x[-2]), rho=float(res.x[-1]),
                 nll=float(res.fun), half_life=half_life_days)
@@ -213,6 +225,10 @@ def promoted_prior(matches):
 
     Estimated from history: find clubs that appear in a season having not played
     the previous one, and average their first-season attack and defence.
+
+    Returned as OFFSETS FROM THAT SEASON'S LEAGUE MEAN, not as absolute ratings.
+    Defence ratings are no longer centred on zero (see fit()), so their level
+    differs between fits; only the offset transfers.
     """
     by_season = {}
     for m in matches:
@@ -225,9 +241,12 @@ def promoted_prior(matches):
             continue
         sub = [m for m in matches if m['season'] == seasons[k]]
         mdl = fit(sub, half_life_days=10_000)
+        mean_a = np.mean(list(mdl['atk'].values()))
+        mean_d = np.mean(list(mdl['dfn'].values()))
         for t in newcomers:
             if t in mdl['atk']:
-                atks.append(mdl['atk'][t]); dfns.append(mdl['dfn'][t])
+                atks.append(mdl['atk'][t] - mean_a)
+                dfns.append(mdl['dfn'][t] - mean_d)
     if not atks:
         return -0.25, -0.25
     return float(np.mean(atks)), float(np.mean(dfns))
@@ -257,6 +276,32 @@ if __name__ == '__main__':
           f'({"model is behind the market, as expected" if gap > 0 else "model beats the closing line"})')
 
     model = fit(matches, half_life_days=hl)
+
+    # Level check. A model can score well on 1X2 while being badly wrong about
+    # how many goals are scored, because scaling both sides together barely
+    # moves win/draw/loss. Clean sheets are exactly what that breaks, and clean
+    # sheets are most of a defender's FPL value — so check the level explicitly.
+    recent = [m for m in matches if m['season'] == matches[-1]['season']]
+    act_g = np.mean([m['hg'] + m['ag'] for m in recent])
+    act_csh = np.mean([m['ag'] == 0 for m in recent])
+    act_csa = np.mean([m['hg'] == 0 for m in recent])
+    pg, pcsh, pcsa = [], [], []
+    for m in recent:
+        if m['home'] not in model['atk'] or m['away'] not in model['atk']:
+            continue
+        M, lam, mu = score_matrix(model, m['home'], m['away'])
+        pg.append(lam + mu)
+        pcsh.append(M[:, 0].sum())
+        pcsa.append(M[0, :].sum())
+    print(f'\nLevel check on {matches[-1]["season"]}:')
+    print(f'{"":22}{"actual":>9}{"model":>9}{"ratio":>8}')
+    for lbl, a, p in (('goals per match', act_g, np.mean(pg)),
+                      ('home clean sheets', act_csh, np.mean(pcsh)),
+                      ('away clean sheets', act_csa, np.mean(pcsa))):
+        r = p / a if a else float('nan')
+        warn = '   <-- OFF' if abs(r - 1) > 0.10 else ''
+        print(f'{lbl:<22}{a:>9.3f}{p:>9.3f}{r:>8.2f}{warn}')
+
     pa, pdf = promoted_prior(matches)
     model['promoted_prior'] = {'atk': pa, 'dfn': pdf}
     model['validation'] = v
