@@ -99,7 +99,22 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 /* minmax(0, …) on every track: grid items default to min-width:auto, which would
    let the table's min-width push the whole page into a horizontal scroll. */
 .main > * { min-width: 0; }
-@media (max-width: 1080px) { .main { grid-template-columns: minmax(0, 1fr); } }
+
+/* Explicit placement so the three children can be reordered on a phone.
+   Desktop: squad top-left, market below it, sidebar spanning both on the right. */
+.squad-panel { grid-column: 1; grid-row: 1; }
+.main > aside { grid-column: 2; grid-row: 1 / span 2; }
+.main > .market { grid-column: 1; grid-row: 2; margin-top: 0; }
+
+@media (max-width: 1080px) {
+  .main { grid-template-columns: minmax(0, 1fr); }
+  /* Single column: pitch, then budget and the suggested squads, THEN the
+     market table. The table is 120 rows tall, so anything placed after it on a
+     phone may as well not exist. */
+  .squad-panel { grid-row: auto; }
+  .main > aside { grid-column: 1; grid-row: auto; }
+  .main > .market { grid-column: 1; grid-row: auto; }
+}
 
 .panel {
   background: var(--turf-1);

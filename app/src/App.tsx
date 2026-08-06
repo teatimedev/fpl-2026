@@ -19,9 +19,15 @@ const PRESET_BLURB = [
 ]
 
 export default function App() {
-  // Default to the weekly view: once the season is running that is the reason
-  // to open this on a phone. The builder is for the pre-season decision.
-  const [tab, setTab] = useState<'week' | 'build'>('week')
+  // Open on whichever tab is actually useful. With no squad saved and no FPL
+  // team linked there is nothing for the weekly view to talk about, so start in
+  // the builder; once either exists, the weekly decision is the reason to open
+  // this on a phone.
+  const [tab, setTab] = useState<'week' | 'build'>(() => {
+    const hasSquad = (localStorage.getItem('fplSquad') ?? '[]') !== '[]'
+    const hasTeam = !!localStorage.getItem('fplEntryId')
+    return hasSquad || hasTeam ? 'week' : 'build'
+  })
   const [picks, setPicks] = useState<Player[]>(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('fplSquad') ?? '[]') as number[]
@@ -138,9 +144,11 @@ export default function App() {
       {tab === 'build' && (
 
       <div className="main">
-        {/* ------------------------------------------------------- pitch */}
-        <div>
-          <section className="panel">
+        {/* Three direct grid children, so the phone can reorder them: on a
+            narrow screen the sidebar (budget, suggested squads) has to come
+            before the 120-row market table, or the suggested squads are buried
+            below it and effectively invisible. */}
+        <section className="panel squad-panel">
             <div className="panel-hd">
               <h2>Your squad</h2>
               <span className="sub">
@@ -196,10 +204,10 @@ export default function App() {
                 </div>
               </div>
             </div>
-          </section>
+        </section>
 
-          {/* ----------------------------------------------------- market */}
-          <section className="panel market">
+        {/* ----------------------------------------------------- market */}
+        <section className="panel market">
             <div className="panel-hd">
               <h2>Player market</h2>
               <span className="sub">showing {rows.length} of {D.players.length}</span>
@@ -309,8 +317,7 @@ export default function App() {
                 </div>
               )}
             </div>
-          </section>
-        </div>
+        </section>
 
         {/* ------------------------------------------------------- sidebar */}
         <aside>
