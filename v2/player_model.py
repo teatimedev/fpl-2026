@@ -54,6 +54,11 @@ STABILITY_DEF_BONUS = 0.14      # defender bonus specifically is near-noise
 
 FULL_SEASON_MINS = 2200.0       # what counts as "one full season of evidence"
 
+# Metrics the API only started recording partway through the panel. Seasons
+# before these dates hold a zero that means "not measured", not "measured zero",
+# and must be excluded from both the shrinkage and the prior it shrinks towards.
+METRIC_FIRST_SEASON = {'dc90': '2024/25'}
+
 GOAL_PTS = {'GKP': 6, 'DEF': 6, 'MID': 5, 'FWD': 4}
 CS_PTS = {'GKP': 4, 'DEF': 4, 'MID': 1, 'FWD': 0}
 DC_THRESHOLD = {'GKP': None, 'DEF': 10, 'MID': 12, 'FWD': 12}
@@ -109,13 +114,24 @@ def load():
 
 
 def positional_priors(players):
-    """Minutes-weighted positional means -- the target of the shrinkage."""
+    """Minutes-weighted positional means -- the target of the shrinkage.
+
+    Metrics that did not exist for the whole panel must only average the seasons
+    where they were actually recorded. Defensive contributions arrived in
+    2024/25, so the two earlier seasons carry a literal zero for every player.
+    Averaging those in halved the prior — 4.55 against a true 7.55 for defenders
+    and 5.01 against 8.50 for midfielders — and every player's DefCon estimate
+    was then shrunk towards that phantom value. shrink() already excluded those
+    rows; this did not, and the two have to agree.
+    """
     acc = defaultdict(lambda: defaultdict(lambda: [0.0, 0.0]))
     for p in players.values():
         for h in p['hist']:
             if h['mins'] < 450:
                 continue
             for m in ('xg90', 'xa90', 'dc90', 'bonus90', 'saves90', 'yellow90'):
+                if h['season'] < METRIC_FIRST_SEASON.get(m, '0000/00'):
+                    continue
                 acc[p['pos']][m][0] += h[m] * h['mins']
                 acc[p['pos']][m][1] += h['mins']
     return {pos: {m: (v[0] / v[1] if v[1] else 0.0) for m, v in d.items()}
@@ -153,8 +169,8 @@ def shrink(p, metric, priors):
     if metric == 'bonus90' and p['pos'] == 'DEF':
         stab = STABILITY_DEF_BONUS
     # DefCon only exists from 2024/25, so older seasons carry no information
-    seasons = [h for h in p['hist']
-               if h['mins'] >= 200 and not (metric == 'dc90' and h['season'] < '2024/25')]
+    first = METRIC_FIRST_SEASON.get(metric, '0000/00')
+    seasons = [h for h in p['hist'] if h['mins'] >= 200 and h['season'] >= first]
     if not seasons:
         # The prior is the average of ESTABLISHED players at this position, so
         # handing it whole to someone with no Premier League record over-rates

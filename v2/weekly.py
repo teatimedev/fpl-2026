@@ -71,12 +71,17 @@ def refresh(full=False):
         if 'forward market odds' in r.stdout else 0
     print(f'  prices and fixtures updated; {market} fixtures have bookmaker odds')
 
-    for step in (['teams_model.py'], ['season_view.py'], ['player_model.py']):
+    # to_csv.py is part of the chain, not an afterthought: the optimiser, the
+    # simulator, the transfer planner and the web app all read
+    # data/projections.csv. Refreshing only projections_v2.json leaves every one
+    # of them running on last week's numbers.
+    for step in (['teams_model.py'], ['season_view.py'], ['player_model.py'],
+                 ['to_csv.py']):
         s = run(step)
         if s.returncode:
             print(s.stdout[-1200:], s.stderr[-1200:])
             raise SystemExit(f'{step[0]} failed')
-    print('  team ratings refitted, projections rebuilt')
+    print('  team ratings refitted, projections rebuilt, shared data updated')
     return market
 
 
