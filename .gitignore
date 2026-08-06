@@ -1,0 +1,6 @@
+.venv/
+node_modules/
+dist/
+__pycache__/
+v2/cache/
+v2/fpl.db

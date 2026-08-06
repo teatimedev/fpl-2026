@@ -1,0 +1,48 @@
+"""Bundle everything the web app needs into one JSON file."""
+import json, csv
+
+CLUB_COLOURS = {
+    'ARS': ('#EF0107', '#FFFFFF'), 'AVL': ('#95BFE5', '#670E36'),
+    'BOU': ('#DA291C', '#000000'), 'BRE': ('#E30613', '#FBB800'),
+    'BHA': ('#0057B8', '#FFCD00'), 'CHE': ('#034694', '#FFFFFF'),
+    'COV': ('#78D0F3', '#000000'), 'CRY': ('#1B458F', '#C4122E'),
+    'EVE': ('#003399', '#FFFFFF'), 'FUL': ('#FFFFFF', '#000000'),
+    'HUL': ('#F5A12D', '#000000'), 'IPS': ('#3A64A3', '#DE2429'),
+    'LEE': ('#FFCD00', '#1D428A'), 'LIV': ('#C8102E', '#00B2A9'),
+    'MCI': ('#6CABDD', '#1C2C5B'), 'MUN': ('#DA291C', '#FBE122'),
+    'NEW': ('#241F20', '#FFFFFF'), 'NFO': ('#DD0000', '#FFFFFF'),
+    'SUN': ('#EB172B', '#211E1F'), 'TOT': ('#132257', '#FFFFFF'),
+}
+
+proj = json.load(open('data/projections.json'))
+squads = json.load(open('data/squads.json'))
+boot = json.load(open('data/bootstrap.json'))
+
+teams = {}
+for t in boot['teams']:
+    s = t['short_name']
+    teams[s] = {'name': t['name'], 'short': s,
+                'primary': CLUB_COLOURS[s][0], 'secondary': CLUB_COLOURS[s][1]}
+
+# trim the player payload to what the UI actually renders
+KEEP = ('id', 'name', 'full_name', 'team', 'pos', 'price', 'proj_gw', 'proj_6gw',
+        'mins_proj', 'sel_pct', 'pts_last', 'mins_last', 'ppg_last', 'goals_last',
+        'assists_last', 'xgi90_last', 'defcon_last', 'cs_last', 'bonus_last',
+        'status', 'news', 'is_new', 'joined', 'pens', 'corners', 'fk', 'note',
+        'fdr6', 'value')
+players = [{k: p[k] for k in KEEP} for p in proj['players']]
+
+out = {
+    'meta': {**proj['meta'], 'generated': '2026-08-06'},
+    'teams': teams,
+    'schedule': proj['schedule'],
+    'players': players,
+    # optimise.py reads its pool from CSV, so ids arrive as strings -- coerce them
+    # back to int so they match the player ids the app indexes on.
+    'squads': [{'label': s['label'], 'cost': s['cost'], 'xi_proj': s['xi_proj'],
+                'picks': [{'id': int(p['id']), 'starting': p['starting']}
+                          for p in s['squad']]} for s in squads],
+}
+json.dump(out, open('app/src/data/fpl.json', 'w'), separators=(',', ':'))
+print('players:', len(players), '| squads:', len(out['squads']),
+      '| teams:', len(teams))
