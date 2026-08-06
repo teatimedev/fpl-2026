@@ -4,6 +4,7 @@ import type { Data, Player, Pos } from './types'
 import { POS_ORDER, SQUAD_SHAPE, BUDGET, MAX_PER_CLUB } from './types'
 import { analyse, blockReason, bestXI, formationOf, squadOutlook, round1 } from './squad'
 import { Pips, Shirt, EmptyShirt, Outlook } from './components'
+import ThisWeek from './ThisWeek'
 
 const D = raw as unknown as Data
 const byId = new Map(D.players.map(p => [p.id, p]))
@@ -18,7 +19,21 @@ const PRESET_BLURB = [
 ]
 
 export default function App() {
-  const [picks, setPicks] = useState<Player[]>([])
+  // Default to the weekly view: once the season is running that is the reason
+  // to open this on a phone. The builder is for the pre-season decision.
+  const [tab, setTab] = useState<'week' | 'build'>('week')
+  const [picks, setPicks] = useState<Player[]>(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('fplSquad') ?? '[]') as number[]
+      return saved.map(id => byId.get(id)).filter((p): p is Player => !!p)
+    } catch { return [] }
+  })
+
+  // Persist the built squad so the weekly view can fall back to it, and so a
+  // phone does not lose the squad between visits.
+  useEffect(() => {
+    localStorage.setItem('fplSquad', JSON.stringify(picks.map(p => p.id)))
+  }, [picks])
   const [pos, setPos] = useState<Pos | 'ALL'>('ALL')
   const [club, setClub] = useState('ALL')
   const [q, setQ] = useState('')
@@ -107,6 +122,10 @@ export default function App() {
         <span className="tag">
           {D.players.length} players · live prices · locked until deadline
         </span>
+        <div className="seg tabs">
+          <button aria-pressed={tab === 'week'} onClick={() => setTab('week')}>This week</button>
+          <button aria-pressed={tab === 'build'} onClick={() => setTab('build')}>Build</button>
+        </div>
         <div className="countdown">
           <span className="k">Gameweek 1 deadline</span>
           <span className="v mono">
@@ -114,6 +133,9 @@ export default function App() {
           </span>
         </div>
       </header>
+
+      {tab === 'week' && <ThisWeek D={D} builtSquad={picks} />}
+      {tab === 'build' && (
 
       <div className="main">
         {/* ------------------------------------------------------- pitch */}
@@ -405,15 +427,17 @@ export default function App() {
           </section>
         </aside>
       </div>
+      )}
 
       <footer className="foot">
-        Prices and availability pulled live from the official Fantasy Premier League
-        API on {D.meta.generated}. FPL locks all prices until the Gameweek 1 deadline,
-        so these are final for team selection.<br />
-        Projections are this project's own model over GW1–{D.meta.horizon}: last
-        season's per-90 scoring split into clean-sheet, defensive-contribution and
-        attacking components, each re-projected against new clubs, new managers and
-        the opening fixtures. They are an estimate, not a forecast.
+        Prices, injuries and your squad are read live from the official Fantasy
+        Premier League API each time you open this. Projections are rebuilt by a
+        scheduled job every Thursday — model last built {D.meta.generated}.<br />
+        Attack and defence ratings are fitted by maximum likelihood on four
+        seasons of real results and validated against bookmaker closing odds;
+        player rates are shrunk by measured year-over-year stability. Hold-out
+        rank correlation is about 0.46, so treat the ordering as a strong hint
+        and the totals as rough.
       </footer>
     </div>
   )

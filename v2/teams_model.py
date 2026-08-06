@@ -252,28 +252,47 @@ def promoted_prior(matches):
     return float(np.mean(atks)), float(np.mean(dfns))
 
 
+DEFAULT_HALF_LIFE = 280.0
+
+
 if __name__ == '__main__':
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--tune', action='store_true',
+                    help='re-run the half-life sweep (slow: many walk-forward '
+                         'refits, several minutes). Only worth doing when a lot '
+                         'of new results have accumulated.')
+    args = ap.parse_args()
+
     matches = load_matches()
     print(f'{len(matches)} matches, {matches[0]["date"].date()} to '
           f'{matches[-1]["date"].date()}')
 
-    print('\nTuning the time-decay half-life by out-of-sample log-loss')
-    best = None
-    for hl in (120, 200, 280, 365, 500, 700, 1200):
-        v = walk_forward(matches, hl)
-        flag = ''
-        if best is None or v['model_ll'] < best[1]['model_ll']:
-            best = (hl, v); flag = '  <-- best'
-        print(f'  half-life {hl:>5}d   model log-loss {v["model_ll"]:.4f}   '
-              f'bookmaker {v["book_ll"]:.4f}   n={v["n"]}{flag}')
-
-    hl, v = best
-    print(f'\nChosen half-life: {hl} days')
-    print(f'  model      log-loss {v["model_ll"]:.4f}   Brier {v["model_brier"]:.4f}')
-    print(f'  bookmaker  log-loss {v["book_ll"]:.4f}   Brier {v["book_brier"]:.4f}')
-    gap = v['model_ll'] - v['book_ll']
-    print(f'  gap to market: {gap:+.4f} log-loss '
-          f'({"model is behind the market, as expected" if gap > 0 else "model beats the closing line"})')
+    if args.tune:
+        print('\nTuning the time-decay half-life by out-of-sample log-loss')
+        best = None
+        for hl in (120, 200, 280, 365, 500, 700, 1200):
+            v = walk_forward(matches, hl)
+            flag = ''
+            if best is None or v['model_ll'] < best[1]['model_ll']:
+                best = (hl, v); flag = '  <-- best'
+            print(f'  half-life {hl:>5}d   model log-loss {v["model_ll"]:.4f}   '
+                  f'bookmaker {v["book_ll"]:.4f}   n={v["n"]}{flag}')
+        hl, v = best
+        print(f'\nChosen half-life: {hl} days')
+        print(f'  model      log-loss {v["model_ll"]:.4f}   Brier {v["model_brier"]:.4f}')
+        print(f'  bookmaker  log-loss {v["book_ll"]:.4f}   Brier {v["book_brier"]:.4f}')
+        gap = v['model_ll'] - v['book_ll']
+        print(f'  gap to market: {gap:+.4f} log-loss '
+              f'({"model is behind the market, as expected" if gap > 0 else "model beats the closing line"})')
+    else:
+        # Reuse the previously tuned value. The sweep costs minutes and the
+        # answer barely moves week to week, so a scheduled refresh should not
+        # pay for it every time.
+        prev = json.loads(OUT.read_text()) if OUT.exists() else {}
+        hl = prev.get('half_life', DEFAULT_HALF_LIFE)
+        v = prev.get('validation', {})
+        print(f'\nUsing stored half-life: {hl:.0f} days  (pass --tune to re-tune)')
 
     model = fit(matches, half_life_days=hl)
 

@@ -1,0 +1,70 @@
+name: Weekly refresh
+
+# Thursday 07:00 UTC — after midweek fixtures have settled and well before any
+# Friday deadline, so the deployed app is current when the gameweek opens.
+# Also runnable by hand from the Actions tab.
+on:
+  schedule:
+    - cron: '0 7 * * 4'
+  workflow_dispatch:
+    inputs:
+      tune:
+        description: 'Also re-tune the team-model half-life (slow, ~10 min)'
+        type: boolean
+        default: false
+
+concurrency:
+  group: weekly-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install --quiet numpy scipy pulp highspy
+
+      - name: Pull fresh data
+        # Full fetch, including the four-season player histories. The database is
+        # not committed, so every CI run starts empty — skipping histories here
+        # would leave season_stat blank and silently drop every player back to
+        # the price prior. It is ~572 requests and about 90 seconds, weekly.
+        run: python v2/fetch.py
+
+      - name: Rebuild the model
+        run: |
+          if [ "${{ inputs.tune }}" = "true" ]; then
+            python v2/teams_model.py --tune
+          else
+            python v2/teams_model.py
+          fi
+          python v2/season_view.py
+          python v2/player_model.py
+          python v2/to_csv.py
+
+      - name: Re-optimise squads and export for the app
+        run: |
+          python optimise.py --json
+          python validate.py
+          python export_app_data.py
+
+      - name: Commit if anything changed
+        run: |
+          git config user.name  "fpl-bot"
+          git config user.email "actions@github.com"
+          git add data/ app/src/data/ v2/team_ratings.json v2/season_view.json \
+                  v2/projections_v2.json
+          if git diff --cached --quiet; then
+            echo "No change this week."
+          else
+            git commit -m "Weekly refresh: $(date -u +%Y-%m-%d)"
+            git push
+          fi

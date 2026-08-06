@@ -26,6 +26,7 @@ for t in boot['teams']:
 
 # trim the player payload to what the UI actually renders
 KEEP = ('id', 'name', 'full_name', 'team', 'pos', 'price', 'proj_gw', 'proj_6gw',
+        'proj_by_gw',
         'mins_proj', 'sel_pct', 'pts_last', 'mins_last', 'ppg_last', 'goals_last',
         'assists_last', 'xgi90_last', 'defcon_last', 'cs_last', 'bonus_last',
         'status', 'news', 'is_new', 'joined', 'pens', 'corners', 'fk', 'note',

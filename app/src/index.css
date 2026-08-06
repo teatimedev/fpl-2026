@@ -444,3 +444,54 @@ tbody tr.picked:hover { background: rgba(74, 222, 128, 0.11); }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* ------------------------------------------------------------- tabs + week */
+.seg.tabs { margin-left: 6px; }
+.seg.tabs button { padding: 7px 16px; font-size: 12px; }
+
+.week { max-width: 860px; }
+.week-hd { padding: 14px; }
+.lede { margin: 0 0 12px; font-size: 14px; color: var(--chalk-dim); line-height: 1.55; }
+.lede strong { color: var(--flood); font-size: 17px; }
+
+.linkrow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.linkrow label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--chalk-faint);
+}
+.linkrow input {
+  background: var(--turf-2); border: var(--line); border-radius: var(--r);
+  color: var(--chalk); padding: 7px 10px; font-family: var(--mono); font-size: 13px;
+  width: 140px;
+}
+.hint {
+  margin: 10px 0 0; font-size: 12.5px; color: var(--chalk-dim); line-height: 1.55;
+}
+
+.panel.accent { border-color: rgba(255, 158, 27, 0.4); }
+.captain { padding: 16px 14px; display: flex; gap: 22px; flex-wrap: wrap; align-items: flex-start; }
+.captain .pick .big {
+  display: block; font-family: var(--display); font-size: 40px; line-height: 1;
+  letter-spacing: 0.02em; color: var(--flood);
+}
+.captain .pick .meta {
+  display: block; margin-top: 7px; font-size: 13px; color: var(--chalk-dim);
+}
+.captain .pick .meta strong { color: var(--chalk); font-family: var(--mono); }
+.captain .alts { list-style: none; margin: 0; padding: 0; margin-left: auto; }
+.captain .alts li {
+  font-size: 12.5px; color: var(--chalk-dim); padding: 3px 0;
+  display: flex; gap: 8px; align-items: baseline;
+}
+.captain .alts .n {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--chalk-faint); min-width: 30px;
+}
+.captain .alts .mono { color: var(--chalk); }
+
+@media (max-width: 700px) {
+  .captain { gap: 14px; }
+  .captain .pick .big { font-size: 30px; }
+  .captain .alts { margin-left: 0; }
+  .seg.tabs button { padding: 6px 12px; }
+}

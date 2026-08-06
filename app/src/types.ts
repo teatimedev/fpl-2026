@@ -9,6 +9,8 @@ export interface Player {
   price: number
   proj_gw: number
   proj_6gw: number
+  /** per-gameweek projection over GW1..horizon — what weekly decisions use */
+  proj_by_gw: number[]
   mins_proj: number
   sel_pct: number
   pts_last: number
