@@ -68,3 +68,5 @@ jobs:
             git commit -m "Weekly refresh: $(date -u +%Y-%m-%d)"
             git push
           fi
+
+# (touched to force GitHub to index this workflow)
