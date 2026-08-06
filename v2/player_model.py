@@ -253,6 +253,42 @@ def poisson_at_least(mean, k):
     return max(0.0, min(1.0, 1.0 - cum))
 
 
+def defcon_hit_prob(mean, k, evidence):
+    """P(a player clears his DefCon threshold in a match).
+
+    NOT `poisson_at_least(shrunk_mean, k)`. That substitutes a point estimate
+    into a sharply convex function and badly understates the answer — Jensen's
+    inequality. Shrinking Gabriel's rate from 9.07 to 6.96 (a 23% cut) collapsed
+    his hit probability from 0.41 to 0.16, a 61% cut, purely as an artefact.
+
+    Two things genuinely spread the count around its mean, and both fatten the
+    upper tail:
+
+      * match-to-match variation — defensive actions depend on game state,
+        opponent and how much of the ball the side has, so counts are
+        over-dispersed relative to Poisson;
+      * uncertainty in the player's own true rate, which is exactly what the
+        shrinkage is expressing.
+
+    Both are handled by a gamma-Poisson mixture: the true per-match rate is
+    Gamma-distributed about the shrunk mean, so the count is negative binomial.
+    `evidence` (0-1, the empirical-Bayes weight on the player's own record) sets
+    the dispersion — a well-evidenced player gets a tight distribution, a
+    thinly-evidenced one a wide one.
+    """
+    if mean <= 0:
+        return 0.0
+    r = 4.0 + 11.0 * max(0.0, min(1.0, evidence))   # 4 (uncertain) .. 15 (solid)
+    p = r / (r + mean)
+    # P(X = 0) = p^r, then the standard negative-binomial recurrence
+    term = p ** r
+    cum = term
+    for i in range(1, k):
+        term *= (r + i - 1) / i * (1 - p)
+        cum += term
+    return max(0.0, min(1.0, 1.0 - cum))
+
+
 # ------------------------------------------------------------ projection
 def project(players, view, priors):
     # median price per position, used to temper the prior for unknown players
@@ -306,7 +342,7 @@ def project(players, view, priors):
                     pts += 0.15 * f['cs'] * start_rate      # save-point bonus
                 thr = DC_THRESHOLD[pos]
                 if thr and dc90 > 0:
-                    pts += 2.0 * poisson_at_least(dc90 * frac, thr) * p_play
+                    pts += 2.0 * defcon_hit_prob(dc90 * frac, thr, w_dc) * p_play
                 pts += start_rate * 2.0 + (1 - start_rate) * 0.20
                 pts += bonus90 * frac * p_play * 0.85
                 pts -= yellow90 * frac * p_play
