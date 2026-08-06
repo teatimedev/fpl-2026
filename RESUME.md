@@ -80,3 +80,21 @@ GW1 your picks are not public, so edit `v2/my_squad.txt` instead.
   Vercel deploy. Repo: github.com/teatimedev/fpl-2026 (private).
 - Vercel root directory is `app`. That is dashboard state, not in git — if the
   project is ever recreated it must be set again or GitHub builds fail.
+
+### The weekly job has not run yet
+
+GitHub Actions was in a **major outage** on 6 Aug 2026 (from 15:22 UTC: "jobs may
+remain queued for an extended period"), so the workflow has never completed a
+run. Nothing is wrong with it — the identical commands were verified to run
+clean from a fresh checkout and reproduce the local build exactly, 0 of 572
+players differing. **First thing next session: check it ran.**
+
+```bash
+gh run list --workflow=weekly.yml --limit 3
+gh workflow run weekly.yml     # to force one
+```
+
+The repo is public. It went public on a wrong diagnosis (I assumed private-repo
+Actions minutes were exhausted; the account has in fact run Actions 14,773 times
+on designarena-hunter). Left public deliberately — no secrets are tracked, and
+unlimited Actions minutes is a real if incidental benefit.
