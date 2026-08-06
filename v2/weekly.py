@@ -163,7 +163,6 @@ def transfer_options(squad, players, bank, gw, horizon, top=8):
     club = {}
     for p in squad:
         club[p['team']] = club.get(p['team'], 0) + 1
-    budget_by_pos = {}
     out = []
     pool = [p for p in players.values()
             if p['id'] not in owned and p['status'] != 'u'

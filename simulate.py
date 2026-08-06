@@ -139,7 +139,7 @@ def player_params(pid):
                yellow90=yellow90,
                dc90=p['defensive_contribution_per_90'],
                price=p['now_cost'] / 10, name=p['web_name'])
-    par['k_att'] = _attacking_calibration(par)
+    par['k_att'], par['add'] = _attacking_calibration(par)
     return par
 
 
@@ -183,9 +183,21 @@ def _attacking_calibration(par):
     attacking = (par['xg90'] * frac * GOAL_PTS[et]
                  + par['xa90'] * frac * 3.0) * p_played
     attacking += min(0.9, par['bonus90'] * frac * 0.55) * 2.0 * p_played * 0.5
-    if attacking <= 1e-6:
-        return 1.0
-    return float(np.clip((target - steady) / attacking, 0.25, 4.0))
+
+    # Scale the attacking component as far as is sensible...
+    k = 1.0 if attacking <= 1e-6 else float(
+        np.clip((target - steady) / attacking, 0.25, 4.0))
+
+    # ...then close whatever gap is left with a flat per-match term.
+    #
+    # k alone cannot do the job. It only multiplies goals, assists and bonus, so
+    # a player with almost no attacking component has almost nothing to scale:
+    # 16 of 28 goalkeepers pinned k at the 4.0 ceiling and the simulator still
+    # came out 0.32 points a gameweek light on them, against 0.20 for midfielders
+    # and forwards and 0.00 for defenders. A bias that size and that uneven across
+    # positions is enough to reorder squads on its own.
+    add = float(target - (steady + attacking * k))
+    return k, add
 
 
 def simulate_player(par, gf, ga, sims):
@@ -216,8 +228,8 @@ def simulate_player(par, gf, ga, sims):
         pts[:, gw] += g * GOAL_PTS[et] + a * 3.0
 
         # clean sheets: a TEAM event, so every defender and the keeper share it
+        cs = (ga[t][:, gw] == 0) & started
         if et in (1, 2, 3):
-            cs = (ga[t][:, gw] == 0) & started
             pts[:, gw] += cs * CS_PTS[et]
         # goals-conceded penalty for keepers and defenders: -1 per 2 conceded
         if et in (1, 2):
@@ -226,19 +238,37 @@ def simulate_player(par, gf, ga, sims):
             saves = rng.poisson(np.clip(par['saves90'] * frac, 0, 12) * started)
             pts[:, gw] += np.floor(saves / 3.0)
 
-        # defensive contribution
+        # Defensive contribution. Drawn from a negative binomial rather than a
+        # Poisson: defensive action counts are over-dispersed, because how much
+        # defending a player does depends on game state, opponent and how much
+        # of the ball his side has. Poisson understates the upper tail, which is
+        # what decides whether a player below the threshold ever clears it.
         if et in (2, 3, 4) and par['dc90'] > 0:
             thr = 10 if et == 2 else 12
-            draws = rng.poisson(np.clip(par['dc90'] * frac, 0, 30) * played)
-            pts[:, gw] += (draws >= thr) * 2.0
+            # `frac` varies per simulation (starters play longer than cameos),
+            # so the mean is a vector and the NB parameters broadcast with it.
+            m = np.clip(par['dc90'] * frac, 0.01, 30)
+            r = 12.0
+            draws = rng.negative_binomial(r, r / (r + m))
+            pts[:, gw] += (draws >= thr) * played * 2.0
 
-        # bonus, approximated as arriving alongside returns
-        got_return = (g + a) > 0
+        # Bonus. Triggered by having a good game, which is position-specific:
+        # attackers earn it from goals and assists, keepers and defenders from
+        # clean sheets and saves. Gating it on (goals + assists) alone -- as this
+        # did originally -- awarded goalkeepers no bonus at all, since they
+        # essentially never score, which is a large slice of a keeper's real
+        # scoring quietly deleted.
+        good = (g + a) > 0
+        if et in (1, 2):
+            good = good | cs
         bp = rng.random(sims) < np.clip(par['bonus90'] * k * frac * 0.55, 0, 0.9)
-        pts[:, gw] += (got_return & bp) * rng.integers(1, 4, sims)
+        pts[:, gw] += (good & bp) * rng.integers(1, 4, sims)
 
         # cards
         pts[:, gw] -= (rng.random(sims) < np.clip(par['yellow90'] * frac, 0, 0.6)) * played
+
+        # residual calibration, applied only when he actually plays
+        pts[:, gw] += par.get('add', 0.0) * played
 
         # remember whether he played, for auto-subs
         par.setdefault('_played', []).append(played)
@@ -246,8 +276,50 @@ def simulate_player(par, gf, ga, sims):
 
 
 # ------------------------------------------------------------------ squads
+_ADD_CACHE = {}
+PILOT_SIMS = 1500
+
+
+def calibrated_params(pid, gf, ga):
+    """Player parameters with the residual term fitted by simulation, not algebra.
+
+    The analytic estimate of the "steady" component never quite matches what the
+    simulation produces — floor() on saves and goals conceded, Jensen gaps on the
+    clean-sheet term, position-specific bonus rules. Rather than chase each of
+    those, run a short pilot, measure the shortfall directly, and set the
+    residual from that. It is slower but it cannot be quietly wrong.
+    """
+    if pid in _ADD_CACHE:
+        par = player_params(pid)
+        par['add'] = _ADD_CACHE[pid]
+        par['_played'] = []
+        return par
+    par = player_params(pid)
+    target = PROJ_GW.get(pid)
+    if target:
+        # The pilot runs at fewer simulations than the main pass, so the team
+        # goal arrays have to be sliced to match or the shapes will not broadcast.
+        n = min(PILOT_SIMS, next(iter(gf.values())).shape[0])
+        key = ('_slice', n)
+        if key not in _ADD_CACHE:
+            _ADD_CACHE[key] = ({t: v[:n] for t, v in gf.items()},
+                               {t: v[:n] for t, v in ga.items()})
+        gf_p, ga_p = _ADD_CACHE[key]
+        probe = dict(par, add=0.0, _played=[])
+        pts = simulate_player(probe, gf_p, ga_p, n)
+        got = pts.mean(axis=0).sum() / HORIZON
+        # spread the per-gameweek shortfall over the matches he actually plays
+        p_play = par['p_start'] + (1 - par['p_start']) * 0.22
+        par['add'] = float((target - got) / max(p_play, 0.15))
+    else:
+        par['add'] = 0.0
+    _ADD_CACHE[pid] = par['add']
+    par['_played'] = []
+    return par
+
+
 def simulate_squad(pids, gf, ga, sims, label):
-    pars = [player_params(i) for i in pids]
+    pars = [calibrated_params(i, gf, ga) for i in pids]
     for p in pars:
         p['_played'] = []
     pts = np.stack([simulate_player(p, gf, ga, sims) for p in pars])   # (15, sims, GW)

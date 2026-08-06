@@ -301,7 +301,15 @@ def project(players, view, priors):
         pos = p['pos']
         start_rate, mps = minutes_model(p, players)
         frac = mps / 90.0
-        p_play = start_rate + (1 - start_rate) * 0.20
+        # The cameo term must be conditional on the player being available at
+        # all. Applied unconditionally it gave players who have LEFT THE CLUB a
+        # 20% chance of appearing, so Harrison (New England Revolution), Uche
+        # (returned to Getafe) and Henderson (departed as a free agent) all
+        # projected around 2.5 points over the horizon instead of zero.
+        available = p['status'] != 'u'
+        p_play = (start_rate + (1 - start_rate) * 0.20) if available else 0.0
+        if not available:
+            start_rate = 0.0
 
         xg90, w_xg = shrink(p, 'xg90', priors)
         xa90, _ = shrink(p, 'xa90', priors)
@@ -343,7 +351,7 @@ def project(players, view, priors):
                 thr = DC_THRESHOLD[pos]
                 if thr and dc90 > 0:
                     pts += 2.0 * defcon_hit_prob(dc90 * frac, thr, w_dc) * p_play
-                pts += start_rate * 2.0 + (1 - start_rate) * 0.20
+                pts += start_rate * 2.0 + (p_play - start_rate) * 1.0
                 pts += bonus90 * frac * p_play * 0.85
                 pts -= yellow90 * frac * p_play
             by_gw.append(round(max(0.0, pts), 3))
