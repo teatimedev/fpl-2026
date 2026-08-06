@@ -1,5 +1,16 @@
-"""Write v2 projections in the v1 CSV schema so the existing optimiser,
-validator and web-app exporter run against them unchanged."""
+"""Write v2 projections in the v1 schema so the existing optimiser, validator
+and web-app exporter run against them unchanged.
+
+Writes BOTH data/projections.csv and data/projections.json, because they had
+different consumers and only one of them was being kept current:
+
+    projections.csv   -> optimise.py, simulate.py, plan.py
+    projections.json  -> export_app_data.py, and therefore the web app
+
+Only v1's project.py ever wrote the .json, and that is now guarded off, so the
+app was quietly serving v1 numbers for every player while its suggested squads
+came from v2. One writer for both files is the fix.
+"""
 import csv
 import json
 import sqlite3
@@ -10,6 +21,7 @@ ROOT = HERE.parent
 SRC = HERE / 'projections_v2.json'
 VIEW = HERE / 'season_view.json'
 DST = ROOT / 'data' / 'projections.csv'
+DST_JSON = ROOT / 'data' / 'projections.json'
 
 FIELDS = ['id', 'name', 'full_name', 'team', 'team_id', 'pos', 'pos_id', 'price',
           'proj_gw', 'proj_6gw', 'proj_by_gw', 'mins_proj', 'value', 'sel_pct',
@@ -65,7 +77,22 @@ def main():
         w = csv.DictWriter(f, fieldnames=FIELDS)
         w.writeheader()
         w.writerows(rows)
-    print(f'wrote {len(rows)} rows -> {DST} (v2 projections in v1 schema)')
+
+    # the JSON twin, which is what the web-app exporter reads
+    horizon = len(data['players'][0]['proj_by_gw']) if data['players'] else 6
+    schedule = {}
+    for team, byweek in view['view'].items():
+        schedule[team] = [
+            ({'opp': byweek[str(g)][0]['opp'], 'home': byweek[str(g)][0]['home'],
+              'fdr': byweek[str(g)][0]['fdr']} if byweek.get(str(g)) else None)
+            for g in range(1, horizon + 1)]
+    json.dump({'players': rows, 'schedule': schedule,
+               'meta': {'horizon': horizon, 'budget': 100.0,
+                        'deadline': '2026-08-21T17:30:00Z'}},
+              open(DST_JSON, 'w'))
+
+    print(f'wrote {len(rows)} rows -> {DST.name} and {DST_JSON.name} '
+          f'(v2 projections in v1 schema)')
 
 
 if __name__ == '__main__':

@@ -33,8 +33,14 @@ export default function App() {
     return () => clearInterval(t)
   }, [])
 
+  // When a suggested squad is loaded, honour the XI the optimiser actually
+  // chose. Recomputing it here can disagree — the solver picks the XI jointly
+  // with the squad, and ties break differently — which showed a different
+  // eleven on the pitch to the one the projection total was quoted for.
+  const [presetXI, setPresetXI] = useState<Set<number> | null>(null)
   const state = useMemo(() => analyse(picks), [picks])
-  const xi = useMemo(() => bestXI(picks), [picks])
+  const computedXI = useMemo(() => bestXI(picks), [picks])
+  const xi = presetXI ?? computedXI
   const starters = picks.filter(p => xi.has(p.id))
   const bench = picks.filter(p => !xi.has(p.id))
   const captain = starters.length
@@ -45,10 +51,19 @@ export default function App() {
     [picks, xi],
   )
 
-  const add = (p: Player) => { if (!blockReason(p, state)) setPicks(s => [...s, p]) }
-  const remove = (id: number) => setPicks(s => s.filter(p => p.id !== id))
-  const loadPreset = (i: number) =>
-    setPicks(D.squads[i].picks.map(x => byId.get(x.id)!).filter(Boolean))
+  // Any hand edit invalidates the optimiser's XI, so fall back to computing one.
+  const add = (p: Player) => {
+    if (!blockReason(p, state)) { setPresetXI(null); setPicks(s => [...s, p]) }
+  }
+  const remove = (id: number) => {
+    setPresetXI(null)
+    setPicks(s => s.filter(p => p.id !== id))
+  }
+  const loadPreset = (i: number) => {
+    const s = D.squads[i]
+    setPicks(s.picks.map(x => byId.get(x.id)!).filter(Boolean))
+    setPresetXI(new Set(s.picks.filter(x => x.starting).map(x => x.id)))
+  }
 
   const rows = useMemo(() => {
     const needle = q.trim().toLowerCase()
@@ -318,7 +333,7 @@ export default function App() {
               )}
               {picks.length > 0 && (
                 <button className="toggle" style={{ marginTop: 12, width: '100%', justifyContent: 'center' }}
-                  onClick={() => setPicks([])}>Clear squad</button>
+                  onClick={() => { setPresetXI(null); setPicks([]) }}>Clear squad</button>
               )}
             </div>
           </section>
