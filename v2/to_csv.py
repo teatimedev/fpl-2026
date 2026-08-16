@@ -30,7 +30,8 @@ FIELDS = ['id', 'name', 'full_name', 'team', 'team_id', 'pos', 'pos_id', 'price'
           'proj_gw', 'proj_6gw', 'proj_by_gw', 'mins_proj', 'value', 'sel_pct',
           'pts_last', 'mins_last', 'ppg_last', 'goals_last', 'assists_last',
           'xgi90_last', 'defcon_last', 'cs_last', 'bonus_last', 'status', 'news',
-          'joined', 'is_new', 'pens', 'corners', 'fk', 'fdr6', 'cs_rate', 'note']
+          'joined', 'is_new', 'pens', 'corners', 'fk', 'fdr6', 'cs_rate', 'note',
+          'pts_now', 'mins_now', 'starts_now', 'games_now']
 
 POS_ID = {'GKP': 1, 'DEF': 2, 'MID': 3, 'FWD': 4}
 
@@ -79,6 +80,8 @@ def main():
             'is_new': p['joined'] >= '2026-05-01', 'pens': p['pens'] or '',
             'corners': p['corners'] or '', 'fk': p['fk'] or '',
             'fdr6': fdr6, 'cs_rate': round(cs_rate, 3), 'note': p.get('note', ''),
+            'pts_now': p.get('pts_now', 0), 'mins_now': p.get('mins_now', 0),
+            'starts_now': p.get('starts_now', 0), 'games_now': p.get('games_now', 0),
         })
     rows.sort(key=lambda r: -r['proj_6gw'])
     with open(DST, 'w', newline='') as f:

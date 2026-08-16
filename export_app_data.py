@@ -36,7 +36,7 @@ KEEP = ('id', 'name', 'full_name', 'team', 'pos', 'price', 'proj_gw', 'proj_6gw'
         'mins_proj', 'sel_pct', 'pts_last', 'mins_last', 'ppg_last', 'goals_last',
         'assists_last', 'xgi90_last', 'defcon_last', 'cs_last', 'bonus_last',
         'status', 'news', 'is_new', 'joined', 'pens', 'corners', 'fk', 'note',
-        'fdr6', 'value')
+        'fdr6', 'value', 'pts_now', 'mins_now', 'starts_now', 'games_now')
 players = [{k: p[k] for k in KEEP} for p in proj['players']]
 
 # the model's report card, graded by v2/scorecard.py once gameweeks finish

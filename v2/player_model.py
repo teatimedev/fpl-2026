@@ -42,8 +42,16 @@ DB = ROOT / 'v2' / 'fpl.db'
 SEASON_VIEW = ROOT / 'v2' / 'season_view.json'
 OUT = ROOT / 'v2' / 'projections_v2.json'
 
-SEASONS = ['2022/23', '2023/24', '2024/25', '2025/26']
-SEASON_WEIGHT = {'2022/23': 0.30, '2023/24': 0.50, '2024/25': 0.75, '2025/26': 1.0}
+SEASONS = ['2022/23', '2023/24', '2024/25', '2025/26', '2026/27']
+SEASON_WEIGHT = {'2022/23': 0.30, '2023/24': 0.50, '2024/25': 0.75, '2025/26': 1.0,
+                 '2026/27': 1.0}
+CURRENT = '2026/27'
+# How the model learns in-season: the current season is one more row in the
+# panel, weighted by minutes like every other, so a regular's own 2026/27 rates
+# are ~40% of his evidence by GW10 and half by GW19 (see shrink()). Minutes are
+# handled separately in minutes_model(): this season's start rate is trusted
+# n/(n+4) after n team games — half weight after four.
+CURRENT_TRUST_K = 4.0
 
 # The projection window ROLLS: it starts at the next gameweek and runs six
 # ahead. `proj_by_gw` is indexed by absolute gameweek (entry 0 = GW1) so every
@@ -104,10 +112,10 @@ def load():
                             joined=joined or '', dob=dob, pens=pens,
                             corners=corners, fk=fk, hist=[])
     by_code = defaultdict(list)
-    for row in cx.execute("""
+    for row in cx.execute(f"""
         SELECT code, season, minutes, starts, points, goals, assists, xg, xa,
                xgc, defcon, clean_sheets, bonus, saves, yellow, bps
-        FROM season_stat WHERE season IN ('2022/23','2023/24','2024/25','2025/26')"""):
+        FROM season_stat WHERE season IN ({','.join('?' * len(SEASONS))})""", SEASONS):
         (code, season, mins, starts, pts, g, a, xg, xa, xgc, dc, cs, bonus,
          saves, yellow, bps) = row
         if not mins:
@@ -121,8 +129,29 @@ def load():
             g=g, a=a, cs=cs, defcon_raw=dc))
     for p in players.values():
         p['hist'] = sorted(by_code.get(p['code'], []), key=lambda h: h['season'])
+        # this season's row is kept separately too: it is what the minutes
+        # model reads for "how often is he starting NOW"
+        p['now'] = next((h for h in p['hist'] if h['season'] == CURRENT), None)
     cx.close()
     return players
+
+
+def games_played():
+    """{team short: matches finished this season} from the cached fixture list."""
+    path = ROOT / 'v2' / 'cache' / 'fixtures.json'
+    boot = ROOT / 'v2' / 'cache' / 'bootstrap.json'
+    if not path.exists() or not boot.exists():
+        return {}
+    short = {t['id']: t['short_name'] for t in json.loads(boot.read_text())['teams']}
+    out = defaultdict(int)
+    for x in json.loads(path.read_text()):
+        if x.get('finished') and x.get('team_h_score') is not None:
+            out[short[x['team_h']]] += 1
+            out[short[x['team_a']]] += 1
+    return dict(out)
+
+
+GAMES_PLAYED = {}
 
 
 def positional_priors(players):
@@ -210,7 +239,9 @@ def minutes_model(p, players):
     shrunk towards the club/position pecking order — the same correction v1
     arrived at by hand, now with a number behind it.
     """
-    hist = [h for h in p['hist'] if h['mins'] >= 200]
+    # past seasons: start rate over 38; this season is handled below, because
+    # starts/38 is meaningless in October
+    hist = [h for h in p['hist'] if h['mins'] >= 200 and h['season'] != CURRENT]
     if hist:
         num = den = 0.0
         mps_num = mps_den = 0.0
@@ -254,8 +285,23 @@ def minutes_model(p, players):
 
     ov = OVERLAY.get(p['id'], {})
     if 'mins' in ov:
-        # the overlay states expected minutes per gameweek directly
+        # the overlay states expected minutes per gameweek directly — pre-season
+        # research that replaces what history says
         start_rate = min(0.97, ov['mins'] / max(mps, 1.0))
+
+    # This season overrides all of the above as it accumulates. After n team
+    # games the observed 2026/27 start rate carries weight n/(n+4): a fifth
+    # after one game, half after four, three quarters after twelve. A summer
+    # signing who is clearly first choice, or a regular who has lost his place,
+    # moves quickly; one benching does not flip the estimate.
+    now, n_games = p.get('now'), GAMES_PLAYED.get(p['team'], 0)
+    if now and n_games > 0:
+        rate_now = min(1.0, (now['starts'] or 0) / n_games)
+        trust = n_games / (n_games + CURRENT_TRUST_K)
+        start_rate = trust * rate_now + (1 - trust) * start_rate
+        if now['starts']:
+            mps_now = min(92.0, now['mins'] / now['starts'])
+            mps = trust * mps_now + (1 - trust) * mps
 
     # availability
     st, ch = p['status'], p['chance']
@@ -432,6 +478,11 @@ def project(players, view, priors):
             note=OVERLAY.get(p['id'], {}).get('note', '')
                  or PRESEASON_FORM.get(p['id'], ''),
             pts_last=next((h['pts'] for h in p['hist'] if h['season'] == '2025/26'), 0),
+            # this season so far — what the model is now learning from
+            pts_now=(p['now'] or {}).get('pts', 0) if p.get('now') else 0,
+            mins_now=(p['now'] or {}).get('mins', 0) if p.get('now') else 0,
+            starts_now=(p['now'] or {}).get('starts', 0) if p.get('now') else 0,
+            games_now=GAMES_PLAYED.get(p['team'], 0),
         ))
     calibrate(out, players)
     out.sort(key=lambda r: -r['proj_6gw'])
@@ -484,8 +535,16 @@ def calibrate(rows, players):
 
 if __name__ == '__main__':
     players = load()
+    GAMES_PLAYED.update(games_played())
     view = json.loads(SEASON_VIEW.read_text())
     priors = positional_priors(players)
+    n_now = sum(1 for p in players.values() if p.get('now') and p['now']['mins'] >= 200)
+    if GAMES_PLAYED:
+        print(f'This season: {max(GAMES_PLAYED.values())} rounds played, '
+              f'{n_now} players with 200+ minutes feeding the model')
+    else:
+        print('This season: no matches played yet — projections rest on history, '
+              'price and pre-season research')
 
     print('Positional priors (minutes-weighted per-90 means)')
     print(f"{'pos':<5}{'xG90':>8}{'xA90':>8}{'DefCon90':>10}{'bonus90':>9}")

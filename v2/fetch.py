@@ -199,12 +199,95 @@ def load_histories(cx, boot):
     print(f'  season-stat rows {len(out)}')
 
 
+CURRENT_SEASON = '2026/27'
+CURRENT_FD = '2627'
+
+
+def load_current_season(cx, boot, fixtures):
+    """This season, as it happens — the rows that let the model LEARN in-season.
+
+    Two things, both from data fetch.py already has in hand:
+
+    1. A season_stat row per player for the current season, from the bootstrap's
+       running totals (minutes, starts, xG, xA, DefCon, bonus, saves, cards...).
+       The player model treats it as one more season in the panel, weighted by
+       minutes played, so a player's own 2026/27 record gradually takes over
+       from his history — and the minutes model reads this season's starts
+       directly. Before Gameweek 1 every row is zeros and is ignored.
+
+    2. A match row per finished fixture, from the FPL fixture list (scores are
+       posted within minutes of full time). football-data's file for the new
+       season lags and only appears some weeks in; when it does, its rows —
+       which carry the closing odds — replace these (INSERT OR IGNORE here,
+       INSERT OR REPLACE there, and football-data loads first).
+    """
+    teams = {t['id']: t['short_name'] for t in boot['teams']}
+    pos = {1: 'GKP', 2: 'DEF', 3: 'MID', 4: 'FWD'}
+    # Until the first deadline passes, the API's element aggregates still hold
+    # LAST season's totals (Haaland shows 2,953 minutes in August). Writing
+    # those as 2026/27 would double-count a whole season. Only start once a
+    # gameweek is current or finished.
+    live = any(e.get('is_current') or e.get('finished') for e in boot['events'])
+    if not live:
+        cx.execute('DELETE FROM season_stat WHERE season = ?', (CURRENT_SEASON,))
+        cx.execute('DELETE FROM match WHERE season = ?', (CURRENT_SEASON,))
+        print(f'  {CURRENT_SEASON}: season not started — the API still shows last '
+              f'season\'s totals, so nothing recorded yet')
+        return 0
+    rows = []
+    for p in boot['elements']:
+        rows.append((
+            p['code'], CURRENT_SEASON, teams[p['team']], pos[p['element_type']],
+            p.get('minutes', 0), p.get('starts'), p.get('total_points', 0),
+            p.get('goals_scored', 0), p.get('assists', 0), p.get('clean_sheets', 0),
+            p.get('goals_conceded', 0), p.get('saves'), p.get('bonus'), p.get('bps'),
+            p.get('yellow_cards'), p.get('red_cards'),
+            f(p.get('expected_goals')), f(p.get('expected_assists')),
+            f(p.get('expected_goal_involvements')), f(p.get('expected_goals_conceded')),
+            p.get('clearances_blocks_interceptions'), p.get('tackles'),
+            p.get('recoveries'), p.get('defensive_contribution'),
+            p['now_cost'] - (p.get('cost_change_start') or 0), p['now_cost'],
+        ))
+    cx.executemany(
+        'INSERT OR REPLACE INTO season_stat VALUES '
+        '(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', rows)
+    played = sum(1 for r in rows if (r[4] or 0) > 0)
+
+    results = []
+    for x in fixtures:
+        if not x.get('finished') or x.get('team_h_score') is None:
+            continue
+        # match.date is football-data's dd/mm/yyyy; teams_model parses that
+        d = (x.get('kickoff_time') or '')[:10]
+        date = f'{d[8:10]}/{d[5:7]}/{d[0:4]}' if len(d) == 10 else ''
+        results.append((CURRENT_SEASON, date, teams[x['team_h']], teams[x['team_a']],
+                        x['team_h_score'], x['team_a_score'],
+                        None, None, None, None, None, None, None, None, None, None,
+                        None, None, None, None, None))
+    cx.executemany(
+        'INSERT OR IGNORE INTO match VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        results)
+    print(f'  {CURRENT_SEASON}: {played} players with minutes, '
+          f'{len(results)} finished matches')
+    return len(results)
+
+
 def load_results(cx):
     total = 0
-    for s in SEASONS:
-        raw = get(f'{FD}/{s}/E0.csv', binary=True)
+    for s in SEASONS + [CURRENT_FD]:
+        try:
+            raw = get(f'{FD}/{s}/E0.csv', binary=True)
+        except Exception as e:
+            print(f'  20{s[:2]}/{s[2:]}: football-data file unavailable ({e})')
+            continue
+        text = raw.decode('utf-8-sig', 'ignore')
+        if 'HomeTeam' not in text[:2000]:
+            # the current season's file does not exist until a few weeks in;
+            # the site answers with a redirect to an HTML page
+            print(f'  20{s[:2]}/{s[2:]}: no results file yet')
+            continue
         (CACHE / f'E0_{s}.csv').write_bytes(raw)
-        rdr = csv.DictReader(io.StringIO(raw.decode('utf-8-sig', 'ignore')))
+        rdr = csv.DictReader(io.StringIO(text))
         season = f'20{s[:2]}/{s[2:]}'
         rows = []
         for r in rdr:
@@ -382,6 +465,11 @@ def main():
 
     print('Match results')
     n = load_results(cx)
+    cx.commit()
+
+    print('This season so far')
+    fixtures = json.loads((CACHE / 'fixtures.json').read_text())
+    load_current_season(cx, boot, fixtures)
     cx.commit()
 
     print('Forward market odds')

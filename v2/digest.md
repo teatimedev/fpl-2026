@@ -56,19 +56,6 @@ Gain is the lift to your best XI (captain included) over GW1–6, not the raw di
 |---|---|---|---|---|
 | Leno + O'Shea | Steele + Mitchell | +0.0 | +0.8 | **+0.8** |
 
-## The next six weeks, planned
-
-Best path from here: **394.5** pts (0 hits). Making no move this week and re-planning: 391.6. Acting now is worth **+2.9** across 4 moves — not enough; hold.
-
-- **GW1** 70.1 pts, C Saka, 15 FT  Raya → Gabriel, Kluivert → Kostoulas, O'Shea → Pickford, Haaland → B.Fernandes
-- **GW2** 65.1 pts, C B.Fernandes, 1 FT  Tarkowski → Virgil
-- **GW3** 65.9 pts, C Foden, 1 FT  hold
-- **GW4** 62.0 pts, C Palmer, 2 FT  Saka → Palmer
-- **GW5** 64.6 pts, C Thiaw, 2 FT  Palmer → Saka, Virgil → Tarkowski
-- **GW6** 66.7 pts, C B.Fernandes, 1 FT  Guéhi → Lacroix
-
-_Point-estimate plans churn on small fixture swings; read this for direction (who to move towards, when), not as a script._
-
 ## Chips
 
 No double or blank gameweeks in the fixture list yet — they appear when cup ties force rescheduling, usually from midwinter.
@@ -88,4 +75,4 @@ Prices are locked until the Gameweek 1 deadline, so there is no transfer flow to
 
 ---
 
-_Generated 2026-08-16 14:58 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-08-16 15:09 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
