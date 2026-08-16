@@ -104,3 +104,6 @@ export function squadOutlook(
 }
 
 export const round1 = (n: number) => Math.round(n * 10) / 10
+
+/** "+1.5" / "-0.3": a signed fixed-point number for deltas. */
+export const signed = (v: number, dp = 1) => (v >= 0 ? '+' : '') + v.toFixed(dp)

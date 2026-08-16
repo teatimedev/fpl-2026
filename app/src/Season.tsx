@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import type { ChipInfo, Data, MoverTopRow } from './types'
 import { BarSpark, LineSpark } from './components'
 import { csTone, xgTone } from './weekly'
+import { signed } from './squad'
 
 /**
  * The season view: when to play each chip, how every club's fixtures swing
@@ -70,7 +71,7 @@ export default function Season({
         </button>
         <span className="mv mono">
           {st.sel.toFixed(1)}%
-          <em>{st.d_sel_7 >= 0 ? '+' : ''}{st.d_sel_7.toFixed(1)} 7d</em>
+          <em>{signed(st.d_sel_7)} 7d</em>
         </span>
         <LineSpark values={st.spark} />
       </li>

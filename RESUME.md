@@ -14,7 +14,11 @@ detail fields. **The app now has four tabs:** This week (renders the CI digest
 when the loaded squad matches — fixture chips, lineup diff, checks, XI-aware
 transfers and two-move combos, six-week plan, price watch; a "load that squad"
 link otherwise), Season (chips with per-week bars, model fixture ticker with
-attack/defence toggle, movers), Build, Scorecard; and a player drawer from any
+attack/defence toggle, movers), **My squad** (replaced Build: your real lineup on
+the pitch with the model's diff overlaid, a transfer sandbox with XI-aware gain
+and hit cost, "Find a replacement", squad health, context panels; header stats
+from `entry/{id}/` once linked; Build survives as a "Draft a squad from scratch"
+mode for wildcard/free-hit weeks — `app/src/SquadBuilder.tsx`), Scorecard; and a player drawer from any
 name (window bars + season curve, xG/xA/DC per 90, evidence, start rate, news,
 momentum). Header is two rows on a phone; the pitch fits four across at 375px.
 
@@ -44,7 +48,7 @@ Reviewed 16 Aug against the refreshed model:
 ## What runs, and when
 
 **https://fpl-2026.vercel.app** — public, works on a phone. Tabs: *This week*
-(captain, XI, your lineup vs the model, transfers, checks, price watch), *Build*,
+(captain, XI, your lineup vs the model, transfers, checks, price watch), *Season*, *My squad*,
 *Scorecard*.
 
 `.github/workflows/weekly.yml` ("Refresh") fires **hourly**; `v2/should_refresh.py`
@@ -116,7 +120,11 @@ shrinkage weights from measured year-over-year stability, hold-out backtested
    places (`P.HORIZON`, labels). They are pre-season tools; not urgent.
 5. `SQUADS.md` describes the *v1* squads and is historical. Not worth rewriting
    now the team is picked; a "why Option B" note is at its top.
-6. Chips are not modelled anywhere. Bench Boost / Triple Captain / Free Hit /
+6. App follow-ups from the review: This Week still renders its digest and
+   live paths as two JSX trees (~350 duplicated lines) — unify by normalising
+   the digest into the live shape; move `Digest` into its own file. Sell prices
+   in the sandbox are current prices, not FPL sell values.
+7. Chips are modelled (v2/chips.py). What is still missing: Bench Boost / Triple Captain / Free Hit /
    Wildcard timing around double and blank gameweeks is the biggest lever in
    the second half of the season — the planner is the place to add it.
 

@@ -1,12 +1,14 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import type { Data, Player, Pos, Weekly } from './types'
 import { POS_ORDER } from './types'
+import { withLive, fxFor, priceMovers } from './weekly'
 import {
-  loadLive, loadTeam, withLive, xiForGw, thisGw, remaining, fxFor,
-  transferOptions, priceMovers, lineupIssues, HIT_COST,
-  type LiveState, type TransferOption, type Lineup,
-} from './weekly'
-import { FxChips } from './components'
+  xiForGw, thisGw, remaining, rankTransfers, lineupIssues, HIT_COST,
+  type TransferOption,
+} from './model'
+import { signed } from './squad'
+import { FxChips, PlayerCell, LinkTeamForm } from './components'
+import type { LinkedTeam } from './useLinkedTeam'
 
 /**
  * The weekly view: what to actually do before this deadline.
@@ -36,62 +38,17 @@ function Md({ line }: { line: string }) {
   return <>{out}</>
 }
 
-/** Player name cell with club bar, tappable to open the drawer. */
-function PlayerCell({ p, id, D, openPlayer, extra }: {
-  p: Player | undefined; id: number; D: Data
-  openPlayer: (id: number) => void; extra?: ReactNode
-}) {
-  if (!p) return <span>#{id}</span>
-  return (
-    <span className="pname">
-      <span className="bar" style={{ background: D.teams[p.team]?.primary }} />
-      <span className="txt">
-        <span className="n">
-          <button className="plink" onClick={() => openPlayer(p.id)}>{p.name}</button>
-          {extra}
-        </span>
-        <span className="s">{p.pos} · {p.team}</span>
-      </span>
-    </span>
-  )
-}
-
 export default function ThisWeek(
-  { D, builtSquad, openPlayer, loadSquad }: {
-    D: Data; builtSquad: Player[]; openPlayer: (id: number) => void
+  { D, linked, builtSquad, openPlayer, loadSquad }: {
+    D: Data; linked: LinkedTeam; builtSquad: Player[]; openPlayer: (id: number) => void
     loadSquad?: (ids: number[]) => void
   },
 ) {
-  const [entryId, setEntryId] = useState(
-    () => localStorage.getItem('fplEntryId') ?? '')
-  const [input, setInput] = useState(entryId)
-  const [editing, setEditing] = useState(false)
-  const [live, setLive] = useState<LiveState | null>(null)
-  const [squadIds, setSquadIds] = useState<number[] | null>(null)
-  const [lineup, setLineup] = useState<Lineup | null>(null)
-  const [bank, setBank] = useState(0)
-  const [fromGw, setFromGw] = useState<number | null>(null)
-  const [err, setErr] = useState<string | null>(null)
-  const [busy, setBusy] = useState(true)
-
-  useEffect(() => {
-    let cancelled = false
-    setBusy(true); setErr(null)
-    loadLive()
-      .then(async l => {
-        if (cancelled) return
-        setLive(l)
-        if (entryId) {
-          const t = await loadTeam(Number(entryId), l.gw)
-          if (cancelled) return
-          if (t) { setSquadIds(t.ids); setLineup(t.lineup); setBank(t.bank); setFromGw(t.fromGw) }
-          else { setSquadIds(null); setLineup(null); setFromGw(null) }
-        }
-      })
-      .catch(e => !cancelled && setErr(String(e?.message ?? e)))
-      .finally(() => !cancelled && setBusy(false))
-    return () => { cancelled = true }
-  }, [entryId])
+  const { entryId, live, busy, err } = linked
+  const squadIds = linked.team?.ids ?? null
+  const lineup = linked.team?.lineup ?? null
+  const bank = linked.team?.bank ?? 0
+  const fromGw = linked.team?.fromGw ?? null
 
   const gw = live?.gw ?? D.weekly?.gw ?? D.meta.start_gw ?? 1
   const horizon = D.meta.horizon
@@ -99,23 +56,17 @@ export default function ThisWeek(
   const pool = useMemo(() => D.players.map(p => withLive(p, live)), [D.players, live])
   const poolById = useMemo(() => new Map(pool.map(p => [p.id, p])), [pool])
 
-  const squad: Player[] = squadIds
+  const squad: Player[] = useMemo(() => squadIds
     ? squadIds.map(i => poolById.get(i)).filter((p): p is Player => !!p)
-    : builtSquad.map(p => poolById.get(p.id) ?? p)
+    : builtSquad.map(p => poolById.get(p.id) ?? p), [squadIds, builtSquad, poolById])
 
   const usingReal = !!squadIds
   const ready = squad.length === 15
 
-  const save = () => {
-    const v = input.trim()
-    localStorage.setItem('fplEntryId', v)
-    setEntryId(v)
-    setEditing(false)
-  }
-
   // The digest applies only to the exact 15 the refresh saw.
   const weekly: Weekly | null = D.weekly ?? null
   const digest = !!weekly && ready && sameSet(squad.map(p => p.id), weekly.squad.ids)
+  const ft = digest && weekly ? weekly.squad.ft : linked.ft
 
   const { xi, bench } = ready ? xiForGw(squad, gw) : { xi: [], bench: [] }
   const ranked = [...xi].sort((a, b) => thisGw(b, gw) - thisGw(a, gw))
@@ -125,17 +76,15 @@ export default function ThisWeek(
   // Only meaningful for a real team: the lineup you have set, against the model's.
   const issues = ready && usingReal && lineup
     ? lineupIssues(lineup, squad, xi, bench, gw) : null
-  const options: TransferOption[] = ready && !digest
-    ? transferOptions(squad, pool, bank, gw, horizon) : []
+  const options: TransferOption[] = useMemo(() => ready && !digest
+    ? rankTransfers(squad, pool, bank, ft, gw, horizon) : [],
+    [ready, digest, squad, pool, bank, ft, gw, horizon])
   const movers = priceMovers(live, pool)
 
   const dl = live ? new Date(live.deadline) : new Date(D.meta.deadline)
   const msLeft = dl.getTime() - Date.now()
   const days = Math.floor(msLeft / 86400000)
   const hours = Math.floor(msLeft / 3600000) % 24
-
-  const linked = !!entryId || builtSquad.length === 15
-  const showLinkForm = editing || !linked
 
   const nameOf = (id: number) => poolById.get(id)?.name ?? `#${id}`
 
@@ -158,52 +107,23 @@ export default function ThisWeek(
               {live && ` Prices and injuries are live; projections rebuilt ${D.meta.generated}.`}
             </p>
           )}
-          {showLinkForm ? (
-            <>
-              <div className="linkrow">
-                <label htmlFor="entry">Your FPL team id</label>
-                <input
-                  id="entry" type="text" inputMode="numeric" placeholder="e.g. 1234567"
-                  value={input} onChange={e => setInput(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && save()}
-                />
-                <button className="toggle" onClick={save}>Link team</button>
-                {editing && (
-                  <button className="toggle" onClick={() => { setInput(entryId); setEditing(false) }}>
-                    Cancel
-                  </button>
-                )}
-              </div>
-              <p className="hint">
-                {busy ? 'Loading live data…'
-                  : err ? `Could not reach the FPL API: ${err}`
-                  : 'Find the number in the URL of your FPL points page. Until you link it, this uses the squad from the Build tab.'}
-              </p>
-            </>
-          ) : (
-            <p className="linked-line">
-              {entryId ? (
-                <>Linked: entry <span className="mono">{entryId}</span>
-                  {usingReal && fromGw != null && <> · picks from GW{fromGw} · £{bank.toFixed(1)}m banked</>}
-                  {!usingReal && !busy && !err && ' · picks not public yet, using the Build tab squad'}
-                  {busy && ' · loading…'}
-                  {err && ` · could not reach the FPL API: ${err}`}
-                </>
-              ) : (
-                <>Using the squad from the <strong>Build</strong> tab</>
-              )}
-              <button className="linkbtn" onClick={() => { setInput(entryId); setEditing(true) }}>
-                change
-              </button>
-            </p>
-          )}
+          <LinkTeamForm
+            entryId={entryId} onSave={linked.setEntryId} busy={busy} err={err}
+            hint="Find the number in the URL of your FPL points page. Until you link it, this uses the squad from the My squad tab."
+            linkedLine={usingReal && fromGw != null
+              ? <> · picks from GW{fromGw} · £{bank.toFixed(1)}m banked</>
+              : (!busy && !err ? ' · picks not public yet, using the My squad tab squad' : null)}
+            unlinkedLine={builtSquad.length === 15
+              ? <>Using the squad from the <strong>My squad</strong> tab</>
+              : undefined}
+          />
         </div>
       </section>
 
       {!ready && (
         <section className="panel" style={{ marginTop: 16 }}>
           <div className="empty-state">
-            No squad yet. Build one in the <strong>Build</strong> tab, or link an
+            No squad yet. Draft one in the <strong>My squad</strong> tab, or link an
             FPL team id above once the season has started.
           </div>
         </section>
@@ -343,44 +263,55 @@ export default function ThisWeek(
           <section className="panel" style={{ marginTop: 16 }}>
             <div className="panel-hd">
               <h2>Transfers</h2>
-              <span className="sub">£{bank.toFixed(1)}m banked</span>
+              <span className="sub">
+                {ft >= 15 ? 'unlimited' : ft} free · £{bank.toFixed(1)}m banked
+              </span>
             </div>
             {options.length === 0 ? (
               <div className="empty-state">
                 Nothing improves this squad over the remaining gameweeks. Bank it.
               </div>
             ) : (
-              <div className="tbl-scroll">
-                <table>
-                  <thead>
-                    <tr>
-                      <th className="l">Out</th><th className="l">In</th>
-                      <th>Cost</th><th>Gain</th><th className="l">Verdict</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {options.map(o => (
-                      <tr key={o.out.id}>
-                        <td className="l">
-                          <button className="plink" onClick={() => openPlayer(o.out.id)}>{o.out.name}</button>
-                          {' '}<span className="s">{o.out.team}</span>
-                        </td>
-                        <td className="l">
-                          <button className="plink" onClick={() => openPlayer(o.in.id)}>{o.in.name}</button>
-                          {' '}<span className="s">{o.in.team}</span>
-                        </td>
-                        <td>{o.costChange >= 0 ? '+' : ''}{o.costChange.toFixed(1)}</td>
-                        <td style={{ color: 'var(--flood-soft)' }}>+{o.gain.toFixed(1)}</td>
-                        <td className="l">
-                          {o.worthAHit
-                            ? <span style={{ color: 'var(--ok)' }}>worth a −{HIT_COST} hit</span>
-                            : <span style={{ color: 'var(--chalk-faint)' }}>free transfer only</span>}
-                        </td>
+              <>
+                <div className="tbl-scroll">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th className="l">Out</th><th className="l">In</th>
+                        <th>Cost</th><th>Gain</th><th>Net</th><th className="l">Verdict</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {options.map(o => (
+                        <tr key={o.out.id}>
+                          <td className="l">
+                            <button className="plink" onClick={() => openPlayer(o.out.id)}>{o.out.name}</button>
+                            {' '}<span className="s">{o.out.team}</span>
+                          </td>
+                          <td className="l">
+                            <button className="plink" onClick={() => openPlayer(o.in.id)}>{o.in.name}</button>
+                            {' '}<span className="s">{o.in.team}</span>
+                          </td>
+                          <td>{signed(o.costChange)}</td>
+                          <td style={{ color: 'var(--flood-soft)' }}>+{o.gain.toFixed(1)}</td>
+                          <td style={{ color: o.net > 0 ? 'var(--ok)' : 'var(--chalk-faint)' }}>
+                            {signed(o.net)}
+                          </td>
+                          <td className="l">
+                            {o.worthAHit
+                              ? <span style={{ color: 'var(--ok)' }}>worth a −{HIT_COST} hit</span>
+                              : <span style={{ color: 'var(--chalk-faint)' }}>free transfer only</span>}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="hint" style={{ padding: '10px 14px 14px' }}>
+                  Gain is the lift to your best XI over GW{gw}–{horizon}, captain
+                  included; net takes off {HIT_COST} if the move is not free.
+                </p>
+              </>
             )}
           </section>
 
@@ -455,14 +386,14 @@ function Digest({
 
   const money = (out: number[], inn: number[]) => {
     const d = inn.reduce((s, i) => s + price(i), 0) - out.reduce((s, i) => s + price(i), 0)
-    return (d >= 0 ? '+' : '') + d.toFixed(1)
+    return signed(d)
   }
   const netCell = (net: number, gain: number) => {
     const hit = gain - net
     return (
       <>
         <span style={{ color: net > 0 ? 'var(--ok)' : 'var(--chalk-faint)' }}>
-          {net >= 0 ? '+' : ''}{net.toFixed(1)}
+          {signed(net)}
         </span>
         {hit > 0.05 && <span className="s"> after −{hit.toFixed(0)}</span>}
       </>
@@ -697,7 +628,7 @@ function Digest({
             Best path <strong className="mono">{plan.total.toFixed(1)}</strong> vs
             hold <strong className="mono">{plan.hold_total.toFixed(1)}</strong> —
             acting now is worth <strong className="mono" style={{ color: plan.worth_it ? 'var(--ok)' : undefined }}>
-              {plan.diff >= 0 ? '+' : ''}{plan.diff.toFixed(1)}
+              {signed(plan.diff)}
             </strong>
             {(plan.n_now ?? 0) > 1 ? ` across ${plan.n_now} moves` : ''}
             {plan.worth_it ? ' — worth doing.' : (plan.n_now ?? 0) > 0 ? ' — not enough; hold.' : ' — nothing to do this week.'}

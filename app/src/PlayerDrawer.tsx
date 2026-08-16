@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import type { Data, Player } from './types'
 import { FxChips } from './components'
-import { fxFor, thisGw } from './weekly'
+import { fxFor } from './weekly'
+import { thisGw } from './model'
+import { signed } from './squad'
 
 /**
  * Slide-over player card: bottom sheet on a phone, right-side panel on desktop.
@@ -11,7 +13,6 @@ import { fxFor, thisGw } from './weekly'
  */
 
 const DASH = '—'
-const signed = (v: number, dp = 1) => (v >= 0 ? '+' : '') + v.toFixed(dp)
 
 function ProjChart({ p, start, horizon }: { p: Player; start: number; horizon: number }) {
   const season = p.season_by_gw ?? []

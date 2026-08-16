@@ -1,4 +1,5 @@
 import type { Scorecard as ScorecardData, ScorecardPick } from './types'
+import { signed as signedNum } from './squad'
 
 /**
  * How the model has actually done. Every refresh before a deadline archives
@@ -8,8 +9,7 @@ import type { Scorecard as ScorecardData, ScorecardPick } from './types'
 
 const DASH = '—'
 const num = (v: number | null | undefined, dp = 2) => (v == null ? DASH : v.toFixed(dp))
-const signed = (v: number | null | undefined, dp = 2) =>
-  v == null ? DASH : (v >= 0 ? '+' : '') + v.toFixed(dp)
+const signed = (v: number | null | undefined, dp = 2) => (v == null ? DASH : signedNum(v, dp))
 const pct = (v: number | null | undefined) => (v == null ? DASH : `${Math.round(v * 100)}%`)
 const pick = (p?: ScorecardPick) => (p ? `${p.name} ${p.pts}` : DASH)
 const trio = (a: number | null | undefined, b: number | null | undefined, c: number | null | undefined) =>
