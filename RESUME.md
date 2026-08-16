@@ -124,9 +124,10 @@ shrinkage weights from measured year-over-year stability, hold-out backtested
    live paths as two JSX trees (~350 duplicated lines) — unify by normalising
    the digest into the live shape; move `Digest` into its own file. Sell prices
    in the sandbox are current prices, not FPL sell values.
-7. Chips are modelled (v2/chips.py). What is still missing: Bench Boost / Triple Captain / Free Hit /
-   Wildcard timing around double and blank gameweeks is the biggest lever in
-   the second half of the season — the planner is the place to add it.
+7. Chips are modelled (`v2/chips.py`) but valued one at a time from the
+   season outlook; they are not inside the planner's integer program. Joint
+   planning (e.g. wildcard *then* bench boost on a double) is the next lever
+   once doubles and blanks are announced.
 
 ## To pick up
 
