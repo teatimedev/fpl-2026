@@ -48,10 +48,15 @@ def main():
     code_of = {r[0]: r[1] for r in cx.execute('SELECT id, code FROM player')}
     cx.close()
 
+    # the season view now covers every remaining gameweek (for chip timing);
+    # the fdr/cs summaries here are for the modelled WINDOW only
+    win_lo = data.get('start_gw', 1)
+    win_hi = data.get('horizon') or (win_lo + 5)
     rows = []
     for p in data['players']:
         t = p['team']
-        fixtures = view['view'].get(t, {})
+        fixtures = {g: fx for g, fx in view['view'].get(t, {}).items()
+                    if win_lo <= int(g) <= win_hi}
         fdr6 = sum(f['fdr'] for g in fixtures.values() for f in g)
         cs_rate = (sum(f['cs'] for g in fixtures.values() for f in g)
                    / max(1, sum(len(g) for g in fixtures.values())))

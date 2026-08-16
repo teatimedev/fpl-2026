@@ -136,12 +136,17 @@ def _days_between(iso_a, iso_b):
 if __name__ == '__main__':
     model = json.loads(RATINGS.read_text())
     atk, dfn, notes = build_ratings(model)
-    # the window rolls: next gameweek to six ahead (see gwclock.py)
+    # The window rolls: next gameweek to six ahead (see gwclock.py). The view
+    # itself covers EVERY gameweek, because chip timing (Bench Boost, Triple
+    # Captain, Free Hit) needs the whole half-season of fixtures; the player
+    # model projects the window in detail and the rest of the season coarsely.
     start_gw, horizon = gw_window()
-    view = season_parameters(model, atk, dfn, horizon=horizon)
-    n_fix = sum(len(v) for t in view.values() for v in t.values()) // 2
-    print(f'{season_parameters.n_market} of {n_fix} fixtures in GW{start_gw}-{horizon} '
-          f'priced from bookmaker odds (the rest from fitted ratings)\n')
+    view = season_parameters(model, atk, dfn, horizon=None)
+    n_fix = sum(len(v) for t in view.values() for g, v in t.items()
+                if start_gw <= g <= horizon) // 2
+    print(f'{season_parameters.n_market} fixtures priced from bookmaker odds; '
+          f'{n_fix} fixtures in the GW{start_gw}-{horizon} window '
+          f'(the rest from fitted ratings)\n')
 
     print('2026/27 ratings after adjustment\n')
     print(f"{'team':<6}{'attack':>9}{'defence':>9}   note")

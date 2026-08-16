@@ -158,6 +158,7 @@ def load_squad(team_id, players, gw):
                 'captain': next((p['element'] for p in ps if p['is_captain']), None),
                 'vice': next((p['element'] for p in ps if p['is_vice_captain']), None),
             }
+            hist = {}
             try:
                 hist = api(f'entry/{team_id}/history/')
                 ft = infer_free_transfers(hist, gw)
@@ -165,7 +166,7 @@ def load_squad(team_id, players, gw):
                 ft = 1
             print(f'  loaded your real squad and lineup from Gameweek {ev} '
                   f'(bank £{bank:.1f}m, {ft} free transfer{"s" if ft != 1 else ""})')
-            return dict(ids=ids, bank=bank, ft=ft, lineup=lineup,
+            return dict(ids=ids, bank=bank, ft=ft, lineup=lineup, history=hist,
                         source=f'FPL entry {team_id}, picks from GW{ev}')
         print('  no public picks yet for that entry (they appear after a deadline)')
 
@@ -209,8 +210,8 @@ def load_squad(team_id, players, gw):
         print(f'  loaded {len(ids)} players from {SQUAD_FILE.name}'
               + (' with your lineup' if lineup else ''))
         return dict(ids=ids, bank=0.0, ft=15 if gw <= 1 else 1, lineup=lineup,
-                    source=SQUAD_FILE.name)
-    return dict(ids=[], bank=0.0, ft=1, lineup=None, source='none')
+                    history={}, source=SQUAD_FILE.name)
+    return dict(ids=[], bank=0.0, ft=1, lineup=None, history={}, source='none')
 
 
 # ------------------------------------------------------------ analysis
@@ -406,6 +407,8 @@ def main():
     ap.add_argument('--no-refresh', action='store_true')
     ap.add_argument('--plan', action='store_true',
                     help='solve the multi-week transfer path (planner.py)')
+    ap.add_argument('--chips', action='store_true',
+                    help='value every chip in every week you could still play it')
     ap.add_argument('--snapshot', action='store_true',
                     help='archive this gameweek\'s projections for the scorecard')
     ap.add_argument('--price-log', action='store_true',
@@ -669,6 +672,7 @@ def main():
         L.append('')
 
         # ---- multi-week path
+        wc_now = None
         if args.plan:
             try:
                 from planner import plan, describe
@@ -676,6 +680,11 @@ def main():
                 L.append('')
                 free = plan(players, ids, bank, ft, gw, horizon)
                 hold = plan(players, ids, bank, ft, gw, horizon, freeze_this_week=True)
+                if args.chips and free and ft < 15 and gw >= 2:
+                    # what a wildcard would add: unlimited moves this week
+                    wc = plan(players, ids, bank, 15, gw, horizon)
+                    if wc:
+                        wc_now = round(wc['total'] - free['total'], 1)
                 if free and hold:
                     diff = free['total'] - hold['total']
                     n_now = len(free['weeks'][0]['in'])
@@ -704,6 +713,26 @@ def main():
                 L.append('')
             except Exception as ex:      # the planner is optional; never sink the digest
                 L.append(f'_Planner unavailable: {ex}_')
+                L.append('')
+
+        # ---- chips
+        if args.chips:
+            try:
+                import chips as CH
+                season, _, last_gw = CH.load_season()
+                res = CH.evaluate(season, ids, bank, gw, last_gw, CH.chip_windows(),
+                                  CH.used_chips(st.get('history')), wc_now=wc_now)
+                L.append('## Chips')
+                L.append('')
+                L.extend(CH.digest_lines(res))
+                L.append('')
+                CH.OUT.parent.mkdir(parents=True, exist_ok=True)
+                CH.OUT.write_text(json.dumps(res, indent=1))
+                plays = [c['name'] for c in res['chips'].values() if c.get('play')]
+                if plays:
+                    P.append('🎯 Chip: play ' + ' / '.join(plays) + ' this week')
+            except Exception as ex:      # optional; never sink the digest
+                L.append(f'_Chips unavailable: {ex}_')
                 L.append('')
 
     # ---- price watch

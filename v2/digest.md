@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 1
 
-Deadline **Fri 21 Aug, 17:30 UTC** — 5d 3h away.
+Deadline **Fri 21 Aug, 17:30 UTC** — 5d 2h away.
 Projections cover GW1–6.
 
 ## Captain: **Saka** (ARS)
@@ -69,10 +69,23 @@ Best path from here: **394.5** pts (0 hits). Making no move this week and re-pla
 
 _Point-estimate plans churn on small fixture swings; read this for direction (who to move towards, when), not as a script._
 
+## Chips
+
+No double or blank gameweeks in the fixture list yet — they appear when cup ties force rescheduling, usually from midwinter.
+
+| chip | this week | best week left | advice |
+|---|---|---|---|
+| Bench Boost | 10.7 | GW6: 11.1 | Hold. Best-looking week for this one is GW6 (11.1 from the bench); this week is 10.7. Second copy (GW20–38): best week GW34 (11.2). |
+| Triple Captain | 7.2 (Saka) | GW3: 8.1 (Haaland) | Hold. Best week for this one is GW3: Haaland (8.1 extra); this week Saka 7.2. Second copy (GW20–38): best week GW27, Haaland (7.2). |
+| Free Hit | — | GW12: 6.8 | Hold. Widest gap left is GW12 (6.8 behind the best possible XI). |
+| Wildcard | — | — | Hold. The squad is holding up (gap to the best possible XI 4.1–5.5 over the next weeks). Playable from GW2. |
+
+_Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
+
 ## Price watch
 
 Prices are locked until the Gameweek 1 deadline, so there is no transfer flow to read yet. This section becomes useful once the season starts.
 
 ---
 
-_Generated 2026-08-16 14:16 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-08-16 14:58 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._

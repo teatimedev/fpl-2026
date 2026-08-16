@@ -42,6 +42,8 @@ players = [{k: p[k] for k in KEEP} for p in proj['players']]
 # the model's report card, graded by v2/scorecard.py once gameweeks finish
 scorecard = (json.load(open('data/scorecard.json'))
              if os.path.exists('data/scorecard.json') else None)
+# chip valuation for the digest squad (v2/chips.py via weekly.py --chips)
+chips = json.load(open('data/chips.json')) if os.path.exists('data/chips.json') else None
 
 out = {
     'meta': {**proj['meta'],
@@ -50,6 +52,7 @@ out = {
     'schedule': proj['schedule'],
     'players': players,
     'scorecard': scorecard,
+    'chips': chips,
     # optimise.py reads its pool from CSV, so ids arrive as strings -- coerce them
     # back to int so they match the player ids the app indexes on.
     'squads': [{'label': s['label'], 'cost': s['cost'], 'xi_proj': s['xi_proj'],

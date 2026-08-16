@@ -53,6 +53,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gwclock import window as _gw_window          # noqa: E402
 START_GW, HORIZON = _gw_window()
 WINDOW = HORIZON - START_GW + 1
+LAST_GW = 38
+SEASON = {}                       # id -> per-gameweek projection to LAST_GW
+OUT_SEASON = ROOT / 'v2' / 'projections_season.json'
 
 # Measured year-over-year stability, used as the empirical-Bayes reliability of
 # a full season of evidence. A metric at 0.90 keeps nearly all of a player's own
@@ -374,12 +377,18 @@ def project(players, view, priors):
         xa90 *= rate_mult
 
         fixtures = view['view'].get(p['team'], {})
-        # zeros for gameweeks already played keep absolute indexing intact
+        # zeros for gameweeks already played keep absolute indexing intact.
+        # by_gw is the detailed window; season_by_gw runs to the last gameweek
+        # under the same rates and minutes — coarse, but it is what chip timing
+        # needs (which week is the bench worth most, where is the double).
         by_gw, total = [0.0] * (START_GW - 1), 0.0
-        for gw in range(START_GW, HORIZON + 1):
+        season_by_gw = [0.0] * (START_GW - 1)
+        for gw in range(START_GW, LAST_GW + 1):
             fx = fixtures.get(str(gw)) or []
             if not fx:
-                by_gw.append(0.0)
+                season_by_gw.append(0.0)
+                if gw <= HORIZON:
+                    by_gw.append(0.0)
                 continue
             pts = 0.0
             for f in fx:                       # handles double gameweeks
@@ -401,9 +410,13 @@ def project(players, view, priors):
                 pts += start_rate * 2.0 + (p_play - start_rate) * 1.0
                 pts += bonus90 * frac * p_play * 0.85
                 pts -= yellow90 * frac * p_play
-            by_gw.append(round(max(0.0, pts), 3))
-            total += by_gw[-1]
+            pts = round(max(0.0, pts), 3)
+            season_by_gw.append(pts)
+            if gw <= HORIZON:
+                by_gw.append(pts)
+                total += pts
 
+        SEASON[p['id']] = season_by_gw
         out.append(dict(
             id=p['id'], name=p['name'], full_name=p['full_name'], team=p['team'],
             pos=pos, price=p['price'], sel_pct=p['sel_pct'], status=p['status'],
@@ -463,6 +476,8 @@ def calibrate(rows, players):
             r['proj_by_gw'] = [round(v * k, 3) for v in r['proj_by_gw']]
             r['proj_6gw'] = round(sum(r['proj_by_gw']), 2)
             r['proj_gw'] = round(r['proj_6gw'] / WINDOW, 3)
+            if r['id'] in SEASON:
+                SEASON[r['id']] = [round(v * k, 3) for v in SEASON[r['id']]]
             r['value'] = round(r['proj_6gw'] / r['price'], 4) if r['price'] else 0
         print(f'  calibration {pos}: raw was {ratio:.2f}x actual, scaled by {k:.3f}')
 
@@ -482,7 +497,15 @@ if __name__ == '__main__':
     rows = project(players, view, priors)
     json.dump({'players': rows, 'horizon': HORIZON, 'start_gw': START_GW,
                'window': WINDOW}, open(OUT, 'w'))
-    print(f'\nprojected {len(rows)} players over GW{START_GW}-{HORIZON} -> {OUT}\n')
+    print(f'\nprojected {len(rows)} players over GW{START_GW}-{HORIZON} -> {OUT}')
+    # the coarse full-season projection, for chip timing (chips.py)
+    season = [dict(id=r['id'], name=r['name'], team=r['team'], pos=r['pos'],
+                   price=r['price'], status=r['status'], start_rate=r['start_rate'],
+                   by_gw=SEASON.get(r['id'], []))
+              for r in rows]
+    json.dump({'players': season, 'start_gw': START_GW, 'last_gw': LAST_GW},
+              open(OUT_SEASON, 'w'), separators=(',', ':'))
+    print(f'season outlook GW{START_GW}-{LAST_GW} -> {OUT_SEASON}\n')
 
     for pos in ('GKP', 'DEF', 'MID', 'FWD'):
         print(f'--- top 10 {pos} (v2) ---')
