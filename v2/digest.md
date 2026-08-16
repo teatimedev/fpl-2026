@@ -48,7 +48,7 @@ Projected 7.2 this week, doubled to 14.5. Vice: Haaland (6.7).
 
 Gain is the lift to your best XI (captain included) over GW1–6, not the raw difference between two players. A hit costs 4.
 
-**No single transfer improves the squad.** Bank the free transfer.
+**No single transfer improves the squad.** Nothing to change.
 
 **Best two-move combinations** (net of any hit):
 
@@ -58,7 +58,7 @@ Gain is the lift to your best XI (captain included) over GW1–6, not the raw di
 
 ## The next six weeks, planned
 
-Best path from here: **394.5** pts (0 hits). Making no move this week and re-planning: 391.6. Acting now is worth **+2.9**.
+Best path from here: **394.5** pts (0 hits). Making no move this week and re-planning: 391.6. Acting now is worth **+2.9** across 4 moves — not enough; hold.
 
 - **GW1** 70.1 pts, C Saka, 15 FT  Raya → Gabriel, Kluivert → Kostoulas, O'Shea → Pickford, Haaland → B.Fernandes
 - **GW2** 65.1 pts, C B.Fernandes, 1 FT  Tarkowski → Virgil
@@ -75,4 +75,4 @@ Prices are locked until the Gameweek 1 deadline, so there is no transfer flow to
 
 ---
 
-_Generated 2026-08-16 13:57 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-08-16 14:16 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
