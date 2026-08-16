@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 1
 
-Deadline **Fri 21 Aug, 17:30 UTC** — 5d 2h away.
+Deadline **Fri 21 Aug, 17:30 UTC** — 5d 1h away.
 Projections cover GW1–6.
 
 ## Captain: **Saka** (ARS)
@@ -88,4 +88,4 @@ Prices are locked until the Gameweek 1 deadline, so there is no transfer flow to
 
 ---
 
-_Generated 2026-08-16 15:13 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-08-16 15:44 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._

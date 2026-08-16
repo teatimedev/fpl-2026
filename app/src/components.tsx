@@ -1,4 +1,4 @@
-import type { Player, Team, Fixture, Pos } from './types'
+import type { Player, Team, Fixture, Pos, TickerFx } from './types'
 
 /* --------------------------------------------------------------- fixture pips
    Six dots for the next six opponents, coloured by FDR. Away games are dimmed.
@@ -21,19 +21,21 @@ export function Pips({ fixtures }: { fixtures: (Fixture | null)[] }) {
 
 /* ------------------------------------------------------------------- shirt */
 export function Shirt({
-  player, team, fixtures, isCaptain, onClick,
+  player, team, fixtures, isCaptain, isVice, onClick,
 }: {
   player: Player
   team: Team
   fixtures: (Fixture | null)[]
   isCaptain: boolean
+  isVice?: boolean
   onClick: () => void
 }) {
   const flagged = player.status !== 'a'
   return (
     <button className="shirt" onClick={onClick}
-      title={`Remove ${player.full_name}`}>
+      title={`${player.full_name} — details`}>
       {isCaptain && <span className="cap" aria-label="Captain">C</span>}
+      {!isCaptain && isVice && <span className="cap vice" aria-label="Vice-captain">V</span>}
       {flagged && <span className="flag" title={player.news}>!</span>}
       <span
         className="jersey"
@@ -45,6 +47,59 @@ export function Shirt({
       <span className="meta">£{player.price.toFixed(1)} · {player.proj_6gw.toFixed(0)}</span>
       <Pips fixtures={fixtures} />
     </button>
+  )
+}
+
+/* ------------------------------------------------------------ fixture chips
+   One gameweek's fixture(s) for a club, from the model ticker. A double shows
+   two chips, a blank shows a dashed "blank" chip. */
+export function FxChips({ fx }: { fx: TickerFx[] }) {
+  if (fx.length === 0) return <span className="fx-chip" data-tone="none">blank</span>
+  return (
+    <span className="fx-chips">
+      {fx.map((f, i) => (
+        <span key={i} className="fx-chip">{f.opp} ({f.home ? 'H' : 'A'})</span>
+      ))}
+    </span>
+  )
+}
+
+/* -------------------------------------------------------------- sparklines
+   Pure inline SVG, no deps. BarSpark for chip weeks, LineSpark for the
+   ownership log in the drawer and movers lists. */
+export function BarSpark({ items }: { items: { label: string; v: number; hot?: boolean }[] }) {
+  if (items.length === 0) return null
+  const bw = 7, gap = 2, H = 30
+  const W = items.length * (bw + gap) - gap
+  const max = Math.max(0.1, ...items.map(x => x.v))
+  return (
+    <svg className="spark" width={W} height={H} viewBox={`0 0 ${W} ${H}`} role="img">
+      {items.map((x, i) => {
+        const h = Math.max(1.5, (x.v / max) * (H - 2))
+        return (
+          <rect key={i} x={i * (bw + gap)} y={H - h} width={bw} height={h} rx={1}
+            fill={x.hot ? 'var(--flood)' : 'rgba(232, 240, 234, 0.26)'}>
+            <title>{x.label}</title>
+          </rect>
+        )
+      })}
+    </svg>
+  )
+}
+
+export function LineSpark({ values, width = 64, height = 18 }: {
+  values: number[]; width?: number; height?: number
+}) {
+  if (values.length < 2) return <span className="spark-flat mono">—</span>
+  const min = Math.min(...values)
+  const span = (Math.max(...values) - min) || 1
+  const pts = values.map((v, i) =>
+    `${(i / (values.length - 1)) * (width - 2) + 1},`
+    + `${height - 2 - ((v - min) / span) * (height - 4)}`).join(' ')
+  return (
+    <svg className="spark" width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img">
+      <polyline points={pts} fill="none" stroke="var(--flood-soft)" strokeWidth="1.5" />
+    </svg>
   )
 }
 

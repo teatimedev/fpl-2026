@@ -1,4 +1,22 @@
-# Where this is up to — 16 Aug 2026
+# Where this is up to — 16 Aug 2026 (evening)
+
+**Since the morning entry below:** chips are modelled (`v2/chips.py`, two copies
+per chip from the API's own windows, valued from a coarse full-season projection
+`v2/projections_season.json`; `weekly.py --chips`); **the model now learns
+in-season** — fetch.py writes 2026/27 season_stat rows from the bootstrap and
+match rows from finished fixtures (guarded pre-season: the API shows last
+season's totals until GW1 ends), the player panel includes 2026/27 at weight
+1.0, and the minutes model trusts this season's start rate n/(n+4) after n team
+games; `weekly.py --json` writes the digest as data (`data/weekly.json`),
+`v2/movers.py` turns the daily price log into ownership/transfer momentum, and
+the app bundle now carries weekly, movers, a model fixture ticker and player
+detail fields. **The app now has four tabs:** This week (renders the CI digest
+when the loaded squad matches — fixture chips, lineup diff, checks, XI-aware
+transfers and two-move combos, six-week plan, price watch; a "load that squad"
+link otherwise), Season (chips with per-week bars, model fixture ticker with
+attack/defence toggle, movers), Build, Scorecard; and a player drawer from any
+name (window bars + season curve, xG/xA/DC per 90, evidence, start rate, news,
+momentum). Header is two rows on a phone; the pitch fits four across at 375px.
 
 **GW1 deadline: Fri 21 Aug, 18:30 BST (17:30 UTC).** Prices are locked until then.
 

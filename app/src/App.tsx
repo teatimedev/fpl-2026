@@ -1,17 +1,19 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import raw from './data/fpl.json'
 import type { Data, Player, Pos } from './types'
 import { POS_ORDER, SQUAD_SHAPE, BUDGET, MAX_PER_CLUB } from './types'
 import { analyse, blockReason, bestXI, formationOf, squadOutlook, round1 } from './squad'
 import { Pips, Shirt, EmptyShirt, Outlook } from './components'
 import ThisWeek from './ThisWeek'
+import Season from './Season'
 import Scorecard from './Scorecard'
+import PlayerDrawer from './PlayerDrawer'
 
 const D = raw as unknown as Data
 const byId = new Map(D.players.map(p => [p.id, p]))
 
 type SortKey = 'proj_6gw' | 'price' | 'value' | 'sel_pct' | 'pts_last' | 'name'
-type Tab = 'week' | 'build' | 'score'
+type Tab = 'week' | 'season' | 'build' | 'score'
 
 const PRESET_BLURB = [
   'The highest projected XI the rules allow, with no constraints beyond the game rules.',
@@ -66,9 +68,16 @@ export default function App() {
   const xi = presetXI ?? computedXI
   const starters = picks.filter(p => xi.has(p.id))
   const bench = picks.filter(p => !xi.has(p.id))
-  const captain = starters.length
-    ? starters.reduce((a, b) => (b.proj_6gw > a.proj_6gw ? b : a))
-    : null
+  const rankedStarters = [...starters].sort((a, b) => b.proj_6gw - a.proj_6gw)
+  const captain = rankedStarters[0] ?? null
+  const vice = rankedStarters[1] ?? null
+
+  // One drawer for the whole app: any player name or shirt opens it.
+  const [drawerId, setDrawerId] = useState<number | null>(null)
+  const openPlayer = useCallback((id: number) => setDrawerId(id), [])
+  const closeDrawer = useCallback(() => setDrawerId(null), [])
+  const drawerPlayer = drawerId != null ? byId.get(drawerId) ?? null : null
+  const drawerGw = D.weekly?.gw ?? D.meta.start_gw ?? 1
   const outlook = useMemo(
     () => squadOutlook(picks, xi, D.schedule, D.meta.horizon, D.meta.start_gw ?? 1),
     [picks, xi],
@@ -132,6 +141,7 @@ export default function App() {
         </span>
         <div className="seg tabs">
           <button aria-pressed={tab === 'week'} onClick={() => setTab('week')}>This week</button>
+          <button aria-pressed={tab === 'season'} onClick={() => setTab('season')}>Season</button>
           <button aria-pressed={tab === 'build'} onClick={() => setTab('build')}>Build</button>
           <button aria-pressed={tab === 'score'} onClick={() => setTab('score')}>Scorecard</button>
         </div>
@@ -143,7 +153,20 @@ export default function App() {
         </div>
       </header>
 
-      {tab === 'week' && <ThisWeek D={D} builtSquad={picks} />}
+      <PlayerDrawer player={drawerPlayer} D={D} gw={drawerGw} onClose={closeDrawer}
+        action={drawerPlayer && tab === 'build' ? (
+          pickedIds.has(drawerPlayer.id)
+            ? { label: `Remove ${drawerPlayer.name} from squad`, run: () => { remove(drawerPlayer.id); closeDrawer() } }
+            : blockReason(drawerPlayer, state)
+              ? null
+              : { label: `Add ${drawerPlayer.name} to squad`, run: () => { add(drawerPlayer); closeDrawer() } }
+        ) : null} />
+
+      {tab === 'week' && (
+        <ThisWeek D={D} builtSquad={picks} openPlayer={openPlayer}
+          loadSquad={ids => { setPresetXI(null); setPicks(ids.map(id => byId.get(id)).filter((p): p is Player => !!p)) }} />
+      )}
+      {tab === 'season' && <Season D={D} openPlayer={openPlayer} />}
       {tab === 'score' && <Scorecard sc={D.scorecard ?? null} />}
       {tab === 'build' && (
 
@@ -173,7 +196,8 @@ export default function App() {
                           team={D.teams[pl.team]}
                           fixtures={D.schedule[pl.team] ?? []}
                           isCaptain={captain?.id === pl.id}
-                          onClick={() => remove(pl.id)}
+                          isVice={vice?.id === pl.id}
+                          onClick={() => openPlayer(pl.id)}
                         />
                       ))}
                       {Array.from({ length: ghosts }).map((_, i) => (
@@ -201,7 +225,7 @@ export default function App() {
                           team={D.teams[pl.team]}
                           fixtures={D.schedule[pl.team] ?? []}
                           isCaptain={false}
-                          onClick={() => remove(pl.id)}
+                          onClick={() => openPlayer(pl.id)}
                         />
                       ))}
                   </div>
@@ -274,7 +298,7 @@ export default function App() {
                             <span className="bar" style={{ background: t.primary }} />
                             <span className="txt">
                               <span className="n">
-                                {p.name}
+                                <button className="plink" onClick={() => openPlayer(p.id)}>{p.name}</button>
                                 {p.is_new && <span className="badge new">new</span>}
                                 {p.pens === 1 && <span className="badge pen">pens</span>}
                                 {p.status !== 'a' && <span className="badge out">{p.status === 's' ? 'susp' : 'inj'}</span>}

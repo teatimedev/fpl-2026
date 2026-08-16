@@ -713,15 +713,17 @@ def main():
                         wc_now = round(wc['total'] - free['total'], 1)
                 if free and hold:
                     diff = free['total'] - hold['total']
-                    J['plan'] = dict(total=free['total'], hold_total=hold['total'],
-                                     diff=round(diff, 1), hits=free['hits'],
-                                     weeks=[dict(gw=w['gw'], pts=w['pts'], hits=w['hits'],
-                                                 captain=w['captain'], ft=w['ft'],
-                                                 in_=w['in'], out=w['out']) for w in free['weeks']])
+
                     n_now = len(free['weeks'][0]['in'])
                     # judge the value of acting now PER MOVE: four changes for
                     # +3 is churn, one change for +3 is a transfer
                     worth_it = n_now > 0 and diff >= HOLD_THRESHOLD * n_now
+                    J['plan'] = dict(total=free['total'], hold_total=hold['total'],
+                                     diff=round(diff, 1), hits=free['hits'],
+                                     n_now=n_now, worth_it=worth_it,
+                                     weeks=[dict(gw=w['gw'], pts=w['pts'], hits=w['hits'],
+                                                 captain=w['captain'], ft=w['ft'],
+                                                 in_=w['in'], out=w['out']) for w in free['weeks']])
                     L.append(f'Best path from here: **{free["total"]:.1f}** pts '
                              f'({free["hits"]} hit{"s" if free["hits"] != 1 else ""}). '
                              f'Making no move this week and re-planning: '

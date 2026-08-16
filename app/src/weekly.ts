@@ -1,5 +1,21 @@
-import type { Player, Pos } from './types'
+import type { Player, Pos, Ticker, TickerFx } from './types'
 import { XI_MIN, XI_MAX, POS_ORDER, MAX_PER_CLUB } from './types'
+
+/* ---------------------------------------------------------- model fixtures
+   The ticker carries the model's view of every remaining fixture. */
+export function fxFor(ticker: Ticker | null | undefined, team: string, gw: number): TickerFx[] {
+  return ticker?.[team]?.find(r => r.gw === gw)?.fx ?? []
+}
+
+export type Tone = 'good' | 'ok' | 'warn' | 'bad'
+
+/** Clean-sheet probability → chip colour. */
+export const csTone = (cs: number): Tone =>
+  cs >= 0.45 ? 'good' : cs >= 0.30 ? 'ok' : cs >= 0.20 ? 'warn' : 'bad'
+
+/** Expected goals → chip colour. */
+export const xgTone = (xg: number): Tone =>
+  xg >= 1.8 ? 'good' : xg >= 1.4 ? 'ok' : xg >= 1.0 ? 'warn' : 'bad'
 
 /**
  * The weekly decision, computed in the browser.
