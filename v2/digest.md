@@ -88,4 +88,4 @@ Prices are locked until the Gameweek 1 deadline, so there is no transfer flow to
 
 ---
 
-_Generated 2026-08-16 15:44 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-08-16 15:47 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
