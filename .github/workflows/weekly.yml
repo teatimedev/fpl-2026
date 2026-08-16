@@ -86,7 +86,8 @@ jobs:
         run: |
           TEAM_ARG=""
           if [ -n "${{ vars.FPL_ENTRY_ID }}" ]; then TEAM_ARG="--team ${{ vars.FPL_ENTRY_ID }}"; fi
-          python v2/weekly.py --no-refresh --plan --chips --snapshot --price-log --push-file $TEAM_ARG
+          python v2/weekly.py --no-refresh --plan --chips --snapshot --price-log --push-file --json $TEAM_ARG
+          python v2/movers.py
 
       - name: Grade finished gameweeks
         run: python v2/scorecard.py

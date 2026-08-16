@@ -31,7 +31,8 @@ FIELDS = ['id', 'name', 'full_name', 'team', 'team_id', 'pos', 'pos_id', 'price'
           'pts_last', 'mins_last', 'ppg_last', 'goals_last', 'assists_last',
           'xgi90_last', 'defcon_last', 'cs_last', 'bonus_last', 'status', 'news',
           'joined', 'is_new', 'pens', 'corners', 'fk', 'fdr6', 'cs_rate', 'note',
-          'pts_now', 'mins_now', 'starts_now', 'games_now']
+          'pts_now', 'mins_now', 'starts_now', 'games_now',
+          'xg90', 'xa90', 'dc90', 'start_rate', 'evidence', 'seasons']
 
 POS_ID = {'GKP': 1, 'DEF': 2, 'MID': 3, 'FWD': 4}
 
@@ -82,6 +83,9 @@ def main():
             'fdr6': fdr6, 'cs_rate': round(cs_rate, 3), 'note': p.get('note', ''),
             'pts_now': p.get('pts_now', 0), 'mins_now': p.get('mins_now', 0),
             'starts_now': p.get('starts_now', 0), 'games_now': p.get('games_now', 0),
+            'xg90': p.get('xg90', 0), 'xa90': p.get('xa90', 0), 'dc90': p.get('dc90', 0),
+            'start_rate': p.get('start_rate', 0), 'evidence': p.get('evidence', 0),
+            'seasons': p.get('seasons', 0),
         })
     rows.sort(key=lambda r: -r['proj_6gw'])
     with open(DST, 'w', newline='') as f:

@@ -33,8 +33,12 @@ What it does each run:
      scored against what actually happened (scorecard.py); with --price-log,
      appends today's prices and transfer flow for the price-change model
 
-Flags: --no-refresh (skip step 1), --plan, --snapshot, --price-log,
-       --push-file (write a short phone-sized summary to v2/push.txt),
+  8. with --chips, values every chip in every week you could still play it
+     (chips.py); with --json, writes the whole digest as data to
+     data/weekly.json, which is what the web app renders
+
+Flags: --no-refresh (skip step 1), --plan, --chips, --snapshot, --price-log,
+       --json, --push-file (write a short phone-sized summary to v2/push.txt),
        --ft N (override the free-transfer count), --bank X (override bank).
 """
 import argparse
@@ -60,6 +64,7 @@ DIGEST = HERE / 'digest.md'
 PUSH = HERE / 'push.txt'
 HISTORY = ROOT / 'data' / 'history'
 PRICE_LOG = ROOT / 'data' / 'price_log'
+WEEKLY_JSON = ROOT / 'data' / 'weekly.json'
 FPL = 'https://fantasy.premierleague.com/api'
 UA = {'User-Agent': 'Mozilla/5.0'}
 APP_URL = 'https://fpl-2026.vercel.app'
@@ -415,6 +420,8 @@ def main():
                     help='log today\'s prices and transfer flow')
     ap.add_argument('--push-file', action='store_true',
                     help='write a phone-sized summary to v2/push.txt')
+    ap.add_argument('--json', action='store_true',
+                    help='write the digest as data for the app to data/weekly.json')
     ap.add_argument('--ft', type=int, help='override free transfers available')
     ap.add_argument('--bank', type=float, help='override money in the bank (£m)')
     args = ap.parse_args()
@@ -435,6 +442,8 @@ def main():
     days, hrs = max(left.days, 0), (left.seconds // 3600) if left.days >= 0 else 0
 
     L, P = [], []          # digest lines, push lines
+    J = dict(gw=gw, deadline=deadline, horizon=horizon,
+             generated=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'))
     L.append(f'# FPL weekly — Gameweek {gw}')
     L.append('')
     L.append(f'Deadline **{dl:%a %d %b, %H:%M UTC}** — {days}d {hrs}h away.')
@@ -448,6 +457,8 @@ def main():
     if args.bank is not None:
         st['bank'] = args.bank
     ids, bank, ft, lineup = st['ids'], st['bank'], st['ft'], st['lineup']
+    J['squad'] = dict(ids=list(ids), bank=bank, ft=ft, source=st['source'],
+                      lineup={k: v for k, v in (lineup or {}).items() if v is not None})
     squad = [players[i] for i in ids if i in players]
     model_out, yours_out = {}, {}
 
@@ -472,6 +483,10 @@ def main():
         cap, vice = ranked[0], ranked[1]
         model_out = dict(xi=[p['id'] for p in xi], bench=[p['id'] for p in bench],
                          captain=cap['id'], vice=vice['id'])
+        J['model'] = dict(model_out, captain_pts=round(key(cap), 2), vice_pts=round(key(vice), 2),
+                          ranked=[dict(id=p['id'], pts=round(key(p), 2)) for p in ranked[:4]],
+                          gw_pts={p['id']: round(key(p), 2) for p in squad},
+                          remaining={p['id']: round(remaining(p, gw, horizon), 2) for p in squad})
 
         # ---- captain
         L.append(f'## Captain: **{cap["name"]}** ({cap["team"]})')
@@ -551,6 +566,7 @@ def main():
                     issues.append(f'Formation: you {yshape["DEF"]}-{yshape["MID"]}-'
                                   f'{yshape["FWD"]}, model {shape["DEF"]}-{shape["MID"]}-'
                                   f'{shape["FWD"]}.')
+            J['lineup_issues'] = list(issues)
             L.append(f'## Your lineup vs the model  ({st["source"]})')
             L.append('')
             if issues:
@@ -582,6 +598,7 @@ def main():
                 flags.append('new signing — role still settling')
             if flags:
                 checks.append((p, flags))
+        J['checks'] = [dict(id=p['id'], xi=p in xi, flags=fl) for p, fl in checks]
         L.append('## Check before the deadline')
         L.append('')
         if checks:
@@ -604,6 +621,12 @@ def main():
                  f'{"unlimited" if ft >= 15 else ft} free)')
         L.append('')
         eng = transfer_engine(squad, players, bank, ft, gw, horizon)
+        J['transfers'] = dict(
+            base=round(eng['base'], 1),
+            singles=[dict(out=s_['out']['id'], in_=s_['in_']['id'], gain=s_['gain'], net=s_['net'])
+                     for s_ in eng['singles']],
+            pairs=[dict(out=[o['id'] for o in pr['out']], in_=[n['id'] for n in pr['in_']],
+                        gain=pr['gain'], net=pr['net']) for pr in eng['pairs']])
         L.append(f'Gain is the lift to your best XI (captain included) over '
                  f'GW{gw}–{horizon}, not the raw difference between two players. '
                  f'A hit costs 4.')
@@ -671,6 +694,9 @@ def main():
                          f'{n1["name"]}+{n2["name"]} net {top["net"]:+.1f}')
         L.append('')
 
+        J['transfers']['advice'] = next((l for l in reversed(L) if l.startswith('**Recommended')
+                                         or l.startswith('**No single')), '').replace('**', '')
+
         # ---- multi-week path
         wc_now = None
         if args.plan:
@@ -687,6 +713,11 @@ def main():
                         wc_now = round(wc['total'] - free['total'], 1)
                 if free and hold:
                     diff = free['total'] - hold['total']
+                    J['plan'] = dict(total=free['total'], hold_total=hold['total'],
+                                     diff=round(diff, 1), hits=free['hits'],
+                                     weeks=[dict(gw=w['gw'], pts=w['pts'], hits=w['hits'],
+                                                 captain=w['captain'], ft=w['ft'],
+                                                 in_=w['in'], out=w['out']) for w in free['weeks']])
                     n_now = len(free['weeks'][0]['in'])
                     # judge the value of acting now PER MOVE: four changes for
                     # +3 is churn, one change for +3 is a transfer
@@ -722,6 +753,7 @@ def main():
                 season, _, last_gw = CH.load_season()
                 res = CH.evaluate(season, ids, bank, gw, last_gw, CH.chip_windows(),
                                   CH.used_chips(st.get('history')), wc_now=wc_now)
+                J['chips'] = res
                 L.append('## Chips')
                 L.append('')
                 L.extend(CH.digest_lines(res))
@@ -737,6 +769,10 @@ def main():
 
     # ---- price watch
     rises, falls = price_watch(boot, players, set(ids))
+    J['price'] = dict(
+        locked=not rises or all(r['net'] == 0 for r in rises),
+        rises=[dict(id=r['p']['id'], net=r['net'], pressure=round(r['pressure'], 4)) for r in rises],
+        falls=[dict(id=r['p']['id'], net=r['net'], pressure=round(r['pressure'], 4)) for r in falls])
     L.append('## Price watch')
     L.append('')
     if not rises or all(r['net'] == 0 for r in rises):
@@ -776,6 +812,11 @@ def main():
     print(text)
     print(f'\n(also written to {DIGEST})')
 
+    if args.json:
+        J['digest_md'] = text
+        WEEKLY_JSON.parent.mkdir(parents=True, exist_ok=True)
+        WEEKLY_JSON.write_text(json.dumps(J, separators=(',', ':')))
+        print(f'(digest data written to {WEEKLY_JSON})')
     if args.push_file:
         P.append(f'Full digest: {APP_URL}')
         PUSH.write_text('\n'.join(P) + '\n')

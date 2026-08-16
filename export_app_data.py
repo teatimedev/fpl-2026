@@ -36,8 +36,35 @@ KEEP = ('id', 'name', 'full_name', 'team', 'pos', 'price', 'proj_gw', 'proj_6gw'
         'mins_proj', 'sel_pct', 'pts_last', 'mins_last', 'ppg_last', 'goals_last',
         'assists_last', 'xgi90_last', 'defcon_last', 'cs_last', 'bonus_last',
         'status', 'news', 'is_new', 'joined', 'pens', 'corners', 'fk', 'note',
-        'fdr6', 'value', 'pts_now', 'mins_now', 'starts_now', 'games_now')
-players = [{k: p[k] for k in KEEP} for p in proj['players']]
+        'fdr6', 'value', 'pts_now', 'mins_now', 'starts_now', 'games_now',
+        'xg90', 'xa90', 'dc90', 'start_rate', 'evidence', 'seasons')
+players = [{k: p.get(k) for k in KEEP} for p in proj['players']]
+
+# per-player season curve (coarse, minutes held constant) for the player drawer
+# and chip context — one decimal is plenty and keeps the bundle small
+if os.path.exists('v2/projections_season.json'):
+    season = {p['id']: p['by_gw'] for p in json.load(open('v2/projections_season.json'))['players']}
+    for p in players:
+        p['season_by_gw'] = [round(x, 1) for x in season.get(p['id'], [])]
+
+# the model's fixture ticker: every remaining gameweek for every club, with
+# clean-sheet probability and expected goals (not FDR) — from v2/season_view.json
+ticker = {}
+if os.path.exists('v2/season_view.json'):
+    sv = json.load(open('v2/season_view.json'))
+    start = sv.get('start_gw', 1)
+    for team, byweek in sv['view'].items():
+        ticker[team] = [
+            dict(gw=int(g), fx=[dict(opp=f['opp'], home=f['home'], cs=round(f['cs'], 3),
+                                     xg=round(f['xg'], 2), xgc=round(f['xgc'], 2),
+                                     src=f.get('src', 'model')) for f in fx])
+            for g, fx in sorted(byweek.items(), key=lambda kv: int(kv[0])) if int(g) >= start]
+
+# the structured digest (weekly.py --json) and the crowd's movements (movers.py)
+weekly = json.load(open('data/weekly.json')) if os.path.exists('data/weekly.json') else None
+if weekly:
+    weekly.pop('digest_md', None)          # the app renders data, not markdown
+movers = json.load(open('data/movers.json')) if os.path.exists('data/movers.json') else None
 
 # the model's report card, graded by v2/scorecard.py once gameweeks finish
 scorecard = (json.load(open('data/scorecard.json'))
@@ -53,6 +80,9 @@ out = {
     'players': players,
     'scorecard': scorecard,
     'chips': chips,
+    'weekly': weekly,
+    'movers': movers,
+    'ticker': ticker,
     # optimise.py reads its pool from CSV, so ids arrive as strings -- coerce them
     # back to int so they match the player ids the app indexes on.
     'squads': [{'label': s['label'], 'cost': s['cost'], 'xi_proj': s['xi_proj'],
