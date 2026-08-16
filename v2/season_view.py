@@ -22,6 +22,7 @@ from pathlib import Path
 import numpy as np
 
 import teams_model as TM
+from gwclock import window as gw_window
 
 ROOT = Path(__file__).resolve().parent.parent
 DB = ROOT / 'v2' / 'fpl.db'
@@ -85,41 +86,77 @@ def season_parameters(model, atk, dfn, horizon=None):
     cx = sqlite3.connect(DB)
     short = {r[0]: r[1] for r in cx.execute('SELECT id, short FROM team')}
     fixtures = cx.execute(
-        'SELECT event, team_h, team_a, fdr_h, fdr_a FROM fixture '
+        'SELECT event, team_h, team_a, fdr_h, fdr_a, kickoff FROM fixture '
         'WHERE event IS NOT NULL ORDER BY event').fetchall()
+    # forward bookmaker odds, when posted (fetch.py fills `market` from
+    # football-data ~a week out and, with ODDS_API_KEY, from the-odds-api).
+    # A home/away pair meets once a season at each venue, so the pair alone
+    # identifies the fixture; the date guards against a stale row.
+    market = {}
+    for date, h, a, oh, od, oa, oo, ou in cx.execute(
+            'SELECT date, home, away, odds_h, odds_d, odds_a, odds_o25, odds_u25 '
+            'FROM market'):
+        market.setdefault((h, a), []).append((date, (oh, od, oa, oo, ou)))
     cx.close()
 
+    m = {**model, 'atk': atk, 'dfn': dfn}
     view = {t: {} for t in short.values()}
-    for ev, th, ta, fh, fa in fixtures:
+    n_market = 0
+    for ev, th, ta, fh, fa, kickoff in fixtures:
         if horizon and ev > horizon:
             continue
         h, a = short[th], short[ta]
-        both = TM.team_view({**model, 'atk': atk, 'dfn': dfn}, h, a)
+        odds = None
+        for date, o in market.get((h, a), []):
+            if not kickoff or not date or abs(_days_between(date, kickoff)) <= 10:
+                odds = o
+        if odds and odds[0]:
+            both = TM.market_view(m, h, a, odds)
+            n_market += both[h].get('src') == 'market'
+        else:
+            both = TM.team_view(m, h, a)
         both[h]['fdr'] = fh
         both[a]['fdr'] = fa
         view[h].setdefault(ev, []).append(both[h])
         view[a].setdefault(ev, []).append(both[a])
+    season_parameters.n_market = n_market
     return view
+
+
+def _days_between(iso_a, iso_b):
+    from datetime import datetime
+    try:
+        da = datetime.fromisoformat(iso_a[:10])
+        db = datetime.fromisoformat(iso_b[:10])
+        return (da - db).days
+    except ValueError:
+        return 0
 
 
 if __name__ == '__main__':
     model = json.loads(RATINGS.read_text())
     atk, dfn, notes = build_ratings(model)
-    view = season_parameters(model, atk, dfn, horizon=6)
+    # the window rolls: next gameweek to six ahead (see gwclock.py)
+    start_gw, horizon = gw_window()
+    view = season_parameters(model, atk, dfn, horizon=horizon)
+    n_fix = sum(len(v) for t in view.values() for v in t.values()) // 2
+    print(f'{season_parameters.n_market} of {n_fix} fixtures in GW{start_gw}-{horizon} '
+          f'priced from bookmaker odds (the rest from fitted ratings)\n')
 
     print('2026/27 ratings after adjustment\n')
     print(f"{'team':<6}{'attack':>9}{'defence':>9}   note")
     for t in sorted(atk, key=lambda t: -(atk[t] + dfn[t])):
         print(f'{t:<6}{atk[t]:>+9.3f}{dfn[t]:>+9.3f}   {notes[t]}')
 
-    print('\n\nClean-sheet probability, GW1-6 — model vs FPL difficulty rating\n')
-    print(f"{'team':<6}" + ''.join(f'{"GW"+str(g):>13}' for g in range(1, 7))
-          + f"{'CS总':>0}")
-    print(f"{'':6}" + ''.join(f'{"cs%  fdr":>13}' for _ in range(1, 7)))
+    print(f'\n\nClean-sheet probability, GW{start_gw}-{horizon} — model vs FPL '
+          f'difficulty rating\n')
+    gws = range(start_gw, horizon + 1)
+    print(f"{'team':<6}" + ''.join(f'{"GW"+str(g):>13}' for g in gws))
+    print(f"{'':6}" + ''.join(f'{"cs%  fdr":>13}' for _ in gws))
     rows = []
     for t in sorted(view):
         cells, tot = '', 0.0
-        for g in range(1, 7):
+        for g in gws:
             fx = view[t].get(g)
             if not fx:
                 cells += f'{"—":>13}'
@@ -133,6 +170,7 @@ if __name__ == '__main__':
 
     json.dump({'atk': atk, 'dfn': dfn, 'notes': notes,
                'home_adv': model['home_adv'], 'rho': model['rho'],
+               'start_gw': start_gw, 'horizon': horizon,
                'view': {t: {str(g): v for g, v in d.items()} for t, d in view.items()}},
               open(OUT, 'w'), indent=1)
     print(f'\nwrote {OUT}')

@@ -54,12 +54,64 @@ export interface SquadPreset {
   picks: { id: number; starting: boolean }[]
 }
 
+/* ------------------------------------------------------------- scorecard
+   Written by v2/scorecard.py: each pre-deadline refresh archives what the model
+   believed, and finished gameweeks are graded against actual points. */
+export interface ScorecardDecile { lo: number; hi: number; proj: number; actual: number; n: number }
+export interface ScorecardPick { id: number; name: string; pts: number }
+
+export interface ScorecardGw {
+  gw: number
+  generated: string
+  /** false until FPL marks the round data-checked (bonus not final) */
+  checked: boolean
+  n_pool: number
+  n_starters: number
+  spearman_pool: number | null
+  spearman_starters: number | null
+  spearman_played: number | null
+  mae_starters: number | null
+  bias_starters: number | null
+  top20_mean_actual: number | null
+  top20_in_actual_top50: number
+  deciles: ScorecardDecile[]
+  captain?: { model?: ScorecardPick; yours?: ScorecardPick; best: ScorecardPick }
+  xi?: { model?: number; yours?: number; best: number }
+  cs?: { n: number; brier: number; predicted_rate: number; actual_rate: number }
+}
+
+export interface ScorecardSummary {
+  n_gws: number
+  spearman_starters: number | null
+  spearman_pool: number | null
+  mae_starters: number | null
+  bias_starters: number | null
+  captain_model: number | null
+  captain_yours: number | null
+  captain_best: number | null
+  xi_model: number | null
+  xi_yours: number | null
+  xi_best: number | null
+  cs_brier: number | null
+  cs_predicted_rate: number | null
+  cs_actual_rate: number | null
+}
+
+export interface Scorecard {
+  generated: string
+  summary: ScorecardSummary
+  gws: ScorecardGw[]
+  notes: string[]
+}
+
 export interface Data {
-  meta: { horizon: number; deadline: string; budget: number; generated: string }
+  /** The window rolls: start_gw is the next gameweek, horizon the last one modelled. */
+  meta: { horizon: number; start_gw?: number; deadline: string; budget: number; generated: string }
   teams: Record<string, Team>
   schedule: Record<string, (Fixture | null)[]>
   players: Player[]
   squads: SquadPreset[]
+  scorecard?: Scorecard | null
 }
 
 export const SQUAD_SHAPE: Record<Pos, number> = { GKP: 2, DEF: 5, MID: 5, FWD: 3 }

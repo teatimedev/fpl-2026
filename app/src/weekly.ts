@@ -162,10 +162,20 @@ export async function loadLive(): Promise<LiveState> {
   return { gw: next.id, deadline: next.deadline_time, elements }
 }
 
+/** The lineup you actually have set: XI, bench in order, armbands. */
+export interface Lineup {
+  xi: number[]
+  bench: number[]
+  captain: number | null
+  vice: number | null
+}
+
 export interface LoadedTeam {
   ids: number[]
   bank: number
   fromGw: number
+  /** null when the picks payload carries no positions (should not happen once public) */
+  lineup: Lineup | null
 }
 
 /**
@@ -177,14 +187,103 @@ export async function loadTeam(entryId: number, gw: number): Promise<LoadedTeam 
   for (let ev = gw - 1; ev >= 1; ev--) {
     try {
       const picks = await fpl<any>(`entry/${entryId}/event/${ev}/picks/`)
+      // position 1–11 is the XI, 12–15 the bench in the order they come on
+      const ps: any[] = [...picks.picks].sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
+      const positioned = ps.length === 15 && ps.every(p => typeof p.position === 'number')
+      const lineup: Lineup | null = positioned ? {
+        xi: ps.filter(p => p.position <= 11).map(p => p.element),
+        bench: ps.filter(p => p.position > 11).map(p => p.element),
+        captain: ps.find(p => p.is_captain)?.element ?? null,
+        vice: ps.find(p => p.is_vice_captain)?.element ?? null,
+      } : null
       return {
-        ids: picks.picks.map((p: any) => p.element),
+        ids: ps.map(p => p.element),
         bank: (picks.entry_history?.bank ?? 0) / 10,
         fromGw: ev,
+        lineup,
       }
     } catch {
       /* not public yet — try the gameweek before */
     }
   }
   return null
+}
+
+export interface LineupIssue { head: string; body: string }
+
+/**
+ * Where the lineup you have set disagrees with the model's for this gameweek.
+ * Mirrors the "Your lineup vs the model" block in v2/weekly.py, wording
+ * included. `xi`/`bench` are the model's, from xiForGw.
+ */
+export function lineupIssues(
+  lineup: Lineup, squad: Player[], xi: Player[], bench: Player[], gw: number,
+): LineupIssue[] {
+  const key = (p: Player) => thisGw(p, gw)
+  const f1 = (x: number) => x.toFixed(1)
+  const signed = (x: number) => (x >= 0 ? '+' : '') + f1(x)
+  const byId = new Map(squad.map(p => [p.id, p]))
+  const ranked = [...xi].sort((a, b) => key(b) - key(a))
+  const cap = ranked[0], vice = ranked[1]
+  if (!cap || !vice) return []
+
+  const issues: LineupIssue[] = []
+  const ycap = lineup.captain != null ? byId.get(lineup.captain) : undefined
+  const yvice = lineup.vice != null ? byId.get(lineup.vice) : undefined
+  // where the model would put the vice armband, given who you captain
+  const armband = ycap && vice.id === ycap.id ? cap : vice
+
+  if (ycap && ycap.id !== cap.id) {
+    issues.push({
+      head: 'Captain:',
+      body: `you have ${ycap.name} (${f1(key(ycap))}); the model prefers ${cap.name} `
+        + `(${f1(key(cap))}) — ${signed((key(cap) - key(ycap)) * 2)} expected once doubled.`,
+    })
+  }
+  if (yvice) {
+    if (yvice.pos === 'GKP') {
+      issues.push({
+        head: `Vice on a goalkeeper (${yvice.name}):`,
+        body: `if the captain misses, the armband doubles your keeper. Move it to ${armband.name}.`,
+      })
+    } else if (!ranked.slice(0, 3).some(p => p.id === yvice.id)) {
+      issues.push({
+        head: 'Vice:',
+        body: `${yvice.name} (${f1(key(yvice))}) is not one of your top three; `
+          + `the model would use ${armband.name}.`,
+      })
+    }
+  }
+  if (lineup.xi.length) {
+    const yxi = lineup.xi.map(i => byId.get(i)).filter((p): p is Player => !!p)
+    const ybench = lineup.bench.map(i => byId.get(i)).filter((p): p is Player => !!p)
+    const yset = new Set(yxi.map(p => p.id))
+    const mset = new Set(xi.map(p => p.id))
+    for (const p of xi) {
+      if (yset.has(p.id)) continue
+      const alt = yxi.find(q => !mset.has(q.id) && q.pos === p.pos)
+        ?? yxi.find(q => !mset.has(q.id))
+      const gap = key(p) - (alt ? key(alt) : 0)
+      issues.push({
+        head: 'Bench → start:',
+        body: `${p.name} (${f1(key(p))}) is on your bench; the model starts him`
+          + (alt ? ` over ${alt.name} (${f1(key(alt))}), ${signed(gap)}.` : '.'),
+      })
+    }
+    const yfirst = ybench.find(q => q.pos !== 'GKP')
+    const mfirst = bench.find(q => q.pos !== 'GKP')
+    if (yfirst && mfirst && yfirst.id !== mfirst.id && !yset.has(mfirst.id)) {
+      issues.push({
+        head: 'Bench order:',
+        body: `your first sub is ${yfirst.name} (${f1(key(yfirst))}); `
+          + `${mfirst.name} (${f1(key(mfirst))}) is the better first man off.`,
+      })
+    }
+    const shape = (ps: Player[]) =>
+      (['DEF', 'MID', 'FWD'] as Pos[]).map(k => ps.filter(p => p.pos === k).length).join('-')
+    if (shape(yxi) !== shape(xi)) {
+      issues.push({ head: 'Formation:', body: `you ${shape(yxi)}, model ${shape(xi)}.` })
+    }
+  }
+  return issues
 }

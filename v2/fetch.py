@@ -235,33 +235,131 @@ def load_results(cx):
     return total
 
 
+def _iso_date(d):
+    """football-data writes dd/mm/yyyy; the-odds-api writes ISO. Store ISO so
+    the same fixture from two sources lands on one row."""
+    d = (d or '').strip()
+    if '/' in d:
+        dd, mm, yy = d.split('/')
+        yy = yy if len(yy) == 4 else '20' + yy
+        return f'{yy}-{int(mm):02d}-{int(dd):02d}'
+    return d[:10]
+
+
 def load_market(cx):
-    """Forward fixtures with bookmaker odds. Empty until ~a week before a round."""
+    """Forward fixtures with bookmaker odds. Empty until ~a week before a round.
+
+    Two feeds. football-data.co.uk posts a fixtures file about a week out
+    (free, no key). the-odds-api gives live prices from many books — Pinnacle
+    when available — but needs a key: set ODDS_API_KEY (free tier is 500
+    requests a month; this uses one per refresh). Its rows overwrite
+    football-data's for the same fixture, because they are fresher.
+    """
+    rows = []
     try:
         raw = get('https://www.football-data.co.uk/fixtures.csv', binary=True)
+        (CACHE / 'fixtures_market.csv').write_bytes(raw)
+        rdr = csv.DictReader(io.StringIO(raw.decode('utf-8-sig', 'ignore')))
+        for r in rdr:
+            if r.get('Div') != 'E0':
+                continue
+            h = FD_TO_SHORT.get((r.get('HomeTeam') or '').strip())
+            a = FD_TO_SHORT.get((r.get('AwayTeam') or '').strip())
+            if not h or not a:
+                continue
+            rows.append((_iso_date(r['Date']), h, a,
+                         f(r.get('PSH') or r.get('AvgH') or r.get('B365H')),
+                         f(r.get('PSD') or r.get('AvgD') or r.get('B365D')),
+                         f(r.get('PSA') or r.get('AvgA') or r.get('B365A')),
+                         f(r.get('Avg>2.5') or r.get('B365>2.5')),
+                         f(r.get('Avg<2.5') or r.get('B365<2.5'))))
     except Exception as e:
-        print(f'  market odds unavailable: {e}')
-        return 0
-    (CACHE / 'fixtures_market.csv').write_bytes(raw)
-    rdr = csv.DictReader(io.StringIO(raw.decode('utf-8-sig', 'ignore')))
-    rows = []
-    for r in rdr:
-        if r.get('Div') != 'E0':
-            continue
-        h = FD_TO_SHORT.get((r.get('HomeTeam') or '').strip())
-        a = FD_TO_SHORT.get((r.get('AwayTeam') or '').strip())
-        if not h or not a:
-            continue
-        rows.append((r['Date'], h, a,
-                     f(r.get('PSH') or r.get('AvgH') or r.get('B365H')),
-                     f(r.get('PSD') or r.get('AvgD') or r.get('B365D')),
-                     f(r.get('PSA') or r.get('AvgA') or r.get('B365A')),
-                     f(r.get('Avg>2.5') or r.get('B365>2.5')),
-                     f(r.get('Avg<2.5') or r.get('B365<2.5'))))
+        print(f'  football-data market odds unavailable: {e}')
+    n_fd = len(rows)
+    n_api = 0
+    api_rows = load_odds_api()
+    if api_rows:
+        # dedupe on the pair: the API row wins
+        pairs = {(h, a) for _, h, a, *_ in api_rows}
+        rows = [r for r in rows if (r[1], r[2]) not in pairs] + api_rows
+        n_api = len(api_rows)
+    # `market` is "current forward prices", nothing else: clear it every fetch
+    # so odds for fixtures already played (or in an old date format) cannot
+    # linger and be matched to next season's reverse fixture
+    cx.execute('DELETE FROM market')
     cx.executemany('INSERT OR REPLACE INTO market VALUES (?,?,?,?,?,?,?,?)', rows)
     print(f'  forward market odds: {len(rows)} Premier League fixtures'
+          f' ({n_fd} football-data, {n_api} the-odds-api)'
           + ('' if rows else '  (none posted yet — normal this far out)'))
     return len(rows)
+
+
+# the-odds-api names clubs in full; FPL short codes are what the model uses
+ODDS_API_TO_SHORT = {
+    'arsenal': 'ARS', 'aston villa': 'AVL', 'bournemouth': 'BOU',
+    'brentford': 'BRE', 'brighton and hove albion': 'BHA', 'brighton': 'BHA',
+    'burnley': 'BUR', 'chelsea': 'CHE', 'coventry city': 'COV', 'coventry': 'COV',
+    'crystal palace': 'CRY', 'everton': 'EVE', 'fulham': 'FUL', 'hull city': 'HUL',
+    'hull': 'HUL', 'ipswich town': 'IPS', 'ipswich': 'IPS', 'leeds united': 'LEE',
+    'leeds': 'LEE', 'leicester city': 'LEI', 'liverpool': 'LIV', 'luton town': 'LUT',
+    'manchester city': 'MCI', 'manchester united': 'MUN', 'newcastle united': 'NEW',
+    'newcastle': 'NEW', 'nottingham forest': 'NFO', 'sheffield united': 'SHU',
+    'southampton': 'SOU', 'sunderland': 'SUN', 'tottenham hotspur': 'TOT',
+    'tottenham': 'TOT', 'west ham united': 'WHU', 'west ham': 'WHU',
+    'wolverhampton wanderers': 'WOL', 'wolves': 'WOL',
+}
+
+
+def load_odds_api():
+    """Live match odds from the-odds-api.com, if ODDS_API_KEY is set.
+
+    Uses Pinnacle's price where it is offered, else the average across books.
+    Returns rows in the `market` shape, or [] (no key, no credit, no network).
+    The raw response is cached for inspection.
+    """
+    import os
+    key = os.environ.get('ODDS_API_KEY')
+    if not key:
+        return []
+    url = ('https://api.the-odds-api.com/v4/sports/soccer_epl/odds/'
+           f'?apiKey={key}&regions=uk,eu&markets=h2h,totals&oddsFormat=decimal')
+    try:
+        events = get(url)
+    except Exception as e:
+        print(f'  the-odds-api unavailable: {e}')
+        return []
+    (CACHE / 'odds_api.json').write_text(json.dumps(events))
+    rows = []
+    for ev in events:
+        h = ODDS_API_TO_SHORT.get((ev.get('home_team') or '').strip().lower())
+        a = ODDS_API_TO_SHORT.get((ev.get('away_team') or '').strip().lower())
+        if not h or not a:
+            continue
+        date = _iso_date(ev.get('commence_time'))
+        # collect per-book prices, prefer pinnacle
+        h2h, tot = {}, {}
+        for bk in ev.get('bookmakers', []):
+            for mk in bk.get('markets', []):
+                if mk['key'] == 'h2h':
+                    o = {x['name']: x['price'] for x in mk['outcomes']}
+                    if ev['home_team'] in o and ev['away_team'] in o and 'Draw' in o:
+                        h2h[bk['key']] = (o[ev['home_team']], o['Draw'], o[ev['away_team']])
+                elif mk['key'] == 'totals':
+                    o = {(x['name'], x.get('point')): x['price'] for x in mk['outcomes']}
+                    if ('Over', 2.5) in o and ('Under', 2.5) in o:
+                        tot[bk['key']] = (o[('Over', 2.5)], o[('Under', 2.5)])
+        if not h2h:
+            continue
+
+        def pick(d):
+            if 'pinnacle' in d:
+                return d['pinnacle']
+            cols = list(zip(*d.values()))
+            return tuple(sum(c) / len(c) for c in cols)
+        oh, od, oa = pick(h2h)
+        oo, ou = pick(tot) if tot else (None, None)
+        rows.append((date, h, a, oh, od, oa, oo, ou))
+    return rows
 
 
 def main():

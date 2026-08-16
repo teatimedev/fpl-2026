@@ -86,10 +86,11 @@ export function formationOf(picks: Player[], xi: Set<number>): string {
  */
 export function squadOutlook(
   picks: Player[], xi: Set<number>, schedule: Record<string, (Fixture | null)[]>, horizon: number,
+  startGw = 1,
 ): { gw: number; avg: number; hardest: string[] }[] {
   const starters = picks.filter(p => xi.has(p.id))
   const out = []
-  for (let gw = 1; gw <= horizon; gw++) {
+  for (let gw = startGw; gw <= horizon; gw++) {
     const fdrs: { team: string; fdr: number }[] = []
     for (const p of starters) {
       const f = schedule[p.team]?.[gw - 1]

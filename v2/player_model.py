@@ -31,6 +31,7 @@ discounted and a small age adjustment (peak 24, 13% swing across the range).
 import json
 import math
 import sqlite3
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -43,7 +44,15 @@ OUT = ROOT / 'v2' / 'projections_v2.json'
 
 SEASONS = ['2022/23', '2023/24', '2024/25', '2025/26']
 SEASON_WEIGHT = {'2022/23': 0.30, '2023/24': 0.50, '2024/25': 0.75, '2025/26': 1.0}
-HORIZON = 6
+
+# The projection window ROLLS: it starts at the next gameweek and runs six
+# ahead. `proj_by_gw` is indexed by absolute gameweek (entry 0 = GW1) so every
+# consumer can keep asking for `proj_by_gw[gw - 1]`; gameweeks already played
+# hold a zero. HORIZON is the last gameweek covered, START_GW the first.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gwclock import window as _gw_window          # noqa: E402
+START_GW, HORIZON = _gw_window()
+WINDOW = HORIZON - START_GW + 1
 
 # Measured year-over-year stability, used as the empirical-Bayes reliability of
 # a full season of evidence. A metric at 0.90 keeps nearly all of a player's own
@@ -365,8 +374,9 @@ def project(players, view, priors):
         xa90 *= rate_mult
 
         fixtures = view['view'].get(p['team'], {})
-        by_gw, total = [], 0.0
-        for gw in range(1, HORIZON + 1):
+        # zeros for gameweeks already played keep absolute indexing intact
+        by_gw, total = [0.0] * (START_GW - 1), 0.0
+        for gw in range(START_GW, HORIZON + 1):
             fx = fixtures.get(str(gw)) or []
             if not fx:
                 by_gw.append(0.0)
@@ -400,7 +410,7 @@ def project(players, view, priors):
             news=p['news'], joined=p['joined'], pens=p['pens'],
             corners=p['corners'], fk=p['fk'],
             proj_by_gw=by_gw, proj_6gw=round(total, 2),
-            proj_gw=round(total / HORIZON, 3),
+            proj_gw=round(total / WINDOW, 3),
             value=round(total / p['price'], 4) if p['price'] else 0,
             start_rate=round(start_rate, 3), mins_proj=round(start_rate * mps),
             xg90=round(xg90, 4), xa90=round(xa90, 4), dc90=round(dc90, 3),
@@ -452,7 +462,7 @@ def calibrate(rows, players):
                 continue
             r['proj_by_gw'] = [round(v * k, 3) for v in r['proj_by_gw']]
             r['proj_6gw'] = round(sum(r['proj_by_gw']), 2)
-            r['proj_gw'] = round(r['proj_6gw'] / HORIZON, 3)
+            r['proj_gw'] = round(r['proj_6gw'] / WINDOW, 3)
             r['value'] = round(r['proj_6gw'] / r['price'], 4) if r['price'] else 0
         print(f'  calibration {pos}: raw was {ratio:.2f}x actual, scaled by {k:.3f}')
 
@@ -470,8 +480,9 @@ if __name__ == '__main__':
               f"{d.get('dc90',0):>10.2f}{d.get('bonus90',0):>9.3f}")
 
     rows = project(players, view, priors)
-    json.dump({'players': rows, 'horizon': HORIZON}, open(OUT, 'w'))
-    print(f'\nprojected {len(rows)} players -> {OUT}\n')
+    json.dump({'players': rows, 'horizon': HORIZON, 'start_gw': START_GW,
+               'window': WINDOW}, open(OUT, 'w'))
+    print(f'\nprojected {len(rows)} players over GW{START_GW}-{HORIZON} -> {OUT}\n')
 
     for pos in ('GKP', 'DEF', 'MID', 'FWD'):
         print(f'--- top 10 {pos} (v2) ---')

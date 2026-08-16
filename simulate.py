@@ -80,7 +80,54 @@ def team_match_params():
     return sched
 
 
-TEAM_SCHED = team_match_params()
+def team_match_params_v2():
+    """Per-team, per-gameweek expected goals from the v2 Dixon-Coles model.
+
+    v2/season_view.json holds, for every club and gameweek, the fitted xG for
+    and against each fixture. That is a far better team layer than the v1
+    heuristic above -- FPL's difficulty rating correlates only -0.60 with real
+    clean-sheet probability, and v2's ratings validated 1.6% behind Pinnacle's
+    closing line -- so use it whenever it is present.
+
+    Returns the same shape as team_match_params(), plus a fixture list so goals
+    can be drawn once per match rather than once per side.
+    """
+    import os
+    path = os.path.join('v2', 'season_view.json')
+    if not os.path.exists(path):
+        return None, None
+    view = json.load(open(path))['view']
+    sched, fixtures, seen = {}, [], set()
+    for short, byweek in view.items():
+        t = TEAM_ID.get(short)
+        if t is None:
+            continue
+        for gw_s, matches in byweek.items():
+            gw = int(gw_s)
+            if gw > HORIZON:
+                continue
+            for m in matches:
+                opp = TEAM_ID.get(m['opp'])
+                if opp is None:
+                    continue
+                sched.setdefault(t, {})[gw] = (max(0.25, m['xg']), max(0.25, m['xgc']))
+                home, away = (t, opp) if m['home'] else (opp, t)
+                key = (gw, home, away)
+                if key in seen:
+                    continue
+                seen.add(key)
+                # the home side's xG is the away side's xGC; take it from the
+                # home team's own row so both sides of the fixture agree
+                if m['home']:
+                    fixtures.append((gw, home, away, max(0.25, m['xg']), max(0.25, m['xgc'])))
+                else:
+                    fixtures.append((gw, home, away, max(0.25, m['xgc']), max(0.25, m['xg'])))
+    return sched, fixtures
+
+
+_V2_SCHED, _V2_FIXTURES = team_match_params_v2()
+TEAM_SCHED = _V2_SCHED if _V2_SCHED else team_match_params()
+TEAM_LAYER = 'v2 Dixon-Coles ratings' if _V2_SCHED else 'v1 FDR heuristic'
 
 # The projection model's per-gameweek mean, used to calibrate the simulation.
 PROJ_GW = {int(r['id']): float(r['proj_gw'])
@@ -95,9 +142,21 @@ def simulate_teams(sims):
     """
     gf = {}
     ga = {}
-    for t, byweek in TEAM_SCHED.items():
+    for t in TEAM_SCHED:
         gf[t] = np.zeros((sims, HORIZON), dtype=np.int16)
         ga[t] = np.zeros((sims, HORIZON), dtype=np.int16)
+    if _V2_FIXTURES:
+        # One draw per match, so the home side's goals ARE the away side's goals
+        # conceded. Without this a squad holding both sides of a fixture (say
+        # City's defence and a Bournemouth midfielder in GW1) sees them succeed
+        # independently, which is impossible.
+        for gw, home, away, xg_h, xg_a in _V2_FIXTURES:
+            h = rng.poisson(xg_h, sims)
+            a = rng.poisson(xg_a, sims)
+            gf[home][:, gw - 1] += h; ga[home][:, gw - 1] += a
+            gf[away][:, gw - 1] += a; ga[away][:, gw - 1] += h
+        return gf, ga
+    for t, byweek in TEAM_SCHED.items():
         for gw in range(1, HORIZON + 1):
             if gw not in byweek:
                 continue
@@ -460,7 +519,8 @@ if __name__ == '__main__':
     results.append(simulate_squad(tmpl, gf, ga, sims, 'The template (most-owned)'))
 
     print(f'\n{sims:,} simulations of GW1-{HORIZON}, '
-          f'including captaincy, auto-subs and team-level clean-sheet correlation\n')
+          f'including captaincy, auto-subs and team-level clean-sheet correlation')
+    print(f'team layer: {TEAM_LAYER}; player means calibrated to data/projections.csv\n')
     print(f"{'squad':<34}{'mean':>7}{'p10':>7}{'p90':>7}{'sd':>7}"
           f"{'capt':>7}{'subs':>7}{'worstGW':>9}{'bestGW':>8}{'maxclub':>8}")
     print('-' * 102)

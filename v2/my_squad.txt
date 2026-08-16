@@ -1,16 +1,19 @@
-# Option A — edit this to your real 15, one name per line
-B.Fernandes
-Gabriel
-Rogers
-Anderson
-Rice
-Thiago
-Wilson
+# Jordan's real GW1 squad (from the FPL screenshot, 16 Aug 2026), £0.0m in bank.
+# Starting XI first, then "bench:" and the four subs in order.
+# (C) = captain, (V) = vice-captain, as set on the FPL site.
+Raya (V)
+Calafiori
+Thiaw
 Guéhi
 Tarkowski
-Senesi
-Raya
-Beto
-Verbruggen
-Mitchell
-Barry
+Kluivert
+Saka
+Mbeumo
+Foden
+Haaland (C)
+Thiago
+bench:
+Leno
+O'Shea
+Reed
+Destan

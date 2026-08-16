@@ -1,11 +1,13 @@
-name: Weekly refresh
+name: Refresh
 
-# Thursday 07:00 UTC — after midweek fixtures have settled and well before any
-# Friday deadline, so the deployed app is current when the gameweek opens.
-# Also runnable by hand from the Actions tab.
+# Fires hourly; v2/should_refresh.py decides whether this hour is one of the
+# moments worth rebuilding for — about 24 hours before the next deadline (odds
+# are out, pressers still to come), about 2 hours before it (last word), and a
+# guaranteed Thursday-morning refresh for blank weeks and international breaks.
+# Every other hour exits in seconds. Runnable by hand from the Actions tab.
 on:
   schedule:
-    - cron: '0 7 * * 4'
+    - cron: '23 * * * *'
   workflow_dispatch:
     inputs:
       tune:
@@ -18,7 +20,26 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.gate.outputs.run }}
+      reason: ${{ steps.gate.outputs.reason }}
+      gw: ${{ steps.gate.outputs.gw }}
+      hours: ${{ steps.gate.outputs.hours }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            v2/should_refresh.py
+            data/last_refresh.json
+          sparse-checkout-cone-mode: false
+      - id: gate
+        run: python3 v2/should_refresh.py
+
   refresh:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -36,8 +57,10 @@ jobs:
         # Full fetch, including the four-season player histories. The database is
         # not committed, so every CI run starts empty — skipping histories here
         # would leave season_stat blank and silently drop every player back to
-        # the price prior. It is ~572 requests and about 90 seconds, weekly.
+        # the price prior. It is ~572 requests and about 90 seconds.
         run: python v2/fetch.py
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
 
       - name: Rebuild the model
         run: |
@@ -50,23 +73,56 @@ jobs:
           python v2/player_model.py
           python v2/to_csv.py
 
-      - name: Re-optimise squads and export for the app
+      - name: Re-optimise squads
         run: |
           python optimise.py --json
           python validate.py
-          python export_app_data.py
+
+      - name: Digest, snapshot, price log
+        # --team reads your real squad once picks are public (after GW1's
+        # deadline); before that weekly.py falls back to v2/my_squad.txt.
+        # FPL_ENTRY_ID is a repository *variable* (Settings → Secrets and
+        # variables → Actions → Variables), not a secret — it is not sensitive.
+        run: |
+          TEAM_ARG=""
+          if [ -n "${{ vars.FPL_ENTRY_ID }}" ]; then TEAM_ARG="--team ${{ vars.FPL_ENTRY_ID }}"; fi
+          python v2/weekly.py --no-refresh --plan --snapshot --price-log --push-file $TEAM_ARG
+
+      - name: Grade finished gameweeks
+        run: python v2/scorecard.py
+
+      - name: Export for the app
+        run: python export_app_data.py
+
+      - name: Record this refresh
+        run: python v2/should_refresh.py mark "${{ needs.gate.outputs.reason }}" "${{ needs.gate.outputs.gw }}"
 
       - name: Commit if anything changed
         run: |
           git config user.name  "fpl-bot"
           git config user.email "actions@github.com"
           git add data/ app/src/data/ v2/team_ratings.json v2/season_view.json \
-                  v2/projections_v2.json
+                  v2/projections_v2.json v2/digest.md
           if git diff --cached --quiet; then
-            echo "No change this week."
+            echo "No change."
           else
-            git commit -m "Weekly refresh: $(date -u +%Y-%m-%d)"
+            git commit -m "Refresh (${{ needs.gate.outputs.reason }}, GW${{ needs.gate.outputs.gw }}): $(date -u +%Y-%m-%d\ %H:%M)"
+            git pull --rebase --autostash origin master
             git push
           fi
 
-# (touched to force GitHub to index this workflow)
+      - name: Push the digest to your phone
+        # ntfy.sh needs no account: subscribe to the topic in the ntfy app and
+        # every deadline-window refresh lands as a notification. NTFY_TOPIC is a
+        # repository variable; leave it unset and this step is skipped. Only the
+        # deadline windows and manual runs push — Thursday's routine refresh
+        # would just be noise.
+        if: vars.NTFY_TOPIC != '' && needs.gate.outputs.reason != 'weekly'
+        run: |
+          curl -fsS \
+            -H "Title: FPL GW${{ needs.gate.outputs.gw }} · ${{ needs.gate.outputs.reason }}" \
+            -H "Click: https://fpl-2026.vercel.app" \
+            -H "Tags: soccer" \
+            --data-binary @v2/push.txt \
+            "https://ntfy.sh/${{ vars.NTFY_TOPIC }}" > /dev/null
+          echo "pushed to ntfy topic"

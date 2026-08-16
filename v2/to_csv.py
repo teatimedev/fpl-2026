@@ -14,9 +14,12 @@ came from v2. One writer for both files is the fix.
 import csv
 import json
 import sqlite3
+import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+from gwclock import next_gw          # noqa: E402
 ROOT = HERE.parent
 SRC = HERE / 'projections_v2.json'
 VIEW = HERE / 'season_view.json'
@@ -78,8 +81,14 @@ def main():
         w.writeheader()
         w.writerows(rows)
 
-    # the JSON twin, which is what the web-app exporter reads
-    horizon = len(data['players'][0]['proj_by_gw']) if data['players'] else 6
+    # the JSON twin, which is what the web-app exporter reads. The window rolls
+    # (see gwclock.py): `horizon` is the last gameweek covered, `start_gw` the
+    # first, and the schedule is indexed by absolute gameweek with nulls for
+    # weeks already played, matching proj_by_gw.
+    horizon = data.get('horizon') or (
+        len(data['players'][0]['proj_by_gw']) if data['players'] else 6)
+    start_gw = data.get('start_gw', 1)
+    _, deadline = next_gw()
     schedule = {}
     for team, byweek in view['view'].items():
         schedule[team] = [
@@ -87,8 +96,8 @@ def main():
               'fdr': byweek[str(g)][0]['fdr']} if byweek.get(str(g)) else None)
             for g in range(1, horizon + 1)]
     json.dump({'players': rows, 'schedule': schedule,
-               'meta': {'horizon': horizon, 'budget': 100.0,
-                        'deadline': '2026-08-21T17:30:00Z'}},
+               'meta': {'horizon': horizon, 'start_gw': start_gw,
+                        'budget': 100.0, 'deadline': deadline}},
               open(DST_JSON, 'w'))
 
     print(f'wrote {len(rows)} rows -> {DST.name} and {DST_JSON.name} '

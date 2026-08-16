@@ -1,0 +1,25 @@
+{
+ "generated": "2026-08-16T13:59:49Z",
+ "summary": {
+  "n_gws": 0,
+  "spearman_starters": null,
+  "spearman_pool": null,
+  "mae_starters": null,
+  "bias_starters": null,
+  "captain_model": null,
+  "captain_yours": null,
+  "captain_best": null,
+  "xi_model": null,
+  "xi_yours": null,
+  "xi_best": null,
+  "cs_brier": null,
+  "cs_predicted_rate": null,
+  "cs_actual_rate": null
+ },
+ "gws": [],
+ "notes": [
+  "Hold-out backtest before the season: rank correlation ~0.46 on points per 90 among established players.",
+  "spearman_starters is over players the model gave a 60%+ chance of starting; spearman_pool over everyone projected 0.5+.",
+  "Captain and XI rows need a known squad at snapshot time."
+ ]
+}

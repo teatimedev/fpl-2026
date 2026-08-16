@@ -167,8 +167,18 @@ models validated against outside benchmarks: a Dixon-Coles team strength model
 checked against Pinnacle's closing odds, shrinkage weights set by measured
 year-over-year stability, and a hold-out backtest. See **[v2/README.md](v2/README.md)**.
 
-Weekly use: `.venv/bin/python v2/weekly.py --team <your FPL entry id>`
+Weekly use: `.venv/bin/python v2/weekly.py --team <your FPL entry id> --plan`
 
 The optimiser, validator and web app now run on v2 projections
 (`v2/to_csv.py` writes them into the v1 schema). v1's projections are kept at
 `data/projections_v1.csv` for comparison.
+
+**In season (from 16 Aug 2026):** the projection window rolls (next gameweek plus
+five, `v2/gwclock.py`); bookmaker odds are blended into the team layer when
+posted (`teams_model.market_view`); `weekly.py` grades transfers by the lift to
+your best XI, searches two-move combinations net of hits, tells you when to hold,
+diffs your set lineup against the model's, and with `--plan` solves the six-week
+transfer path (`v2/planner.py`). A GitHub Actions workflow refreshes at T-24h and
+T-2h before every deadline (plus Thursdays), pushes a summary to your phone via
+ntfy, archives each gameweek's projections and grades them afterwards
+(`v2/scorecard.py`, shown in the app's Scorecard tab). RESUME.md has the details.

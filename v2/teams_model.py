@@ -134,22 +134,26 @@ def fit(matches, half_life_days=340.0, ref_date=None):
 
 
 # ---------------------------------------------------------- match outcomes
-def score_matrix(model, home, away, atk_over=None, dfn_over=None):
-    atk = atk_over or model['atk']
-    dfn = dfn_over or model['dfn']
-    lam = np.exp(atk[home] - dfn[away] + model['home_adv'])
-    mu = np.exp(atk[away] - dfn[home])
+def dc_matrix(lam, mu, rho):
+    """Dixon-Coles scoreline matrix for given expected goals."""
     k = np.arange(MAXG + 1)
     from scipy.stats import poisson
     ph = poisson.pmf(k, lam)
     pa = poisson.pmf(k, mu)
     M = np.outer(ph, pa)
-    rho = model['rho']
     M[0, 0] *= 1 - lam * mu * rho
     M[0, 1] *= 1 + lam * rho
     M[1, 0] *= 1 + mu * rho
     M[1, 1] *= 1 - rho
-    return M / M.sum(), float(lam), float(mu)
+    return M / M.sum()
+
+
+def score_matrix(model, home, away, atk_over=None, dfn_over=None):
+    atk = atk_over or model['atk']
+    dfn = dfn_over or model['dfn']
+    lam = np.exp(atk[home] - dfn[away] + model['home_adv'])
+    mu = np.exp(atk[away] - dfn[home])
+    return dc_matrix(lam, mu, model['rho']), float(lam), float(mu)
 
 
 def outcome_probs(M):
@@ -159,16 +163,75 @@ def outcome_probs(M):
     return ph, pd_, pa
 
 
-def team_view(model, home, away):
-    """Everything the player model needs from one fixture, for both sides."""
-    M, lam, mu = score_matrix(model, home, away)
+def _view_from(M, lam, mu, home, away, src):
     ph, pd_, pa = outcome_probs(M)
     return {
         home: dict(opp=away, home=True, xg=lam, xgc=mu,
-                   cs=float(M[:, 0].sum()), win=ph, draw=pd_),
+                   cs=float(M[:, 0].sum()), win=ph, draw=pd_, src=src),
         away: dict(opp=home, home=False, xg=mu, xgc=lam,
-                   cs=float(M[0, :].sum()), win=pa, draw=pd_),
+                   cs=float(M[0, :].sum()), win=pa, draw=pd_, src=src),
     }
+
+
+def team_view(model, home, away):
+    """Everything the player model needs from one fixture, for both sides."""
+    M, lam, mu = score_matrix(model, home, away)
+    return _view_from(M, lam, mu, home, away, 'model')
+
+
+MARKET_WEIGHT = 0.8     # how far to pull expected goals towards the bookmaker
+
+
+def market_view(model, home, away, odds, weight=MARKET_WEIGHT):
+    """team_view, but with this fixture's expected goals pulled towards what
+    the bookmaker odds imply.
+
+    The model validated 1.6% behind Pinnacle's closing line, so when a price
+    exists it is the better estimate. We back out the (home xG, away xG) pair
+    whose Dixon-Coles scoreline distribution best reproduces the de-vigged 1X2
+    and over/under 2.5 prices, then blend it with the model in log space —
+    80/20 by default, because lines posted a week out are not yet the closing
+    line and the model still knows things about squad news the market has not
+    priced. Falls back to the plain model view if the odds are unusable.
+
+    `odds` is (h, d, a, over25, under25); any may be None.
+    """
+    M0, lam0, mu0 = score_matrix(model, home, away)
+    oh, od, oa, oo, ou = (list(odds) + [None] * 5)[:5]
+    p1x2 = devig(oh, od, oa)
+    if p1x2 is None:
+        return team_view(model, home, away)
+    ph, pd_, pa = p1x2
+    po = None
+    if oo and ou:
+        po = (1 / oo) / (1 / oo + 1 / ou)
+    rho = model['rho']
+
+    from scipy.optimize import minimize
+    # scorelines with at most two goals in total, for the over/under 2.5 price
+    mask_le2 = np.fromfunction(lambda i, j: i + j <= 2, (MAXG + 1, MAXG + 1))
+
+    def loss(x):
+        lam, mu = float(np.exp(x[0])), float(np.exp(x[1]))
+        M = dc_matrix(lam, mu, rho)
+        h, d, a = outcome_probs(M)
+        l = (h - ph) ** 2 + (a - pa) ** 2 + (d - pd_) ** 2
+        if po is not None:
+            over = 1.0 - float(M[mask_le2].sum())
+            l += (over - po) ** 2
+        else:
+            # no total on offer: keep the goal level where the model has it
+            l += 0.02 * ((lam + mu) - (lam0 + mu0)) ** 2
+        return l
+
+    res = minimize(loss, [np.log(lam0), np.log(mu0)], method='Nelder-Mead',
+                   options=dict(xatol=1e-4, fatol=1e-8, maxiter=400))
+    if not res.success and res.fun > 1e-3:
+        return team_view(model, home, away)
+    lam_m, mu_m = float(np.exp(res.x[0])), float(np.exp(res.x[1]))
+    lam = float(np.exp(weight * np.log(lam_m) + (1 - weight) * np.log(lam0)))
+    mu = float(np.exp(weight * np.log(mu_m) + (1 - weight) * np.log(mu0)))
+    return _view_from(dc_matrix(lam, mu, rho), lam, mu, home, away, 'market')
 
 
 # ------------------------------------------------------------- validation

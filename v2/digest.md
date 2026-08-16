@@ -1,53 +1,73 @@
 # FPL weekly — Gameweek 1
 
-Deadline **Fri 21 Aug, 17:30 UTC** — 15d 0h away.
+Deadline **Fri 21 Aug, 17:30 UTC** — 5d 3h away.
 Projections cover GW1–6.
 
-## Captain: **B.Fernandes** (MUN)
+## Captain: **Saka** (ARS)
 
-Projected 6.6 this week, doubled to 13.2. Vice: Gabriel (6.0).
+Projected 7.2 this week, doubled to 14.5. Vice: Haaland (6.7).
 
-| rank | player | club | this GW |
-|---|---|---|---|
-| 1 | B.Fernandes | MUN | 6.6 |
-| 2 | Gabriel | ARS | 6.0 |
-| 3 | Thiago | BRE | 5.6 |
-| 4 | Rice | ARS | 5.5 |
+| rank | player | club | this GW | start % |
+|---|---|---|---|---|
+| 1 | Saka | ARS | 7.2 | 75 |
+| 2 | Haaland | MCI | 6.7 | 84 |
+| 3 | Calafiori | ARS | 6.3 | 84 |
+| 4 | Mbeumo | MUN | 6.2 | 83 |
 
 ## Starting XI
 
 | pos | player | club | this GW | GW1–6 |
 |---|---|---|---|---|
 | GKP | Raya | ARS | 5.4 | 28.6 |
-| DEF | Gabriel (V) | ARS | 6.0 | 31.1 |
-| DEF | Tarkowski | EVE | 5.0 | 28.3 |
-| DEF | Guéhi | MCI | 4.6 | 27.1 |
-| DEF | Mitchell | CRY | 3.7 | 22.2 |
-| MID | B.Fernandes (C) | MUN | 6.6 | 37.5 |
-| MID | Rice | ARS | 5.5 | 29.5 |
-| MID | Rogers | CHE | 3.4 | 21.4 |
-| MID | Wilson | LEE | 3.4 | 20.5 |
+| DEF | Calafiori | ARS | 6.3 | 31.6 |
+| DEF | Tarkowski | EVE | 5.3 | 30.2 |
+| DEF | Guéhi | MCI | 4.9 | 28.9 |
+| DEF | Thiaw | NEW | 4.3 | 29.2 |
+| DEF | O'Shea | IPS | 4.0 | 20.1 |
+| MID | Saka (C) | ARS | 7.2 | 35.8 |
+| MID | Mbeumo | MUN | 6.2 | 34.7 |
+| MID | Foden | MCI | 5.5 | 32.0 |
+| FWD | Haaland (V) | MCI | 6.7 | 39.1 |
 | FWD | Thiago | BRE | 5.6 | 30.2 |
-| FWD | Beto | EVE | 3.3 | 19.8 |
 
-**Bench order:** Verbruggen (3.4), Senesi (3.3), Anderson (3.0), Barry (2.9)
+**Bench order:** Leno (3.8), Kluivert (3.7), Destan (1.7), Reed (1.5)
 
-## Transfers  (£0.0m in the bank)
+## Your lineup vs the model  (my_squad.txt)
 
-Gain is over GW1–6. A hit costs 4, so only act on a second transfer above that line.
+- **Captain:** you have Haaland (6.7); the model prefers Saka (7.2) — +1.0 expected once doubled.
+- **Vice on a goalkeeper** (Raya): if the captain misses, the armband doubles your keeper. Move it to Saka.
+- **Bench → start:** O'Shea (4.0) is on your bench; the model starts him over Kluivert (3.7), +0.3.
+- Formation: you 4-4-2, model 5-3-2.
 
-| out | in | cost | gain | worth a hit? |
+## Check before the deadline
+
+- **Saka** (ARS, XI) — starts only 75% of the time
+- **Foden** (MCI, XI) — starts only 77% of the time
+
+## Transfers  (£0.0m in the bank, unlimited free)
+
+Gain is the lift to your best XI (captain included) over GW1–6, not the raw difference between two players. A hit costs 4.
+
+**No single transfer improves the squad.** Bank the free transfer.
+
+**Best two-move combinations** (net of any hit):
+
+| out | in | £ | gain | net |
 |---|---|---|---|---|
-| Rogers (CHE) | Foden (MCI) | -0.5 | **+10.1** | yes |
-| Anderson (MCI) | Kluivert (BOU) | -0.5 | **+7.7** | yes |
-| Barry (EVE) | Kostoulas (BHA) | +0.0 | **+6.5** | yes |
-| Senesi (TOT) | Thiaw (NEW) | -1.0 | **+6.2** | yes |
-| Wilson (LEE) | Kluivert (BOU) | -0.5 | **+4.8** | yes |
-| Beto (EVE) | Kostoulas (BHA) | +0.0 | **+4.5** | yes |
-| Verbruggen (BHA) | Leno (FUL) | +0.0 | **+2.6** | free transfer only |
-| Rice (ARS) | Foden (MCI) | -0.5 | **+2.0** | free transfer only |
+| Leno + O'Shea | Steele + Mitchell | +0.0 | +0.8 | **+0.8** |
 
-**Recommended:** Rogers → Foden, worth +10.1 over the remaining weeks.
+## The next six weeks, planned
+
+Best path from here: **394.5** pts (0 hits). Making no move this week and re-planning: 391.6. Acting now is worth **+2.9**.
+
+- **GW1** 70.1 pts, C Saka, 15 FT  Raya → Gabriel, Kluivert → Kostoulas, O'Shea → Pickford, Haaland → B.Fernandes
+- **GW2** 65.1 pts, C B.Fernandes, 1 FT  Tarkowski → Virgil
+- **GW3** 65.9 pts, C Foden, 1 FT  hold
+- **GW4** 62.0 pts, C Palmer, 2 FT  Saka → Palmer
+- **GW5** 64.6 pts, C Thiaw, 2 FT  Palmer → Saka, Virgil → Tarkowski
+- **GW6** 66.7 pts, C B.Fernandes, 1 FT  Guéhi → Lacroix
+
+_Point-estimate plans churn on small fixture swings; read this for direction (who to move towards, when), not as a script._
 
 ## Price watch
 
@@ -55,4 +75,4 @@ Prices are locked until the Gameweek 1 deadline, so there is no transfer flow to
 
 ---
 
-_Generated 2026-08-06 18:28. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-08-16 13:57 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._

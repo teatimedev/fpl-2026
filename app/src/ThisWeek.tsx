@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import type { Data, Player } from './types'
 import {
   loadLive, loadTeam, withLive, xiForGw, thisGw, remaining,
-  transferOptions, priceMovers, HIT_COST,
-  type LiveState, type TransferOption,
+  transferOptions, priceMovers, lineupIssues, HIT_COST,
+  type LiveState, type TransferOption, type Lineup,
 } from './weekly'
 
 /**
@@ -21,6 +21,7 @@ export default function ThisWeek(
   const [input, setInput] = useState(entryId)
   const [live, setLive] = useState<LiveState | null>(null)
   const [squadIds, setSquadIds] = useState<number[] | null>(null)
+  const [lineup, setLineup] = useState<Lineup | null>(null)
   const [bank, setBank] = useState(0)
   const [fromGw, setFromGw] = useState<number | null>(null)
   const [err, setErr] = useState<string | null>(null)
@@ -36,8 +37,8 @@ export default function ThisWeek(
         if (entryId) {
           const t = await loadTeam(Number(entryId), l.gw)
           if (cancelled) return
-          if (t) { setSquadIds(t.ids); setBank(t.bank); setFromGw(t.fromGw) }
-          else { setSquadIds(null); setFromGw(null) }
+          if (t) { setSquadIds(t.ids); setLineup(t.lineup); setBank(t.bank); setFromGw(t.fromGw) }
+          else { setSquadIds(null); setLineup(null); setFromGw(null) }
         }
       })
       .catch(e => !cancelled && setErr(String(e?.message ?? e)))
@@ -69,6 +70,9 @@ export default function ThisWeek(
   const captain = ranked[0]
   const vice = ranked[1]
   const flagged = squad.filter(p => p.status !== 'a')
+  // Only meaningful for a real team: the lineup you have set, against the model's.
+  const issues = ready && usingReal && lineup
+    ? lineupIssues(lineup, squad, xi, bench, gw) : null
   const options: TransferOption[] = ready
     ? transferOptions(squad, pool, bank, gw, horizon) : []
   const movers = priceMovers(live, pool)
@@ -198,6 +202,28 @@ export default function ThisWeek(
               Bench, in order: {bench.map(p => p.name).join(' → ')}
             </p>
           </section>
+
+          {issues && (
+            <section className="panel" style={{ marginTop: 16 }}>
+              <div className="panel-hd">
+                <h2>Your lineup vs the model</h2>
+                <span className="sub">picks from GW{fromGw}</span>
+              </div>
+              {issues.length === 0 ? (
+                <div style={{ padding: '2px 14px 14px' }}>
+                  <div className="ready">
+                    Your captain, vice, XI and bench order all match the model. ✓
+                  </div>
+                </div>
+              ) : (
+                <ul className="problems" style={{ margin: 14 }}>
+                  {issues.map((it, i) => (
+                    <li key={i}><strong>{it.head}</strong> {it.body}</li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
 
           {flagged.length > 0 && (
             <section className="panel" style={{ marginTop: 16 }}>

@@ -5,11 +5,13 @@ import { POS_ORDER, SQUAD_SHAPE, BUDGET, MAX_PER_CLUB } from './types'
 import { analyse, blockReason, bestXI, formationOf, squadOutlook, round1 } from './squad'
 import { Pips, Shirt, EmptyShirt, Outlook } from './components'
 import ThisWeek from './ThisWeek'
+import Scorecard from './Scorecard'
 
 const D = raw as unknown as Data
 const byId = new Map(D.players.map(p => [p.id, p]))
 
 type SortKey = 'proj_6gw' | 'price' | 'value' | 'sel_pct' | 'pts_last' | 'name'
+type Tab = 'week' | 'build' | 'score'
 
 const PRESET_BLURB = [
   'The highest projected XI the rules allow, with no constraints beyond the game rules.',
@@ -22,8 +24,8 @@ export default function App() {
   // Open on whichever tab is actually useful. With no squad saved and no FPL
   // team linked there is nothing for the weekly view to talk about, so start in
   // the builder; once either exists, the weekly decision is the reason to open
-  // this on a phone.
-  const [tab, setTab] = useState<'week' | 'build'>(() => {
+  // this on a phone. The scorecard is never the default.
+  const [tab, setTab] = useState<Tab>(() => {
     const hasSquad = (localStorage.getItem('fplSquad') ?? '[]') !== '[]'
     const hasTeam = !!localStorage.getItem('fplEntryId')
     return hasSquad || hasTeam ? 'week' : 'build'
@@ -68,7 +70,7 @@ export default function App() {
     ? starters.reduce((a, b) => (b.proj_6gw > a.proj_6gw ? b : a))
     : null
   const outlook = useMemo(
-    () => squadOutlook(picks, xi, D.schedule, D.meta.horizon),
+    () => squadOutlook(picks, xi, D.schedule, D.meta.horizon, D.meta.start_gw ?? 1),
     [picks, xi],
   )
 
@@ -131,9 +133,10 @@ export default function App() {
         <div className="seg tabs">
           <button aria-pressed={tab === 'week'} onClick={() => setTab('week')}>This week</button>
           <button aria-pressed={tab === 'build'} onClick={() => setTab('build')}>Build</button>
+          <button aria-pressed={tab === 'score'} onClick={() => setTab('score')}>Scorecard</button>
         </div>
         <div className="countdown">
-          <span className="k">Gameweek 1 deadline</span>
+          <span className="k">Gameweek {D.meta.start_gw ?? 1} deadline</span>
           <span className="v mono">
             {left > 0 ? `${dd}d ${String(hh).padStart(2, '0')}h ${String(mm).padStart(2, '0')}m ${String(ss).padStart(2, '0')}s` : 'Deadline passed'}
           </span>
@@ -141,6 +144,7 @@ export default function App() {
       </header>
 
       {tab === 'week' && <ThisWeek D={D} builtSquad={picks} />}
+      {tab === 'score' && <Scorecard sc={D.scorecard ?? null} />}
       {tab === 'build' && (
 
       <div className="main">
@@ -246,7 +250,7 @@ export default function App() {
                     <th onClick={() => setSorting('price')}
                       aria-sort={sort === 'price' ? (asc ? 'ascending' : 'descending') : undefined}>Price</th>
                     <th onClick={() => setSorting('proj_6gw')}
-                      aria-sort={sort === 'proj_6gw' ? (asc ? 'ascending' : 'descending') : undefined}>Proj GW1–6</th>
+                      aria-sort={sort === 'proj_6gw' ? (asc ? 'ascending' : 'descending') : undefined}>Proj GW{D.meta.start_gw ?? 1}–{D.meta.horizon}</th>
                     <th onClick={() => setSorting('value')}
                       aria-sort={sort === 'value' ? (asc ? 'ascending' : 'descending') : undefined}>Per £m</th>
                     <th onClick={() => setSorting('pts_last')}
@@ -438,8 +442,9 @@ export default function App() {
 
       <footer className="foot">
         Prices, injuries and your squad are read live from the official Fantasy
-        Premier League API each time you open this. Projections are rebuilt by a
-        scheduled job every Thursday — model last built {D.meta.generated}.<br />
+        Premier League API each time you open this. Projections are rebuilt about
+        24 hours and 2 hours before every deadline (and each Thursday), with
+        bookmaker odds blended in where posted — model last built {D.meta.generated}.<br />
         Attack and defence ratings are fitted by maximum likelihood on four
         seasons of real results and validated against bookmaker closing odds;
         player rates are shrunk by measured year-over-year stability. Hold-out

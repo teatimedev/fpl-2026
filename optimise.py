@@ -132,7 +132,7 @@ def show(res):
     print(f"  {res['label']}")
     print(f"  formation {nd}-{nm}-{nf}   cost £{res['cost']}m   "
           f"(£{round(100.0 - res['cost'], 1)}m left)   "
-          f"XI projection {res['xi_proj']} pts over GW1-6")
+          f"XI projection {res['xi_proj']} pts over the modelled window")
     print(f"{'='*78}")
     print('  STARTING XI')
     for p in xi:

@@ -1,56 +1,119 @@
-# Where this is up to — 6 Aug 2026
+# Where this is up to — 16 Aug 2026
 
-**GW1 deadline: Fri 21 Aug, 18:30 BST.** Prices are locked until then, so nothing
-in the dataset moves before you pick.
+**GW1 deadline: Fri 21 Aug, 18:30 BST (17:30 UTC).** Prices are locked until then.
 
-## State
+## The team is picked
 
-Two generations of model live side by side. **v2 is what everything runs on now.**
+Jordan's real 15 is **Option B ("Haaland Build") from the app, verbatim**, and it
+is in `v2/my_squad.txt` with his captain (Haaland), vice (Raya) and bench order.
+Reviewed 16 Aug against the refreshed model:
 
-- `v2/` — the current model. Dixon-Coles team ratings fitted on 1,520 real
-  matches and validated 1.6% behind Pinnacle's closing line; shrinkage weights
-  set by measured year-over-year stability; hold-out backtested.
-- v1 (`project.py`, `overlay.py`, `simulate.py`, `plan.py`) — superseded but
-  still working and still used. `overlay.py` in particular is imported by v2,
-  because it holds research no model can derive (confirmed line-ups, role
-  changes). v1's projections are archived at `data/projections_v1.csv`.
-- `app/` — the browser squad builder, **local only, never deployed**.
+- No single transfer improves it; the best XI-aware two-move combination is
+  +0.8 pts over six gameweeks (noise). It sits 1.3 pts behind the model's
+  unconstrained optimum on the same metric while owning the 73%-owned captain.
+- Monte Carlo (`simulate.py`, now on the v2 team layer): mean 403 over GW1–6,
+  beats the most-owned template 88% of the time. Option A beats it 56/44, and
+  nearly all of that gap is **bench cover** (auto-subs 29.9 vs 19.8 — Reed and
+  Destan are £4.5m floor players who don't play), not the 3 ARS + 3 MCI
+  concentration (sd 50.7 vs 49.2).
+- What the model would change on the pitch: captain **Saka over Haaland for
+  GW1** (7.2 vs 6.7 — Arsenal home to promoted Coventry); **vice on Raya is a
+  mistake** (should be Saka/Haaland — a keeper doubled if the captain misses);
+  5-3-2 with O'Shea over 4-4-2 with Kluivert is a coin flip (+0.3).
+- Recheck Friday afternoon after the pressers — the T-2h refresh (below) picks
+  up late news and the opening odds, and that is when the captain call is real.
 
-## Nothing is decided yet
+## What runs, and when
 
-You have not picked a team. Four candidate squads are in `data/squads.json` and
-loadable in the app. `SQUADS.md` has the reasoning, but **it describes the v1
-squads** — the app and `data/squads.json` have since been rebuilt on v2 and the
-picks changed materially (Saka, Mbeumo and Foden in; Haaland out of Option A).
-Rewriting SQUADS.md against v2 is the obvious first job next time.
+**https://fpl-2026.vercel.app** — public, works on a phone. Tabs: *This week*
+(captain, XI, your lineup vs the model, transfers, checks, price watch), *Build*,
+*Scorecard*.
+
+`.github/workflows/weekly.yml` ("Refresh") fires **hourly**; `v2/should_refresh.py`
+lets it through only at **T-24h** and **T-2h** before the next deadline, plus a
+guaranteed **Thursday 06:00–09:00 UTC** slot, plus manual dispatch. Each real run:
+fetch → team ratings → season view (bookmaker odds where posted) → player
+projections → csv/json → re-optimise squads → `weekly.py --plan --snapshot
+--price-log --push-file` → `scorecard.py` → export → commit → push (Vercel
+deploys) → **ntfy push** to the phone (deadline windows and manual runs only).
+
+- **Repository variables** (Settings → Secrets and variables → Actions → Variables):
+  `NTFY_TOPIC` (set; subscribe to that topic in the ntfy app), and `FPL_ENTRY_ID`
+  — **set this from Fri 21 Aug 18:30**, after which the workflow and the app read
+  Jordan's real squad, bank, free transfers and lineup from the picks endpoint.
+  Until then everything uses `v2/my_squad.txt`.
+- **Optional secret** `ODDS_API_KEY` (the-odds-api.com, free tier): live match
+  odds from many books, Pinnacle preferred. Without it, only football-data's
+  week-ahead lines are used. As of 16 Aug no GW1 odds were posted by either.
+- Vercel root directory is `app`. That is dashboard state, not in git — if the
+  project is ever recreated it must be set again or GitHub builds fail.
+
+## The model (v2)
+
+Dixon-Coles team ratings on 1,520 matches (1.6% behind Pinnacle's closing line),
+shrinkage weights from measured year-over-year stability, hold-out backtested
+(rank correlation ~0.46 on points/90 among established players).
+
+- **The window rolls.** `v2/gwclock.py` decides the next gameweek from the
+  cached bootstrap; `season_view.py` and `player_model.py` project
+  `next_gw … next_gw+5`. `proj_by_gw` stays indexed by absolute gameweek (entry
+  0 = GW1) with zeros for weeks already played, so every consumer keeps asking
+  for `proj_by_gw[gw-1]`; `horizon` is the last GW covered, `start_gw` the first.
+  `FPL_GW_OVERRIDE=7 python v2/player_model.py` simulates the run-up to GW7.
+- **Bookmaker odds are now actually used.** `teams_model.market_view()` backs out
+  the (home xG, away xG) that reproduces the de-vigged 1X2 and O/U 2.5 prices and
+  blends 80/20 with the model in log space; `season_view.py` applies it to any
+  fixture with a `market` row and prints how many were priced. Before 16 Aug the
+  odds were fetched and never read.
+- `weekly.py` now: XI-aware transfer gains (lift to best XI + captain over the
+  window, not player-vs-player), best two-move combos net of hits, hold-vs-use
+  advice (a free move worth < 2.0 is banked; per move for multi-move plans), free
+  transfer count inferred from public history (`infer_free_transfers`), a lineup
+  checker (captain, vice — flags a keeper vice — bench→start, bench order,
+  formation), "Check before the deadline" (news, chance of playing, start rate <
+  80%, new signings), and price pressure = net transfers / owners (uncalibrated).
+- `v2/planner.py` — plan.py ported to v2: multi-week integer program from the
+  real squad/bank/FTs; `--plan` in weekly. Point-estimate plans churn; it is
+  read for direction.
+- `v2/scorecard.py` — grades each archived `data/history/gw{n}.json` once the
+  round is finished: rank corr (starters/pool/played), MAE/bias, decile
+  calibration, captain model/yours/best, XI model/yours/best, clean-sheet Brier.
+  Writes `data/scorecard.json`; the app's Scorecard tab renders it. Empty until
+  GW1 has been played.
+- `data/price_log/{date}.csv` — every player's price and transfer flow, daily,
+  for calibrating a price-change model later.
+
+## Open threads
+
+1. **After GW1 (Fri 18:30):** set `FPL_ENTRY_ID`. Confirm the T-2h run fired and
+   the ntfy push arrived. Check the Scorecard grades GW1 after Monday's
+   data-check.
+2. **By ~GW6, with real data:** test DefCon dispersion (Poisson vs negative
+   binomial), re-tune shrinkage/priors on 26/27, calibrate the price model
+   from `data/price_log`, and look at `scorecard.json` to see whether the market
+   blend weight (0.8) should move.
+3. **The model over-likes thin-record players** (Kostoulas, O'Shea; Thiaw
+   turned out to have a real 126-pt season). Sanity-check by eye.
+4. `simulate.py`, `plan.py`, `optimise.py` (v1 shells) still assume GW1–6 in
+   places (`P.HORIZON`, labels). They are pre-season tools; not urgent.
+5. `SQUADS.md` describes the *v1* squads and is historical. Not worth rewriting
+   now the team is picked; a "why Option B" note is at its top.
+6. Chips are not modelled anywhere. Bench Boost / Triple Captain / Free Hit /
+   Wildcard timing around double and blank gameweeks is the biggest lever in
+   the second half of the season — the planner is the place to add it.
 
 ## To pick up
 
 ```bash
 cd ~/projects/fpl-2026
-cd app && npm run dev          # the builder, http://localhost:5173
-.venv/bin/python v2/weekly.py  # captain, XI, transfers, price watch
+.venv/bin/python v2/weekly.py --plan            # full refresh + digest (~2 min)
+.venv/bin/python v2/weekly.py --no-refresh      # digest only, seconds
+.venv/bin/python v2/scorecard.py                # grade finished gameweeks
+.venv/bin/python simulate.py                    # Monte Carlo of the candidate squads
+cd app && npm run dev                           # http://localhost:5173
+gh run list --workflow=weekly.yml --limit 5     # did the refresh fire?
+gh workflow run weekly.yml                      # force one (pushes to ntfy)
 ```
-
-Add `--team <your FPL entry id>` to `weekly.py` once you have made a team; before
-GW1 your picks are not public, so edit `v2/my_squad.txt` instead.
-
-## Open threads
-
-1. **Rewrite SQUADS.md against v2.** It is currently out of date.
-2. **Re-run `simulate.py` and `plan.py` on v2 projections.** Both still read
-   `data/projections.csv`, which is now v2, so they will work — but the numbers
-   quoted in SQUADS.md came from v1 and have not been refreshed.
-3. **The model likes unknowns** — Kostoulas, Thiaw, O'Shea. Low ownership, almost
-   no Premier League record, so they lean on the price prior. Sanity-check them
-   by eye before trusting them.
-4. **DefCon dispersion is untested.** Poisson is assumed. After a few gameweeks
-   of real 2026/27 match logs, test Poisson vs negative binomial properly.
-5. **Bookmaker odds are not live yet.** football-data publishes forward odds
-   about a week before each round; `weekly.py` picks them up automatically and
-   prefers them over the fitted ratings once they appear.
-6. **Offered but not done:** a scheduled job so the digest lands before each
-   deadline.
 
 ## Things learned the hard way
 
@@ -61,40 +124,10 @@ GW1 your picks are not public, so edit `v2/my_squad.txt` instead.
 - FPL's fixture difficulty correlates only −0.60 with real clean-sheet
   probability. Do not trust it.
 - Realistic ceiling for predicting player points/90 is Spearman ~0.46.
-
----
-
-## Deployed
-
-**https://fpl-2026.vercel.app** — public, works on a phone.
-
-- **This week** tab: captain, XI, transfers, injury flags, price pressure.
-  Enter your FPL team id once (stored in the browser) and it reads your real
-  squad. Before Gameweek 1 your picks are not public, so it uses whatever you
-  built in the Build tab.
-- Prices, injuries and your squad are read **live** on every visit through
-  `app/api/fpl.ts`, a proxy that exists because the FPL API sends no CORS header
-  and browsers cannot call it directly.
-- Projections are rebuilt every **Thursday 07:00 UTC** by
-  `.github/workflows/weekly.yml`, which commits the new data and triggers a
-  Vercel deploy. Repo: github.com/teatimedev/fpl-2026 (private).
-- Vercel root directory is `app`. That is dashboard state, not in git — if the
-  project is ever recreated it must be set again or GitHub builds fail.
-
-### The weekly job has not run yet
-
-GitHub Actions was in a **major outage** on 6 Aug 2026 (from 15:22 UTC: "jobs may
-remain queued for an extended period"), so the workflow has never completed a
-run. Nothing is wrong with it — the identical commands were verified to run
-clean from a fresh checkout and reproduce the local build exactly, 0 of 572
-players differing. **First thing next session: check it ran.**
-
-```bash
-gh run list --workflow=weekly.yml --limit 3
-gh workflow run weekly.yml     # to force one
-```
-
-The repo is public. It went public on a wrong diagnosis (I assumed private-repo
-Actions minutes were exhausted; the account has in fact run Actions 14,773 times
-on designarena-hunter). Left public deliberately — no secrets are tracked, and
-unlimited Actions minutes is a real if incidental benefit.
+- A per-player transfer score ("A projects more than B") is not a transfer
+  score. Only the lift to the best XI counts, and a bench-fodder swap that
+  frees money is invisible to it.
+- The daily Chrome can squat 127.0.0.1:9222 and answer 404, pushing the CDP
+  automation Chrome onto `[::1]:9222` where the MCP can't reach it. Check
+  `lsof -nP -iTCP:9222` before assuming it's broken. Neither browser profile is
+  logged in to FPL.

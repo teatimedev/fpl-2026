@@ -1,5 +1,18 @@
 # Three squads for Gameweek 1
 
+> **16 Aug 2026 — historical.** The numbers and picks below are the **v1** squads
+> of 6 Aug; the app and `data/squads.json` were rebuilt on v2 and the picks
+> changed materially. **The team that was actually entered is v2's Option B, the
+> "Haaland Build"** — Raya; Calafiori, Thiaw, Guéhi, Tarkowski; Kluivert, Saka,
+> Mbeumo, Foden; Haaland, Thiago; bench Leno, O'Shea, Reed, Destan (£100.0m).
+> Why B and not A: on the v2 model A is 1.3 pts better over six gameweeks (388.5
+> vs 387.2, XI + captain), and 40,000-run Monte Carlo puts A ahead 56/44 — almost
+> entirely bench cover (A's bench plays, B's is £4.5m floor players), not the
+> 3 Arsenal + 3 City concentration (sd 50.7 vs 49.2). Against that, B owns the
+> 73%-owned captain, which is a large reduction in rank variance for a 1–2 pt
+> per week expected cost. See RESUME.md for the review and `v2/digest.md` for the
+> current weekly view. Everything below is kept for the reasoning, not the picks.
+
 *Updated 6 Aug 2026 after a fix to the minutes model — see "Why the big names
 are missing" at the bottom, and the changelog in README.md.*
 
