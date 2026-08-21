@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-08-21T16:23:43Z",
-  "coverage": 1.0,
+  "checked_at": "2026-08-21T16:25:54Z",
+  "coverage": 0.95,
   "enabled": 20,
   "gw": 1,
-  "healthy": 20,
+  "healthy": 19,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -16,7 +16,7 @@
       "club": "ARS",
       "content_hash": "9ad55bb8c198c53229b7d0618acc89a7ca1c87fc9aefa9d41e67e998949a55fd",
       "documents": 2,
-      "etag": "\"xhfhj44q4q35o0\"",
+      "etag": "\"npvscta96k35o0\"",
       "id": "ars-news",
       "publisher": "Arsenal",
       "status": "ok",
@@ -64,7 +64,7 @@
       "content_hash": "511e5b401574ae56a77d5b61b461ef089e1aeda57ab4774e66f11e779e7743d8",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Fri, 21 Aug 2026 16:23:46 GMT",
+      "last_modified": "Fri, 21 Aug 2026 16:25:55 GMT",
       "publisher": "Brentford",
       "status": "ok",
       "url": "https://www.brentfordfc.com/en/news"
@@ -98,7 +98,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"f25tzxm2astw4x\"",
+      "etag": "\"3rbywlbb0xtxoz\"",
       "id": "cry-news",
       "publisher": "Crystal Palace",
       "status": "ok",
@@ -184,10 +184,27 @@
     },
     {
       "article_errors": 0,
+      "article_validators": {
+        "https://www.liverpoolfc.com/news/andoni-iraola-press-conference-newcastle-v-liverpool-first-game-excitement-transfers-and-more": {
+          "etag": "\"23941-h179v4tf2i+ucTQ6mhBLuqTUfHg\""
+        },
+        "https://www.liverpoolfc.com/news/fantasy-premier-league-liverpools-top-picks-value-money-differentials-and-more": {
+          "etag": "\"1f8cf-dFKRgudR1tSo9jlfgzgnZhJ/5Fs\""
+        },
+        "https://www.liverpoolfc.com/news/virgil-van-dijks-season-preview-everyone-challenge": {
+          "etag": "\"1cedc-WhnI9bjR4XRzKPnCUNENEX3Ep5E\""
+        },
+        "https://www.liverpoolfc.com/news/watch-andoni-iraolas-newcastle-v-liverpool-press-conference-demand": {
+          "etag": "\"1b8d7-k1IhWd+RSHpGEhsKrnl/9L+x25k\""
+        },
+        "https://www.liverpoolfc.com/news/zara-shaw-named-england-squad-womens-u20-world-cup": {
+          "etag": "\"1bd21-8b5N8aERcMJ5syZAhP9ODQSjYgc\""
+        }
+      },
       "club": "LIV",
       "content_hash": "fcf06dfb55ce189bc96c3aaeb965e95fdd120c78073c9eca535e670f291b092e",
       "documents": 6,
-      "etag": "\"33fde-hETghqbp4QVLtnoerF55u4ZqvXU\"",
+      "etag": "\"33dc0-skAV3tBSt6AYiQUjbd6No5QBqTc\"",
       "id": "liv-news",
       "publisher": "Liverpool",
       "status": "ok",
@@ -196,9 +213,7 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/citytv/mens/enzo-maresca-press-conference-video-bournemouth-premier-league-63922899": {
-          "last_modified": "Fri, 21 Aug 2026 15:57:30 GMT"
-        },
+        "https://www.mancity.com/citytv/mens/enzo-maresca-press-conference-video-bournemouth-premier-league-63922899": {},
         "https://www.mancity.com/news/mens/city-v-bournemouth-kick-off-time-and-tv-information-63922554": {},
         "https://www.mancity.com/news/mens/enzo-maresca-bournemouth-premier-league-team-news-63922897": {},
         "https://www.mancity.com/news/mens/enzo-maresca-manchester-city-afc-bournemouth-preview-63922911": {}
@@ -212,19 +227,11 @@
       "url": "https://www.mancity.com/news"
     },
     {
-      "article_errors": 0,
-      "article_validators": {
-        "https://www.manutd.com/en/news/team-news-for-man-utd-hull-opener-aug-2026": {
-          "etag": "W/\"zqv59r0zo69ttz\""
-        }
-      },
       "club": "MUN",
-      "content_hash": "fc39d9c9d853b7a905c4cefcf81d2a1dd9c7370fc6e276f2e76f9d498ceaa78f",
-      "documents": 2,
+      "error": "HTTP Error 403: Forbidden",
       "id": "mun-news",
-      "last_modified": "Fri, 21 Aug 2026 16:23:48 GMT",
       "publisher": "Manchester United",
-      "status": "ok",
+      "status": "error",
       "url": "https://www.manutd.com/en/news"
     },
     {
@@ -234,7 +241,7 @@
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-livramento-and-joelinton-latest-ahead-of-reds-test": {}
       },
       "club": "NEW",
-      "content_hash": "8fbd6ba5db27bcd0e73ad770d751f9e2c9b79e42a0cd4e66a85679ebbb39d787",
+      "content_hash": "b1936e2a4690c29227114a8967d79c7c4f5d515208a5060426a2060b50776a0c",
       "documents": 3,
       "id": "new-news",
       "publisher": "Newcastle United",

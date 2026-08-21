@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-21T15:10:14Z",
+ "generated": "2026-08-21T16:36:16Z",
  "summary": {
   "n_gws": 0,
   "spearman_starters": null,
@@ -14,7 +14,13 @@
   "xi_best": null,
   "cs_brier": null,
   "cs_predicted_rate": null,
-  "cs_actual_rate": null
+  "cs_actual_rate": null,
+  "start_brier": null,
+  "appearance_brier": null,
+  "minutes_mae": null,
+  "minutes_bias": null,
+  "baseline_start_brier": null,
+  "start_brier_lift": null
  },
  "gws": [],
  "notes": [
