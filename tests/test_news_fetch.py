@@ -41,6 +41,16 @@ class NewsFetchTests(unittest.TestCase):
         self.assertEqual(health["article_validators"], prior["article_validators"])
         self.assertEqual(health["_unchanged_articles"], ["https://www.arsenal.com/news/team-news"])
 
+    def test_failed_article_preserves_prior_claim_url_fail_safe(self):
+        index = '<a href="/news/team-news">Team news</a>'
+        prior = {"article_validators": {
+            "https://www.arsenal.com/news/team-news": {"etag": '"article-old"'}
+        }}
+        with patch("v2.news_fetch._request", side_effect=[(index, {}), RuntimeError("timeout")]):
+            _, health = fetch_source(SOURCE, prior=prior)
+        self.assertIn("https://www.arsenal.com/news/team-news", health["_unchanged_articles"])
+        self.assertEqual(health["article_validators"], prior["article_validators"])
+
 
 if __name__ == "__main__":
     unittest.main()

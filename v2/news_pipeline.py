@@ -148,10 +148,20 @@ def _official_json(url: str, path: Path):
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
             return json.loads(response.read()), True
-    except OSError:
+    except (OSError, json.JSONDecodeError, ValueError, TypeError):
         if path.exists():
-            return json.loads(path.read_text()), False
+            try:
+                return json.loads(path.read_text()), False
+            except (OSError, json.JSONDecodeError, ValueError, TypeError):
+                pass
         return None, False
+
+
+def _valid_official_payloads(bootstrap, fixtures) -> bool:
+    return (isinstance(bootstrap, dict)
+            and all(isinstance(bootstrap.get(key), list) for key in ("events", "teams", "elements"))
+            and isinstance(fixtures, list)
+            and all(isinstance(row, dict) for row in fixtures))
 
 
 def _fixture_context(bootstrap: dict, fixtures: list[dict], gw: int) -> dict[str, dict[str, set[str]]]:
@@ -250,7 +260,7 @@ def run(root: Path = ROOT, *, now: datetime | None = None) -> dict:
         FPL_BOOTSTRAP, root / "v2/cache/bootstrap.json")
     fixtures, fixtures_fresh = _official_json(
         FPL_FIXTURES, root / "v2/cache/fixtures.json")
-    if bootstrap is None or fixtures is None:
+    if not _valid_official_payloads(bootstrap, fixtures):
         return _official_outage(root, now, stamp)
     official_fpl_ok = bootstrap_fresh and fixtures_fresh
     gw, deadlines, hours = _context(bootstrap, now)

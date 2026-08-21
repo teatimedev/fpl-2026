@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 from v2.news_pipeline import (
     build_generated_overrides, degraded_materiality, materiality, persist_scan,
-    resolve_claim_conflicts, _official_json, _official_outage,
+    resolve_claim_conflicts, _official_json, _official_outage, _valid_official_payloads,
 )
 
 
@@ -110,6 +110,17 @@ class NewsPipelineTests(unittest.TestCase):
                 payload, fresh = _official_json("https://example.test/api", missing)
         self.assertIsNone(payload)
         self.assertFalse(fresh)
+
+    def test_malformed_official_json_is_controlled(self):
+        response = unittest.mock.MagicMock()
+        response.__enter__.return_value.read.return_value = b'{truncated'
+        response.__enter__.return_value.__exit__ = unittest.mock.MagicMock(return_value=False)
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch("v2.news_pipeline.urllib.request.urlopen", return_value=response):
+                payload, fresh = _official_json("https://example.test/api", Path(tmp) / "missing")
+        self.assertIsNone(payload)
+        self.assertFalse(fresh)
+        self.assertFalse(_valid_official_payloads({"events": []}, []))
 
     def test_outage_near_deadline_builds_urgent_alert_without_fpl_cache(self):
         with tempfile.TemporaryDirectory() as tmp:

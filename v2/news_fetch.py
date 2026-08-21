@@ -156,6 +156,12 @@ def fetch_source(source: dict, *, article_limit: int = 5,
                 })
             except RuntimeError as exc:
                 article_errors.append(str(exc))
+                # A transient article failure must not erase a previously
+                # verified absence from the model. Preserve its claim and its
+                # validators until the article can be checked successfully.
+                unchanged_articles.append(url)
+                if url in prior_articles:
+                    article_validators[url] = prior_articles[url]
         digest = hashlib.sha256("\n".join(d["text"] for d in documents).encode()).hexdigest()
         status = "error" if urls and len(documents) == 1 and article_errors else "ok"
         row = {
