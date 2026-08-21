@@ -1,6 +1,6 @@
 # Deadline team-news ingestion
 
-- Status: implemented; production release verification pending; nuanced-claim calibration 0/2 deadlines
+- Status: live and production verified; nuanced-claim calibration 0/2 deadlines
 - Owner: FPL bot; Jordan owns any optional manual override
 - Primary runner: GitHub Actions
 - Consumers: availability model, weekly digest, Vercel app, ntfy
@@ -263,7 +263,7 @@ until two completed deadlines have been scored.
 - Add website freshness, provenance, candidates, and degraded-state messaging.
 - Add targeted ntfy messages with a click through to the affected player.
 
-### 4. Safe automatic absences — implemented; production verification pending
+### 4. Safe automatic absences — implemented and production verified
 
 - Enable only explicit out/suspended/dated-return rules.
 - Verify manual override precedence and expiry.
