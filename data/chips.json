@@ -14,7 +14,7 @@
    "weeks": [
     [
      1,
-     8.6
+     9.1
     ],
     [
      2,
@@ -91,9 +91,9 @@
    ],
    "best_gw": 6,
    "best": 9.6,
-   "now": 8.6,
+   "now": 9.1,
    "play": false,
-   "advice": "Hold. Best-looking week for this one is GW6 (9.6 from the bench); this week is 8.6. Second copy (GW20\u201338): best week GW34 (9.7).",
+   "advice": "Hold. Best-looking week for this one is GW6 (9.6 from the bench); this week is 9.1. Second copy (GW20\u201338): best week GW34 (9.7).",
    "last_eligible": 19,
    "later": [
     {
@@ -110,7 +110,7 @@
     [
      1,
      7.3,
-     "Haaland"
+     "Saka"
     ],
     [
      2,
@@ -134,12 +134,12 @@
     ],
     [
      6,
-     6.3,
+     6.4,
      "Saka"
     ],
     [
      7,
-     8.1,
+     8.2,
      "Haaland"
     ],
     [
@@ -164,7 +164,7 @@
     ],
     [
      12,
-     5.9,
+     6.0,
      "Mbeumo"
     ],
     [
@@ -174,7 +174,7 @@
     ],
     [
      14,
-     6.9,
+     7.0,
      "Mbeumo"
     ],
     [
@@ -189,7 +189,7 @@
     ],
     [
      17,
-     6.1,
+     6.2,
      "Haaland"
     ],
     [
@@ -200,19 +200,19 @@
     [
      19,
      7.3,
-     "Haaland"
+     "Saka"
     ]
    ],
-   "best_gw": 3,
-   "best": 8.1,
+   "best_gw": 7,
+   "best": 8.2,
    "best_name": "Haaland",
    "now": 7.3,
-   "now_name": "Haaland",
+   "now_name": "Saka",
    "play": false,
-   "advice": "Hold. Best week for this one is GW3: Haaland (8.1 extra); this week Haaland 7.3. Second copy (GW20\u201338): best week GW27, Haaland (7.2).",
+   "advice": "Hold. Best week for this one is GW7: Haaland (8.2 extra); this week Saka 7.3. Second copy (GW20\u201338): best week GW27, Haaland (7.2).",
    "anyone": [
-    3,
-    8.1,
+    7,
+    8.2,
     "Haaland"
    ],
    "last_eligible": 19,
@@ -231,7 +231,7 @@
    "weeks": [
     [
      2,
-     4.1
+     4.2
     ],
     [
      3,
@@ -271,7 +271,7 @@
     ],
     [
      12,
-     6.8
+     6.9
     ],
     [
      13,
@@ -279,11 +279,11 @@
     ],
     [
      14,
-     3.9
+     4.0
     ],
     [
      15,
-     2.4
+     2.5
     ],
     [
      16,
@@ -291,11 +291,11 @@
     ],
     [
      17,
-     4.0
+     4.1
     ],
     [
      18,
-     3.4
+     3.5
     ],
     [
      19,
@@ -303,10 +303,10 @@
     ]
    ],
    "best_gw": 12,
-   "best": 6.8,
+   "best": 6.9,
    "now": null,
    "play": false,
-   "advice": "Hold. Widest gap left is GW12 (6.8 behind the best possible XI).",
+   "advice": "Hold. Widest gap left is GW12 (6.9 behind the best possible XI).",
    "last_eligible": 19
   },
   "wildcard": {
@@ -315,7 +315,7 @@
    "gap_trend": [
     [
      2,
-     4.1
+     4.2
     ],
     [
      3,
@@ -347,12 +347,12 @@
     ]
    ],
    "play": false,
-   "advice": "Hold. The squad is holding up (gap to the best possible XI 4.1\u20135.5 over the next weeks). Playable from GW2.",
+   "advice": "Hold. The squad is holding up (gap to the best possible XI 4.2\u20135.5 over the next weeks). Playable from GW2.",
    "last_eligible": 19
   }
  },
  "gaps": {
-  "2": 4.1,
+  "2": 4.2,
   "3": 1.3,
   "4": 5.5,
   "5": 1.5,
@@ -362,13 +362,13 @@
   "9": 1.4,
   "10": 2.3,
   "11": 2.2,
-  "12": 6.8,
+  "12": 6.9,
   "13": 2.6,
-  "14": 3.9,
-  "15": 2.4,
+  "14": 4.0,
+  "15": 2.5,
   "16": 3.2,
-  "17": 4.0,
-  "18": 3.4,
+  "17": 4.1,
+  "18": 3.5,
   "19": 3.7
  }
 }

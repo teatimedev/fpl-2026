@@ -5,76 +5,84 @@ Projections cover GW1–6.
 
 ## Captain: **Haaland** (MCI)
 
-Projected 7.3 this week, doubled to 14.6. Vice: Saka (7.2).
+Projected 6.7 this week, doubled to 13.5. Vice: Mbeumo (6.2).
 
 | rank | player | club | this GW | start % |
 |---|---|---|---|---|
-| 1 | Haaland | MCI | 7.3 | 84 |
-| 2 | Saka | ARS | 7.2 | 75 |
-| 3 | Mbeumo | MUN | 6.8 | 83 |
-| 4 | Calafiori | ARS | 6.2 | 84 |
+| 1 | Haaland | MCI | 6.7 | 92 |
+| 2 | Mbeumo | MUN | 6.2 | 83 |
+| 3 | Saka | ARS | 5.9 | 60 |
+| 4 | Calafiori | ARS | 5.9 | 84 |
 
 ## Starting XI
 
 | pos | player | club | this GW | GW1–6 |
 |---|---|---|---|---|
-| GKP | Raya | ARS | 5.4 | 29.3 |
-| DEF | Calafiori | ARS | 6.2 | 31.6 |
-| DEF | Tarkowski | EVE | 5.1 | 30.1 |
-| DEF | Guéhi | MCI | 4.9 | 29.0 |
-| DEF | O'Shea | IPS | 4.0 | 20.2 |
-| DEF | Thiaw | NEW | 3.9 | 28.8 |
-| MID | Saka (V) | ARS | 7.2 | 35.9 |
-| MID | Mbeumo | MUN | 6.8 | 35.4 |
-| MID | Foden | MCI | 5.8 | 32.5 |
-| FWD | Haaland (C) | MCI | 7.3 | 39.9 |
-| FWD | Thiago | BRE | 5.2 | 29.9 |
+| GKP | Raya | ARS | 5.5 | 29.3 |
+| DEF | Calafiori | ARS | 5.9 | 29.8 |
+| DEF | Tarkowski | EVE | 5.0 | 28.6 |
+| DEF | Thiaw | NEW | 4.1 | 27.4 |
+| DEF | O'Shea | IPS | 3.7 | 19.0 |
+| MID | Mbeumo (V) | MUN | 6.2 | 35.0 |
+| MID | Saka | ARS | 5.9 | 34.5 |
+| MID | Foden | MCI | 4.8 | 31.4 |
+| MID | Kluivert | BOU | 3.2 | 25.5 |
+| FWD | Haaland (C) | MCI | 6.7 | 39.4 |
+| FWD | Thiago | BRE | 5.7 | 30.9 |
 
-**Bench order:** Leno (3.4), Kluivert (3.8), Reed (1.4), Destan (0.0)
+**Bench order:** Leno (3.9), Guéhi (2.8), Reed (1.5), Destan (0.0)
 
 ## Your lineup vs the model  (my_squad.txt)
 
-- **Vice on a goalkeeper** (Raya): if the captain misses, the armband doubles your keeper. Move it to Saka.
-- **Bench → start:** O'Shea (4.0) is on your bench; the model starts him over Kluivert (3.8), +0.3.
-- Formation: you 4-4-2, model 5-3-2.
+- **Vice on a goalkeeper** (Raya): if the captain misses, the armband doubles your keeper. Move it to Mbeumo.
+- **Bench → start:** O'Shea (3.7) is on your bench; the model starts him over Guéhi (2.8), +1.0.
 
 ## Check before the deadline
 
-- **Saka** (ARS, XI) — starts only 75% of the time
-- **Foden** (MCI, XI) — starts only 77% of the time
-- **Destan** (HUL, bench) — status u; 0% chance; "Has joined Konyaspor permanently" (2026-08-17)
+- **Haaland** (MCI, XI) — 92% deadline start estimate (medium confidence): Started the Shield and has the strongest premium-attacker minutes case for GW1.
+- **Saka** (ARS, XI) — 60% deadline start estimate (medium confidence): Ready to be involved after a late return, but not confirmed to start; 30-minute Shield cameo.
+- **Foden** (MCI, XI) — 80% deadline start estimate (medium confidence): Started the final warm-ups and Shield; likely starter with a roughly 60-70 minute role.
+- **Kluivert** (BOU, XI) — 68% deadline start estimate (low confidence): Predicted to start, but only ten league starts last season make an 83% baseline too confident.
+- **Guéhi** (MCI, bench) — 45% deadline start estimate (low confidence): Available, but began the Shield on the bench and is omitted from the current predicted XI.
+- **Destan** (HUL, bench) — status u; 0% chance; "Has joined Konyaspor permanently" (2026-08-17); 0% deadline start estimate (high confidence)
 
 ## Transfers  (£0.0m in the bank, unlimited free)
 
-Gain is the lift to your best XI (captain included) over GW1–6, not the raw difference between two players. A hit costs 4.
+Gain is the lift to your expected starting XI and captain plus modelled auto-sub cover over GW1–6. The auto-sub term uses each starter's non-appearance risk, not a flat bench weight. A hit costs 4.
 
-**No single transfer improves the squad.** Nothing to change.
+**Availability warning:** Destan has effectively no route to points. Obi is the best legal same-position replacement (+1.6: +0.0 XI/captain, +1.6 auto-sub cover).
+
+| out | in | £ | XI + captain | auto-sub | total | net |
+|---|---|---|---|---|---|---|
+| Destan (HUL) | Obi (MUN) | +0.0 | +0.0 | +1.6 | **+1.6** | +1.6 |
+| Kluivert (BOU) | Barnes (NEW) | +0.0 | -0.7 | +1.2 | **+0.5** | +0.5 |
+
+**Recommended:** use the free pre-GW1 rebuild shown in the plan below (+5.9 versus holding/re-planning). The one- and two-move tables are diagnostics, not the final action.
+
+**Best two-move combinations** (net of any hit):
+
+| out | in | £ | XI + captain | auto-sub | total | net |
+|---|---|---|---|---|---|---|
+| Guéhi + Reed | Sessegnon + Barnes | +0.0 | -1.0 | +8.4 | +7.5 | **+7.5** |
+| Guéhi + Reed | Mitchell + Barnes | +0.0 | -0.2 | +7.4 | +7.1 | **+7.1** |
+| Guéhi + Destan | Sessegnon + Osula | +0.0 | -3.7 | +10.1 | +6.3 | **+6.3** |
+| Guéhi + Destan | Sessegnon + Wissa | +0.0 | -4.0 | +10.2 | +6.3 | **+6.3** |
+| Guéhi + Reed | Sessegnon + Garnacho | +0.0 | -1.4 | +7.6 | +6.2 | **+6.2** |
+
+The pair Guéhi+Reed → Sessegnon+Barnes is the best two-move package (+7.5).
 
 ## The next six weeks, planned
 
-Best path from here: **397.5** pts (0 hits). Making no move this week and re-planning: 394.1. Acting now is worth **+3.4** across 7 moves — not enough; hold.
+Best exact-scored pre-season build: **414.6** pts (0 hits). Making no move this week and re-planning: 408.7. Acting now is worth **+5.9** across 7 moves — use the free pre-GW1 rebuild.
 
-- **GW1** 71.0 pts, C B.Fernandes, 15 FT  Kluivert → Verbruggen, Tarkowski → Mitchell, Leno → Beto, Reed → Virgil, O'Shea → Cherki, Haaland → Dalot, Thiaw → B.Fernandes
-- **GW2** 65.6 pts, C B.Fernandes, 1 FT  hold
-- **GW3** 67.3 pts, C Foden, 2 FT  Dalot → Thiaw
-- **GW4** 62.8 pts, C Palmer, 2 FT  Saka → Palmer
-- **GW5** 64.0 pts, C B.Fernandes, 2 FT  Virgil → Tarkowski
-- **GW6** 66.8 pts, C B.Fernandes, 2 FT  Guéhi → Saka, Cherki → Sessegnon
+- **GW1** 71.2 pts, C B.Fernandes, 15 FT  Leno → Steele, Guéhi → Gvardiol, O'Shea → Sessegnon, Kluivert → B.Fernandes, Reed → Cherki, Haaland → Wissa, Destan → Beto
+- **GW2** 69.0 pts, C B.Fernandes, 1 FT  hold
+- **GW3** 71.4 pts, C Foden, 2 FT  hold
+- **GW4** 63.3 pts, C B.Fernandes, 3 FT  hold
+- **GW5** 69.1 pts, C B.Fernandes, 4 FT  hold
+- **GW6** 70.7 pts, C B.Fernandes, 5 FT  hold
 
-_Point-estimate plans churn on small fixture swings; read this for direction (who to move towards, when), not as a script._
-
-## Chips
-
-No double or blank gameweeks in the fixture list yet — they appear when cup ties force rescheduling, usually from midwinter.
-
-| chip | this week | best week left | advice |
-|---|---|---|---|
-| Bench Boost | 8.6 | GW6: 9.6 | Hold. Best-looking week for this one is GW6 (9.6 from the bench); this week is 8.6. Second copy (GW20–38): best week GW34 (9.7). |
-| Triple Captain | 7.3 (Haaland) | GW3: 8.1 (Haaland) | Hold. Best week for this one is GW3: Haaland (8.1 extra); this week Haaland 7.3. Second copy (GW20–38): best week GW27, Haaland (7.2). |
-| Free Hit | — | GW12: 6.8 | Hold. Widest gap left is GW12 (6.8 behind the best possible XI). |
-| Wildcard | — | — | Hold. The squad is holding up (gap to the best possible XI 4.1–5.5 over the next weeks). Playable from GW2. |
-
-_Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
+_The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
 
 ## Price watch
 
@@ -82,4 +90,4 @@ Prices are locked until the Gameweek 1 deadline, so there is no transfer flow to
 
 ---
 
-_Generated 2026-08-21 14:04 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-08-21 13:59 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
