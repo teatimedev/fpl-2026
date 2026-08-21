@@ -88,6 +88,13 @@ def deciles(pairs, n=10):
     return out
 
 
+def started_outcome(actual):
+    """Boolean start target; FPL reports a count in double gameweeks."""
+    if len(actual) > 2 and actual[2] is not None:
+        return int(actual[2] > 0)
+    return int(actual[1] >= 60)
+
+
 # ---------------------------------------------------------------- actuals
 def actuals_for(gw, events):
     """{player_id: (points, minutes)}, {team_short: clean_sheet_bool}, checked."""
@@ -100,7 +107,8 @@ def actuals_for(gw, events):
     if not ev or not ev.get('finished'):
         return None
     live = api(f'event/{gw}/live/')
-    pts = {str(e['id']): [e['stats']['total_points'], e['stats']['minutes']]
+    pts = {str(e['id']): [e['stats']['total_points'], e['stats']['minutes'],
+                           e['stats'].get('starts')]
            for e in live['elements']}
     fixtures = api(f'fixtures/?event={gw}')
     boot_teams = {t['id']: t['short_name'] for t in api('bootstrap-static/')['teams']}
@@ -151,6 +159,63 @@ def grade(snap, act):
         top20_in_actual_top50=hits20,
         deciles=deciles(starters),
     )
+
+    # Deadline availability calibration. Older snapshots did not archive these
+    # three fields, so they remain gradeable for points but are skipped here.
+    availability = [(p, a) for p, a in rows
+                    if p.get('p_start') is not None and p.get('p_play') is not None
+                    and p.get('expected_minutes') is not None]
+    if availability:
+        start_sq = play_sq = minute_abs = minute_bias = 0.0
+        for player, actual in availability:
+            minutes = actual[1]
+            started = started_outcome(actual)
+            appeared = int(minutes > 0)
+            start_sq += (player['p_start'] - started) ** 2
+            play_sq += (player['p_play'] - appeared) ** 2
+            minute_abs += abs(player['expected_minutes'] - minutes)
+            minute_bias += minutes - player['expected_minutes']
+        n_avail = len(availability)
+        g['availability'] = dict(
+            n=n_avail,
+            start_brier=round(start_sq / n_avail, 3),
+            appearance_brier=round(play_sq / n_avail, 3),
+            minutes_mae=round(minute_abs / n_avail, 2),
+            minutes_bias=round(minute_bias / n_avail, 2),
+        )
+        baseline = [(player, actual) for player, actual in availability
+                    if player.get('baseline_start') is not None]
+        if baseline:
+            baseline_brier = sum(
+                (player['baseline_start'] - started_outcome(actual)) ** 2
+                for player, actual in baseline
+            ) / len(baseline)
+            g['availability']['baseline_start_brier'] = round(baseline_brier, 3)
+            g['availability']['start_brier_lift'] = round(
+                baseline_brier - g['availability']['start_brier'], 3)
+
+        groups = {}
+        dimensions = {
+            'confidence': lambda player: player.get('availability_confidence') or 'unknown',
+            'source_tier': lambda player: (
+                'baseline' if player.get('availability_source') == 'model baseline' else
+                'official_fpl' if str(player.get('availability_source', '')).startswith('FPL ') else
+                'deadline_override'
+            ),
+            'claim_type': lambda player: player.get('generation_rule') or 'baseline',
+        }
+        for dimension, classify in dimensions.items():
+            grouped = {}
+            for player, actual in availability:
+                grouped.setdefault(classify(player), []).append((player, actual))
+            groups[dimension] = {}
+            for label, group in grouped.items():
+                sq = 0.0
+                for player, actual in group:
+                    started = started_outcome(actual)
+                    sq += (player['p_start'] - started) ** 2
+                groups[dimension][label] = {'n': len(group), 'start_brier': round(sq / len(group), 3)}
+        g['availability_groups'] = groups
 
     # captaincy and XI, if a squad was known at snapshot time
     squad = snap.get('squad') or []
@@ -264,6 +329,12 @@ def main():
         cs_brier=avg('cs', 'brier'),
         cs_predicted_rate=avg('cs', 'predicted_rate'),
         cs_actual_rate=avg('cs', 'actual_rate'),
+        start_brier=avg('availability', 'start_brier'),
+        appearance_brier=avg('availability', 'appearance_brier'),
+        minutes_mae=avg('availability', 'minutes_mae'),
+        minutes_bias=avg('availability', 'minutes_bias'),
+        baseline_start_brier=avg('availability', 'baseline_start_brier'),
+        start_brier_lift=avg('availability', 'start_brier_lift'),
     )
     out = dict(generated=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                summary=summary, gws=graded,

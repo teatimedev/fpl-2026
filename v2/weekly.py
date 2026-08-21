@@ -436,10 +436,23 @@ def snapshot(gw, deadline, players, squad, model, yours):
                                xg=round(f['xg'], 3), xgc=round(f['xgc'], 3)) for f in fx]
     rows = []
     for p in players.values():
+        start_by_gw = p.get('start_by_gw') or []
+        play_by_gw = p.get('play_by_gw') or []
+        mins_by_gw = p.get('mins_by_gw') or []
+        idx = gw - 1
+        forecast_by_gw = p.get('availability_by_gw') or []
+        forecast = forecast_by_gw[idx] if idx < len(forecast_by_gw) else None
         rows.append(dict(id=p['id'], name=p['name'], team=p['team'], pos=p['pos'],
                          price=p['price'], sel_pct=p['sel_pct'],
                          proj=round(gw_pts(p, gw), 3),
-                         start_rate=p['start_rate'], status=p['status']))
+                         start_rate=p['start_rate'], status=p['status'],
+                         p_start=round(start_by_gw[idx], 4) if idx < len(start_by_gw) else p['start_rate'],
+                         p_play=round(play_by_gw[idx], 4) if idx < len(play_by_gw) else p['start_rate'],
+                         expected_minutes=round(mins_by_gw[idx], 2) if idx < len(mins_by_gw) else None,
+                         baseline_start=round(p['start_rate'], 4),
+                         availability_source=(forecast or {}).get('source', p.get('availability_source', 'model baseline')),
+                         availability_confidence=(forecast or {}).get('confidence', p.get('availability_confidence', 'model')),
+                         generation_rule=(forecast or {}).get('generation_rule')))
     out = dict(gw=gw, deadline=deadline,
                generated=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                players=rows, team_cs=team_cs,

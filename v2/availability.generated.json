@@ -1,0 +1,26 @@
+{
+  "overrides": [
+    {
+      "cameo_minutes": 0.0,
+      "confidence": "high",
+      "evidence_ids": [
+        "ev-fde1099d972ad13c"
+      ],
+      "from_gw": 1,
+      "generated_at": "2026-08-21T16:00:02Z",
+      "generation_rule": "explicit_absence_v1",
+      "last_updated": "2026-08-21T16:00:02Z",
+      "name": "J\u00e9r\u00e9my Doku",
+      "note": "Enzo Maresca says J\u00e9r\u00e9my Doku is not fit to face Bournemouth this Sunday.",
+      "p_cameo": 0.0,
+      "p_start": 0.0,
+      "player_id": 400,
+      "source": "https://www.mancity.com/news/mens/enzo-maresca-bournemouth-premier-league-team-news-63922897",
+      "start_minutes": 0.0,
+      "status": "applied",
+      "through_gw": 1
+    }
+  ],
+  "updated_at": "2026-08-21T16:00:02Z",
+  "version": 1
+}

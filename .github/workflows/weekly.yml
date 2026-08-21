@@ -10,6 +10,11 @@ on:
     - cron: '23 * * * *'
   workflow_dispatch:
     inputs:
+      mode:
+        description: 'Run the cheap news scan or a full model rebuild'
+        type: choice
+        options: [full, news]
+        default: full
       tune:
         description: 'Also re-tune the team-model half-life (slow, ~10 min)'
         type: boolean
@@ -27,6 +32,7 @@ jobs:
       reason: ${{ steps.gate.outputs.reason }}
       gw: ${{ steps.gate.outputs.gw }}
       hours: ${{ steps.gate.outputs.hours }}
+      mode: ${{ steps.gate.outputs.mode }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,6 +42,8 @@ jobs:
           sparse-checkout-cone-mode: false
       - id: gate
         run: python3 v2/should_refresh.py
+        env:
+          INPUT_MODE: ${{ inputs.mode }}
 
   refresh:
     needs: gate
@@ -50,10 +58,16 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install dependencies
+      - name: Scan public first-party team news
+        id: news
+        run: python3 -m v2.news_pipeline --summary /tmp/news-summary.json
+
+      - name: Install full-model dependencies
+        if: (needs.gate.outputs.mode == 'full' || steps.news.outputs.rebuild_required == 'true') && steps.news.outputs.official_fpl_ok == 'true'
         run: pip install --quiet numpy scipy pulp highspy
 
       - name: Pull fresh data
+        if: (needs.gate.outputs.mode == 'full' || steps.news.outputs.rebuild_required == 'true') && steps.news.outputs.official_fpl_ok == 'true'
         # Full fetch, including the four-season player histories. The database is
         # not committed, so every CI run starts empty — skipping histories here
         # would leave season_stat blank and silently drop every player back to
@@ -63,6 +77,7 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
 
       - name: Rebuild the model
+        if: (needs.gate.outputs.mode == 'full' || steps.news.outputs.rebuild_required == 'true') && steps.news.outputs.official_fpl_ok == 'true'
         run: |
           if [ "${{ inputs.tune }}" = "true" ]; then
             python v2/teams_model.py --tune
@@ -74,11 +89,13 @@ jobs:
           python v2/to_csv.py
 
       - name: Re-optimise squads
+        if: (needs.gate.outputs.mode == 'full' || steps.news.outputs.rebuild_required == 'true') && steps.news.outputs.official_fpl_ok == 'true'
         run: |
           python optimise.py --json
           python validate.py
 
       - name: Digest, snapshot, price log
+        if: (needs.gate.outputs.mode == 'full' || steps.news.outputs.rebuild_required == 'true') && steps.news.outputs.official_fpl_ok == 'true'
         # --team reads your real squad once picks are public (after GW1's
         # deadline); before that weekly.py falls back to v2/my_squad.txt.
         # FPL_ENTRY_ID is a repository *variable* (Settings → Secrets and
@@ -90,20 +107,60 @@ jobs:
           python v2/movers.py
 
       - name: Grade finished gameweeks
+        if: (needs.gate.outputs.mode == 'full' || steps.news.outputs.rebuild_required == 'true') && steps.news.outputs.official_fpl_ok == 'true'
         run: python v2/scorecard.py
 
       - name: Export for the app
+        if: (needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true') || steps.news.outputs.state_changed == 'true'
         run: python export_app_data.py
 
       - name: Record this refresh
+        if: needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true'
         run: python v2/should_refresh.py mark "${{ needs.gate.outputs.reason }}" "${{ needs.gate.outputs.gw }}"
 
+      - name: Push the digest to your phone
+        # ntfy.sh needs no account: subscribe to the topic in the ntfy app and
+        # every deadline-window refresh lands as a notification. NTFY_TOPIC is a
+        # repository secret. Only the
+        # deadline windows and manual runs push — Thursday's routine refresh
+        # would just be noise.
+        if: needs.gate.outputs.reason != 'weekly' && ((needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true') || steps.news.outputs.notify_required == 'true')
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          if [ -z "$NTFY_TOPIC" ]; then
+            echo "NTFY_TOPIC secret is not configured; required notification failed."
+            exit 1
+          fi
+          PRIORITY="default"
+          if [ "${{ steps.news.outputs.urgent }}" = "true" ]; then PRIORITY="urgent"; fi
+          PUSH_FILE="v2/push.txt"
+          if { [ "${{ needs.gate.outputs.mode }}" = "news" ] && [ "${{ steps.news.outputs.rebuild_required }}" != "true" ]; } || [ "${{ steps.news.outputs.official_fpl_ok }}" != "true" ]; then
+            PUSH_FILE="v2/news_push.txt"
+          fi
+          UPDATE_ID="gw${{ needs.gate.outputs.gw }}-${{ needs.gate.outputs.reason }}-${{ steps.news.outputs.notification_key }}"
+          if curl -fsS "https://ntfy.sh/$NTFY_TOPIC/json?poll=1&since=24h" | \
+              python3 -c 'import json,sys; k=sys.argv[1]; found=any(k in (json.loads(line).get("message") or "") for line in sys.stdin if line.strip()); raise SystemExit(0 if found else 1)' "$UPDATE_ID"; then
+            echo "notification already delivered; skipping duplicate"
+          else
+            { cat "$PUSH_FILE"; printf '\nUpdate ID: %s\n' "$UPDATE_ID"; } | curl -fsS \
+              -H "Title: FPL GW${{ needs.gate.outputs.gw }} · ${{ needs.gate.outputs.reason }}" \
+              -H "Click: https://fpl-2026.vercel.app" \
+              -H "Tags: soccer" \
+              -H "Priority: $PRIORITY" \
+              --data-binary @- \
+              "https://ntfy.sh/$NTFY_TOPIC" > /dev/null
+            echo "pushed to ntfy topic"
+          fi
+
       - name: Commit if anything changed
+        if: (needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true') || steps.news.outputs.state_changed == 'true'
         run: |
           git config user.name  "fpl-bot"
           git config user.email "actions@github.com"
           git add data/ app/src/data/ v2/team_ratings.json v2/season_view.json \
-                  v2/projections_v2.json v2/digest.md
+                  v2/projections_v2.json v2/digest.md v2/availability.generated.json \
+                  v2/player_aliases.json
           if git diff --cached --quiet; then
             echo "No change."
           else
@@ -112,18 +169,8 @@ jobs:
             git push
           fi
 
-      - name: Push the digest to your phone
-        # ntfy.sh needs no account: subscribe to the topic in the ntfy app and
-        # every deadline-window refresh lands as a notification. NTFY_TOPIC is a
-        # repository variable; leave it unset and this step is skipped. Only the
-        # deadline windows and manual runs push — Thursday's routine refresh
-        # would just be noise.
-        if: vars.NTFY_TOPIC != '' && needs.gate.outputs.reason != 'weekly'
+      - name: Fail visibly when official FPL is stale
+        if: steps.news.outputs.official_fpl_ok != 'true'
         run: |
-          curl -fsS \
-            -H "Title: FPL GW${{ needs.gate.outputs.gw }} · ${{ needs.gate.outputs.reason }}" \
-            -H "Click: https://fpl-2026.vercel.app" \
-            -H "Tags: soccer" \
-            --data-binary @v2/push.txt \
-            "https://ntfy.sh/${{ vars.NTFY_TOPIC }}" > /dev/null
-          echo "pushed to ntfy topic"
+          echo "Official FPL bootstrap or fixtures were unavailable; cached data was not allowed to rebuild the model."
+          exit 1

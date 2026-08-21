@@ -1,5 +1,5 @@
 import { useMemo, type ReactNode } from 'react'
-import type { Data, Player, Pos, Weekly } from './types'
+import type { Data, NewsClaim, Player, Pos, Weekly } from './types'
 import { withLive, priceMovers } from './weekly'
 import {
   xiForGw, thisGw, rankTransfers, lineupIssues, HIT_COST,
@@ -118,6 +118,8 @@ export default function ThisWeek(
           />
         </div>
       </section>
+
+      <NewsStatus D={D} squadIds={squad.map(p => p.id)} openPlayer={openPlayer} />
 
       {!ready && (
         <section className="panel" style={{ marginTop: 16 }}>
@@ -308,6 +310,77 @@ export default function ThisWeek(
           </section>
         </>
       )}
+    </div>
+  )
+}
+
+function NewsStatus({ D, squadIds, openPlayer }: {
+  D: Data; squadIds: number[]; openPlayer: (id: number) => void
+}) {
+  const news = D.news
+  if (!news?.run || !news.health) {
+    return (
+      <section className="panel news-health news-health-red" style={{ marginTop: 16 }}>
+        <div className="panel-hd"><h2>Team-news automation</h2><span className="sub">not yet verified</span></div>
+        <div className="empty-state">
+          No completed public-source scan is bundled into this build. Treat the FPL injury flags above as the only live news.
+        </div>
+      </section>
+    )
+  }
+  const squad = new Set(squadIds)
+  const allClaims = news.evidence?.claims ?? []
+  const owned = allClaims.filter(claim => squad.has(claim.player_id))
+  const applied = owned.filter(claim => claim.decision === 'applied')
+  const candidates = owned.filter(claim => claim.decision === 'candidate')
+  const checked = new Date(news.run.checked_at)
+  const checkedText = isNaN(checked.getTime()) ? news.run.checked_at
+    : checked.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+  const tone = news.health.status
+  const headline = tone === 'green' ? 'Healthy at last published change' : tone === 'amber' ? 'Partly degraded' : 'Degraded'
+  return (
+    <section className={`panel news-health news-health-${tone}`} style={{ marginTop: 16 }}>
+      <div className="panel-hd">
+        <h2>Team-news automation</h2>
+        <span className="sub">{headline} · {news.health.healthy}/{news.health.enabled} sources · {checkedText}</span>
+      </div>
+      <div className="news-health-body">
+        <p>
+          {news.health.official_fpl_ok === false
+            ? 'Official FPL data was unavailable, so the model rebuild was stopped and the last safe inputs were retained.'
+            : tone === 'green'
+            ? 'Official club pages were healthy in the last published scan. Only explicit, recent absences for the upcoming fixture can change the model automatically.'
+            : 'Some official club pages could not be checked. The model keeps its last safe inputs and this warning stays visible.'}
+        </p>
+        {applied.map(claim => <NewsClaimRow key={claim.id} claim={claim} applied openPlayer={openPlayer} />)}
+        {candidates.map(claim => <NewsClaimRow key={claim.id} claim={claim} openPlayer={openPlayer} />)}
+        {owned.length === 0 && <p className="news-none">No new club-news claims matched anyone in your 15.</p>}
+        <details className="sync-details">
+          <summary>Source health and audit trail</summary>
+          <p>{Math.round(news.health.coverage * 100)}% club-source coverage at the last published state change. Stored evidence is a short excerpt, publication time and public link—not the full article.</p>
+          <ul>
+            {news.health.sources.filter(source => source.status !== 'ok').map(source => (
+              <li key={source.id}><strong>{source.club}</strong>: {source.error || source.status}</li>
+            ))}
+          </ul>
+        </details>
+      </div>
+    </section>
+  )
+}
+
+function NewsClaimRow({ claim, applied = false, openPlayer }: {
+  claim: NewsClaim; applied?: boolean; openPlayer: (id: number) => void
+}) {
+  return (
+    <div className={`news-claim ${applied ? 'news-applied' : 'news-candidate'}`}>
+      <p>
+        <strong>{applied ? 'Approved model input' : 'Review only'}:</strong>{' '}
+        <button className="plink" onClick={() => openPlayer(claim.player_id)}>{claim.player}</button>
+        {' '}· {claim.claim_type.replaceAll('_', ' ')}
+      </p>
+      <p>{claim.excerpt}</p>
+      <a href={claim.url} target="_blank" rel="noreferrer">{claim.publisher} source ↗</a>
     </div>
   )
 }

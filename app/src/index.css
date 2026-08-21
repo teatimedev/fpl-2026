@@ -432,6 +432,19 @@ tbody tr.picked:hover { background: rgba(74, 222, 128, 0.11); }
   padding: 5px 10px 7px 31px; border-bottom: var(--line);
 }
 
+.news-health { border-left: 4px solid var(--chalk-faint); }
+.news-health-green { border-left-color: var(--ok); }
+.news-health-amber { border-left-color: #d99a28; }
+.news-health-red { border-left-color: #d95858; }
+.news-health-body { padding: 2px 14px 14px; }
+.news-health-body > p { margin: 8px 0 12px; }
+.news-none { color: var(--chalk-faint); }
+.news-claim { margin: 10px 0; padding: 10px 12px; border-radius: 8px; background: rgba(255,255,255,.035); }
+.news-claim p { margin: 0 0 6px; }
+.news-claim a { font-size: .82rem; color: var(--flood-soft); }
+.news-applied { border-left: 3px solid #d95858; }
+.news-candidate { border-left: 3px solid #d99a28; }
+
 .empty-state {
   padding: 40px 16px; text-align: center; color: var(--chalk-dim); font-size: 13px;
 }

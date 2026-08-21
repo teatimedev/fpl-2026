@@ -84,6 +84,21 @@ scorecard = (json.load(open('data/scorecard.json'))
 # chip valuation for the digest squad (v2/chips.py via weekly.py --chips)
 chips = json.load(open('data/chips.json')) if os.path.exists('data/chips.json') else None
 
+def load_json(path):
+    return json.load(open(path)) if os.path.exists(path) else None
+
+news = {
+    'run': load_json('data/news/latest_run.json'),
+    'health': load_json('data/news/source_health.json'),
+    'evidence': load_json('data/news/evidence.json'),
+}
+if not any(news.values()):
+    news = None
+elif news['run']:
+    # The pipeline needs the all-player official-status snapshot for change
+    # detection; the browser only needs health and impact summary fields.
+    news['run'].pop('official_fpl', None)
+
 out = {
     'meta': {**proj['meta'],
              'generated': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')},
@@ -95,6 +110,7 @@ out = {
     'weekly': weekly,
     'movers': movers,
     'ticker': ticker,
+    'news': news,
     # optimise.py reads its pool from CSV, so ids arrive as strings -- coerce them
     # back to int so they match the player ids the app indexes on.
     'squads': [{'label': s['label'], 'cost': s['cost'], 'xi_proj': s['xi_proj'],

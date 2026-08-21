@@ -18,6 +18,7 @@ from typing import Iterable, Mapping
 
 HERE = Path(__file__).resolve().parent
 DEFAULT_OVERRIDES = HERE / "availability.json"
+DEFAULT_GENERATED_OVERRIDES = HERE / "availability.generated.json"
 DEFAULT_CAMEO_PROBABILITY = 0.20
 DEFAULT_CAMEO_MINUTES = 25.0
 
@@ -36,6 +37,7 @@ class AvailabilityForecast:
     last_updated: str | None = None
     from_gw: int | None = None
     through_gw: int | None = None
+    generation_rule: str | None = None
 
 
 def _clamp_probability(value):
@@ -82,8 +84,7 @@ def deadline_start_probability(base_start, status, chance=None, news=""):
     return base_start
 
 
-def load_overrides(path=DEFAULT_OVERRIDES):
-    """Load deadline inputs as a list; a missing file means no overrides."""
+def _load_override_file(path, *, generated=False):
     path = Path(path)
     if not path.exists():
         return []
@@ -96,11 +97,17 @@ def load_overrides(path=DEFAULT_OVERRIDES):
         "player_id", "from_gw", "through_gw", "p_start", "p_cameo",
         "start_minutes", "cameo_minutes", "source", "confidence",
     }
+    generated_required = {"evidence_ids", "generation_rule", "generated_at"}
     validated = []
     for index, raw in enumerate(rows):
-        missing = sorted(required - raw.keys())
+        if generated and raw.get("status") != "applied":
+            continue
+        row_required = required | (generated_required if generated else set())
+        missing = sorted(row_required - raw.keys())
         if missing:
             raise ValueError(f"{path}: override {index} missing {', '.join(missing)}")
+        if generated and not raw["evidence_ids"]:
+            raise ValueError(f"{path}: override {index} needs evidence_ids")
         row = dict(raw, last_updated=raw.get("last_updated", updated_at))
         if not row["last_updated"]:
             raise ValueError(f"{path}: override {index} needs last_updated or updated_at")
@@ -117,6 +124,34 @@ def load_overrides(path=DEFAULT_OVERRIDES):
                 raise ValueError(f"{path}: override {index} has invalid {field}")
         validated.append(row)
     return validated
+
+
+def _overlaps(left, right):
+    return (
+        int(left["player_id"]) == int(right["player_id"])
+        and int(left["from_gw"]) <= int(right["through_gw"])
+        and int(right["from_gw"]) <= int(left["through_gw"])
+    )
+
+
+def load_overrides(path=DEFAULT_OVERRIDES,
+                   generated_path=DEFAULT_GENERATED_OVERRIDES):
+    """Load manual and applied generated inputs, with manual precedence."""
+    manual = _load_override_file(path)
+    generated = _load_override_file(generated_path, generated=True)
+    for index, row in enumerate(generated):
+        if any(_overlaps(row, previous) for previous in generated[:index]):
+            raise ValueError(
+                "conflicting generated overrides for "
+                f"player {row['player_id']}, GW{row['from_gw']}-{row['through_gw']}"
+            )
+    unmasked = []
+    for row in generated:
+        for gw in range(int(row["from_gw"]), int(row["through_gw"]) + 1):
+            point = dict(row, from_gw=gw, through_gw=gw)
+            if not any(_overlaps(point, manual_row) for manual_row in manual):
+                unmasked.append(point)
+    return manual + unmasked
 
 
 def _active_override(player_id, gw, overrides: Iterable[Mapping]):
@@ -184,4 +219,5 @@ def availability_forecast(*, player_id, gw, base_start, base_start_minutes,
         from_gw=int(row.get("from_gw")) if row and row.get("from_gw") is not None else None,
         through_gw=(int(row.get("through_gw"))
                     if row and row.get("through_gw") is not None else None),
+        generation_rule=(row.get("generation_rule") if row else None),
     )

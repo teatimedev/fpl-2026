@@ -1,0 +1,44 @@
+{
+  "claims": [
+    {
+      "claim_type": "available",
+      "club": "MCI",
+      "confidence": "review",
+      "decision": "candidate",
+      "excerpt": "However, there is positive news about Matheus Nunes, who is available for selection after missing the curtain raiser at the Principality Stadium due to an injury sustained while warming up.",
+      "gw": 1,
+      "id": "ev-b6ff68c2a75345a9",
+      "observed_at": "2026-08-21T16:00:02Z",
+      "player": "Matheus Nunes",
+      "player_id": 389,
+      "published_at": "2026-08-21",
+      "publisher": "Manchester City",
+      "reason": "observation_only",
+      "source_id": "mci-news",
+      "title": "Doku out but Nunes fit to face Bournemouth, says Maresca",
+      "url": "https://www.mancity.com/news/mens/enzo-maresca-bournemouth-premier-league-team-news-63922897"
+    },
+    {
+      "claim_type": "explicit_out",
+      "club": "MCI",
+      "confidence": "high",
+      "decision": "applied",
+      "excerpt": "Enzo Maresca says J\u00e9r\u00e9my Doku is not fit to face Bournemouth this Sunday.",
+      "gw": 1,
+      "id": "ev-fde1099d972ad13c",
+      "observed_at": "2026-08-21T16:00:02Z",
+      "player": "J\u00e9r\u00e9my Doku",
+      "player_id": 400,
+      "published_at": "2026-08-21",
+      "publisher": "Manchester City",
+      "reason": "explicit_absence",
+      "source_id": "mci-news",
+      "title": "Doku out but Nunes fit to face Bournemouth, says Maresca",
+      "url": "https://www.mancity.com/news/mens/enzo-maresca-bournemouth-premier-league-team-news-63922897"
+    }
+  ],
+  "deadline": "2026-08-21T17:30:00Z",
+  "gw": 1,
+  "policy": "explicit absences auto-apply; nuanced claims are review candidates",
+  "version": 1
+}

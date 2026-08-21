@@ -1,0 +1,288 @@
+{
+  "checked_at": "2026-08-21T16:23:43Z",
+  "coverage": 1.0,
+  "enabled": 20,
+  "gw": 1,
+  "healthy": 20,
+  "official_fpl_ok": true,
+  "sources": [
+    {
+      "article_errors": 0,
+      "article_validators": {
+        "https://www.arsenal.com/meetings-and-events/conferences": {
+          "etag": "\"134inmx1n3936u2\""
+        }
+      },
+      "club": "ARS",
+      "content_hash": "9ad55bb8c198c53229b7d0618acc89a7ca1c87fc9aefa9d41e67e998949a55fd",
+      "documents": 2,
+      "etag": "\"xhfhj44q4q35o0\"",
+      "id": "ars-news",
+      "publisher": "Arsenal",
+      "status": "ok",
+      "url": "https://www.arsenal.com/news"
+    },
+    {
+      "article_errors": 0,
+      "article_validators": {},
+      "club": "AVL",
+      "content_hash": "54a857ed7e41f6d3ba6e05a20075b1b0dcc4bdfa5f28d8a5df97642d39d3e33c",
+      "documents": 1,
+      "etag": "\"927d7d8e17515798030a86b712a657a2\"",
+      "id": "avl-news",
+      "last_modified": "Fri, 21 Aug 2026 16:19:46 GMT",
+      "publisher": "Aston Villa",
+      "status": "ok",
+      "url": "https://www.avfc.co.uk/news/"
+    },
+    {
+      "article_errors": 0,
+      "club": "BHA",
+      "content_hash": "e4f3972d4f1345b82faf33f1e140a6c20b8b9b702f3e47478cf86c2ab7c0dec6",
+      "documents": 2,
+      "etag": "\"vimqta\"",
+      "id": "bha-news",
+      "publisher": "Brighton & Hove Albion",
+      "status": "ok",
+      "url": "https://www.brightonandhovealbion.com/pages/en/media-article-listing"
+    },
+    {
+      "article_errors": 0,
+      "club": "BOU",
+      "content_hash": "cf7847b631790ecb60148b1cc18063c9ca752ff090b703899564ce12f4ab429e",
+      "documents": 1,
+      "id": "bou-news",
+      "last_modified": "Fri, 21 Aug 2026 14:53:22 GMT",
+      "publisher": "AFC Bournemouth",
+      "status": "ok",
+      "url": "https://www.afcb.co.uk/news/"
+    },
+    {
+      "article_errors": 0,
+      "article_validators": {},
+      "club": "BRE",
+      "content_hash": "511e5b401574ae56a77d5b61b461ef089e1aeda57ab4774e66f11e779e7743d8",
+      "documents": 1,
+      "id": "bre-news",
+      "last_modified": "Fri, 21 Aug 2026 16:23:46 GMT",
+      "publisher": "Brentford",
+      "status": "ok",
+      "url": "https://www.brentfordfc.com/en/news"
+    },
+    {
+      "article_errors": 0,
+      "article_validators": {},
+      "club": "CHE",
+      "content_hash": "b61979eb5d84aea6da30811bd26cc4492be453c08e8d767845d335a66edebdf9",
+      "documents": 1,
+      "id": "che-news",
+      "publisher": "Chelsea",
+      "status": "ok",
+      "url": "https://www.chelseafc.com/en/news"
+    },
+    {
+      "article_errors": 0,
+      "club": "COV",
+      "content_hash": "3554129e1f24d0567ef56591d5bc9d490f2922a1a7e34bbf4e5ac2fd9588fb95",
+      "documents": 1,
+      "etag": "\"596eb1ebfdd9f05ca41de8bc11b8f161\"",
+      "id": "cov-news",
+      "last_modified": "Fri, 21 Aug 2026 02:04:48 GMT",
+      "publisher": "Coventry City",
+      "status": "ok",
+      "url": "https://www.ccfc.co.uk/news/"
+    },
+    {
+      "article_errors": 0,
+      "article_validators": {},
+      "club": "CRY",
+      "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
+      "documents": 1,
+      "etag": "\"f25tzxm2astw4x\"",
+      "id": "cry-news",
+      "publisher": "Crystal Palace",
+      "status": "ok",
+      "url": "https://www.cpfc.co.uk/news/"
+    },
+    {
+      "article_errors": 0,
+      "club": "EVE",
+      "content_hash": "7f2844b9f692f7f412b6ea5afd5433414d12302a05c9a406d86bec4a1c5a81d8",
+      "documents": 1,
+      "etag": "\"c8029c25ccd4a4c87e9fe53cde049dc1\"",
+      "id": "eve-news",
+      "last_modified": "Fri, 21 Aug 2026 02:05:05 GMT",
+      "publisher": "Everton",
+      "status": "ok",
+      "url": "https://www.evertonfc.com/news"
+    },
+    {
+      "article_errors": 0,
+      "club": "FUL",
+      "content_hash": "02cd6714e1a663221abebb2c4f525f3da0e082c685c5b3c96c2bdbd9642998ed",
+      "documents": 6,
+      "etag": "\"8a7c589826bf8de22f23f454272596d8\"",
+      "id": "ful-news",
+      "last_modified": "Fri, 21 Aug 2026 16:14:54 GMT",
+      "publisher": "Fulham",
+      "status": "ok",
+      "url": "https://www.fulhamfc.com/news/"
+    },
+    {
+      "article_errors": 0,
+      "club": "HUL",
+      "content_hash": "ea6460d922a745cff521f5005b7d44149337d52b5fa04f089301403474385771",
+      "documents": 1,
+      "etag": "\"f80c14671ce41ffdcc6ccb8c577b24e8\"",
+      "id": "hul-news",
+      "last_modified": "Fri, 21 Aug 2026 02:06:41 GMT",
+      "publisher": "Hull City",
+      "status": "ok",
+      "url": "https://www.wearehullcity.co.uk/news/"
+    },
+    {
+      "article_errors": 0,
+      "article_validators": {
+        "https://www.itfc.co.uk/hospitality/conferences-meetings": {
+          "etag": "\"f3515608d0a7b5c52abb379504dd5224\"",
+          "last_modified": "Fri, 21 Aug 2026 02:13:37 GMT"
+        },
+        "https://www.itfc.co.uk/news/2026/august/21/Early-team-news-from-Gary-ONeil-Ipswich-Town-Sunderland-press-conference/": {
+          "etag": "\"2e0221dd26545ef0e798bb38efc7bb8c\"",
+          "last_modified": "Fri, 21 Aug 2026 14:04:50 GMT"
+        },
+        "https://www.itfc.co.uk/news/2026/august/21/matchday-guide---sunderland--h-/": {
+          "etag": "\"d08128b8c9e220913b8db37b3c9eb313\"",
+          "last_modified": "Fri, 21 Aug 2026 16:16:11 GMT"
+        }
+      },
+      "club": "IPS",
+      "content_hash": "f02720d4beb7a2c15e9d378a8b840b90210d0ba0a264a24dc0bd16ef8527c9db",
+      "documents": 4,
+      "etag": "\"ad4c425f3f7f81868175f4a3a443e3da\"",
+      "id": "ips-news",
+      "last_modified": "Fri, 21 Aug 2026 16:16:11 GMT",
+      "publisher": "Ipswich Town",
+      "status": "ok",
+      "url": "https://www.itfc.co.uk/news/"
+    },
+    {
+      "article_errors": 0,
+      "article_validators": {
+        "https://www.leedsunited.com/en/news/2026-27-squad-numbers-announced": {},
+        "https://www.leedsunited.com/en/news/preview-chester-le-street-town-ladies-vs-leeds-united-women": {},
+        "https://www.leedsunited.com/en/news/preview-nottingham-forest-vs-leeds-united-26-27": {}
+      },
+      "club": "LEE",
+      "content_hash": "cb62733778ea8800bf19946f075288de85b14d981417cf37fa3ae25e07647c75",
+      "documents": 4,
+      "id": "lee-news",
+      "last_modified": "Fri, 21 Aug 2026 16:23:11 GMT",
+      "publisher": "Leeds United",
+      "status": "ok",
+      "url": "https://www.leedsunited.com/en/news"
+    },
+    {
+      "article_errors": 0,
+      "club": "LIV",
+      "content_hash": "fcf06dfb55ce189bc96c3aaeb965e95fdd120c78073c9eca535e670f291b092e",
+      "documents": 6,
+      "etag": "\"33fde-hETghqbp4QVLtnoerF55u4ZqvXU\"",
+      "id": "liv-news",
+      "publisher": "Liverpool",
+      "status": "ok",
+      "url": "https://www.liverpoolfc.com/news"
+    },
+    {
+      "article_errors": 0,
+      "article_validators": {
+        "https://www.mancity.com/citytv/mens/enzo-maresca-press-conference-video-bournemouth-premier-league-63922899": {
+          "last_modified": "Fri, 21 Aug 2026 15:57:30 GMT"
+        },
+        "https://www.mancity.com/news/mens/city-v-bournemouth-kick-off-time-and-tv-information-63922554": {},
+        "https://www.mancity.com/news/mens/enzo-maresca-bournemouth-premier-league-team-news-63922897": {},
+        "https://www.mancity.com/news/mens/enzo-maresca-manchester-city-afc-bournemouth-preview-63922911": {}
+      },
+      "club": "MCI",
+      "content_hash": "526145c4e7c68d16827bd1ee1ab968a3710475a6d30be5d9671808f50aa6a9ba",
+      "documents": 5,
+      "id": "mci-news",
+      "publisher": "Manchester City",
+      "status": "ok",
+      "url": "https://www.mancity.com/news"
+    },
+    {
+      "article_errors": 0,
+      "article_validators": {
+        "https://www.manutd.com/en/news/team-news-for-man-utd-hull-opener-aug-2026": {
+          "etag": "W/\"zqv59r0zo69ttz\""
+        }
+      },
+      "club": "MUN",
+      "content_hash": "fc39d9c9d853b7a905c4cefcf81d2a1dd9c7370fc6e276f2e76f9d498ceaa78f",
+      "documents": 2,
+      "id": "mun-news",
+      "last_modified": "Fri, 21 Aug 2026 16:23:48 GMT",
+      "publisher": "Manchester United",
+      "status": "ok",
+      "url": "https://www.manutd.com/en/news"
+    },
+    {
+      "article_errors": 0,
+      "article_validators": {
+        "https://www.newcastleunited.com/en/news/jessie-gale-named-in-england-under-20s-world-cup-squad": {},
+        "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-livramento-and-joelinton-latest-ahead-of-reds-test": {}
+      },
+      "club": "NEW",
+      "content_hash": "8fbd6ba5db27bcd0e73ad770d751f9e2c9b79e42a0cd4e66a85679ebbb39d787",
+      "documents": 3,
+      "id": "new-news",
+      "publisher": "Newcastle United",
+      "status": "ok",
+      "url": "https://www.newcastleunited.com/en/news"
+    },
+    {
+      "article_errors": 0,
+      "club": "NFO",
+      "content_hash": "135299ec2a5dde67198ce61c0c2220511057525416bc2f31889bdc7235c9b4a7",
+      "documents": 1,
+      "etag": "\"5989a0bbe460fec28561a393304e71a5\"",
+      "id": "nfo-news",
+      "last_modified": "Fri, 21 Aug 2026 15:31:24 GMT",
+      "publisher": "Nottingham Forest",
+      "status": "ok",
+      "url": "https://www.nottinghamforest.co.uk/news"
+    },
+    {
+      "article_errors": 0,
+      "club": "SUN",
+      "content_hash": "7a3cebfb60e6adae923252da91d99a1aaa75361948a69ec70326b273404ccac3",
+      "documents": 1,
+      "etag": "\"93e41cbeea9b26412e6fcc048dab0d58\"",
+      "id": "sun-news",
+      "last_modified": "Fri, 21 Aug 2026 09:11:26 GMT",
+      "publisher": "Sunderland",
+      "status": "ok",
+      "url": "https://www.safc.com/news"
+    },
+    {
+      "article_errors": 0,
+      "article_validators": {
+        "https://www.tottenhamhotspur.com/teams/mens/squad": {},
+        "https://www.tottenhamhotspur.com/teams/u18s-mens/squad": {},
+        "https://www.tottenhamhotspur.com/teams/u19s-womens/squad": {},
+        "https://www.tottenhamhotspur.com/teams/u21s-mens/squad": {},
+        "https://www.tottenhamhotspur.com/teams/womens/squad": {}
+      },
+      "club": "TOT",
+      "content_hash": "5e78cd928fd28079c59a81727e2f991e08b88676f10a2b2c90d8b3b3f700a757",
+      "documents": 6,
+      "id": "tot-news",
+      "publisher": "Tottenham Hotspur",
+      "status": "ok",
+      "url": "https://www.tottenhamhotspur.com/news/"
+    }
+  ],
+  "status": "green",
+  "version": 1
+}

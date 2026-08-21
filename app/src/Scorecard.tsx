@@ -71,6 +71,12 @@ export default function Scorecard({ sc }: { sc: ScorecardData | null }) {
               s="model / yours / best" />
             <Tile k="CS Brier" v={num(s.cs_brier, 3)}
               s={`predicted ${pct(s.cs_predicted_rate)} · actual ${pct(s.cs_actual_rate)}`} />
+            <Tile k="Start / appearance Brier" v={`${num(s.start_brier, 3)} / ${num(s.appearance_brier, 3)}`}
+              s="lower is better" />
+            <Tile k="Minutes MAE" v={num(s.minutes_mae, 1)}
+              s={`bias ${signed(s.minutes_bias, 1)}`} />
+            <Tile k="Start lift vs baseline" v={signed(s.start_brier_lift, 3)}
+              s={`baseline Brier ${num(s.baseline_start_brier, 3)} · positive is better`} />
           </div>
         </div>
       </section>
@@ -97,6 +103,9 @@ export default function Scorecard({ sc }: { sc: ScorecardData | null }) {
                 <th>XI yours</th>
                 <th>XI best</th>
                 <th>CS Brier</th>
+                <th>Start Brier</th>
+                <th>Appear Brier</th>
+                <th>Minutes MAE</th>
               </tr>
             </thead>
             <tbody>
@@ -118,6 +127,9 @@ export default function Scorecard({ sc }: { sc: ScorecardData | null }) {
                   <td>{g.xi?.yours ?? DASH}</td>
                   <td style={{ color: 'var(--chalk-dim)' }}>{g.xi?.best ?? DASH}</td>
                   <td>{num(g.cs?.brier, 3)}</td>
+                  <td>{num(g.availability?.start_brier, 3)}</td>
+                  <td>{num(g.availability?.appearance_brier, 3)}</td>
+                  <td>{num(g.availability?.minutes_mae, 1)}</td>
                 </tr>
               ))}
             </tbody>

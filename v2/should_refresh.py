@@ -16,8 +16,8 @@ gameweek (data/last_refresh.json remembers):
 Windows are wider than the hourly cadence because GitHub's cron can slip by
 half an hour or more at busy times.
 
-Writes GitHub Actions outputs: run=true|false, reason=<window>, gw=<n>,
-hours=<h to deadline>.
+Writes GitHub Actions outputs: run=true|false, mode=full|news|noop,
+reason=<window>, gw=<n>, hours=<h to deadline>.
 """
 import json
 import os
@@ -30,6 +30,22 @@ ROOT = Path(__file__).resolve().parent.parent
 MARKER = ROOT / 'data' / 'last_refresh.json'
 FPL = 'https://fantasy.premierleague.com/api'
 WINDOWS = (('T-2h', 0.75, 3.5), ('T-24h', 22.5, 26.5))
+
+
+def decide_mode(hours, now):
+    """Return the scheduled work mode and its stable reason."""
+    for name, lo, hi in WINDOWS:
+        if lo <= hours <= hi:
+            return 'full', name
+    if now.weekday() == 3 and 6 <= now.hour < 9:
+        return 'full', 'weekly'
+    if hours < 0.75:
+        return 'noop', 'deadline-lock'
+    if 0.75 <= hours <= 6:
+        return 'news', 'news-hourly'
+    if 6 < hours <= 30:
+        return ('news', 'news-3h') if now.hour % 3 == 0 else ('noop', 'news-cadence')
+    return 'noop', 'outside-windows'
 
 
 def out(**kv):
@@ -51,7 +67,7 @@ def main():
             events = json.loads(r.read())['events']
     except Exception as ex:
         # if the API is down we would rather refresh than not
-        out(run='true', reason='api-unreachable', gw='0', hours='0')
+        out(run='true', mode='full', reason='api-unreachable', gw='0', hours='0')
         return
     nxt = next((e for e in events if e.get('is_next')), None)
     if not nxt:
@@ -62,25 +78,25 @@ def main():
     dl = datetime.fromisoformat(nxt['deadline_time'].replace('Z', '+00:00'))
     hours = (dl - now).total_seconds() / 3600
 
-    window = None
-    for name, lo, hi in WINDOWS:
-        if lo <= hours <= hi:
-            window = name
-            break
-    if window is None and now.weekday() == 3 and 6 <= now.hour < 9:
-        window = 'weekly'
+    mode, window = decide_mode(hours, now)
     if forced:
-        window = 'manual'
+        mode = os.environ.get('INPUT_MODE') or 'full'
+        window = f'manual-{mode}'
 
-    if window is None:
-        out(run='false', reason='outside-windows', gw=gw, hours=f'{hours:.1f}')
+    if mode == 'noop':
+        out(run='false', mode='noop', reason=window, gw=gw, hours=f'{hours:.1f}')
         return
 
     last = json.loads(MARKER.read_text()) if MARKER.exists() else {}
-    if window != 'manual' and last.get('gw') == gw and window in last.get('done', []):
-        out(run='false', reason=f'{window}-already-done', gw=gw, hours=f'{hours:.1f}')
+    if mode == 'full' and not window.startswith('manual') and last.get('gw') == gw and window in last.get('done', []):
+        # A completed T-2h rebuild must not suppress the later hourly news
+        # checks. They are precisely where last-minute press updates arrive.
+        if window == 'T-2h' and hours >= 0.75:
+            out(run='true', mode='news', reason='news-hourly', gw=gw, hours=f'{hours:.1f}')
+            return
+        out(run='false', mode='noop', reason=f'{window}-already-done', gw=gw, hours=f'{hours:.1f}')
         return
-    out(run='true', reason=window, gw=gw, hours=f'{hours:.1f}')
+    out(run='true', mode=mode, reason=window, gw=gw, hours=f'{hours:.1f}')
 
 
 def mark(window, gw):

@@ -11,6 +11,152 @@ from v2.availability import (
 
 
 class AvailabilityForecastTests(unittest.TestCase):
+    def test_manual_override_wins_over_generated_for_the_same_gameweek(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manual = Path(tmp) / "availability.json"
+            generated = Path(tmp) / "availability.generated.json"
+            manual.write_text(
+                """{
+                  "updated_at": "2026-08-21T14:30:00Z",
+                  "overrides": [{
+                    "player_id": 12,
+                    "from_gw": 2,
+                    "through_gw": 2,
+                    "p_start": 0.60,
+                    "p_cameo": 0.80,
+                    "start_minutes": 70,
+                    "cameo_minutes": 30,
+                    "confidence": "medium",
+                    "source": "manual review"
+                  }]
+                }"""
+            )
+            generated.write_text(
+                """{
+                  "updated_at": "2026-08-21T14:25:00Z",
+                  "overrides": [{
+                    "player_id": 12,
+                    "from_gw": 2,
+                    "through_gw": 2,
+                    "p_start": 0.0,
+                    "p_cameo": 0.0,
+                    "start_minutes": 0,
+                    "cameo_minutes": 0,
+                    "confidence": "high",
+                    "source": "official club news",
+                    "status": "applied",
+                    "evidence_ids": ["club-12-out"],
+                    "generation_rule": "explicit_out_v1",
+                    "generated_at": "2026-08-21T14:25:00Z"
+                  }]
+                }"""
+            )
+
+            overrides = load_overrides(manual, generated)
+
+        forecast = availability_forecast(
+            player_id=12,
+            gw=2,
+            base_start=0.75,
+            base_start_minutes=86,
+            status="a",
+            overrides=overrides,
+        )
+        self.assertEqual(forecast.p_start, 0.60)
+        self.assertEqual(forecast.source, "manual review")
+
+    def test_applied_generated_override_requires_audit_metadata(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manual = Path(tmp) / "availability.json"
+            generated = Path(tmp) / "availability.generated.json"
+            manual.write_text('{"overrides": []}')
+            generated.write_text(
+                """{
+                  "updated_at": "2026-08-21T14:25:00Z",
+                  "overrides": [{
+                    "player_id": 12,
+                    "from_gw": 2,
+                    "through_gw": 2,
+                    "p_start": 0.0,
+                    "p_cameo": 0.0,
+                    "start_minutes": 0,
+                    "cameo_minutes": 0,
+                    "confidence": "high",
+                    "source": "official club news",
+                    "status": "applied"
+                  }]
+                }"""
+            )
+
+            with self.assertRaisesRegex(ValueError, "evidence_ids"):
+                load_overrides(manual, generated)
+
+    def test_conflicting_applied_generated_overrides_fail_at_load_time(self):
+        row = """{
+          "player_id": 12,
+          "from_gw": 2,
+          "through_gw": 2,
+          "p_start": 0.0,
+          "p_cameo": 0.0,
+          "start_minutes": 0,
+          "cameo_minutes": 0,
+          "confidence": "high",
+          "source": "official club news",
+          "status": "applied",
+          "evidence_ids": ["%s"],
+          "generation_rule": "explicit_out_v1",
+          "generated_at": "2026-08-21T14:25:00Z"
+        }"""
+        with tempfile.TemporaryDirectory() as tmp:
+            manual = Path(tmp) / "availability.json"
+            generated = Path(tmp) / "availability.generated.json"
+            manual.write_text('{"overrides": []}')
+            generated.write_text(
+                '{"updated_at": "2026-08-21T14:25:00Z", "overrides": ['
+                + (row % "club-report") + "," + (row % "league-report")
+                + "]}"
+            )
+
+            with self.assertRaisesRegex(ValueError, "conflicting generated"):
+                load_overrides(manual, generated)
+
+    def test_manual_override_masks_only_its_gameweek_from_generated_range(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manual = Path(tmp) / "availability.json"
+            generated = Path(tmp) / "availability.generated.json"
+            manual.write_text(
+                """{"updated_at": "2026-08-21T14:30:00Z", "overrides": [{
+                  "player_id": 12, "from_gw": 2, "through_gw": 2,
+                  "p_start": 0.6, "p_cameo": 0.8,
+                  "start_minutes": 70, "cameo_minutes": 30,
+                  "confidence": "medium", "source": "manual review"
+                }]}"""
+            )
+            generated.write_text(
+                """{"updated_at": "2026-08-21T14:25:00Z", "overrides": [{
+                  "player_id": 12, "from_gw": 2, "through_gw": 3,
+                  "p_start": 0.0, "p_cameo": 0.0,
+                  "start_minutes": 0, "cameo_minutes": 0,
+                  "confidence": "high", "source": "official club news",
+                  "status": "applied", "evidence_ids": ["club-12-out"],
+                  "generation_rule": "explicit_out_v1",
+                  "generated_at": "2026-08-21T14:25:00Z"
+                }]}"""
+            )
+            overrides = load_overrides(manual, generated)
+
+        current = availability_forecast(
+            player_id=12, gw=2, base_start=0.75, base_start_minutes=86,
+            status="a", overrides=overrides,
+        )
+        following = availability_forecast(
+            player_id=12, gw=3, base_start=0.75, base_start_minutes=86,
+            status="a", overrides=overrides,
+        )
+        self.assertEqual(current.p_start, 0.6)
+        self.assertEqual(following.p_start, 0.0)
+        self.assertEqual(following.from_gw, 3)
+
     def test_override_requires_an_explicit_expiry(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "availability.json"

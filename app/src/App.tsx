@@ -146,8 +146,10 @@ export default function App() {
       <footer className="foot">
         Prices, injuries and your squad are read live from the official Fantasy
         Premier League API each time you open this. Projections are rebuilt about
-        24 hours and 2 hours before every deadline (and each Thursday), with
-        bookmaker odds blended in where posted — model last built {D.meta.generated}.<br />
+        24 hours and 2 hours before every deadline (and each Thursday). Public
+        official club news is scanned every three hours from T−30h, then hourly
+        from T−6h to T−45m; an owned-player change triggers another full rebuild.
+        Bookmaker odds are blended in where posted — model last built {D.meta.generated}.<br />
         Attack and defence ratings are fitted by maximum likelihood on four
         seasons of real results and validated against bookmaker closing odds;
         player rates are shrunk by measured year-over-year stability. Hold-out

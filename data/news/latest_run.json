@@ -1,0 +1,3019 @@
+{
+  "affected_clubs": [],
+  "affected_owned": [],
+  "checked_at": "2026-08-21T16:16:11Z",
+  "claims": 2,
+  "coverage": 1.0,
+  "deadline": "2026-08-21T17:30:00Z",
+  "gw": 1,
+  "notification_key": "b09490327693f6521482",
+  "notify_required": false,
+  "official_fpl": {
+    "1": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "10": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "100": {
+      "chance": 75,
+      "news": "Lack of match fitness - 75% chance of playing",
+      "status": "d"
+    },
+    "101": {
+      "chance": 75,
+      "news": "Wrist injury - 75% chance of playing",
+      "status": "d"
+    },
+    "102": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "103": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "104": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "105": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "106": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "107": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "108": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "109": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "11": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "110": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "111": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "112": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "113": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "114": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "115": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "116": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "117": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "118": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "119": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "12": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "120": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "121": {
+      "chance": 0,
+      "news": "Hamstring injury - Unknown return date",
+      "status": "i"
+    },
+    "122": {
+      "chance": 0,
+      "news": "Leg injury - Expected back 28 Nov",
+      "status": "i"
+    },
+    "123": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "124": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "125": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "126": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "127": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "128": {
+      "chance": 0,
+      "news": "Has joined Elche on loan for the rest of the season",
+      "status": "u"
+    },
+    "129": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "13": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "130": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "131": {
+      "chance": 0,
+      "news": "Ankle injury - Expected back 23 Aug",
+      "status": "i"
+    },
+    "132": {
+      "chance": 0,
+      "news": "Has joined Leicester City on loan for the rest of the season",
+      "status": "u"
+    },
+    "133": {
+      "chance": 0,
+      "news": "Has joined Leicester City on loan for the rest of the season",
+      "status": "u"
+    },
+    "134": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "135": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "136": {
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
+    },
+    "137": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "138": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "139": {
+      "chance": 0,
+      "news": "Ankle injury - Expected back 10 Oct",
+      "status": "i"
+    },
+    "14": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "140": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "141": {
+      "chance": 0,
+      "news": "Has joined RC Strasbourg on loan for the rest of the season",
+      "status": "u"
+    },
+    "142": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "143": {
+      "chance": 0,
+      "news": "Has joined Como permanently",
+      "status": "u"
+    },
+    "144": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "145": {
+      "chance": 0,
+      "news": "Suspended until 6 Sep",
+      "status": "s"
+    },
+    "146": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "147": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "148": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "149": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "15": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "150": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "151": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "152": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "153": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "154": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "155": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "156": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "157": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "158": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "159": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "16": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "160": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "161": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "162": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "163": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "164": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "165": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "166": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "167": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "168": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "169": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "17": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "170": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "171": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "172": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "173": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "174": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "175": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "176": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "177": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "178": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "179": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "18": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "180": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "181": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "182": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "183": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "184": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "185": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "186": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "187": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "188": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "189": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "19": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "190": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "191": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "192": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "193": {
+      "chance": 0,
+      "news": "Thigh injury - Unknown return date",
+      "status": "i"
+    },
+    "194": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "195": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "196": {
+      "chance": 0,
+      "news": "Has joined Shabab Al-Ahli Dubai permanently",
+      "status": "u"
+    },
+    "197": {
+      "chance": 0,
+      "news": "Has joined KVC Westerlo on loan for the rest of the season",
+      "status": "u"
+    },
+    "198": {
+      "chance": 75,
+      "news": "Ankle injury - 75% chance of playing",
+      "status": "d"
+    },
+    "199": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "2": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "20": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "200": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "201": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "202": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "203": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "204": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "205": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "206": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "207": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "208": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "209": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "21": {
+      "chance": 0,
+      "news": "Unspecified injury - Unknown return date",
+      "status": "i"
+    },
+    "210": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "211": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "212": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "213": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "214": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "215": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "216": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "217": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "218": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "219": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "22": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "220": {
+      "chance": 0,
+      "news": "Has joined Bristol City on loan for the rest of the season",
+      "status": "u"
+    },
+    "221": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "222": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "223": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "224": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "225": {
+      "chance": 0,
+      "news": "has returned to Getafe CF",
+      "status": "u"
+    },
+    "226": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "227": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "228": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "229": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "23": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "230": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "231": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "232": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "233": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "234": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "235": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "236": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "237": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "238": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "239": {
+      "chance": 25,
+      "news": "Groin injury - 25% chance of playing",
+      "status": "d"
+    },
+    "24": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "240": {
+      "chance": 0,
+      "news": "Thigh injury - Unknown return date",
+      "status": "i"
+    },
+    "241": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "242": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "243": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "244": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "245": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "246": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "247": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "248": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "249": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "25": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "250": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "251": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "252": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "253": {
+      "chance": 0,
+      "news": "Suspended until 30 Aug",
+      "status": "s"
+    },
+    "254": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "255": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "256": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "257": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "258": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "259": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "26": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "260": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "261": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "262": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "263": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "264": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "265": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "266": {
+      "chance": 0,
+      "news": "Knee injury - Expected back 10 Oct",
+      "status": "i"
+    },
+    "267": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "268": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "269": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "27": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "270": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "271": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "272": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "273": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "274": {
+      "chance": 0,
+      "news": "Arm injury - Unknown return date",
+      "status": "i"
+    },
+    "275": {
+      "chance": 0,
+      "news": "Has joined Grimsby Town on loan for the rest of the season",
+      "status": "u"
+    },
+    "276": {
+      "chance": 0,
+      "news": "Has joined Colchester United on loan for the rest of the season",
+      "status": "u"
+    },
+    "277": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "278": {
+      "chance": 0,
+      "news": "Groin injury - Unknown return date",
+      "status": "i"
+    },
+    "279": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "28": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "280": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "281": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "282": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "283": {
+      "chance": 0,
+      "news": "Hip injury - Expected back 29 Aug",
+      "status": "i"
+    },
+    "284": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "285": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "286": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "287": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "288": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "289": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "29": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "290": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "291": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "292": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "293": {
+      "chance": 0,
+      "news": "Has joined Portsmouth permanently",
+      "status": "u"
+    },
+    "294": {
+      "chance": 0,
+      "news": "Thigh injury - Unknown return date",
+      "status": "i"
+    },
+    "295": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "296": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "297": {
+      "chance": 0,
+      "news": "Thigh injury - Unknown return date",
+      "status": "i"
+    },
+    "298": {
+      "chance": 0,
+      "news": "Has joined Konyaspor permanently",
+      "status": "u"
+    },
+    "299": {
+      "chance": 0,
+      "news": "Has joined Sheffield Wednesday on loan for the rest of the season",
+      "status": "u"
+    },
+    "3": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "30": {
+      "chance": 0,
+      "news": "Has joined Paris Saint-Germain permanently",
+      "status": "u"
+    },
+    "300": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "301": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "302": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "303": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "304": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "305": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "306": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "307": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "308": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "309": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "31": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "310": {
+      "chance": 0,
+      "news": "Muscular injury - Unknown return date",
+      "status": "i"
+    },
+    "311": {
+      "chance": 0,
+      "news": "Has joined Leicester City permanently",
+      "status": "u"
+    },
+    "312": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "313": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "314": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "315": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "316": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "317": {
+      "chance": 0,
+      "news": "Has joined Stoke City permanently",
+      "status": "u"
+    },
+    "318": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "319": {
+      "chance": 0,
+      "news": "Has joined Derby County on loan for the rest of the season",
+      "status": "u"
+    },
+    "32": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "320": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "321": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "322": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "323": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "324": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "325": {
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
+    },
+    "326": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "327": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "328": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "329": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "33": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "330": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "331": {
+      "chance": 0,
+      "news": "Hamstring injury - Unknown return date",
+      "status": "i"
+    },
+    "332": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "333": {
+      "chance": 0,
+      "news": "Has joined Hamburg SV on loan for the rest of the season",
+      "status": "u"
+    },
+    "334": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "335": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "336": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "337": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "338": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "339": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "34": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "340": {
+      "chance": 0,
+      "news": "Ankle injury - Expected back 5 Sep",
+      "status": "i"
+    },
+    "341": {
+      "chance": 0,
+      "news": "Hamstring injury - Unknown return date",
+      "status": "i"
+    },
+    "342": {
+      "chance": 0,
+      "news": "Has joined New England Revolution permanently",
+      "status": "u"
+    },
+    "343": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "344": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "345": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "346": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "347": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "348": {
+      "chance": 0,
+      "news": "Has joined West Ham United on loan for the rest of the season",
+      "status": "u"
+    },
+    "349": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "35": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "350": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "351": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "352": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "353": {
+      "chance": 0,
+      "news": "Has joined TSV Hartberg on loan for the rest of the season",
+      "status": "u"
+    },
+    "354": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "355": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "356": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "357": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "358": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "359": {
+      "chance": 0,
+      "news": "Muscular injury - Unknown return date",
+      "status": "i"
+    },
+    "36": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "360": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "361": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "362": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "363": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "364": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "365": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "366": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "367": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "368": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "369": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "37": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "370": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "371": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "372": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "373": {
+      "chance": 75,
+      "news": "Hip injury - 75% chance of playing",
+      "status": "d"
+    },
+    "374": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "375": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "376": {
+      "chance": 0,
+      "news": "Hamstring injury - Expected back 23 Aug",
+      "status": "i"
+    },
+    "377": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "378": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "379": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "38": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "380": {
+      "chance": 0,
+      "news": "Achilles injury - Unknown return date",
+      "status": "i"
+    },
+    "381": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "382": {
+      "chance": 0,
+      "news": "Unspecified injury - Unknown return date",
+      "status": "i"
+    },
+    "383": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "384": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "385": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "386": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "387": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "388": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "389": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "39": {
+      "chance": 0,
+      "news": "Has joined Rangers on loan for the rest of the season",
+      "status": "u"
+    },
+    "390": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "391": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "392": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "393": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "394": {
+      "chance": 0,
+      "news": "Has joined Burnley on loan for the rest of the season",
+      "status": "u"
+    },
+    "395": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "396": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "397": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "398": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "399": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "4": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "40": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "400": {
+      "chance": 0,
+      "news": "Calf injury - Expected back 5 Sep",
+      "status": "i"
+    },
+    "401": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "402": {
+      "chance": 0,
+      "news": "Has joined Barcelona permanently",
+      "status": "u"
+    },
+    "403": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "404": {
+      "chance": 0,
+      "news": "Has joined Al Qadsiah permanently",
+      "status": "u"
+    },
+    "405": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "406": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "407": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "408": {
+      "chance": 0,
+      "news": "Has joined Sheffield United on loan for the rest of the season",
+      "status": "u"
+    },
+    "409": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "41": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "410": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "411": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "412": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "413": {
+      "chance": 0,
+      "news": "Has joined Celta Vigo on loan for the rest of the season",
+      "status": "u"
+    },
+    "414": {
+      "chance": 0,
+      "news": "Hamstring injury - Unknown return date",
+      "status": "i"
+    },
+    "415": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "416": {
+      "chance": 0,
+      "news": "Back injury - Unknown return date",
+      "status": "i"
+    },
+    "417": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "418": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "419": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "42": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "420": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "421": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "422": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "423": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "424": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "425": {
+      "chance": 0,
+      "news": "Has joined Lausanne-Sport permanently",
+      "status": "u"
+    },
+    "426": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "427": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "428": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "429": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "43": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "430": {
+      "chance": 50,
+      "news": "Foot injury - 50% chance of playing",
+      "status": "d"
+    },
+    "431": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "432": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "433": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "434": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "435": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "436": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "437": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "438": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "439": {
+      "chance": 75,
+      "news": "Shin injury - 75% chance of playing",
+      "status": "d"
+    },
+    "44": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "440": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "441": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "442": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "443": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "444": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "445": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "446": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "447": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "448": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "449": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "45": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "450": {
+      "chance": 0,
+      "news": "Calf injury - Unknown return date",
+      "status": "i"
+    },
+    "451": {
+      "chance": 0,
+      "news": "Has joined FC Kaiserslautern on loan for the rest of the season",
+      "status": "u"
+    },
+    "452": {
+      "chance": 75,
+      "news": "Thigh injury - 75% chance of playing",
+      "status": "d"
+    },
+    "453": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "454": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "455": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "456": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "457": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "458": {
+      "chance": 0,
+      "news": "Unspecified injury - Unknown return date",
+      "status": "i"
+    },
+    "459": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "46": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "460": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "461": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "462": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "463": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "464": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "465": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "466": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "467": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "468": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "469": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "47": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "470": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "471": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "472": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "473": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "474": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "475": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "476": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "477": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "478": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "479": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "48": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "480": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "481": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "482": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "483": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "484": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "485": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "486": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "487": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "488": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "489": {
+      "chance": 0,
+      "news": "Unspecified injury - Unknown return date",
+      "status": "i"
+    },
+    "49": {
+      "chance": 0,
+      "news": "Has joined Bolton Wanderers on loan for the rest of the season",
+      "status": "u"
+    },
+    "490": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "491": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "492": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "493": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "494": {
+      "chance": 0,
+      "news": "Has joined Juventus on loan for the rest of the season",
+      "status": "u"
+    },
+    "495": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "496": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "497": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "498": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "499": {
+      "chance": 0,
+      "news": "Lack of match fitness - Expected back 29 Aug",
+      "status": "i"
+    },
+    "5": {
+      "chance": 0,
+      "news": "Groin injury - Unknown return date",
+      "status": "i"
+    },
+    "50": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "500": {
+      "chance": 0,
+      "news": "Has joined Atletico Madrid permanently",
+      "status": "u"
+    },
+    "501": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "502": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "503": {
+      "chance": 0,
+      "news": "Unspecified injury - Expected back 29 Aug",
+      "status": "i"
+    },
+    "504": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "505": {
+      "chance": 0,
+      "news": "Has joined Internazionale permanently",
+      "status": "u"
+    },
+    "506": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "507": {
+      "chance": 0,
+      "news": "Has joined Middlesbrough permanently",
+      "status": "u"
+    },
+    "508": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "509": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "51": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "510": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "511": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "512": {
+      "chance": 25,
+      "news": "Thigh injury - 25% chance of playing",
+      "status": "d"
+    },
+    "513": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "514": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "515": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "516": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "517": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "518": {
+      "chance": 0,
+      "news": "Hamstring injury - Unknown return date",
+      "status": "i"
+    },
+    "519": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "52": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "520": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "521": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "522": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "523": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "524": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "525": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "526": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "527": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "528": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "529": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "53": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    },
+    "530": {
+      "chance": 0,
+      "news": "Has joined Wrexham permanently",
+      "status": "u"
+    },
+    "531": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "532": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "533": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "534": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "535": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "536": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "537": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "538": {
+      "chance": 0,
+      "news": "Has joined KV Mechelen on loan for the rest of the season",
+      "status": "u"
+    },
+    "539": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "54": {
+      "chance": 0,
+      "news": "Calf injury - Unknown return date",
+      "status": "i"
+    },
+    "540": {
+      "chance": 0,
+      "news": "Has joined Konyaspor permanently",
+      "status": "u"
+    },
+    "541": {
+      "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "542": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "543": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "544": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "545": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "546": {
+      "chance": 0,
+      "news": "Ankle injury - Unknown return date",
+      "status": "i"
+    },
+    "547": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "548": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "549": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "55": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "550": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "551": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "552": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "553": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "554": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "555": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "556": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "557": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "558": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "559": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "56": {
+      "chance": 75,
+      "news": "Knock - 75% chance of playing",
+      "status": "d"
+    },
+    "560": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "561": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "562": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "563": {
+      "chance": 50,
+      "news": "Calf injury - 50% chance of playing",
+      "status": "d"
+    },
+    "564": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "565": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "566": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "567": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "568": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "569": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "57": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "570": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "571": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "572": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "573": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "574": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "575": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "576": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "577": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "578": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "579": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "58": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "580": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "581": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "582": {
+      "chance": 0,
+      "news": "Unspecified injury - Unknown return date",
+      "status": "i"
+    },
+    "583": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "584": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "585": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "586": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "587": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "588": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "589": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "59": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "590": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "591": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "592": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "593": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "594": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "595": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "596": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "597": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "598": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "599": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "6": {
+      "chance": 0,
+      "news": "Back injury - Unknown return date",
+      "status": "i"
+    },
+    "60": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "600": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "61": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "62": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "63": {
+      "chance": 0,
+      "news": "Unspecified injury - Unknown return date",
+      "status": "i"
+    },
+    "64": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "65": {
+      "chance": 0,
+      "news": "Thigh injury - Unknown return date",
+      "status": "i"
+    },
+    "66": {
+      "chance": 75,
+      "news": "Hamstring injury - 75% chance of playing",
+      "status": "d"
+    },
+    "67": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "68": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "69": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "7": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "70": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "71": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "72": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "73": {
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
+    },
+    "74": {
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
+    },
+    "75": {
+      "chance": 0,
+      "news": "Suspended until 29 Aug",
+      "status": "s"
+    },
+    "76": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "77": {
+      "chance": 0,
+      "news": "Unspecified injury - Unknown return date",
+      "status": "i"
+    },
+    "78": {
+      "chance": 0,
+      "news": "Foot injury - Unknown return date",
+      "status": "i"
+    },
+    "79": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "8": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "80": {
+      "chance": 0,
+      "news": "Has joined Getafe permanently",
+      "status": "u"
+    },
+    "81": {
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
+    },
+    "82": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "83": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "84": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "85": {
+      "chance": 0,
+      "news": "Groin injury - Unknown return date",
+      "status": "i"
+    },
+    "86": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "87": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "88": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "89": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "9": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "90": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "91": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "92": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "93": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "94": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "95": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "96": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "97": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "98": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "99": {
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
+    }
+  },
+  "official_fpl_ok": true,
+  "rebuild_required": false,
+  "state_changed": false,
+  "status": "green",
+  "urgent": false,
+  "version": 1
+}

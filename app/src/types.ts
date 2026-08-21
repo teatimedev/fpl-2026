@@ -10,6 +10,7 @@ export interface AvailabilityForecast {
   last_updated: string | null
   from_gw: number | null
   through_gw: number | null
+  generation_rule?: string | null
 }
 
 export interface Player {
@@ -114,6 +115,8 @@ export interface ScorecardGw {
   captain?: { model?: ScorecardPick; yours?: ScorecardPick; best: ScorecardPick }
   xi?: { model?: number; yours?: number; best: number }
   cs?: { n: number; brier: number; predicted_rate: number; actual_rate: number }
+  availability?: { n: number; start_brier: number; appearance_brier: number; minutes_mae: number; minutes_bias: number }
+  availability_groups?: Record<string, Record<string, { n: number; start_brier: number }>>
 }
 
 export interface ScorecardSummary {
@@ -131,6 +134,12 @@ export interface ScorecardSummary {
   cs_brier: number | null
   cs_predicted_rate: number | null
   cs_actual_rate: number | null
+  start_brier?: number | null
+  appearance_brier?: number | null
+  minutes_mae?: number | null
+  minutes_bias?: number | null
+  baseline_start_brier?: number | null
+  start_brier_lift?: number | null
 }
 
 export interface Scorecard {
@@ -299,6 +308,43 @@ export interface TickerFx {
 export interface TickerGw { gw: number; fx: TickerFx[] }
 export type Ticker = Record<string, TickerGw[]>
 
+/* --------------------------------------------------------------- team news
+   Public first-party sources only. Explicit recent absences may feed the model;
+   everything nuanced is shown as a candidate for review. */
+export interface NewsClaim {
+  id: string
+  player_id: number
+  player: string
+  club: string
+  claim_type: string
+  decision: 'applied' | 'candidate'
+  reason: string
+  confidence: string
+  publisher: string
+  url: string
+  title?: string
+  excerpt: string
+  published_at?: string | null
+  observed_at?: string
+}
+export interface NewsSourceHealth {
+  id: string; club: string; publisher?: string; url?: string
+  status: 'ok' | 'error' | 'unsupported'; error?: string
+}
+export interface NewsData {
+  run?: {
+    gw: number; checked_at: string; status: 'green' | 'amber' | 'red'
+    coverage: number; claims: number; rebuild_required: boolean
+    affected_owned?: number[]
+  } | null
+  health?: {
+    gw: number; checked_at: string; status: 'green' | 'amber' | 'red'
+    coverage: number; healthy: number; enabled: number; official_fpl_ok?: boolean
+    sources: NewsSourceHealth[]
+  } | null
+  evidence?: { gw: number; deadline: string; policy: string; claims: NewsClaim[] } | null
+}
+
 export interface Data {
   /** The window rolls: start_gw is the next gameweek, horizon the last one modelled. */
   meta: { horizon: number; start_gw?: number; deadline: string; budget: number; generated: string }
@@ -311,6 +357,7 @@ export interface Data {
   chips?: ChipsData | null
   movers?: Movers | null
   ticker?: Ticker | null
+  news?: NewsData | null
 }
 
 export const SQUAD_SHAPE: Record<Pos, number> = { GKP: 2, DEF: 5, MID: 5, FWD: 3 }

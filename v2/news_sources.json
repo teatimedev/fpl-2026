@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "policy": "Public first-party club pages only. No authenticated or paywalled sources.",
+  "sources": [
+    {"id":"ars-news","publisher":"Arsenal","club":"ARS","url":"https://www.arsenal.com/news","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"avl-news","publisher":"Aston Villa","club":"AVL","url":"https://www.avfc.co.uk/news/","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"bou-news","publisher":"AFC Bournemouth","club":"BOU","url":"https://www.afcb.co.uk/news/","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"bre-news","publisher":"Brentford","club":"BRE","url":"https://www.brentfordfc.com/en/news","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"bha-news","publisher":"Brighton & Hove Albion","club":"BHA","url":"https://www.brightonandhovealbion.com/pages/en/media-article-listing","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"che-news","publisher":"Chelsea","club":"CHE","url":"https://www.chelseafc.com/en/news","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"cov-news","publisher":"Coventry City","club":"COV","url":"https://www.ccfc.co.uk/news/","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"cry-news","publisher":"Crystal Palace","club":"CRY","url":"https://www.cpfc.co.uk/news/","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"eve-news","publisher":"Everton","club":"EVE","url":"https://www.evertonfc.com/news","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"ful-news","publisher":"Fulham","club":"FUL","url":"https://www.fulhamfc.com/news/","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"hul-news","publisher":"Hull City","club":"HUL","url":"https://www.wearehullcity.co.uk/news/","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"ips-news","publisher":"Ipswich Town","club":"IPS","url":"https://www.itfc.co.uk/news/","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"lee-news","publisher":"Leeds United","club":"LEE","url":"https://www.leedsunited.com/en/news","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"liv-news","publisher":"Liverpool","club":"LIV","url":"https://www.liverpoolfc.com/news","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"mci-news","publisher":"Manchester City","club":"MCI","url":"https://www.mancity.com/news","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"mun-news","publisher":"Manchester United","club":"MUN","url":"https://www.manutd.com/en/news","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"new-news","publisher":"Newcastle United","club":"NEW","url":"https://www.newcastleunited.com/en/news","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"nfo-news","publisher":"Nottingham Forest","club":"NFO","url":"https://www.nottinghamforest.co.uk/news","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"sun-news","publisher":"Sunderland","club":"SUN","url":"https://www.safc.com/news","source_type":"club_news","parser":"html_article_index","enabled":true},
+    {"id":"tot-news","publisher":"Tottenham Hotspur","club":"TOT","url":"https://www.tottenhamhotspur.com/news/","source_type":"club_news","parser":"html_article_index","enabled":true}
+  ]
+}
