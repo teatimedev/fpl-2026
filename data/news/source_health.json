@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-21T16:25:54Z",
+  "checked_at": "2026-08-21T16:37:03Z",
   "coverage": 0.95,
   "enabled": 20,
   "gw": 1,
@@ -64,7 +64,7 @@
       "content_hash": "511e5b401574ae56a77d5b61b461ef089e1aeda57ab4774e66f11e779e7743d8",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Fri, 21 Aug 2026 16:25:55 GMT",
+      "last_modified": "Fri, 21 Aug 2026 16:37:04 GMT",
       "publisher": "Brentford",
       "status": "ok",
       "url": "https://www.brentfordfc.com/en/news"
@@ -157,11 +157,11 @@
         }
       },
       "club": "IPS",
-      "content_hash": "f02720d4beb7a2c15e9d378a8b840b90210d0ba0a264a24dc0bd16ef8527c9db",
-      "documents": 4,
-      "etag": "\"ad4c425f3f7f81868175f4a3a443e3da\"",
+      "content_hash": "d33ea9e9de59c977aa1a62ae91107e1f0cfa0275c90c7137d8048627f0e2ee0a",
+      "documents": 1,
+      "etag": "\"475503998d2d512e097890df6523200a\"",
       "id": "ips-news",
-      "last_modified": "Fri, 21 Aug 2026 16:16:11 GMT",
+      "last_modified": "Fri, 21 Aug 2026 16:30:05 GMT",
       "publisher": "Ipswich Town",
       "status": "ok",
       "url": "https://www.itfc.co.uk/news/"
@@ -177,7 +177,7 @@
       "content_hash": "cb62733778ea8800bf19946f075288de85b14d981417cf37fa3ae25e07647c75",
       "documents": 4,
       "id": "lee-news",
-      "last_modified": "Fri, 21 Aug 2026 16:23:11 GMT",
+      "last_modified": "Fri, 21 Aug 2026 16:37:04 GMT",
       "publisher": "Leeds United",
       "status": "ok",
       "url": "https://www.leedsunited.com/en/news"
@@ -186,7 +186,7 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.liverpoolfc.com/news/andoni-iraola-press-conference-newcastle-v-liverpool-first-game-excitement-transfers-and-more": {
-          "etag": "\"23941-h179v4tf2i+ucTQ6mhBLuqTUfHg\""
+          "etag": "\"23941-bBKnC/INWGST3VSAKiL5cyCnVYM\""
         },
         "https://www.liverpoolfc.com/news/fantasy-premier-league-liverpools-top-picks-value-money-differentials-and-more": {
           "etag": "\"1f8cf-dFKRgudR1tSo9jlfgzgnZhJ/5Fs\""
@@ -198,13 +198,13 @@
           "etag": "\"1b8d7-k1IhWd+RSHpGEhsKrnl/9L+x25k\""
         },
         "https://www.liverpoolfc.com/news/zara-shaw-named-england-squad-womens-u20-world-cup": {
-          "etag": "\"1bd21-8b5N8aERcMJ5syZAhP9ODQSjYgc\""
+          "etag": "\"1bd21-8RIPs7m8REmvSGz+DV7T76HipGA\""
         }
       },
       "club": "LIV",
-      "content_hash": "fcf06dfb55ce189bc96c3aaeb965e95fdd120c78073c9eca535e670f291b092e",
-      "documents": 6,
-      "etag": "\"33dc0-skAV3tBSt6AYiQUjbd6No5QBqTc\"",
+      "content_hash": "9d44511ebc28f6f107caff3e442f40198dc1485581d9c4b526ca1a9aaff0957c",
+      "documents": 3,
+      "etag": "\"33dbb-srKpsEoq0f+BCtOYcKzt81jM4AE\"",
       "id": "liv-news",
       "publisher": "Liverpool",
       "status": "ok",
@@ -213,7 +213,9 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/citytv/mens/enzo-maresca-press-conference-video-bournemouth-premier-league-63922899": {},
+        "https://www.mancity.com/citytv/mens/enzo-maresca-press-conference-video-bournemouth-premier-league-63922899": {
+          "last_modified": "Fri, 21 Aug 2026 16:21:54 GMT"
+        },
         "https://www.mancity.com/news/mens/city-v-bournemouth-kick-off-time-and-tv-information-63922554": {},
         "https://www.mancity.com/news/mens/enzo-maresca-bournemouth-premier-league-team-news-63922897": {},
         "https://www.mancity.com/news/mens/enzo-maresca-manchester-city-afc-bournemouth-preview-63922911": {}
@@ -241,7 +243,7 @@
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-livramento-and-joelinton-latest-ahead-of-reds-test": {}
       },
       "club": "NEW",
-      "content_hash": "b1936e2a4690c29227114a8967d79c7c4f5d515208a5060426a2060b50776a0c",
+      "content_hash": "174ff449fc8090b231cba6c4087d299632259d9014e6bd6779c5a371a966de34",
       "documents": 3,
       "id": "new-news",
       "publisher": "Newcastle United",
@@ -290,6 +292,6 @@
       "url": "https://www.tottenhamhotspur.com/news/"
     }
   ],
-  "status": "green",
+  "status": "amber",
   "version": 1
 }

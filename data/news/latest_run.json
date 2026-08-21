@@ -1,15 +1,13 @@
 {
-  "affected_clubs": [
-    "MUN"
-  ],
+  "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-08-21T16:25:54Z",
+  "checked_at": "2026-08-21T16:37:03Z",
   "claims": 2,
   "coverage": 0.95,
   "deadline": "2026-08-21T17:30:00Z",
   "gw": 1,
-  "notification_key": "6f7b655ced934c11f399",
-  "notify_required": true,
+  "notification_key": "b09490327693f6521482",
+  "notify_required": false,
   "official_fpl": {
     "1": {
       "chance": null,
@@ -3015,7 +3013,7 @@
   "official_fpl_ok": true,
   "rebuild_required": false,
   "state_changed": false,
-  "status": "green",
-  "urgent": true,
+  "status": "amber",
+  "urgent": false,
   "version": 1
 }
