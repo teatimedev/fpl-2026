@@ -128,6 +128,32 @@ changed. A backtest that flatters a method is usually leaking.
   so DefCon dispersion (Poisson vs negative binomial) cannot yet be tested. It
   can be, after a few gameweeks of 2026/27.
 
+## Deadline availability and squad value
+
+The historical minutes model is only the baseline. `availability.json` can
+override one or more explicit gameweeks with separate probabilities of
+starting and appearing from the bench, minutes in each role, source, confidence
+and an expiry. `player_model.py` prices starter and cameo minutes separately;
+a substitute is no longer credited with a starter's full attacking exposure.
+FPL injury and suspension flags with a stated return date remain active through
+each deadline before that date; undated temporary flags affect only the current
+deadline rather than contaminating the full forecast window.
+
+`squad_evaluator.py` is the shared rules layer for the weekly digest, optimiser,
+planner, chips and simulation. It selects a legal XI each week, applies exact
+formation-sensitive autosubs in realised scenarios, limits captain fallback to
+the vice-captain, and values expected bench cover from the selected XI's
+non-appearance distribution with formation, bench order and substitute DNPs.
+The optimiser/planner iteratively refit a per-gameweek linear DNP proxy to the
+selected squad inside their integer programs, then report it through the full
+evaluator. The squad optimiser also performs a bounded exact one-swap search
+after the linear solve. The multiweek transfer planner reports exact scores for
+its chosen weeks but still selects its path with the linear bench proxy, so the
+path is directional rather than a guaranteed nonlinear global optimum. Transfer
+advice reports starting-XI/captain gain
+and auto-sub resilience gain separately, and unavailable squad members are
+flagged even when their raw best-XI gain is zero.
+
 ## 5. Weekly use
 
 ```bash

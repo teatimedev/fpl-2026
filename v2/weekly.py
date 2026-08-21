@@ -56,6 +56,11 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(HERE))
 from gwclock import next_gw          # noqa: E402
+from squad_evaluator import (       # noqa: E402
+    deadline_unavailable,
+    evaluate_squad,
+    pick_lineup as shared_pick_lineup,
+)
 
 PROJ = HERE / 'projections_v2.json'
 VIEW = HERE / 'season_view.json'
@@ -77,6 +82,29 @@ HIT = 4.0
 MAX_FT = 5
 HOLD_THRESHOLD = 2.0     # a free transfer worth less than this over the window
                          # is usually better banked: next week has more information
+
+
+def _supersede_transfer_recommendation(lines, push_lines, transfers, message,
+                                       push_message):
+    """Replace an earlier tactical headline with the chosen preseason plan."""
+    recommendation_indexes = [
+        index for index, line in enumerate(lines)
+        if line.startswith('**Recommended:') or line.startswith('**No single')
+    ]
+    if recommendation_indexes:
+        lines[recommendation_indexes[0]] = message
+        for index in reversed(recommendation_indexes[1:]):
+            del lines[index]
+    else:
+        lines.append(message)
+    tactical_prefixes = (
+        'Transfers:', 'Fix unavailable:', 'Best swap:', 'Transfer:',
+        'Two-mover worth it:', 'Use a FT',
+    )
+    push_lines[:] = [line for line in push_lines
+                     if not line.startswith(tactical_prefixes)]
+    push_lines.append(push_message)
+    transfers['advice'] = message.replace('**', '')
 
 
 def api(path):
@@ -234,37 +262,13 @@ def remaining(p, gw, horizon):
 def pick_xi(squad, gw):
     """Best legal XI for one gameweek. Returns (xi, bench-in-order, key)."""
     key = lambda p: gw_pts(p, gw)
-    bypos = {}
-    for p in squad:
-        bypos.setdefault(p['pos'], []).append(p)
-    for k in bypos:
-        bypos[k].sort(key=key, reverse=True)
-    xi, used = [], {k: 0 for k in SQUAD_SHAPE}
-    for pos in POS_ORDER:
-        for p in bypos.get(pos, [])[:XI_MIN[pos]]:
-            xi.append(p); used[pos] += 1
-    rest = sorted((p for p in squad if p not in xi), key=key, reverse=True)
-    for p in rest:
-        if len(xi) >= 11:
-            break
-        if used[p['pos']] < XI_MAX[p['pos']]:
-            xi.append(p); used[p['pos']] += 1
-    bench = [p for p in squad if p not in xi]
-    bench.sort(key=lambda p: (p['pos'] != 'GKP', -key(p)))
-    return xi, bench, key
+    lineup = shared_pick_lineup(squad, gw)
+    return lineup.xi, lineup.bench, key
 
 
 def squad_score(squad, gw, horizon):
-    """What the squad is really worth over the window: best XI each week plus
-    the captain doubled. This — not the sum of fifteen projections — is what
-    a transfer has to improve."""
-    total = 0.0
-    for g in range(gw, horizon + 1):
-        xi, _, key = pick_xi(squad, g)
-        if not xi:
-            continue
-        total += sum(key(p) for p in xi) + max(key(p) for p in xi)
-    return total
+    """Expected XI, captain fallback and risk-sensitive autosub value."""
+    return evaluate_squad(squad, gw, horizon).total
 
 
 def legal(squad, budget):
@@ -284,7 +288,16 @@ def transfer_engine(squad, players, bank, ft, gw, horizon, pool_size=60):
     charged at 4 for every transfer beyond the free ones available.
     """
     budget = sum(p['price'] for p in squad) + bank
-    base = squad_score(squad, gw, horizon)
+    cache = {}
+
+    def value(candidate):
+        key = tuple(sorted(p['id'] for p in candidate))
+        if key not in cache:
+            cache[key] = evaluate_squad(candidate, gw, horizon)
+        return cache[key]
+
+    base_eval = value(squad)
+    base = base_eval.total
     owned = {p['id'] for p in squad}
     pool = {}
     for pos in POS_ORDER:
@@ -302,9 +315,14 @@ def transfer_engine(squad, players, bank, ft, gw, horizon, pool_size=60):
             new = [n if p is o else p for p in squad]
             if not legal(new, budget):
                 continue
-            g = squad_score(new, gw, horizon) - base
+            after = value(new)
+            g = after.total - base
             if g > 0.05:
                 singles.append(dict(gain=round(g, 1), net=round(net(g, 1), 1),
+                                    xi_gain=round(after.xi_captain_points
+                                                  - base_eval.xi_captain_points, 1),
+                                    autosub_gain=round(after.autosub_points
+                                                       - base_eval.autosub_points, 1),
                                     out=o, in_=n, moves=1))
     singles.sort(key=lambda t: -t['gain'])
     best_per_out, seen = [], set()
@@ -325,13 +343,24 @@ def transfer_engine(squad, players, bank, ft, gw, horizon, pool_size=60):
                 new = [n1 if p is o1 else n2 if p is o2 else p for p in squad]
                 if not legal(new, budget):
                     continue
-                g = squad_score(new, gw, horizon) - base
+                after = value(new)
+                g = after.total - base
                 if g > 0.5:
                     pairs.append(dict(gain=round(g, 1), net=round(net(g, 2), 1),
+                                      xi_gain=round(after.xi_captain_points
+                                                    - base_eval.xi_captain_points, 1),
+                                      autosub_gain=round(after.autosub_points
+                                                         - base_eval.autosub_points, 1),
                                       out=(o1, o2), in_=(n1, n2), moves=2))
     pairs.sort(key=lambda t: -t['net'])
-    return dict(base=base, singles=best_per_out[:8], all_singles=singles,
-                pairs=pairs[:5])
+    unavailable = deadline_unavailable(squad, gw)
+    unavailable_moves = []
+    for player in unavailable:
+        move = next((s for s in singles if s['out']['id'] == player['id']), None)
+        unavailable_moves.append(dict(player=player, replacement=move))
+    return dict(base=base, base_eval=base_eval, singles=best_per_out[:8],
+                all_singles=singles, pairs=pairs[:5],
+                unavailable=unavailable_moves)
 
 
 def price_watch(boot, players, owned_ids):
@@ -429,7 +458,14 @@ def main():
     if not args.no_refresh:
         refresh(full=args.full)
 
-    boot = api('bootstrap-static/')
+    try:
+        boot = api('bootstrap-static/')
+    except Exception:
+        cached_boot = HERE / 'cache' / 'bootstrap.json'
+        if not args.no_refresh or not cached_boot.exists():
+            raise
+        boot = json.loads(cached_boot.read_text())
+        print(f'  FPL API unavailable; using cached bootstrap from {cached_boot.name}')
     elem = {e['id']: e for e in boot['elements']}
     gw, deadline = next_gw(boot['events'])
     players, horizon, start_gw = load_projections()
@@ -592,6 +628,14 @@ def main():
             if news:
                 added = (e.get('news_added') or '')[:10]
                 flags.append(f'"{news}"' + (f' ({added})' if added else ''))
+            av = (p.get('availability_by_gw') or [])
+            av = av[gw - 1] if gw - 1 < len(av) else None
+            if av and av.get('confidence') not in (None, 'model'):
+                flags.append(
+                    f'{p["start_rate"]*100:.0f}% deadline start estimate '
+                    f'({av["confidence"]} confidence)'
+                    + (f': {av["note"]}' if av.get('note') else '')
+                )
             if p in xi and p['start_rate'] < 0.8 and not flags:
                 flags.append(f'starts only {p["start_rate"]*100:.0f}% of the time')
             if (p.get('joined') or '') >= '2026-05-01' and p in xi:
@@ -623,30 +667,63 @@ def main():
         eng = transfer_engine(squad, players, bank, ft, gw, horizon)
         J['transfers'] = dict(
             base=round(eng['base'], 1),
-            singles=[dict(out=s_['out']['id'], in_=s_['in_']['id'], gain=s_['gain'], net=s_['net'])
+            base_xi=round(eng['base_eval'].xi_captain_points, 1),
+            base_autosub=round(eng['base_eval'].autosub_points, 1),
+            unavailable=[u['player']['id'] for u in eng['unavailable']],
+            singles=[dict(out=s_['out']['id'], in_=s_['in_']['id'], gain=s_['gain'],
+                          xi_gain=s_['xi_gain'], autosub_gain=s_['autosub_gain'], net=s_['net'])
                      for s_ in eng['singles']],
             pairs=[dict(out=[o['id'] for o in pr['out']], in_=[n['id'] for n in pr['in_']],
-                        gain=pr['gain'], net=pr['net']) for pr in eng['pairs']])
-        L.append(f'Gain is the lift to your best XI (captain included) over '
-                 f'GW{gw}–{horizon}, not the raw difference between two players. '
+                        gain=pr['gain'], xi_gain=pr['xi_gain'],
+                        autosub_gain=pr['autosub_gain'], net=pr['net'])
+                   for pr in eng['pairs']])
+        L.append(f'Gain is the lift to your expected starting XI and captain plus '
+                 f'modelled auto-sub cover over GW{gw}–{horizon}. The auto-sub term '
+                 f'uses each starter\'s non-appearance risk, not a flat bench weight. '
                  f'A hit costs 4.')
         L.append('')
+        for unavailable in eng['unavailable']:
+            dead = unavailable['player']
+            move = unavailable['replacement']
+            if move:
+                no_route = ('no route to points' if dead.get('status') == 'u'
+                            else f'no credible route to minutes in GW{gw}')
+                L.append(f'**Availability warning:** {dead["name"]} has effectively '
+                         f'{no_route}. {move["in_"]["name"]} is the best legal '
+                         f'same-position replacement ({move["gain"]:+.1f}: '
+                         f'{move["xi_gain"]:+.1f} XI/captain, '
+                         f'{move["autosub_gain"]:+.1f} auto-sub cover).')
+            else:
+                L.append(f'**Availability warning:** {dead["name"]} has effectively '
+                         f'no route to points; replace him when a legal move is available.')
+            L.append('')
         if not eng['singles']:
             L.append('**No single transfer improves the squad.**'
                      + (' Nothing to change.' if ft >= 15 else ' Bank the free transfer.'))
             P.append('Transfers: none worth making'
                      + ('' if ft >= 15 else ' — bank it'))
         else:
-            L.append('| out | in | £ | gain | net of hits |')
-            L.append('|---|---|---|---|---|')
+            L.append('| out | in | £ | XI + captain | auto-sub | total | net |')
+            L.append('|---|---|---|---|---|---|---|')
             for s in eng['singles']:
                 delta = s['in_']['price'] - s['out']['price']
                 L.append(f'| {s["out"]["name"]} ({s["out"]["team"]}) | '
                          f'{s["in_"]["name"]} ({s["in_"]["team"]}) | {delta:+.1f} | '
+                         f'{s["xi_gain"]:+.1f} | {s["autosub_gain"]:+.1f} | '
                          f'**{s["gain"]:+.1f}** | {s["net"]:+.1f} |')
             best = eng['singles'][0]
+            forced = next((u['replacement'] for u in eng['unavailable']
+                           if u['replacement']), None)
             L.append('')
-            if ft >= 15:
+            if ft >= 15 and forced:
+                L.append(f'**Recommended:** {forced["out"]["name"]} → '
+                         f'{forced["in_"]["name"]} ({forced["gain"]:+.1f}). '
+                         f'The outgoing player is unavailable and transfers are free '
+                         f'before Gameweek 1, so even a small resilience gain should not '
+                         f'be left unused.')
+                P.append(f'Fix unavailable: {forced["out"]["name"]}→'
+                         f'{forced["in_"]["name"]} {forced["gain"]:+.1f}')
+            elif ft >= 15:
                 L.append(f'**Recommended:** {best["out"]["name"]} → {best["in_"]["name"]} '
                          f'({best["gain"]:+.1f}); everything is free before Gameweek 1.'
                          if best['gain'] >= 1.0 else
@@ -676,20 +753,24 @@ def main():
             L.append('')
             L.append('**Best two-move combinations** (net of any hit):')
             L.append('')
-            L.append('| out | in | £ | gain | net |')
-            L.append('|---|---|---|---|---|')
+            L.append('| out | in | £ | XI + captain | auto-sub | total | net |')
+            L.append('|---|---|---|---|---|---|---|')
             for pr in eng['pairs']:
                 o1, o2 = pr['out']; n1, n2 = pr['in_']
                 delta = n1['price'] + n2['price'] - o1['price'] - o2['price']
                 L.append(f'| {o1["name"]} + {o2["name"]} | {n1["name"]} + {n2["name"]} | '
-                         f'{delta:+.1f} | {pr["gain"]:+.1f} | **{pr["net"]:+.1f}** |')
+                         f'{delta:+.1f} | {pr["xi_gain"]:+.1f} | '
+                         f'{pr["autosub_gain"]:+.1f} | {pr["gain"]:+.1f} | '
+                         f'**{pr["net"]:+.1f}** |')
             top = eng['pairs'][0]
             if top['net'] > (eng['singles'][0]['net'] if eng['singles'] else 0) + 1.0 \
                     and top['net'] > 2.0:
                 o1, o2 = top['out']; n1, n2 = top['in_']
                 L.append('')
                 L.append(f'The pair {o1["name"]}+{o2["name"]} → {n1["name"]}+{n2["name"]} '
-                         f'beats any single move even after the hit ({top["net"]:+.1f}).')
+                         + (f'beats any single move even after the hit '
+                            if ft < 2 else 'is the best two-move package ')
+                         + f'({top["net"]:+.1f}).')
                 P.append(f'Two-mover worth it: {o1["name"]}+{o2["name"]}→'
                          f'{n1["name"]}+{n2["name"]} net {top["net"]:+.1f}')
         L.append('')
@@ -706,6 +787,44 @@ def main():
                 L.append('')
                 free = plan(players, ids, bank, ft, gw, horizon)
                 hold = plan(players, ids, bank, ft, gw, horizon, freeze_this_week=True)
+                free_source = 'planner'
+                # Before GW1, compare the approximate transfer path with the
+                # exact-scored best static build produced by optimise.py. The
+                # planner's linear bench proxy must not overrule a better full
+                # evaluator score when every initial change is free.
+                if ft >= 15 and gw == 1:
+                    presets_path = ROOT / 'data' / 'squads.json'
+                    if presets_path.exists():
+                        presets = json.loads(presets_path.read_text())
+                        if presets:
+                            best_ids = [int(p['id']) for p in presets[0]['squad']]
+                            best_squad = [players[i] for i in best_ids if i in players]
+                            if len(best_squad) == 15:
+                                exact = evaluate_squad(best_squad, gw, horizon)
+                                exact_weeks = []
+                                for offset, week in enumerate(exact.weeks):
+                                    lineup = week.lineup
+                                    exact_weeks.append({
+                                        'gw': week.gw, 'pts': round(week.total, 1),
+                                        'hits': 0, 'squad': best_ids,
+                                        'xi': [p['id'] for p in lineup.xi],
+                                        'captain': (lineup.captain['id']
+                                                    if lineup.captain else None),
+                                        'autosub': round(week.autosub_points, 1),
+                                        'in': ([i for i in best_ids if i not in ids]
+                                               if offset == 0 else []),
+                                        'out': ([i for i in ids if i not in best_ids]
+                                                if offset == 0 else []),
+                                        'ft': 15 if offset == 0 else min(MAX_FT, offset),
+                                        'cost': sum(players[i]['price'] for i in best_ids),
+                                    })
+                                exact_plan = {
+                                    'total': round(exact.total, 1), 'hits': 0,
+                                    'weeks': exact_weeks,
+                                }
+                                if free is None or exact_plan['total'] > free['total']:
+                                    free = exact_plan
+                                    free_source = 'exact static build'
                 if args.chips and free and ft < 15 and gw >= 2:
                     # what a wildcard would add: unlimited moves this week
                     wc = plan(players, ids, bank, 15, gw, horizon)
@@ -716,31 +835,57 @@ def main():
 
                     n_now = len(free['weeks'][0]['in'])
                     # judge the value of acting now PER MOVE: four changes for
-                    # +3 is churn, one change for +3 is a transfer
-                    worth_it = n_now > 0 and diff >= HOLD_THRESHOLD * n_now
+                    # +3 is churn, one change for +3 is a transfer. GW1 is the
+                    # exception: the squad is still editable without spending
+                    # transfers, so any material improvement is actionable.
+                    unlimited = ft >= 15
+                    worth_it = n_now > 0 and (
+                        (unlimited and diff >= 0.5)
+                        or (not unlimited and diff >= HOLD_THRESHOLD * n_now)
+                    )
                     J['plan'] = dict(total=free['total'], hold_total=hold['total'],
                                      diff=round(diff, 1), hits=free['hits'],
                                      n_now=n_now, worth_it=worth_it,
                                      weeks=[dict(gw=w['gw'], pts=w['pts'], hits=w['hits'],
                                                  captain=w['captain'], ft=w['ft'],
                                                  in_=w['in'], out=w['out']) for w in free['weeks']])
-                    L.append(f'Best path from here: **{free["total"]:.1f}** pts '
+                    if worth_it and unlimited and free_source == 'exact static build':
+                        recommendation = (
+                            '**Recommended:** use the free pre-GW1 rebuild shown in '
+                            f'the plan below ({diff:+.1f} versus holding/re-planning). '
+                            'The one- and two-move tables are diagnostics, not the '
+                            'final action.'
+                        )
+                        _supersede_transfer_recommendation(
+                            L, P, J['transfers'], recommendation,
+                            f'Use the free pre-GW1 rebuild ({diff:+.1f})',
+                        )
+                    lead = ('Best exact-scored pre-season build'
+                            if free_source == 'exact static build' else 'Best path from here')
+                    L.append(f'{lead}: **{free["total"]:.1f}** pts '
                              f'({free["hits"]} hit{"s" if free["hits"] != 1 else ""}). '
                              f'Making no move this week and re-planning: '
                              f'{hold["total"]:.1f}. Acting now is worth **{diff:+.1f}**'
                              + (f' across {n_now} moves' if n_now > 1 else '')
-                             + ('.' if worth_it else ' — not enough; hold.'))
+                             + (' — use the free pre-GW1 rebuild.'
+                                if worth_it and unlimited else
+                                '.' if worth_it else ' — not enough; hold.'))
                     L.append('')
                     L.extend(describe(free, players))
                     L.append('')
-                    L.append('_Point-estimate plans churn on small fixture swings; read '
-                             'this for direction (who to move towards, when), not as a '
-                             'script._')
+                    L.append('_The multiweek planner uses a linear bench proxy and small '
+                             'fixture swings can cause churn; treat future moves as '
+                             'directional rather than scripted._')
                     if worth_it:
                         w = free['weeks'][0]
+                        paired = []
+                        for pos in POS_ORDER:
+                            incoming = [i for i in w['in'] if players[i]['pos'] == pos]
+                            outgoing = [o for o in w['out'] if players[o]['pos'] == pos]
+                            paired.extend(zip(outgoing, incoming))
                         P.append('Plan this week: ' + ', '.join(
                             f"{players[o]['name']}→{players[i]['name']}"
-                            for i, o in zip(w['in'], w['out'])))
+                            for o, i in paired))
                 else:
                     L.append('Planner timed out; single-move advice above stands.')
                 L.append('')

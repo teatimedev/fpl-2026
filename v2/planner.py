@@ -14,7 +14,8 @@ next deadline, and solves the whole modelled window as one integer program:
               y[p][gw]  ... and in the starting XI
               c[p][gw]  ... and captained
               in/out    transfers made before gameweek gw
-  objective   XI points, captain counted twice, minus 4 per hit
+  objective   XI points, captain counted twice, risk-weighted auto-sub cover,
+              minus 4 per hit
   subject to  budget, 2/5/5/3, max 3 per club, a legal XI, and FPL's
               free-transfer accounting (one a week, bank up to five)
 
@@ -28,12 +29,32 @@ plan slightly optimistic. Chips are not modelled.
 """
 import pulp
 
+from squad_evaluator import evaluate_squad, modelled_bench_weights
+
 SQUAD = {'GKP': 2, 'DEF': 5, 'MID': 5, 'FWD': 3}
 XI_MIN = {'GKP': 1, 'DEF': 3, 'MID': 2, 'FWD': 1}
 XI_MAX = {'GKP': 1, 'DEF': 5, 'MID': 5, 'FWD': 3}
 HIT = 4.0
 MAX_BANK = 5
 POOL = 120
+
+
+def _valid_incumbent(prob, tolerance=1e-5):
+    """Whether PuLP currently holds a complete, integral, feasible solution."""
+    for variable in prob.variables():
+        value = variable.value()
+        if value is None or abs(value - round(value)) > tolerance:
+            return False
+    try:
+        constraints = getattr(prob, "_constraints", None)
+        if constraints is None:
+            public = prob.constraints
+            constraints = public() if callable(public) else public.values()
+        else:
+            constraints = constraints.values()
+        return all(constraint.valid(tolerance) for constraint in constraints)
+    except TypeError:
+        return False
 
 
 def _pool(players, owned, gw, horizon):
@@ -47,7 +68,7 @@ def _pool(players, owned, gw, horizon):
 
 
 def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
-         freeze_this_week=False, time_limit=60):
+         freeze_this_week=False, time_limit=30):
     """Optimal transfer path from `owned` over GW gw..horizon.
 
     `ft` is the number of free transfers available at the coming deadline
@@ -65,6 +86,8 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
            for i in ids for g in GW}
     price = {i: int(round(P[i]['price'] * 10)) for i in ids}
     budget = sum(price[i] for i in owned if i in price) + int(round(bank * 10))
+    seed = [P[i] for i in owned if i in P]
+    bench_weights = {g: modelled_bench_weights(seed or pool, g) for g in GW}
 
     prob = pulp.LpProblem('fpl_path', pulp.LpMaximize)
     x = {(i, g): pulp.LpVariable(f'x{i}_{g}', cat='Binary') for i in ids for g in GW}
@@ -77,9 +100,18 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
     ftv = {g: pulp.LpVariable(f'f{g}', lowBound=0, upBound=max(MAX_BANK, ft), cat='Integer')
            for g in GW}
 
-    prob += (pulp.lpSum(y[(i, g)] * pts[(i, g)] for i in ids for g in GW)
-             + pulp.lpSum(c[(i, g)] * pts[(i, g)] for i in ids for g in GW)
-             - HIT * pulp.lpSum(hits[g] for g in GW))
+    def objective(weights):
+        return (pulp.lpSum(y[(i, g)] * pts[(i, g)] for i in ids for g in GW)
+                + pulp.lpSum(c[(i, g)] * pts[(i, g)] for i in ids for g in GW)
+                + pulp.lpSum(
+                    (x[(i, g)] - y[(i, g)]) * pts[(i, g)]
+                    * (weights[g]['GKP'] if P[i]['pos'] == 'GKP'
+                       else weights[g]['outfield'])
+                    for i in ids for g in GW
+                )
+                - HIT * pulp.lpSum(hits[g] for g in GW))
+
+    prob += objective(bench_weights)
 
     for g in GW:
         prob += pulp.lpSum(x[(i, g)] for i in ids) == 15
@@ -123,24 +155,47 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
                 # everyone starts Gameweek 2 with exactly one
                 prob += ftv[nxt] <= 1
 
+    # First find a legal path, then refit the linear bench proxy to the squads
+    # that path actually selected. One refit captures the material difference
+    # without turning the normal weekly command into an open-ended loop.
     prob.solve(pulp.HiGHS(msg=False, timeLimit=time_limit))
-    if pulp.LpStatus[prob.status] not in ('Optimal', 'Not Solved'):
+    if (pulp.LpStatus[prob.status] not in ('Optimal', 'Not Solved')
+            or not _valid_incumbent(prob)):
         return None
-    if any(x[(i, GW[0])].value() is None for i in ids[:1]):
-        return None
+    first_incumbent = {variable.name: variable.value() for variable in prob.variables()}
+    selected = tuple(
+        tuple(sorted(i for i in ids if (x[(i, g)].value() or 0) > 0.5))
+        for g in GW
+    )
+    bench_weights = {
+        g: modelled_bench_weights([P[i] for i in selected[k]], g)
+        for k, g in enumerate(GW)
+    }
+    prob.setObjective(objective(bench_weights))
+    prob.solve(pulp.HiGHS(msg=False, timeLimit=time_limit))
+    if (pulp.LpStatus[prob.status] not in ('Optimal', 'Not Solved')
+            or not _valid_incumbent(prob)):
+        # A timeout may leave no second incumbent. The first pass was checked
+        # in full, so retain that feasible path instead of reading partial
+        # variable values as a squad.
+        for variable in prob.variables():
+            variable.varValue = first_incumbent[variable.name]
 
     out = {'weeks': [], 'total': 0.0, 'hits': 0, 'gw': gw, 'horizon': horizon}
     for g in GW:
         squad = [i for i in ids if (x[(i, g)].value() or 0) > 0.5]
-        xi = [i for i in ids if (y[(i, g)].value() or 0) > 0.5]
-        cap = [i for i in ids if (c[(i, g)].value() or 0) > 0.5]
-        wk = sum(pts[(i, g)] for i in xi) + sum(pts[(i, g)] for i in cap)
+        evaluation = evaluate_squad([P[i] for i in squad], g, g)
+        lineup = evaluation.weeks[0].lineup
+        xi = [p['id'] for p in lineup.xi]
+        cap = lineup.captain['id'] if lineup.captain else None
+        wk = evaluation.total
         h = int(round(hits[g].value() or 0))
         out['total'] += wk - HIT * h
         out['hits'] += h
         out['weeks'].append({
             'gw': g, 'pts': round(wk, 1), 'hits': h,
-            'squad': squad, 'xi': xi, 'captain': cap[0] if cap else None,
+            'squad': squad, 'xi': xi, 'captain': cap,
+            'autosub': round(evaluation.autosub_points, 1),
             'in': [i for i in ids if (tin[(i, g)].value() or 0) > 0.5],
             'out': [i for i in ids if (tout[(i, g)].value() or 0) > 0.5],
             'ft': int(round(ftv[g].value() or 0)),
@@ -158,8 +213,13 @@ def describe(res, players):
     for w in res['weeks']:
         moves = ''
         if w['in']:
+            paired = []
+            for pos in ('GKP', 'DEF', 'MID', 'FWD'):
+                incoming = [i for i in w['in'] if players[i]['pos'] == pos]
+                outgoing = [o for o in w['out'] if players[o]['pos'] == pos]
+                paired.extend(zip(outgoing, incoming))
             pairs = ', '.join(f"{players[o]['name']} → {players[i]['name']}"
-                              for i, o in zip(w['in'], w['out']))
+                              for o, i in paired)
             moves = f'  {pairs}' + (f'  (−{w["hits"] * 4} hit)' if w['hits'] else '')
         capn = players[w['captain']]['name'] if w['captain'] in players else '—'
         L.append(f"- **GW{w['gw']}** {w['pts']:.1f} pts, C {capn}, "

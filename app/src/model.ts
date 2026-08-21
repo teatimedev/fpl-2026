@@ -53,24 +53,141 @@ export function xiForGw(squad: Player[], gw: number) {
 }
 
 /**
- * What a squad is really worth over the window: the best XI each week plus
- * the captain doubled — mirrors v2/weekly.py squad_score. This, not the sum
- * of fifteen projections, is what a transfer has to improve.
+ * The chance that a player records any minutes in a gameweek.
  */
-export function squadScore(squad: Player[], gw: number, horizon: number): number {
-  let total = 0
-  for (let g = gw; g <= horizon; g++) {
-    const { xi } = xiForGw(squad, g)
-    if (!xi.length) continue
-    let sum = 0, best = -Infinity
-    for (const p of xi) {
-      const v = thisGw(p, g)
-      sum += v
-      if (v > best) best = v
-    }
-    total += sum + best
+export function playProbability(p: Player, gw: number): number {
+  const exact = p.play_by_gw?.[gw - 1]
+  if (exact != null) return Math.max(0, Math.min(1, exact))
+  if (p.status === 'u') return 0
+  const start = p.start_by_gw?.[gw - 1] ?? p.start_rate
+  return Math.max(0, Math.min(1, start + (1 - start) * 0.2))
+}
+
+type OutfieldPos = Exclude<Pos, 'GKP'>
+interface AutosubState { missing: number[]; counts: number[]; probability: number }
+const OUTFIELD_POS: OutfieldPos[] = ['DEF', 'MID', 'FWD']
+
+function stateKey(missing: number[], counts: number[]): string {
+  return `${missing.join(',')}|${counts.join(',')}`
+}
+
+function expectedOutfieldAutosubs(
+  xi: Player[], bench: Player[], gw: number,
+): number {
+  const outfield = xi.filter(p => p.pos !== 'GKP')
+  const originalCounts = OUTFIELD_POS.map(pos => outfield.filter(p => p.pos === pos).length)
+  let states = new Map<string, AutosubState>()
+  states.set(stateKey([0, 0, 0], originalCounts), {
+    missing: [0, 0, 0], counts: originalCounts, probability: 1,
+  })
+
+  const addState = (
+    target: Map<string, AutosubState>, missing: number[], counts: number[], probability: number,
+  ) => {
+    const key = stateKey(missing, counts)
+    const current = target.get(key)
+    if (current) current.probability += probability
+    else target.set(key, { missing, counts, probability })
   }
-  return total
+
+  for (const starter of outfield) {
+    const q = 1 - playProbability(starter, gw)
+    const posIndex = OUTFIELD_POS.indexOf(starter.pos as OutfieldPos)
+    const next = new Map<string, AutosubState>()
+    for (const state of states.values()) {
+      addState(next, state.missing, state.counts, state.probability * (1 - q))
+      const missing = [...state.missing]
+      missing[posIndex]++
+      addState(next, missing, state.counts, state.probability * q)
+    }
+    states = next
+  }
+
+  const replacement = (state: AutosubState, benchPos: OutfieldPos) => {
+    const order = [benchPos, ...outfield.map(p => p.pos as OutfieldPos)
+      .filter(pos => pos !== benchPos)]
+    const seen = new Set<OutfieldPos>()
+    for (const absentPos of order) {
+      if (seen.has(absentPos)) continue
+      seen.add(absentPos)
+      const absentIndex = OUTFIELD_POS.indexOf(absentPos)
+      if (state.missing[absentIndex] <= 0) continue
+      const counts = [...state.counts]
+      counts[absentIndex]--
+      counts[OUTFIELD_POS.indexOf(benchPos)]++
+      const legal = OUTFIELD_POS.every((pos, index) =>
+        counts[index] >= XI_MIN[pos] && counts[index] <= XI_MAX[pos])
+      if (legal) return { absentIndex, counts }
+    }
+    return null
+  }
+
+  let expected = 0
+  for (const substitute of bench.filter(p => p.pos !== 'GKP')) {
+    const pos = substitute.pos as OutfieldPos
+    const activation = [...states.values()]
+      .filter(state => replacement(state, pos) != null)
+      .reduce((sum, state) => sum + state.probability, 0)
+    expected += activation * thisGw(substitute, gw)
+
+    const available = playProbability(substitute, gw)
+    const next = new Map<string, AutosubState>()
+    for (const state of states.values()) {
+      addState(next, state.missing, state.counts, state.probability * (1 - available))
+      const change = replacement(state, pos)
+      if (!change) {
+        addState(next, state.missing, state.counts, state.probability * available)
+        continue
+      }
+      const missing = [...state.missing]
+      missing[change.absentIndex]--
+      addState(next, missing, change.counts, state.probability * available)
+    }
+    states = next
+  }
+  return expected
+}
+
+export interface SquadBreakdown {
+  xi: number
+  captain: number
+  autosub: number
+  total: number
+}
+
+/** Risk-sensitive expected score; mirrors v2/squad_evaluator.py. */
+export function squadBreakdown(
+  squad: Player[], gw: number, horizon: number,
+): SquadBreakdown {
+  let xiPoints = 0, captainPoints = 0, autosubPoints = 0
+  for (let g = gw; g <= horizon; g++) {
+    const { xi, bench } = xiForGw(squad, g)
+    if (!xi.length) continue
+    const ranked = [...xi].sort((a, b) => thisGw(b, g) - thisGw(a, g))
+    xiPoints += xi.reduce((sum, p) => sum + thisGw(p, g), 0)
+    captainPoints += thisGw(ranked[0], g)
+    if (ranked[1]) {
+      captainPoints += (1 - playProbability(ranked[0], g)) * thisGw(ranked[1], g)
+    }
+
+    const startingKeeper = xi.find(p => p.pos === 'GKP')
+    const benchKeeper = bench.find(p => p.pos === 'GKP')
+    if (startingKeeper && benchKeeper) {
+      autosubPoints += (1 - playProbability(startingKeeper, g)) * thisGw(benchKeeper, g)
+    }
+
+    autosubPoints += expectedOutfieldAutosubs(xi, bench, g)
+  }
+  return {
+    xi: xiPoints,
+    captain: captainPoints,
+    autosub: autosubPoints,
+    total: xiPoints + captainPoints + autosubPoints,
+  }
+}
+
+export function squadScore(squad: Player[], gw: number, horizon: number): number {
+  return squadBreakdown(squad, gw, horizon).total
 }
 
 /* ------------------------------------------------------------- transfers */

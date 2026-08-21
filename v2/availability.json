@@ -1,0 +1,71 @@
+{
+  "updated_at": "2026-08-21T13:30:00Z",
+  "method": "Judgemental deadline inputs. p_cameo is conditional on not starting; all entries expire after GW1.",
+  "overrides": [
+    {
+      "player_id": 12,
+      "name": "Bukayo Saka",
+      "from_gw": 1,
+      "through_gw": 1,
+      "p_start": 0.6,
+      "p_cameo": 0.8,
+      "start_minutes": 70,
+      "cameo_minutes": 30,
+      "confidence": "medium",
+      "source": "https://www.arsenal.com/news/every-word-from-mikel-artetas-pre-coventry-presser-agLtL1y0uKj3 ; https://live.mancity.com/news/mens/arsenal-manchester-city-community-shield-match-report-63922483 ; https://www.fantasyfootballscout.co.uk/team-news/",
+      "note": "Ready to be involved after a late return, but not confirmed to start; 30-minute Shield cameo."
+    },
+    {
+      "player_id": 388,
+      "name": "Marc Guehi",
+      "from_gw": 1,
+      "through_gw": 1,
+      "p_start": 0.45,
+      "p_cameo": 0.65,
+      "start_minutes": 78,
+      "cameo_minutes": 25,
+      "confidence": "low",
+      "source": "https://live.mancity.com/news/mens/arsenal-manchester-city-community-shield-match-report-63922483 ; https://www.fantasyfootballscout.co.uk/team-news/",
+      "note": "Available, but began the Shield on the bench and is omitted from the current predicted XI."
+    },
+    {
+      "player_id": 398,
+      "name": "Phil Foden",
+      "from_gw": 1,
+      "through_gw": 1,
+      "p_start": 0.8,
+      "p_cameo": 0.4,
+      "start_minutes": 65,
+      "cameo_minutes": 25,
+      "confidence": "medium",
+      "source": "https://www.mancity.com/news/mens/inter-hong-kong-tour-team-news-tactics-63921167 ; https://www.mancity.com/news/mens/k-league-all-stars-seoul-match-report-63921520 ; https://live.mancity.com/news/mens/arsenal-manchester-city-community-shield-match-report-63922483 ; https://fplitalia.com/probabili-formazioni-premier-league/",
+      "note": "Started the final warm-ups and Shield; likely starter with a roughly 60-70 minute role."
+    },
+    {
+      "player_id": 70,
+      "name": "Justin Kluivert",
+      "from_gw": 1,
+      "through_gw": 1,
+      "p_start": 0.68,
+      "p_cameo": 0.55,
+      "start_minutes": 74,
+      "cameo_minutes": 25,
+      "confidence": "low",
+      "source": "https://fplitalia.com/probabili-formazioni-premier-league/ ; https://fplitalia.com/amichevoli-precampionato/ ; https://www.afcb.co.uk/news/2026/may/24/match-report-v-forest/",
+      "note": "Predicted to start, but only ten league starts last season make an 83% baseline too confident."
+    },
+    {
+      "player_id": 411,
+      "name": "Erling Haaland",
+      "from_gw": 1,
+      "through_gw": 1,
+      "p_start": 0.92,
+      "p_cameo": 0.45,
+      "start_minutes": 76,
+      "cameo_minutes": 25,
+      "confidence": "medium",
+      "source": "https://live.mancity.com/news/mens/arsenal-manchester-city-community-shield-match-report-63922483 ; https://fplitalia.com/probabili-formazioni-premier-league/",
+      "note": "Started the Shield and has the strongest premium-attacker minutes case for GW1."
+    }
+  ]
+}

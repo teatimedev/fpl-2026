@@ -32,7 +32,10 @@ FIELDS = ['id', 'name', 'full_name', 'team', 'team_id', 'pos', 'pos_id', 'price'
           'xgi90_last', 'defcon_last', 'cs_last', 'bonus_last', 'status', 'news',
           'joined', 'is_new', 'pens', 'corners', 'fk', 'fdr6', 'cs_rate', 'note',
           'pts_now', 'mins_now', 'starts_now', 'games_now',
-          'xg90', 'xa90', 'dc90', 'start_rate', 'evidence', 'seasons']
+          'xg90', 'xa90', 'dc90', 'start_rate', 'start_by_gw', 'play_by_gw',
+          'mins_by_gw', 'availability_by_gw', 'availability_source',
+          'availability_confidence',
+          'evidence', 'seasons']
 
 POS_ID = {'GKP': 1, 'DEF': 2, 'MID': 3, 'FWD': 4}
 
@@ -85,6 +88,12 @@ def main():
             'starts_now': p.get('starts_now', 0), 'games_now': p.get('games_now', 0),
             'xg90': p.get('xg90', 0), 'xa90': p.get('xa90', 0), 'dc90': p.get('dc90', 0),
             'start_rate': p.get('start_rate', 0), 'evidence': p.get('evidence', 0),
+            'start_by_gw': p.get('start_by_gw', []),
+            'play_by_gw': p.get('play_by_gw', []),
+            'mins_by_gw': p.get('mins_by_gw', []),
+            'availability_by_gw': p.get('availability_by_gw', []),
+            'availability_source': p.get('availability_source', 'model baseline'),
+            'availability_confidence': p.get('availability_confidence', 'model'),
             'seasons': p.get('seasons', 0),
         })
     rows.sort(key=lambda r: -r['proj_6gw'])

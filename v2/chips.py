@@ -33,6 +33,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(HERE))
+from squad_evaluator import pick_lineup as shared_pick_lineup  # noqa: E402
 
 SEASON = HERE / 'projections_season.json'
 BOOT = HERE / 'cache' / 'bootstrap.json'
@@ -94,23 +95,8 @@ def gw_pts(p, g):
 
 
 def pick_xi(squad, g):
-    key = lambda p: gw_pts(p, g)
-    bypos = {}
-    for p in squad:
-        bypos.setdefault(p['pos'], []).append(p)
-    for k in bypos:
-        bypos[k].sort(key=key, reverse=True)
-    xi, used = [], {k: 0 for k in SQUAD_SHAPE}
-    for pos in POS_ORDER:
-        for p in bypos.get(pos, [])[:XI_MIN[pos]]:
-            xi.append(p); used[pos] += 1
-    for p in sorted((p for p in squad if p not in xi), key=key, reverse=True):
-        if len(xi) >= 11:
-            break
-        if used[p['pos']] < XI_MAX[p['pos']]:
-            xi.append(p); used[p['pos']] += 1
-    bench = [p for p in squad if p not in xi]
-    return xi, bench, key
+    lineup = shared_pick_lineup(squad, g, points=gw_pts)
+    return lineup.xi, lineup.bench, lambda p: gw_pts(p, g)
 
 
 def your_week(squad, g):

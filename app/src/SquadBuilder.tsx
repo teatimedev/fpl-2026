@@ -12,12 +12,13 @@ import MarketTable from './MarketTable'
  * Week can see it.
  */
 
-const PRESET_BLURB = [
-  'The highest projected XI the rules allow, with no constraints beyond the game rules.',
-  'Built around the 75%-owned captain. Costs a little projected upside for a lot less rank volatility.',
-  'Nothing owned by more than a quarter of managers. Higher variance, but this is how you climb rather than tread water.',
-  'The standard heuristic: keep the keeper and defence cheap, spend it up front. Gets you both Haaland and Bruno.',
-]
+function presetBlurb(label: string): string {
+  if (label.includes('Best Found')) return 'The highest exact score found across all modelled search seeds and legal local refinements.'
+  if (label.includes('Haaland Build')) return 'Built around Haaland as the premium captain and rank-risk anchor.'
+  if (label.includes('Differential')) return 'Nothing owned by more than a quarter of managers: a deliberately higher-variance build.'
+  if (label.includes('Conventional')) return 'The standard heuristic: keep goalkeeper and defence cheaper, then spend in attack.'
+  return 'The unrestricted linear seed, retained as a distinct alternative after exact scoring.'
+}
 
 export default function SquadBuilder({
   D, picks, presetXI, state, add, remove, loadPreset, clear, openPlayer,
@@ -127,7 +128,7 @@ export default function SquadBuilder({
             {D.squads.map((s, i) => (
               <button className="preset" key={s.label} onClick={() => loadPreset(i)}>
                 <span className="t">{s.label.split(' - ')[1]?.split(':')[0] ?? s.label}</span>
-                <span className="d">{PRESET_BLURB[i]}</span>
+                <span className="d">{presetBlurb(s.label)}</span>
                 <span className="n">£{s.cost.toFixed(1)}m · {s.xi_proj} proj pts</span>
               </button>
             ))}

@@ -59,11 +59,24 @@ CURRENT_TRUST_K = 4.0
 # hold a zero. HORIZON is the last gameweek covered, START_GW the first.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gwclock import window as _gw_window          # noqa: E402
+from availability import (  # noqa: E402
+    availability_forecast,
+    deadline_start_probability,
+    load_overrides,
+    status_for_gameweek,
+)
 START_GW, HORIZON = _gw_window()
 WINDOW = HORIZON - START_GW + 1
 LAST_GW = 38
 SEASON = {}                       # id -> per-gameweek projection to LAST_GW
 OUT_SEASON = ROOT / 'v2' / 'projections_season.json'
+AVAILABILITY_OVERRIDES = load_overrides()
+BOOT_CACHE = ROOT / 'v2' / 'cache' / 'bootstrap.json'
+if BOOT_CACHE.exists():
+    _events = json.loads(BOOT_CACHE.read_text()).get('events', [])
+    GW_DEADLINES = {int(event['id']): event['deadline_time'] for event in _events}
+else:
+    GW_DEADLINES = {}
 
 # Measured year-over-year stability, used as the empirical-Bayes reliability of
 # a full season of evidence. A metric at 0.90 keeps nearly all of a player's own
@@ -303,16 +316,6 @@ def minutes_model(p, players):
             mps_now = min(92.0, now['mins'] / now['starts'])
             mps = trust * mps_now + (1 - trust) * mps
 
-    # availability
-    st, ch = p['status'], p['chance']
-    if st == 'u':
-        start_rate = 0.0
-    elif st == 's':
-        start_rate *= 0.30
-    elif st == 'i':
-        start_rate *= 0.40 if 'expected back' in p['news'].lower() else 0.06
-    elif st == 'd' and ch is not None:
-        start_rate *= ch / 100.0
     return max(0.0, min(0.97, start_rate)), mps
 
 
@@ -395,17 +398,7 @@ def project(players, view, priors):
     out = []
     for p in players.values():
         pos = p['pos']
-        start_rate, mps = minutes_model(p, players)
-        frac = mps / 90.0
-        # The cameo term must be conditional on the player being available at
-        # all. Applied unconditionally it gave players who have LEFT THE CLUB a
-        # 20% chance of appearing, so Harrison (New England Revolution), Uche
-        # (returned to Getafe) and Henderson (departed as a free agent) all
-        # projected around 2.5 points over the horizon instead of zero.
-        available = p['status'] != 'u'
-        p_play = (start_rate + (1 - start_rate) * 0.20) if available else 0.0
-        if not available:
-            start_rate = 0.0
+        base_start_rate, mps = minutes_model(p, players)
 
         xg90, w_xg = shrink(p, 'xg90', priors)
         xa90, _ = shrink(p, 'xa90', priors)
@@ -429,7 +422,42 @@ def project(players, view, priors):
         # needs (which week is the bench worth most, where is the double).
         by_gw, total = [0.0] * (START_GW - 1), 0.0
         season_by_gw = [0.0] * (START_GW - 1)
+        start_by_gw = [0.0] * (START_GW - 1)
+        play_by_gw = [0.0] * (START_GW - 1)
+        mins_by_gw = [0.0] * (START_GW - 1)
+        availability_by_gw = [None] * (START_GW - 1)
         for gw in range(START_GW, LAST_GW + 1):
+            effective_status = status_for_gameweek(
+                p['status'], gw, START_GW, news=p['news'],
+                gw_deadline=GW_DEADLINES.get(gw),
+            )
+            start_input = (deadline_start_probability(
+                base_start_rate, effective_status, p['chance'], p['news']
+            ) if effective_status != 'a' else base_start_rate)
+            av = availability_forecast(
+                player_id=p['id'], gw=gw, base_start=start_input,
+                base_start_minutes=mps, position=pos, status=effective_status,
+                overrides=AVAILABILITY_OVERRIDES,
+            )
+            p_start = av.p_start
+            p_cameo = (1.0 - p_start) * av.p_cameo
+            p_play = av.p_play
+            minute_share = av.expected_minutes / 90.0
+            start_share = av.start_minutes / 90.0
+            cameo_share = av.cameo_minutes / 90.0
+            if gw <= HORIZON:
+                start_by_gw.append(round(p_start, 3))
+                play_by_gw.append(round(p_play, 3))
+                mins_by_gw.append(round(av.expected_minutes, 1))
+                availability_by_gw.append(dict(
+                    source=av.source, confidence=av.confidence, note=av.note,
+                    p_cameo=round(av.p_cameo, 3),
+                    start_minutes=round(av.start_minutes, 1),
+                    cameo_minutes=round(av.cameo_minutes, 1),
+                    last_updated=av.last_updated,
+                    from_gw=av.from_gw,
+                    through_gw=av.through_gw,
+                ))
             fx = fixtures.get(str(gw)) or []
             if not fx:
                 season_by_gw.append(0.0)
@@ -441,21 +469,25 @@ def project(players, view, priors):
                 # attacking, scaled by how many goals this team is expected to
                 # score in THIS fixture relative to a league-average match
                 vol = f['xg'] / 1.45
-                pts += (xg90 * frac * vol * GOAL_PTS[pos]
-                        + xa90 * frac * vol * 3.0) * p_play
+                pts += (xg90 * minute_share * vol * GOAL_PTS[pos]
+                        + xa90 * minute_share * vol * 3.0)
                 # clean sheet: straight from the fitted scoreline distribution
                 if CS_PTS[pos]:
-                    pts += CS_PTS[pos] * f['cs'] * start_rate
+                    pts += CS_PTS[pos] * f['cs'] * p_start
                 if pos in ('GKP', 'DEF'):
-                    pts -= expected_floor_div(f['xgc'], 2) * start_rate
+                    pts -= expected_floor_div(f['xgc'], 2) * p_start
                 if pos == 'GKP':
-                    pts += expected_floor_div(saves90 * frac, 3) * start_rate
+                    pts += (expected_floor_div(saves90 * start_share, 3) * p_start
+                            + expected_floor_div(saves90 * cameo_share, 3) * p_cameo)
                 thr = DC_THRESHOLD[pos]
                 if thr and dc90 > 0:
-                    pts += 2.0 * defcon_hit_prob(dc90 * frac, thr, w_dc) * p_play
-                pts += start_rate * 2.0 + (p_play - start_rate) * 1.0
-                pts += bonus90 * frac * p_play * 0.85
-                pts -= yellow90 * frac * p_play
+                    pts += 2.0 * (
+                        p_start * defcon_hit_prob(dc90 * start_share, thr, w_dc)
+                        + p_cameo * defcon_hit_prob(dc90 * cameo_share, thr, w_dc)
+                    )
+                pts += p_start * 2.0 + p_cameo
+                pts += bonus90 * minute_share * 0.85
+                pts -= yellow90 * minute_share
             pts = round(max(0.0, pts), 3)
             season_by_gw.append(pts)
             if gw <= HORIZON:
@@ -463,6 +495,8 @@ def project(players, view, priors):
                 total += pts
 
         SEASON[p['id']] = season_by_gw
+        first = START_GW - 1
+        current_availability = availability_by_gw[first]
         out.append(dict(
             id=p['id'], name=p['name'], full_name=p['full_name'], team=p['team'],
             pos=pos, price=p['price'], sel_pct=p['sel_pct'], status=p['status'],
@@ -471,7 +505,11 @@ def project(players, view, priors):
             proj_by_gw=by_gw, proj_6gw=round(total, 2),
             proj_gw=round(total / WINDOW, 3),
             value=round(total / p['price'], 4) if p['price'] else 0,
-            start_rate=round(start_rate, 3), mins_proj=round(start_rate * mps),
+            start_rate=start_by_gw[first], mins_proj=round(mins_by_gw[first]),
+            start_by_gw=start_by_gw, play_by_gw=play_by_gw,
+            mins_by_gw=mins_by_gw, availability_by_gw=availability_by_gw,
+            availability_source=current_availability['source'],
+            availability_confidence=current_availability['confidence'],
             xg90=round(xg90, 4), xa90=round(xa90, 4), dc90=round(dc90, 3),
             evidence=round(w_xg, 2),
             seasons=len([h for h in p['hist'] if h['mins'] >= 450]),

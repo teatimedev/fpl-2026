@@ -69,9 +69,9 @@ they respond to different things.
 
 ### Known limitation
 
-**Captaincy is not modelled.** The armband doubles a score, so premiums the
-optimiser rates poorly on raw points per £m are worth more than they look. Read
-small projection gaps between squads accordingly.
+Individual player projections do not include an armband bonus. Squad scoring
+does: the optimiser, weekly evaluator and simulation select a captain in every
+gameweek, then fall back only to the vice-captain if the captain does not play.
 
 ### Changelog
 
@@ -82,21 +82,26 @@ small projection gaps between squads accordingly.
   8.1 → 11.7, Doku 19.4 → 23.4. Durable players fell slightly as an old 1.05
   inflation factor was removed (Bruno Fernandes 41.2 → 39.0).
 
-`overlay.py` holds everything the API cannot express — manager changes,
-pre-season role changes, squad-depth reality checks. Every entry traces to a
-source in RESEARCH.md, and multipliers are kept within roughly 0.75–1.25 so the
-model stays data-driven.
+`overlay.py` holds durable role and rate changes. Short-lived deadline news is
+kept separately in `v2/availability.json`: every entry has an explicit
+gameweek range, source and confidence, plus separate start/cameo probabilities
+and minutes. This prevents a predicted lineup from silently affecting six
+weeks of projections.
 
 **These are estimates, not forecasts.** They are most useful for comparing
 players, least useful as absolute point predictions.
 
 ## Optimiser
 
-`optimise.py` solves an integer program (HiGHS via PuLP) for the highest
-projected starting XI subject to the real constraints: £100.0m, 2/5/5/3, max 3
-per club, and a legal XI. The bench is weighted at 12% of a starting point,
-which is what produces the usual "stack the XI, cheap bench" shape rather than
-15 evenly priced players.
+`optimise.py` solves an integer program (HiGHS via PuLP) subject to the real
+constraints: £100.0m, 2/5/5/3, max 3 per club, and a legal XI. Its linear solver
+selects the XI and captain separately in every gameweek, and iteratively refits
+per-gameweek bench activation to the selected 15 instead of
+using the old flat 12% bench weight; final squads are then scored with
+formation- and bench-order-aware probabilities through the same
+`v2/squad_evaluator.py` used by weekly transfers and the simulator. A bounded
+same-position local search then rejects any legal one-swap improvement under
+that full score, covering interactions the linear bench proxy cannot encode.
 
 `validate.py` re-checks every squad against the rules using the raw API prices
 and positions, deliberately without importing the optimiser, so a bug in the
@@ -117,7 +122,9 @@ transfer plan can trade on.
 
 Assumes static prices and ignores FPL's sell-price rule. Plans against expected
 values, so it cannot anticipate injuries — which is where most of a transfer's
-real value lies. Read its output as a floor.
+real value lies. Its auto-sub term is a selected-squad linear approximation;
+the chosen weeks are re-scored exactly, but the displayed path is not guaranteed
+to be the global optimum under that nonlinear score. Read its output as a floor.
 
 ## Simulation
 
@@ -133,18 +140,20 @@ total cannot:
   gameweek and shared by every player at that club, so three Arsenal defenders
   blank together. Squads concentrated in a few clubs are correctly shown as
   riskier than their projection implies.
-- **Auto-subs**, with FPL's real rules — at most three outfield subs, each bench
-  player used once. This turned out to be worth 6.6 points between the top two
-  squads.
-- **Captaincy**, falling through to the vice-captain when the captain doesn't play.
+- **Auto-subs**, with FPL's real rules — formation constraints, bench order, a
+  separate reserve goalkeeper, and each bench player used once.
+- **Captaincy**, falling only to the vice-captain when the captain doesn't play.
 
-The simulation's attacking rates are calibrated per player so its mean matches
-the projection model (mean absolute error 0.16 pts/GW). Raw xG and xA run about
-20–30% light on realised attacking returns while defenders come out roughly
-right — left uncorrected, that would have biased the whole comparison towards
-defensive squads. The projection model is anchored on last season's actual
-points, so it is the better estimate of the *mean*; the simulation's job is the
-*shape*.
+The XI, bench order, captain and vice are reselected for every gameweek rather
+than being frozen from a six-week average. Player outcomes are also shared
+between compared squads, so head-to-head probabilities are paired comparisons.
+
+The simulation's attacking rates are calibrated per player so its expected mean
+matches the projection model. Raw xG and xA run light on realised attacking
+returns while defenders come out roughly right — left uncorrected, that would
+have biased the whole comparison towards defensive squads. The projection model
+is anchored on last season's actual points, so it is the better estimate of the
+*mean*; the simulation's job is the *shape*.
 
 Two bugs found and fixed while building it, both of which had inverted the
 result: auto-subs let one bench player cover every blank in the XI

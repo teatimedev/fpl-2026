@@ -32,13 +32,25 @@ for t in boot['teams']:
 
 # trim the player payload to what the UI actually renders
 KEEP = ('id', 'name', 'full_name', 'team', 'pos', 'price', 'proj_gw', 'proj_6gw',
-        'proj_by_gw',
+        'proj_by_gw', 'start_by_gw', 'play_by_gw', 'mins_by_gw',
+        'availability_by_gw',
+        'availability_source', 'availability_confidence',
         'mins_proj', 'sel_pct', 'pts_last', 'mins_last', 'ppg_last', 'goals_last',
         'assists_last', 'xgi90_last', 'defcon_last', 'cs_last', 'bonus_last',
         'status', 'news', 'is_new', 'joined', 'pens', 'corners', 'fk', 'note',
         'fdr6', 'value', 'pts_now', 'mins_now', 'starts_now', 'games_now',
         'xg90', 'xa90', 'dc90', 'start_rate', 'evidence', 'seasons')
-players = [{k: p.get(k) for k in KEEP} for p in proj['players']]
+players = []
+for raw in proj['players']:
+    player = {k: raw.get(k) for k in KEEP}
+    # The core projection keeps a full per-GW minutes record. The browser only
+    # needs provenance for deadline overrides; repeated model-baseline rows add
+    # hundreds of kilobytes without exposing any additional judgement.
+    player['availability_by_gw'] = [
+        row if row and row.get('last_updated') else None
+        for row in (raw.get('availability_by_gw') or [])
+    ]
+    players.append(player)
 
 # per-player season curve (coarse, minutes held constant) for the player drawer
 # and chip context — one decimal is plenty and keeps the bundle small

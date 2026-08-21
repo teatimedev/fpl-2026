@@ -1,5 +1,17 @@
 export type Pos = 'GKP' | 'DEF' | 'MID' | 'FWD'
 
+export interface AvailabilityForecast {
+  source: string
+  confidence: string
+  note: string
+  p_cameo: number
+  start_minutes: number
+  cameo_minutes: number
+  last_updated: string | null
+  from_gw: number | null
+  through_gw: number | null
+}
+
 export interface Player {
   id: number
   name: string
@@ -24,6 +36,13 @@ export interface Player {
   dc90: number
   /** 0–1 share of possible starts */
   start_rate: number
+  /** deadline-aware per-GW probabilities and expected minutes */
+  start_by_gw: number[]
+  play_by_gw: number[]
+  mins_by_gw: number[]
+  availability_by_gw: (AvailabilityForecast | null)[]
+  availability_source: string
+  availability_confidence: string
   /** 0–1: how much of the xG estimate is the player's own record vs the positional prior */
   evidence: number
   /** PL seasons with 450+ minutes */
@@ -149,9 +168,18 @@ export interface WeeklyModel {
 
 export interface WeeklyCheck { id: number; xi: boolean; flags: string[] }
 
-export interface WeeklySingle { out: number; in_: number; gain: number; net: number }
-export interface WeeklyPair { out: number[]; in_: number[]; gain: number; net: number }
-export interface WeeklyTransfers { base: number; singles: WeeklySingle[]; pairs: WeeklyPair[]; advice: string }
+export interface WeeklySingle {
+  out: number; in_: number; gain: number; net: number
+  xi_gain?: number; autosub_gain?: number
+}
+export interface WeeklyPair {
+  out: number[]; in_: number[]; gain: number; net: number
+  xi_gain?: number; autosub_gain?: number
+}
+export interface WeeklyTransfers {
+  base: number; base_xi?: number; base_autosub?: number; unavailable?: number[]
+  singles: WeeklySingle[]; pairs: WeeklyPair[]; advice: string
+}
 
 export interface WeeklyPlanWeek {
   gw: number; pts: number; hits: number; captain: number; ft: number

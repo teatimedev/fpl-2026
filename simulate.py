@@ -21,9 +21,14 @@ import json, csv, argparse
 import numpy as np
 
 import project as P
+from v2.squad_evaluator import apply_autosubs, captain_replacement, pick_lineup
 
 SIMS = 40_000
-HORIZON = P.HORIZON
+V2_DATA = json.load(open('v2/projections_v2.json'))
+V2_PLAYERS = {p['id']: p for p in V2_DATA['players']}
+START_GW = V2_DATA.get('start_gw', 1)
+HORIZON = V2_DATA.get('horizon', P.HORIZON)
+WINDOW = HORIZON - START_GW + 1
 POS_ID = {'GKP': 1, 'DEF': 2, 'MID': 3, 'FWD': 4}
 GOAL_PTS = {1: 6, 2: 6, 3: 5, 4: 4}
 CS_PTS = {1: 4, 2: 4, 3: 1, 4: 0}
@@ -68,7 +73,7 @@ def team_match_params():
     sched = {}
     for f in P.FIX:
         gw = f.get('event')
-        if gw is None or gw > HORIZON:
+        if gw is None or gw < START_GW or gw > HORIZON:
             continue
         for side, dkey, home in (('team_h', 'team_h_difficulty', True),
                                  ('team_a', 'team_a_difficulty', False)):
@@ -104,7 +109,7 @@ def team_match_params_v2():
             continue
         for gw_s, matches in byweek.items():
             gw = int(gw_s)
-            if gw > HORIZON:
+            if gw < START_GW or gw > HORIZON:
                 continue
             for m in matches:
                 opp = TEAM_ID.get(m['opp'])
@@ -129,9 +134,29 @@ _V2_SCHED, _V2_FIXTURES = team_match_params_v2()
 TEAM_SCHED = _V2_SCHED if _V2_SCHED else team_match_params()
 TEAM_LAYER = 'v2 Dixon-Coles ratings' if _V2_SCHED else 'v1 FDR heuristic'
 
-# The projection model's per-gameweek mean, used to calibrate the simulation.
-PROJ_GW = {int(r['id']): float(r['proj_gw'])
-           for r in csv.DictReader(open('data/projections.csv'))}
+# The projection model's per-gameweek means and deadline-aware minutes, used to
+# calibrate the simulation and to set a fresh lineup every gameweek.
+PROJ_BY_GW = {pid: p['proj_by_gw'] for pid, p in V2_PLAYERS.items()}
+
+
+def simulation_gameweeks(start_gw=START_GW, horizon=HORIZON):
+    """The exact rolling gameweek window represented by simulation arrays."""
+    return list(range(start_gw, horizon + 1))
+
+
+def projection_window_average(values, start_gw=START_GW, horizon=HORIZON):
+    """Average a full-season projection array over the active window.
+
+    Blank gameweeks count as zero rather than disappearing from the divisor.
+    """
+    window = values[start_gw - 1:horizon]
+    return sum(window) / max(len(window), 1)
+
+
+PROJ_GW = {
+    pid: projection_window_average(values)
+    for pid, values in PROJ_BY_GW.items()
+}
 
 
 def simulate_teams(sims):
@@ -143,26 +168,28 @@ def simulate_teams(sims):
     gf = {}
     ga = {}
     for t in TEAM_SCHED:
-        gf[t] = np.zeros((sims, HORIZON), dtype=np.int16)
-        ga[t] = np.zeros((sims, HORIZON), dtype=np.int16)
+        gf[t] = np.zeros((sims, WINDOW), dtype=np.int16)
+        ga[t] = np.zeros((sims, WINDOW), dtype=np.int16)
     if _V2_FIXTURES:
         # One draw per match, so the home side's goals ARE the away side's goals
         # conceded. Without this a squad holding both sides of a fixture (say
         # City's defence and a Bournemouth midfielder in GW1) sees them succeed
         # independently, which is impossible.
         for gw, home, away, xg_h, xg_a in _V2_FIXTURES:
+            index = gw - START_GW
             h = rng.poisson(xg_h, sims)
             a = rng.poisson(xg_a, sims)
-            gf[home][:, gw - 1] += h; ga[home][:, gw - 1] += a
-            gf[away][:, gw - 1] += a; ga[away][:, gw - 1] += h
+            gf[home][:, index] += h; ga[home][:, index] += a
+            gf[away][:, index] += a; ga[away][:, index] += h
         return gf, ga
     for t, byweek in TEAM_SCHED.items():
-        for gw in range(1, HORIZON + 1):
+        for gw in range(START_GW, HORIZON + 1):
             if gw not in byweek:
                 continue
             att, dfn = byweek[gw]
-            gf[t][:, gw - 1] = rng.poisson(att, sims)
-            ga[t][:, gw - 1] = rng.poisson(dfn, sims)
+            index = gw - START_GW
+            gf[t][:, index] = rng.poisson(att, sims)
+            ga[t][:, index] = rng.poisson(dfn, sims)
     return gf, ga
 
 
@@ -170,16 +197,36 @@ def simulate_teams(sims):
 def player_params(pid):
     """Per-90 rates and start probability for one player."""
     p = ELEM[pid]
+    projection = V2_PLAYERS[pid]
     et = p['element_type']
-    mins = P.projected_minutes(p)
     per90 = max(p['minutes'] / 90.0, 1e-9)
 
-    # probability of starting, and typical minutes when he does
+    # Historical per-start minutes remain the fallback outside a live deadline
+    # override. The actual start/cameo mixture comes from player_model v2.
     if p['starts'] >= 5 and p['minutes'] >= 450:
         mps = min(92.0, p['minutes'] / p['starts'])
     else:
         mps = 80.0
-    p_start = min(0.98, mins / mps) if mps > 0 else 0.0
+    all_starts = projection.get('start_by_gw') or [
+        projection.get('start_rate', 0.0)
+    ] * HORIZON
+    all_plays = projection.get('play_by_gw') or [
+        s + (1.0 - s) * 0.20 for s in all_starts
+    ]
+    all_metadata = projection.get('availability_by_gw') or []
+    starts = [all_starts[gw - 1] for gw in range(START_GW, HORIZON + 1)]
+    plays = [all_plays[gw - 1] for gw in range(START_GW, HORIZON + 1)]
+    start_minutes, cameo_minutes, cameo_rates = [], [], []
+    for index, gw in enumerate(range(START_GW, HORIZON + 1)):
+        row = all_metadata[gw - 1] if gw - 1 < len(all_metadata) and all_metadata[gw - 1] else {}
+        sm = float(row.get('start_minutes', mps))
+        cm = float(row.get('cameo_minutes', 25.0))
+        ps = float(starts[index])
+        pp = float(plays[index])
+        pc = ((pp - ps) / max(1.0 - ps, 1e-9)) if ps < 1.0 else 0.0
+        start_minutes.append(sm)
+        cameo_minutes.append(cm)
+        cameo_rates.append(float(np.clip(pc, 0.0, 1.0)))
 
     if p['minutes'] >= 450:
         xg90 = float(p['expected_goals_per_90'])
@@ -193,7 +240,10 @@ def player_params(pid):
         xg90, xa90 = base, base * 0.6
         bonus90, saves90, yellow90 = 0.25, (2.6 if et == 1 else 0.0), 0.15
 
-    par = dict(pid=pid, et=et, team=p['team'], p_start=p_start, mps=mps,
+    par = dict(pid=pid, et=et, team=p['team'],
+               p_start_by_gw=starts, p_cameo_by_gw=cameo_rates,
+               start_minutes_by_gw=start_minutes,
+               cameo_minutes_by_gw=cameo_minutes,
                xg90=xg90, xa90=xa90, bonus90=bonus90, saves90=saves90,
                yellow90=yellow90,
                dc90=p['defensive_contribution_per_90'],
@@ -218,30 +268,50 @@ def _attacking_calibration(par):
     et, t = par['et'], par['team']
     target = PROJ_GW.get(par['pid'])
     if not target or t not in TEAM_SCHED:
-        return 1.0
+        return 1.0, 0.0
 
-    weeks = [TEAM_SCHED[t][gw] for gw in range(1, HORIZON + 1) if gw in TEAM_SCHED[t]]
+    active = [(gw - START_GW, TEAM_SCHED[t][gw])
+              for gw in range(START_GW, HORIZON + 1)
+              if gw in TEAM_SCHED[t]]
+    weeks = [fixture for _, fixture in active]
     if not weeks:
-        return 1.0
-    mean_dfn = float(np.mean([w[1] for w in weeks]))
-    p_start, frac = par['p_start'], par['mps'] / 90.0
-    p_played = p_start + (1 - p_start) * 0.22
+        return 1.0, 0.0
+    p_start = sum(par['p_start_by_gw'][i] for i, _ in active) / WINDOW
+    p_cameo = sum(
+        (1 - par['p_start_by_gw'][i]) * par['p_cameo_by_gw'][i]
+        for i, _ in active
+    ) / WINDOW
+    p_played = p_start + p_cameo
+    minute_share = sum(
+        par['p_start_by_gw'][i] * par['start_minutes_by_gw'][i] / 90.0
+        + (1 - par['p_start_by_gw'][i]) * par['p_cameo_by_gw'][i]
+        * par['cameo_minutes_by_gw'][i] / 90.0
+        for i, _ in active
+    ) / WINDOW
 
-    steady = p_start * 2.0 + (1 - p_start) * 0.22
+    steady = p_start * 2.0 + p_cameo
     if et in (1, 2, 3):
-        steady += CS_PTS[et] * float(np.exp(-mean_dfn)) * p_start
+        steady += CS_PTS[et] * sum(
+            float(np.exp(-fixture[1])) * par['p_start_by_gw'][i]
+            for i, fixture in active
+        ) / WINDOW
     if et in (1, 2):
-        steady -= (mean_dfn / 2.0) * p_start          # -1 per 2 conceded
+        steady -= sum(
+            fixture[1] / 2.0 * par['p_start_by_gw'][i]
+            for i, fixture in active
+        ) / WINDOW
     if et == 1:
-        steady += (par['saves90'] * frac / 3.0) * p_start
+        steady += par['saves90'] * minute_share / 3.0
     if et in (2, 3, 4) and par['dc90'] > 0:
         thr = 10 if et == 2 else 12
-        steady += 2.0 * P._poisson_at_least(par['dc90'] * frac, thr) * p_played
-    steady -= min(0.6, par['yellow90'] * frac) * p_played
+        steady += 2.0 * P._poisson_at_least(
+            par['dc90'] * minute_share / max(p_played, 1e-9), thr
+        ) * p_played
+    steady -= min(0.6, par['yellow90'] * minute_share)
 
-    attacking = (par['xg90'] * frac * GOAL_PTS[et]
-                 + par['xa90'] * frac * 3.0) * p_played
-    attacking += min(0.9, par['bonus90'] * frac * 0.55) * 2.0 * p_played * 0.5
+    attacking = (par['xg90'] * GOAL_PTS[et]
+                 + par['xa90'] * 3.0) * minute_share
+    attacking += min(0.9, par['bonus90'] * 0.55) * minute_share
 
     # Scale the attacking component as far as is sensible...
     k = 1.0 if attacking <= 1e-6 else float(
@@ -262,16 +332,23 @@ def _attacking_calibration(par):
 def simulate_player(par, gf, ga, sims):
     """Points for one player across all sims and gameweeks."""
     et, t = par['et'], par['team']
-    pts = np.zeros((sims, HORIZON), dtype=np.float32)
+    pts = np.zeros((sims, WINDOW), dtype=np.float32)
     if t not in gf:
         return pts
 
-    for gw in range(HORIZON):
-        started = rng.random(sims) < par['p_start']
+    for gw in range(WINDOW):
+        actual_gw = START_GW + gw
+        if actual_gw not in TEAM_SCHED.get(t, {}):
+            par.setdefault('_played', []).append(np.zeros(sims, dtype=bool))
+            continue
+        p_start = par['p_start_by_gw'][gw]
+        p_cameo = par['p_cameo_by_gw'][gw]
+        started = rng.random(sims) < p_start
         # a non-starter sometimes appears off the bench
-        cameo = (~started) & (rng.random(sims) < 0.22)
+        cameo = (~started) & (rng.random(sims) < p_cameo)
         played = started | cameo
-        frac = np.where(started, par['mps'] / 90.0, 0.28)
+        frac = np.where(started, par['start_minutes_by_gw'][gw] / 90.0,
+                        par['cameo_minutes_by_gw'][gw] / 90.0)
 
         # appearance points: 1 for any minutes, 2 for 60+
         pts[:, gw] += np.where(started, 2.0, 0.0) + np.where(cameo, 1.0, 0.0)
@@ -366,9 +443,14 @@ def calibrated_params(pid, gf, ga):
         gf_p, ga_p = _ADD_CACHE[key]
         probe = dict(par, add=0.0, _played=[])
         pts = simulate_player(probe, gf_p, ga_p, n)
-        got = pts.mean(axis=0).sum() / HORIZON
+        got = pts.mean(axis=0).sum() / WINDOW
         # spread the per-gameweek shortfall over the matches he actually plays
-        p_play = par['p_start'] + (1 - par['p_start']) * 0.22
+        p_play = sum(
+            par['p_start_by_gw'][index]
+            + (1 - par['p_start_by_gw'][index]) * par['p_cameo_by_gw'][index]
+            for index, gw in enumerate(range(START_GW, HORIZON + 1))
+            if gw in TEAM_SCHED.get(par['team'], {})
+        ) / WINDOW
         par['add'] = float((target - got) / max(p_play, 0.15))
     else:
         par['add'] = 0.0
@@ -377,80 +459,67 @@ def calibrated_params(pid, gf, ga):
     return par
 
 
+_OUTCOME_CACHE = {}
+
+
+def player_outcome(pid, gf, ga, sims):
+    """One paired outcome for a player, reused by every compared squad."""
+    key = (pid, sims, id(gf))
+    if key in _OUTCOME_CACHE:
+        return _OUTCOME_CACHE[key]
+    par = calibrated_params(pid, gf, ga)
+    par['_played'] = []
+    pts = simulate_player(par, gf, ga, sims)
+    played = np.stack(par['_played'], axis=1)
+    _OUTCOME_CACHE[key] = (par, pts, played)
+    return _OUTCOME_CACHE[key]
+
+
 def simulate_squad(pids, gf, ga, sims, label):
-    pars = [calibrated_params(i, gf, ga) for i in pids]
-    for p in pars:
-        p['_played'] = []
-    pts = np.stack([simulate_player(p, gf, ga, sims) for p in pars])   # (15, sims, GW)
-    played = np.stack([np.stack(p['_played'], axis=1) for p in pars])  # (15, sims, GW)
+    outcomes = [player_outcome(i, gf, ga, sims) for i in pids]
+    pars = [outcome[0] for outcome in outcomes]
+    pts = np.stack([outcome[1] for outcome in outcomes])       # (15, sims, GW)
+    played = np.stack([outcome[2] for outcome in outcomes])    # (15, sims, GW)
+    index = {pid: i for i, pid in enumerate(pids)}
+    squad = [V2_PLAYERS[pid] for pid in pids]
 
-    order = np.argsort([-np.mean(pts[i]) for i in range(len(pars))])
-    ets = np.array([p['et'] for p in pars])
+    total = np.zeros((sims, WINDOW), dtype=np.float32)
+    subbed = np.zeros((sims, WINDOW), dtype=np.float32)
+    cap_extra = np.zeros((sims, WINDOW), dtype=np.float32)
+    top_club = 0
 
-    # pick the XI once, on expected points, the way a manager would
-    xi, used = [], {1: 0, 2: 0, 3: 0, 4: 0}
-    for et in (1, 2, 3, 4):
-        for i in order:
-            if ets[i] == et and used[et] < XI_MIN[et]:
-                xi.append(i); used[et] += 1
-    for i in order:
-        if len(xi) >= 11 or i in xi:
-            continue
-        if used[ets[i]] < XI_MAX[ets[i]]:
-            xi.append(i); used[ets[i]] += 1
-    bench = [i for i in range(len(pars)) if i not in xi]
-    bench.sort(key=lambda i: (pars[i]['et'] == 1, -np.mean(pts[i])))
+    # Managers reset XI, bench order, captain and vice every gameweek. Use the
+    # same shared rule engine as weekly.py rather than freezing one six-week XI.
+    from collections import Counter
+    for gw_index, gw in enumerate(range(START_GW, HORIZON + 1)):
+        lineup = pick_lineup(squad, gw)
+        xi_ids = [p['id'] for p in lineup.xi]
+        for pid in xi_ids:
+            total[:, gw_index] += pts[index[pid], :, gw_index]
 
-    total = np.zeros((sims, HORIZON), dtype=np.float32)
-    for i in xi:
-        total += pts[i]
+        clubs = Counter(ELEM[pid]['team'] for pid in xi_ids)
+        top_club = max(top_club, max(clubs.values()) if clubs else 0)
 
-    # Auto-subs. FPL allows at most three outfield substitutions, and each bench
-    # player can only come on once -- so a bench player must be consumed when
-    # used, otherwise one £4.5m sub covers every blank in the XI at once.
-    outfield_bench = [i for i in bench if pars[i]['et'] != 1]
-    gk_bench = [i for i in bench if pars[i]['et'] == 1]
-    gk_xi = [i for i in xi if pars[i]['et'] == 1]
-    subbed = np.zeros((sims, HORIZON), dtype=np.float32)
+        captain_id = lineup.captain['id'] if lineup.captain else None
+        vice_id = lineup.vice['id'] if lineup.vice else None
+        for simulation in range(sims):
+            appeared = {
+                pid: bool(played[index[pid], simulation, gw_index]) for pid in pids
+            }
+            subs = apply_autosubs(lineup.xi, lineup.bench, appeared)
+            for _, substitute_id in subs.substitutions:
+                value = pts[index[substitute_id], simulation, gw_index]
+                subbed[simulation, gw_index] += value
 
-    consumed = {b: np.zeros((sims, HORIZON), dtype=bool) for b in outfield_bench}
-    n_subs = np.zeros((sims, HORIZON), dtype=np.int8)
-    for i in xi:
-        if pars[i]['et'] == 1:
-            continue
-        need = (~played[i]) & (n_subs < 3)
-        for b in outfield_bench:
-            use = need & played[b] & ~consumed[b]
-            subbed += use * pts[b]
-            consumed[b] |= use
-            n_subs = n_subs + use
-            need = need & ~use
+            doubled = captain_replacement(captain_id, vice_id, appeared)
+            if doubled is not None:
+                cap_extra[simulation, gw_index] = pts[
+                    index[doubled], simulation, gw_index
+                ]
 
-    for g in gk_xi:
-        need = ~played[g]
-        for b in gk_bench:
-            use = need & played[b]
-            subbed += use * pts[b]
-            need = need & ~use
-    total += subbed
-
-    # captaincy: double the highest-expected available starter each week
-    cap_order = sorted(xi, key=lambda i: -np.mean(pts[i]))
-    cap_extra = np.zeros((sims, HORIZON), dtype=np.float32)
-    remaining = np.ones((sims, HORIZON), dtype=bool)
-    for i in cap_order[:3]:                       # captain, vice, third choice
-        use = remaining & played[i]
-        cap_extra += use * pts[i]
-        remaining = remaining & ~played[i]
-    total += cap_extra
+    total += subbed + cap_extra
 
     season = total.sum(axis=1)
-
-    # club concentration in the XI: clean sheets are a team event, so three
-    # defenders from one club is one bet, not three
-    from collections import Counter
-    xi_clubs = Counter(pars[i]['team'] for i in xi)
-    top_club = max(xi_clubs.values()) if xi_clubs else 0
 
     # how much of the total comes from the armband, and the worst gameweek
     weekly = total
@@ -518,7 +587,7 @@ if __name__ == '__main__':
     tmpl = template_squad(meta)
     results.append(simulate_squad(tmpl, gf, ga, sims, 'The template (most-owned)'))
 
-    print(f'\n{sims:,} simulations of GW1-{HORIZON}, '
+    print(f'\n{sims:,} simulations of GW{START_GW}-{HORIZON}, '
           f'including captaincy, auto-subs and team-level clean-sheet correlation')
     print(f'team layer: {TEAM_LAYER}; player means calibrated to data/projections.csv\n')
     print(f"{'squad':<34}{'mean':>7}{'p10':>7}{'p90':>7}{'sd':>7}"
