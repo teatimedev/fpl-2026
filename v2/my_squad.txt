@@ -1,19 +1,28 @@
-# Jordan's real GW1 squad (from the FPL screenshot, 16 Aug 2026), £0.0m in bank.
+# Jordan's real GW1 squad, read from the signed-in official FPL Pick Team page.
+# Source: confirmed pre-deadline squad
+# Confirmed at: 2026-08-21T15:07:00Z
+# FPL entry: 3415101
+# Squad value: £100.0m; bank: £0.0m.
+# Change: Guéhi → Milenković
+# Change: Reed → Sadiki
+# Change: Destan → Obi
+# Change: O'Shea starts; Kluivert is first outfield substitute
+# Change: Mbeumo is vice-captain
 # Starting XI first, then "bench:" and the four subs in order.
 # (C) = captain, (V) = vice-captain, as set on the FPL site.
-Raya (V)
+Raya
 Calafiori
 Thiaw
-Guéhi
+Milenković
 Tarkowski
-Kluivert
+O'Shea
 Saka
-Mbeumo
+Mbeumo (V)
 Foden
 Haaland (C)
 Thiago
 bench:
 Leno
-O'Shea
-Reed
-Destan
+Kluivert
+Sadiki
+Obi

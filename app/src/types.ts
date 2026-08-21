@@ -151,6 +151,9 @@ export interface WeeklySquad {
   bank: number
   ft: number
   source: string
+  confirmed_at?: string
+  entry_id?: number
+  changes?: string[]
   lineup?: WeeklyLineup | null
 }
 

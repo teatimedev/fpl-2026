@@ -84,6 +84,16 @@ HOLD_THRESHOLD = 2.0     # a free transfer worth less than this over the window
                          # is usually better banked: next week has more information
 
 
+def worth_rebuilding(diff, n_moves, unlimited=False):
+    """Only overturn a settled squad when the gain clears churn per move.
+
+    Unlimited transfers remove the points cost, not the uncertainty and
+    decision cost of replacing most of a confirmed squad.
+    """
+    _ = unlimited
+    return n_moves > 0 and diff >= HOLD_THRESHOLD * n_moves
+
+
 def _supersede_transfer_recommendation(lines, push_lines, transfers, message,
                                        push_message):
     """Replace an earlier tactical headline with the chosen preseason plan."""
@@ -204,6 +214,13 @@ def load_squad(team_id, players, gw):
         print('  no public picks yet for that entry (they appear after a deadline)')
 
     if SQUAD_FILE.exists():
+        squad_text = SQUAD_FILE.read_text()
+        source_match = re.search(r'^#\s*Source:\s*(.+?)\s*$', squad_text, re.M | re.I)
+        confirmed_match = re.search(r'^#\s*Confirmed at:\s*(.+?)\s*$', squad_text, re.M | re.I)
+        entry_match = re.search(r'^#\s*FPL entry:\s*(\d+)\s*$', squad_text, re.M | re.I)
+        change_matches = re.findall(r'^#\s*Change:\s*(.+?)\s*$', squad_text, re.M | re.I)
+        source = source_match.group(1) if source_match else SQUAD_FILE.name
+        confirmed_at = confirmed_match.group(1) if confirmed_match else None
         byname = {}
         for p in players.values():
             byname.setdefault(p['name'].lower(), p['id'])
@@ -211,7 +228,7 @@ def load_squad(team_id, players, gw):
         ids, bench, missing = [], [], []
         cap = vice = None
         in_bench = False
-        for raw in SQUAD_FILE.read_text().splitlines():
+        for raw in squad_text.splitlines():
             line = raw.strip()
             if not line or line.startswith('#'):
                 continue
@@ -243,7 +260,9 @@ def load_squad(team_id, players, gw):
         print(f'  loaded {len(ids)} players from {SQUAD_FILE.name}'
               + (' with your lineup' if lineup else ''))
         return dict(ids=ids, bank=0.0, ft=15 if gw <= 1 else 1, lineup=lineup,
-                    history={}, source=SQUAD_FILE.name)
+                    history={}, source=source, confirmed_at=confirmed_at,
+                    entry_id=(int(entry_match.group(1)) if entry_match else None),
+                    changes=change_matches)
     return dict(ids=[], bank=0.0, ft=1, lineup=None, history={}, source='none')
 
 
@@ -495,6 +514,12 @@ def main():
     ids, bank, ft, lineup = st['ids'], st['bank'], st['ft'], st['lineup']
     J['squad'] = dict(ids=list(ids), bank=bank, ft=ft, source=st['source'],
                       lineup={k: v for k, v in (lineup or {}).items() if v is not None})
+    if st.get('confirmed_at'):
+        J['squad']['confirmed_at'] = st['confirmed_at']
+    if st.get('entry_id'):
+        J['squad']['entry_id'] = st['entry_id']
+    if st.get('changes'):
+        J['squad']['changes'] = st['changes']
     squad = [players[i] for i in ids if i in players]
     model_out, yours_out = {}, {}
 
@@ -726,11 +751,11 @@ def main():
             elif ft >= 15:
                 L.append(f'**Recommended:** {best["out"]["name"]} → {best["in_"]["name"]} '
                          f'({best["gain"]:+.1f}); everything is free before Gameweek 1.'
-                         if best['gain'] >= 1.0 else
+                         if best['gain'] >= HOLD_THRESHOLD else
                          '**Recommended:** nothing compelling — the squad is already '
-                         'at the model\'s optimum.')
+                         'close enough to the model\'s optimum.')
                 P.append(f'Best swap: {best["out"]["name"]}→{best["in_"]["name"]} '
-                         f'{best["gain"]:+.1f}' if best['gain'] >= 1.0 else
+                         f'{best["gain"]:+.1f}' if best['gain'] >= HOLD_THRESHOLD else
                          'Transfers: squad already optimal')
             elif ft >= MAX_FT:
                 L.append(f'**Recommended:** you have {MAX_FT} free transfers and cannot '
@@ -767,12 +792,19 @@ def main():
                     and top['net'] > 2.0:
                 o1, o2 = top['out']; n1, n2 = top['in_']
                 L.append('')
-                L.append(f'The pair {o1["name"]}+{o2["name"]} → {n1["name"]}+{n2["name"]} '
-                         + (f'beats any single move even after the hit '
-                            if ft < 2 else 'is the best two-move package ')
-                         + f'({top["net"]:+.1f}).')
-                P.append(f'Two-mover worth it: {o1["name"]}+{o2["name"]}→'
-                         f'{n1["name"]}+{n2["name"]} net {top["net"]:+.1f}')
+                if ft >= 15:
+                    L.append(f'The best two-player diagnostic is {o1["name"]}+{o2["name"]} '
+                             f'→ {n1["name"]}+{n2["name"]} ({top["net"]:+.1f}). '
+                             'The exact full-squad comparison below remains the '
+                             'authoritative pre-season decision.')
+                else:
+                    L.append(f'The pair {o1["name"]}+{o2["name"]} → '
+                             f'{n1["name"]}+{n2["name"]} '
+                             + (f'beats any single move even after the hit '
+                                if ft < 2 else 'is the best two-move package ')
+                             + f'({top["net"]:+.1f}).')
+                    P.append(f'Two-mover worth it: {o1["name"]}+{o2["name"]}→'
+                             f'{n1["name"]}+{n2["name"]} net {top["net"]:+.1f}')
         L.append('')
 
         J['transfers']['advice'] = next((l for l in reversed(L) if l.startswith('**Recommended')
@@ -834,15 +866,12 @@ def main():
                     diff = free['total'] - hold['total']
 
                     n_now = len(free['weeks'][0]['in'])
-                    # judge the value of acting now PER MOVE: four changes for
-                    # +3 is churn, one change for +3 is a transfer. GW1 is the
-                    # exception: the squad is still editable without spending
-                    # transfers, so any material improvement is actionable.
+                    # Judge the value of acting now PER MOVE: four changes for
+                    # +3 is churn, one change for +3 is a transfer. Unlimited
+                    # transfers remove the points cost, not the uncertainty of
+                    # overturning a settled and manually confirmed squad.
                     unlimited = ft >= 15
-                    worth_it = n_now > 0 and (
-                        (unlimited and diff >= 0.5)
-                        or (not unlimited and diff >= HOLD_THRESHOLD * n_now)
-                    )
+                    worth_it = worth_rebuilding(diff, n_now, unlimited)
                     J['plan'] = dict(total=free['total'], hold_total=hold['total'],
                                      diff=round(diff, 1), hits=free['hits'],
                                      n_now=n_now, worth_it=worth_it,

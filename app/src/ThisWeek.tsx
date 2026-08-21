@@ -1,13 +1,12 @@
 import { useMemo, type ReactNode } from 'react'
 import type { Data, Player, Pos, Weekly } from './types'
-import { POS_ORDER } from './types'
-import { withLive, fxFor, priceMovers } from './weekly'
+import { withLive, priceMovers } from './weekly'
 import {
-  xiForGw, thisGw, remaining, rankTransfers, lineupIssues, HIT_COST,
+  xiForGw, thisGw, rankTransfers, lineupIssues, HIT_COST,
   type TransferOption,
 } from './model'
 import { signed } from './squad'
-import { FxChips, PlayerCell, LinkTeamForm } from './components'
+import { LinkTeamForm, Pitch } from './components'
 import type { LinkedTeam } from './useLinkedTeam'
 
 /**
@@ -178,47 +177,14 @@ export default function ThisWeek(
 
           <section className="panel" style={{ marginTop: 16 }}>
             <div className="panel-hd">
-              <h2>Start these eleven</h2>
+              <h2>Your recommended lineup</h2>
               <span className="sub">
                 {['DEF', 'MID', 'FWD'].map(k =>
                   xi.filter(p => p.pos === k).length).join('-')}
               </span>
             </div>
-            <div className="tbl-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th className="l">Player</th><th className="l">Fixture</th><th>Price</th>
-                    <th>GW{gw}</th><th>GW{gw}–{horizon}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {POS_ORDER.flatMap(pos => xi.filter(p => p.pos === pos)).map(p => (
-                    <tr key={p.id}>
-                      <td className="l">
-                        <PlayerCell p={p} id={p.id} D={D} openPlayer={openPlayer} extra={<>
-                          {p.id === captain.id && <span className="badge pen">C</span>}
-                          {p.id === vice?.id && <span className="badge new">V</span>}
-                        </>} />
-                      </td>
-                      <td className="l"><FxChips fx={fxFor(D.ticker, p.team, gw)} /></td>
-                      <td>£{p.price.toFixed(1)}</td>
-                      <td style={{ color: 'var(--flood-soft)' }}>{thisGw(p, gw).toFixed(1)}</td>
-                      <td style={{ color: 'var(--chalk-dim)' }}>{remaining(p, gw, horizon).toFixed(1)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <p className="hint" style={{ padding: '10px 14px 14px' }}>
-              Bench, in order:{' '}
-              {bench.map((p, i) => (
-                <span key={p.id}>
-                  {i > 0 && ' → '}
-                  <button className="plink" onClick={() => openPlayer(p.id)}>{p.name}</button>
-                </span>
-              ))}
-            </p>
+            <Pitch D={D} xi={xi} bench={bench} captain={captain.id}
+              vice={vice?.id ?? null} openPlayer={openPlayer} />
           </section>
 
           {issues && (
@@ -364,14 +330,13 @@ function Digest({
   const m = W.model
   const cap = poolById.get(m.captain)
   const vice = poolById.get(m.vice)
-  const gwp = (id: number) => m.gw_pts[String(id)] ?? 0
-  const rem = (id: number) => m.remaining[String(id)] ?? 0
   const price = (id: number) => poolById.get(id)?.price ?? 0
   const posOf = (id: number): Pos | undefined => poolById.get(id)?.pos
   const teamOf = (id: number) => poolById.get(id)?.team ?? ''
-  const xiByPos = POS_ORDER.flatMap(pos => m.xi.filter(id => posOf(id) === pos))
   const shape = (['DEF', 'MID', 'FWD'] as Pos[])
     .map(k => m.xi.filter(id => posOf(id) === k).length).join('-')
+  const xiPlayers = m.xi.map(id => poolById.get(id)).filter((p): p is Player => !!p)
+  const benchPlayers = m.bench.map(id => poolById.get(id)).filter((p): p is Player => !!p)
   const alts = m.ranked.filter(r => r.id !== m.captain).slice(0, 3)
 
   const issues = W.lineup_issues ?? []
@@ -379,6 +344,11 @@ function Digest({
   const checks = W.checks ?? []
   const tr = W.transfers
   const plan = W.plan ?? null
+  const transferInstruction = tr.advice
+    .replace(/^Recommended:\s*/i, '')
+    .replace(/^No single transfer improves the squad\.\s*/i, '')
+  const keepTeam = !plan?.worth_it
+    && /nothing compelling|\bhold\b|nothing to change|close enough|no single transfer improves/i.test(tr.advice)
   const price_ = W.price
   const stamp = new Date(W.generated)
   const stampStr = isNaN(stamp.getTime()) ? W.generated
@@ -408,10 +378,42 @@ function Digest({
   return (
     <>
       <p className="stamp mono">
-        computed {stampStr} for {W.squad.source}
+        confirmed from official FPL {W.squad.confirmed_at
+          ? new Date(W.squad.confirmed_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+          : stampStr}
         {W.squad.ft > 0 && ` · ${W.squad.ft >= 15 ? 'unlimited' : W.squad.ft} free transfer${W.squad.ft === 1 ? '' : 's'}`}
         {' '}· £{W.squad.bank.toFixed(1)}m banked
       </p>
+
+      <section className="panel decision" style={{ marginTop: 10 }}>
+        <div className="panel-hd">
+          <h2>Your deadline plan</h2>
+          <span className="sub">one clear instruction</span>
+        </div>
+        <div className="decision-body">
+          <p className="decision-title">
+            {keepTeam ? 'Keep the team exactly as it is set in FPL.' : transferInstruction}
+          </p>
+          {keepTeam ? (
+            <p>
+              Start the {shape} shown below. Captain <strong>{nameOf(m.captain)}</strong>,
+              vice-captain <strong>{nameOf(m.vice)}</strong>. Your official lineup and
+              the model now match, including bench order.
+            </p>
+          ) : (
+            <p>
+              This is the current action. The pitch below shows the resulting XI;
+              optional comparisons remain collapsed further down.
+            </p>
+          )}
+          {(W.squad.changes?.length ?? 0) > 0 && (
+            <details className="sync-details">
+              <summary>What changed in the latest FPL sync</summary>
+              <ul>{W.squad.changes!.map(change => <li key={change}>{change}</li>)}</ul>
+            </details>
+          )}
+        </div>
+      </section>
 
       <section className="panel accent" style={{ marginTop: 10 }}>
         <div className="panel-hd">
@@ -444,50 +446,11 @@ function Digest({
 
       <section className="panel" style={{ marginTop: 16 }}>
         <div className="panel-hd">
-          <h2>Start these eleven</h2>
+          <h2>Your recommended lineup</h2>
           <span className="sub">{shape}</span>
         </div>
-        <div className="tbl-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th className="l">Player</th><th className="l">Fixture</th><th>Price</th>
-                <th>GW{gw}</th><th>GW{gw}–{horizon}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {xiByPos.map(id => (
-                <tr key={id}>
-                  <td className="l">
-                    <PlayerCell p={poolById.get(id)} id={id} D={D} openPlayer={openPlayer} extra={<>
-                      {id === m.captain && <span className="badge pen">C</span>}
-                      {id === m.vice && <span className="badge new">V</span>}
-                    </>} />
-                  </td>
-                  <td className="l"><FxChips fx={fxFor(D.ticker, teamOf(id), gw)} /></td>
-                  <td>£{price(id).toFixed(1)}</td>
-                  <td style={{ color: 'var(--flood-soft)' }}>{gwp(id).toFixed(1)}</td>
-                  <td style={{ color: 'var(--chalk-dim)' }}>{rem(id).toFixed(1)}</td>
-                </tr>
-              ))}
-              {m.bench.map((id, i) => (
-                <tr key={id} className="benchrow">
-                  <td className="l">
-                    <PlayerCell p={poolById.get(id)} id={id} D={D} openPlayer={openPlayer}
-                      extra={<span className="badge bench">{i === 0 ? 'GK' : `sub ${i}`}</span>} />
-                  </td>
-                  <td className="l"><FxChips fx={fxFor(D.ticker, teamOf(id), gw)} /></td>
-                  <td>£{price(id).toFixed(1)}</td>
-                  <td>{gwp(id).toFixed(1)}</td>
-                  <td>{rem(id).toFixed(1)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="hint" style={{ padding: '10px 14px 14px' }}>
-          Dimmed rows are the bench, in the order they come on.
-        </p>
+        <Pitch D={D} xi={xiPlayers} bench={benchPlayers} captain={m.captain}
+          vice={m.vice} openPlayer={openPlayer} />
       </section>
 
       {(hasDigestLineup || liveIssues) && (
@@ -560,7 +523,9 @@ function Digest({
             Nothing improves this squad over the remaining gameweeks. Bank it.
           </div>
         ) : (
-          <>
+          <details className="scenario-details">
+            <summary>Compare optional alternatives (not instructions)</summary>
+            <div className="scenario-body">
             {tr.singles.length > 0 && (
               <div className="tbl-scroll">
                 <table>
@@ -614,7 +579,8 @@ function Digest({
               Gain is projected points over GW{gw}–{horizon} against holding; net
               takes off {HIT_COST} per move beyond your free transfers.
             </p>
-          </>
+            </div>
+          </details>
         )}
       </section>
 
@@ -625,16 +591,22 @@ function Digest({
             <span className="sub">{plan.hits > 0 ? `${plan.hits} hit${plan.hits === 1 ? '' : 's'}` : 'no hits'}</span>
           </div>
           <p className="lede-sm">
-            Best path <strong className="mono">{plan.total.toFixed(1)}</strong> vs
-            hold <strong className="mono">{plan.hold_total.toFixed(1)}</strong> —
-            acting now is worth <strong className="mono" style={{ color: plan.worth_it ? 'var(--ok)' : undefined }}>
-              {signed(plan.diff)}
-            </strong>
-            {(plan.n_now ?? 0) > 1 ? ` across ${plan.n_now} moves` : ''}
-            {plan.worth_it ? ' — worth doing.' : (plan.n_now ?? 0) > 0 ? ' — not enough; hold.' : ' — nothing to do this week.'}
+            {plan.worth_it ? (
+              <>The model found a path worth <strong className="mono" style={{ color: 'var(--ok)' }}>
+                {signed(plan.diff)}
+              </strong> versus holding.</>
+            ) : (plan.n_now ?? 0) > 0 ? (
+              <>A {plan.n_now}-player alternative gains only <strong className="mono">
+                {signed(plan.diff)} projected points
+              </strong> over six weeks. That is below the churn threshold, so do not make it.</>
+            ) : (
+              <>There is no worthwhile move to make this week.</>
+            )}
           </p>
-          <div className="tbl-scroll">
-            <table>
+          <details className="scenario-details">
+            <summary>{plan.worth_it ? 'See the model path' : 'See the rejected model scenario'}</summary>
+            <div className="scenario-body tbl-scroll">
+              <table>
               <thead>
                 <tr>
                   <th className="l">GW</th><th>Pts</th><th className="l">Captain</th>
@@ -658,13 +630,13 @@ function Digest({
                   </tr>
                 ))}
               </tbody>
-            </table>
-          </div>
-          <p className="hint" style={{ padding: '10px 14px 14px' }}>
-            A plan on point estimates: read it for direction (who to move
-            towards, and when), not as a script — it is re-planned every refresh
-            and churns on small fixture swings.
-          </p>
+              </table>
+              <p className="hint" style={{ padding: '10px 14px 14px' }}>
+                This is a point-estimate scenario, not a second instruction. It is
+                re-planned every refresh and can churn on small fixture swings.
+              </p>
+            </div>
+          </details>
         </section>
       )}
 

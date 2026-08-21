@@ -102,8 +102,9 @@ export default function MySquad({
 
   const genStr = (() => {
     if (!weekly) return ''
-    const d = new Date(weekly.generated)
-    return isNaN(d.getTime()) ? weekly.generated
+    const sourceStamp = weekly.squad.confirmed_at ?? weekly.generated
+    const d = new Date(sourceStamp)
+    return isNaN(d.getTime()) ? sourceStamp
       : d.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
   })()
 
@@ -142,10 +143,10 @@ export default function MySquad({
               />
               {source?.kind === 'digest' && (
                 <p className="source-line">
-                  Showing the squad the refresh analysed on <strong>{genStr}</strong>
+                  Showing the squad confirmed from official FPL on <strong>{genStr}</strong>
                   {' '}({weekly?.squad.source})
                   {!summary && bankShown != null && <> · £{bankShown.toFixed(1)}m in the bank</>}
-                  {' '}— link your team id after the first deadline to see the real one.
+                  {' '}— public picks will take over automatically after the deadline.
                 </p>
               )}
               <p className="draft-row">

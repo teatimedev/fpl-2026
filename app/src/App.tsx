@@ -22,19 +22,31 @@ export default function App() {
   const [tab, setTab] = useState<Tab>(() => {
     const hasSquad = (localStorage.getItem('fplSquad') ?? '[]') !== '[]'
     const hasTeam = !!localStorage.getItem('fplEntryId')
-    return hasSquad || hasTeam ? 'week' : 'squad'
+    const hasConfirmedSquad = (D.weekly?.squad.ids.length ?? 0) === 15
+    return hasSquad || hasTeam || hasConfirmedSquad ? 'week' : 'squad'
   })
 
   // Live prices, availability and the linked team, loaded once for every tab.
-  const linked = useLinkedTeam()
+  const linked = useLinkedTeam(D.weekly?.squad.entry_id?.toString() ?? '')
 
   // The drafted squad (My squad → Draft mode). Persisted so the weekly view
   // can fall back to it, and so a phone does not lose it between visits.
   const [picks, setPicks] = useState<Player[]>(() => {
+    const confirmedAt = D.weekly?.squad.confirmed_at ?? ''
+    const confirmedIds = D.weekly?.squad.ids ?? []
     try {
       const saved = JSON.parse(localStorage.getItem('fplSquad') ?? '[]') as number[]
-      return saved.map(id => byId.get(id)).filter((p): p is Player => !!p)
-    } catch { return [] }
+      const unseenConfirmation = confirmedAt
+        && localStorage.getItem('fplConfirmedSquadAt') !== confirmedAt
+        && confirmedIds.length === 15
+      if (unseenConfirmation) {
+        localStorage.setItem('fplConfirmedSquadAt', confirmedAt)
+      }
+      const initial = unseenConfirmation || saved.length === 0 ? confirmedIds : saved
+      return initial.map(id => byId.get(id)).filter((p): p is Player => !!p)
+    } catch {
+      return confirmedIds.map(id => byId.get(id)).filter((p): p is Player => !!p)
+    }
   })
   useEffect(() => {
     localStorage.setItem('fplSquad', JSON.stringify(picks.map(p => p.id)))

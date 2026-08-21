@@ -634,6 +634,32 @@ tbody tr:not(.benchrow) + tr.benchrow td { border-top: 1px dashed rgba(232, 240,
 .problems.soft li .s { color: var(--chalk-faint); font-family: var(--mono); font-size: 10px; }
 .moves .s { color: var(--chalk-faint); font-family: var(--mono); font-size: 10px; }
 .week td.moves { white-space: normal; min-width: 180px; }
+.panel.decision {
+  border-color: rgba(84, 211, 138, 0.45);
+  background: linear-gradient(135deg, rgba(84, 211, 138, 0.09), rgba(8, 34, 24, 0.2));
+}
+.decision-body { padding: 14px; }
+.decision-body > p { margin: 0; color: var(--chalk-dim); line-height: 1.55; }
+.decision-body .decision-title {
+  margin-bottom: 7px; color: var(--chalk); font-family: var(--display);
+  font-size: clamp(22px, 4vw, 34px); letter-spacing: 0.01em; line-height: 1.08;
+}
+.sync-details, .scenario-details {
+  margin: 12px 14px 14px; border: var(--line); border-radius: var(--r);
+  background: rgba(4, 22, 15, 0.34); overflow: hidden;
+}
+.sync-details { margin: 14px 0 0; }
+.sync-details summary, .scenario-details summary {
+  padding: 10px 12px; color: var(--chalk-dim); cursor: pointer;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.05em;
+}
+.sync-details summary:hover, .scenario-details summary:hover { color: var(--chalk); }
+.sync-details[open] summary, .scenario-details[open] summary { border-bottom: var(--line); }
+.sync-details ul { margin: 0; padding: 10px 12px 10px 30px; color: var(--chalk-dim); }
+.sync-details li { padding: 2px 0; font-size: 12.5px; }
+.scenario-body { padding-top: 2px; }
+.scenario-body .tbl-scroll { margin: 0; }
+.scenario-body > table { margin: 0; }
 
 /* ------------------------------------------------------------------ season */
 .season { max-width: 1100px; }

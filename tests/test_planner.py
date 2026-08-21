@@ -8,10 +8,14 @@ import pulp
 V2 = Path(__file__).resolve().parents[1] / "v2"
 sys.path.insert(0, str(V2))
 from planner import _valid_incumbent, describe  # noqa: E402
-from weekly import _supersede_transfer_recommendation  # noqa: E402
+from weekly import _supersede_transfer_recommendation, worth_rebuilding  # noqa: E402
 
 
 class PlannerDescriptionTests(unittest.TestCase):
+    def test_preseason_rebuild_must_clear_the_churn_threshold_per_move(self):
+        self.assertFalse(worth_rebuilding(diff=5.9, n_moves=7, unlimited=True))
+        self.assertTrue(worth_rebuilding(diff=6.0, n_moves=2, unlimited=True))
+
     def test_preseason_rebuild_supersedes_single_move_headline(self):
         lines = [
             "## Transfers",
