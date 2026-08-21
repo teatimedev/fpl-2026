@@ -115,26 +115,33 @@ def fetch_source(source: dict, *, article_limit: int = 5,
                     "error": source.get("unsupported_reason")}
     try:
         body, headers = _request(source["url"], conditional=prior)
-        if body is None and prior:
+        if body is None and prior and prior.get("status") == "ok":
             return [], {**prior, "_not_modified": True}
-        parser = PageParser(); parser.feed(body)
-        urls = []
-        for href, label in parser.links:
-            absolute = urllib.parse.urljoin(source["url"], href).split("#", 1)[0]
-            if _same_site(source["url"], absolute) and RELEVANT.search(label + " " + absolute):
-                if absolute not in urls:
-                    urls.append(absolute)
-            if len(urls) >= article_limit:
-                break
-        documents = [{
-            "source_id": source["id"], "publisher": source["publisher"], "club": source["club"],
-            "url": source["url"], "title": source["publisher"] + " news index", "text": parser.text,
-            "published_at": None,
-        }]
+        prior_articles = (prior or {}).get("article_validators") or {}
+        if body is None:
+            # The index may be unchanged while an article failed last time.
+            # Retry retained article URLs until the source recovers.
+            urls = list(prior_articles)[:article_limit]
+            documents = []
+            headers = {k: (prior or {}).get(k) for k in ("etag", "last_modified")}
+        else:
+            parser = PageParser(); parser.feed(body)
+            urls = []
+            for href, label in parser.links:
+                absolute = urllib.parse.urljoin(source["url"], href).split("#", 1)[0]
+                if _same_site(source["url"], absolute) and RELEVANT.search(label + " " + absolute):
+                    if absolute not in urls:
+                        urls.append(absolute)
+                if len(urls) >= article_limit:
+                    break
+            documents = [{
+                "source_id": source["id"], "publisher": source["publisher"], "club": source["club"],
+                "url": source["url"], "title": source["publisher"] + " news index", "text": parser.text,
+                "published_at": None,
+            }]
         article_errors = []
         article_validators = {}
         unchanged_articles = []
-        prior_articles = (prior or {}).get("article_validators") or {}
         for url in urls:
             try:
                 article, article_headers = _request(url, conditional=prior_articles.get(url))
@@ -160,10 +167,11 @@ def fetch_source(source: dict, *, article_limit: int = 5,
                 # verified absence from the model. Preserve its claim and its
                 # validators until the article can be checked successfully.
                 unchanged_articles.append(url)
-                if url in prior_articles:
-                    article_validators[url] = prior_articles[url]
-        digest = hashlib.sha256("\n".join(d["text"] for d in documents).encode()).hexdigest()
-        status = ("error" if urls and len(documents) == 1 and article_errors else
+                article_validators[url] = prior_articles.get(url, {})
+        digest = (prior.get("content_hash") if body is None and prior else None) or hashlib.sha256(
+            "\n".join(d["text"] for d in documents).encode()).hexdigest()
+        loaded_articles = len([doc for doc in documents if doc["url"] != source["url"]])
+        status = ("error" if urls and loaded_articles == 0 and article_errors else
                   "partial" if article_errors else "ok")
         row = {
             "id": source["id"], "club": source["club"], "publisher": source["publisher"],

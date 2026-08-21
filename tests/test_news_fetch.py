@@ -61,6 +61,19 @@ class NewsFetchTests(unittest.TestCase):
             _, health = fetch_source(SOURCE)
         self.assertEqual(health["status"], "partial")
 
+    def test_partial_source_retries_articles_when_index_is_304(self):
+        article_url = "https://www.arsenal.com/news/team-news"
+        prior = {"id": SOURCE["id"], "club": "ARS", "publisher": "Arsenal",
+                 "url": SOURCE["url"], "status": "partial", "etag": '"index"',
+                 "content_hash": "old", "article_validators": {article_url: {}}}
+        article = '<title>Recovered</title><time datetime="2026-08-21">Today</time>'
+        with patch("v2.news_fetch._request", side_effect=[
+                (None, {"not_modified": True}), (article, {"etag": '"recovered"'})]) as request:
+            documents, health = fetch_source(SOURCE, prior=prior)
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(documents[0]["url"], article_url)
+        self.assertEqual(health["status"], "ok")
+
 
 if __name__ == "__main__":
     unittest.main()
