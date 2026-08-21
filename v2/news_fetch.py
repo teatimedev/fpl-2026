@@ -163,7 +163,8 @@ def fetch_source(source: dict, *, article_limit: int = 5,
                 if url in prior_articles:
                     article_validators[url] = prior_articles[url]
         digest = hashlib.sha256("\n".join(d["text"] for d in documents).encode()).hexdigest()
-        status = "error" if urls and len(documents) == 1 and article_errors else "ok"
+        status = ("error" if urls and len(documents) == 1 and article_errors else
+                  "partial" if article_errors else "ok")
         row = {
             "id": source["id"], "club": source["club"], "publisher": source["publisher"],
             "url": source["url"], "status": status, "documents": len(documents),
@@ -175,6 +176,8 @@ def fetch_source(source: dict, *, article_limit: int = 5,
             row["_unchanged_articles"] = unchanged_articles
         if status == "error":
             row["error"] = "all discovered team-news articles failed to load"
+        elif status == "partial":
+            row["error"] = "some discovered team-news articles failed; prior evidence retained"
         return documents, row
     except RuntimeError as exc:
         return [], {"id": source["id"], "club": source["club"], "publisher": source["publisher"],

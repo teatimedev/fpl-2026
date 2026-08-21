@@ -120,7 +120,19 @@ class NewsPipelineTests(unittest.TestCase):
                 payload, fresh = _official_json("https://example.test/api", Path(tmp) / "missing")
         self.assertIsNone(payload)
         self.assertFalse(fresh)
-        self.assertFalse(_valid_official_payloads({"events": []}, []))
+        self.assertFalse(_valid_official_payloads({"events": []}, [], datetime.now(timezone.utc)))
+
+    def test_empty_or_incomplete_success_payload_is_rejected(self):
+        now = datetime(2026, 8, 21, 12, tzinfo=timezone.utc)
+        empty = {"events": [], "teams": [], "elements": []}
+        self.assertFalse(_valid_official_payloads(empty, [], now))
+        bootstrap = {
+            "events": [{"id": 1, "deadline_time": "2026-08-21T17:30:00Z", "is_next": True}],
+            "teams": [{"id": 1, "short_name": "ARS", "name": "Arsenal"}],
+            "elements": [{"id": 1}],
+        }
+        self.assertFalse(_valid_official_payloads(
+            bootstrap, [{"event": 1, "team_h": 1, "team_a": 1}], now))
 
     def test_outage_near_deadline_builds_urgent_alert_without_fpl_cache(self):
         with tempfile.TemporaryDirectory() as tmp:

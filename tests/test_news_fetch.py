@@ -50,6 +50,16 @@ class NewsFetchTests(unittest.TestCase):
             _, health = fetch_source(SOURCE, prior=prior)
         self.assertIn("https://www.arsenal.com/news/team-news", health["_unchanged_articles"])
         self.assertEqual(health["article_validators"], prior["article_validators"])
+        self.assertEqual(health["status"], "error")
+
+    def test_one_failed_article_marks_source_partial(self):
+        index = ('<a href="/news/team-news">Team news</a>'
+                 '<a href="/news/injury-news">Injury news</a>')
+        article = '<title>Team news</title><time datetime="2026-08-21">Today</time>'
+        with patch("v2.news_fetch._request", side_effect=[
+                (index, {}), (article, {"etag": '"one"'}), RuntimeError("timeout")]):
+            _, health = fetch_source(SOURCE)
+        self.assertEqual(health["status"], "partial")
 
 
 if __name__ == "__main__":

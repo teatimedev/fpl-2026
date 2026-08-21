@@ -157,11 +157,29 @@ def _official_json(url: str, path: Path):
         return None, False
 
 
-def _valid_official_payloads(bootstrap, fixtures) -> bool:
-    return (isinstance(bootstrap, dict)
-            and all(isinstance(bootstrap.get(key), list) for key in ("events", "teams", "elements"))
-            and isinstance(fixtures, list)
-            and all(isinstance(row, dict) for row in fixtures))
+def _valid_official_payloads(bootstrap, fixtures, now: datetime) -> bool:
+    try:
+        if (not isinstance(bootstrap, dict) or not isinstance(fixtures, list)
+                or any(not isinstance(bootstrap.get(key), list) or not bootstrap[key]
+                       for key in ("events", "teams", "elements"))):
+            return False
+        if any(not {"id", "deadline_time"} <= set(event) for event in bootstrap["events"]):
+            return False
+        if any(not {"id", "short_name", "name"} <= set(team) for team in bootstrap["teams"]):
+            return False
+        if any("id" not in element for element in bootstrap["elements"]):
+            return False
+        gw, _, _ = _context(bootstrap, now)
+        team_ids = {team["id"] for team in bootstrap["teams"]}
+        upcoming = [row for row in fixtures if isinstance(row, dict) and row.get("event") == gw]
+        if not upcoming:
+            return False
+        required = {"event", "team_h", "team_a", "kickoff_time"}
+        return all(required <= set(row) and row["team_h"] in team_ids and row["team_a"] in team_ids
+                   and datetime.fromisoformat(row["kickoff_time"].replace("Z", "+00:00"))
+                   for row in upcoming)
+    except (KeyError, StopIteration, TypeError, ValueError):
+        return False
 
 
 def _fixture_context(bootstrap: dict, fixtures: list[dict], gw: int) -> dict[str, dict[str, set[str]]]:
@@ -260,7 +278,7 @@ def run(root: Path = ROOT, *, now: datetime | None = None) -> dict:
         FPL_BOOTSTRAP, root / "v2/cache/bootstrap.json")
     fixtures, fixtures_fresh = _official_json(
         FPL_FIXTURES, root / "v2/cache/fixtures.json")
-    if not _valid_official_payloads(bootstrap, fixtures):
+    if not _valid_official_payloads(bootstrap, fixtures, now):
         return _official_outage(root, now, stamp)
     official_fpl_ok = bootstrap_fresh and fixtures_fresh
     gw, deadlines, hours = _context(bootstrap, now)
@@ -290,7 +308,7 @@ def run(root: Path = ROOT, *, now: datetime | None = None) -> dict:
     healthy = sum(1 for row in source_rows if row["status"] == "ok")
     coverage = healthy / enabled if enabled else 0.0
     status = ("red" if not official_fpl_ok else
-              "green" if coverage >= 0.8 else "red" if coverage < 0.5 else "amber")
+              "green" if coverage == 1.0 else "red" if coverage < 0.5 else "amber")
     old_generated = _read(root / "v2/availability.generated.json", {"overrides": []})
     generated = (build_generated_overrides(claims, gw=gw, deadlines=deadlines, generated_at=stamp)
                  if official_fpl_ok else old_generated)
