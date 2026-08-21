@@ -28,11 +28,10 @@ class WeeklyCoherenceTests(unittest.TestCase):
     def test_weekly_snapshot_records_when_the_private_squad_was_confirmed(self):
         squad = _weekly()["squad"]
 
-        self.assertNotEqual(squad["source"], "my_squad.txt")
-        if squad["source"] == "confirmed pre-deadline squad":
-            self.assertTrue(squad["confirmed_at"])
-            self.assertTrue(squad["entry_id"])
-            self.assertTrue(squad["changes"])
+        self.assertEqual(squad["source"], "confirmed pre-deadline squad")
+        self.assertTrue(squad["confirmed_at"])
+        self.assertTrue(squad["entry_id"])
+        self.assertTrue(squad["changes"])
 
     def test_recorded_sync_changes_are_reflected_in_the_squad_and_lineup(self):
         squad = _weekly()["squad"]
@@ -59,6 +58,15 @@ class WeeklyCoherenceTests(unittest.TestCase):
         )
 
         self.assertEqual(app_data["weekly"], weekly)
+
+    def test_structured_decision_and_displayed_instruction_agree(self):
+        weekly = _weekly()
+
+        self.assertEqual(weekly["decision"]["kind"], "hold")
+        self.assertEqual(
+            weekly["decision"]["instruction"],
+            weekly["transfers"]["advice"],
+        )
 
 
 if __name__ == "__main__":

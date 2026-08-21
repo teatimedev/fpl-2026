@@ -803,13 +803,16 @@ def main():
                              'authoritative pre-season decision.')
                 else:
                     action_kind = 'transfer'
-                    L.append(f'The pair {o1["name"]}+{o2["name"]} → '
-                             f'{n1["name"]}+{n2["name"]} '
-                             + (f'beats any single move even after the hit '
-                                if ft < 2 else 'is the best two-move package ')
-                             + f'({top["net"]:+.1f}).')
-                    P.append(f'Two-mover worth it: {o1["name"]}+{o2["name"]}→'
-                             f'{n1["name"]}+{n2["name"]} net {top["net"]:+.1f}')
+                    pair_names = (f'{o1["name"]}+{o2["name"]} → '
+                                  f'{n1["name"]}+{n2["name"]}')
+                    recommendation = (
+                        f'**Recommended:** {pair_names} ({top["net"]:+.1f} net); '
+                        'this is the best package and beats any single move.'
+                    )
+                    _supersede_transfer_recommendation(
+                        L, P, J['transfers'], recommendation,
+                        f'Transfers: {pair_names} net {top["net"]:+.1f}',
+                    )
         L.append('')
 
         J['transfers']['advice'] = next((l for l in reversed(L) if l.startswith('**Recommended')
@@ -897,6 +900,24 @@ def main():
                         )
                     elif worth_it:
                         action_kind = 'rebuild' if n_now > 1 else 'transfer'
+                        w = free['weeks'][0]
+                        paired = []
+                        for pos in POS_ORDER:
+                            incoming = [i for i in w['in'] if players[i]['pos'] == pos]
+                            outgoing = [o for o in w['out'] if players[o]['pos'] == pos]
+                            paired.extend(zip(outgoing, incoming))
+                        plan_text = ', '.join(
+                            f"{players[o]['name']}→{players[i]['name']}"
+                            for o, i in paired
+                        )
+                        recommendation = (
+                            f'**Recommended:** {plan_text} this week '
+                            f'({diff:+.1f} versus holding/re-planning).'
+                        )
+                        _supersede_transfer_recommendation(
+                            L, P, J['transfers'], recommendation,
+                            f'Plan this week: {plan_text}',
+                        )
                     lead = ('Best exact-scored pre-season build'
                             if free_source == 'exact static build' else 'Best path from here')
                     L.append(f'{lead}: **{free["total"]:.1f}** pts '
@@ -913,16 +934,6 @@ def main():
                     L.append('_The multiweek planner uses a linear bench proxy and small '
                              'fixture swings can cause churn; treat future moves as '
                              'directional rather than scripted._')
-                    if worth_it:
-                        w = free['weeks'][0]
-                        paired = []
-                        for pos in POS_ORDER:
-                            incoming = [i for i in w['in'] if players[i]['pos'] == pos]
-                            outgoing = [o for o in w['out'] if players[o]['pos'] == pos]
-                            paired.extend(zip(outgoing, incoming))
-                        P.append('Plan this week: ' + ', '.join(
-                            f"{players[o]['name']}→{players[i]['name']}"
-                            for o, i in paired))
                 else:
                     L.append('Planner timed out; single-move advice above stands.')
                 L.append('')

@@ -344,8 +344,11 @@ function Digest({
   const checks = W.checks ?? []
   const tr = W.transfers
   const plan = W.plan ?? null
-  const lineupMatches = hasDigestLineup ? issues.length === 0 : liveIssues?.length === 0
-  const transferInstruction = tr.advice
+  const lineupMatches = liveIssues !== null
+    ? liveIssues.length === 0
+    : hasDigestLineup && issues.length === 0
+  const decisionInstruction = W.decision?.instruction ?? tr.advice
+  const transferInstruction = decisionInstruction
     .replace(/^Recommended:\s*/i, '')
     .replace(/^No single transfer improves the squad\.\s*/i, '')
   const noTransfer = W.decision?.kind === 'hold'
@@ -465,15 +468,29 @@ function Digest({
           vice={m.vice} openPlayer={openPlayer} />
       </section>
 
-      {(hasDigestLineup || liveIssues) && (
+      {(hasDigestLineup || liveIssues !== null) && (
         <section className="panel" style={{ marginTop: 16 }}>
           <div className="panel-hd">
             <h2>Your lineup vs the model</h2>
             <span className="sub">
-              {hasDigestLineup ? `lineup from ${W.squad.source}` : `picks from GW${fromGw}`}
+              {liveIssues !== null ? `picks from GW${fromGw}` : `lineup from ${W.squad.source}`}
             </span>
           </div>
-          {hasDigestLineup ? (
+          {liveIssues !== null ? (
+            liveIssues.length === 0 ? (
+              <div style={{ padding: '2px 14px 14px' }}>
+                <div className="ready">
+                  Your captain, vice, XI and bench order all match the model. ✓
+                </div>
+              </div>
+            ) : (
+              <ul className="problems" style={{ margin: 14 }}>
+                {liveIssues.map((it, i) => (
+                  <li key={i}><strong>{it.head}</strong> {it.body}</li>
+                ))}
+              </ul>
+            )
+          ) : hasDigestLineup ? (
             issues.length === 0 ? (
               <div style={{ padding: '2px 14px 14px' }}>
                 <div className="ready">
@@ -485,19 +502,7 @@ function Digest({
                 {issues.map((line, i) => <li key={i}><Md line={line} /></li>)}
               </ul>
             )
-          ) : liveIssues && liveIssues.length === 0 ? (
-            <div style={{ padding: '2px 14px 14px' }}>
-              <div className="ready">
-                Your captain, vice, XI and bench order all match the model. ✓
-              </div>
-            </div>
-          ) : (
-            <ul className="problems" style={{ margin: 14 }}>
-              {liveIssues!.map((it, i) => (
-                <li key={i}><strong>{it.head}</strong> {it.body}</li>
-              ))}
-            </ul>
-          )}
+          ) : null}
         </section>
       )}
 
@@ -529,7 +534,7 @@ function Digest({
             hold = {tr.base.toFixed(1)} over GW{gw}–{horizon}
           </span>
         </div>
-        {tr.advice && <p className="lede-sm">{tr.advice}</p>}
+        {decisionInstruction && <p className="lede-sm">{decisionInstruction}</p>}
         {tr.singles.length === 0 && tr.pairs.length === 0 ? (
           <div className="empty-state">
             Nothing improves this squad over the remaining gameweeks. Bank it.
