@@ -13,8 +13,8 @@ from weekly import _supersede_transfer_recommendation, worth_rebuilding  # noqa:
 
 class PlannerDescriptionTests(unittest.TestCase):
     def test_preseason_rebuild_must_clear_the_churn_threshold_per_move(self):
-        self.assertFalse(worth_rebuilding(diff=5.9, n_moves=7, unlimited=True))
-        self.assertTrue(worth_rebuilding(diff=6.0, n_moves=2, unlimited=True))
+        self.assertFalse(worth_rebuilding(diff=5.9, n_moves=7))
+        self.assertTrue(worth_rebuilding(diff=6.0, n_moves=2))
 
     def test_preseason_rebuild_supersedes_single_move_headline(self):
         lines = [

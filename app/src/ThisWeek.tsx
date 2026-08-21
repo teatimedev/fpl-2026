@@ -344,11 +344,14 @@ function Digest({
   const checks = W.checks ?? []
   const tr = W.transfers
   const plan = W.plan ?? null
+  const lineupMatches = hasDigestLineup ? issues.length === 0 : liveIssues?.length === 0
   const transferInstruction = tr.advice
     .replace(/^Recommended:\s*/i, '')
     .replace(/^No single transfer improves the squad\.\s*/i, '')
-  const keepTeam = !plan?.worth_it
-    && /nothing compelling|\bhold\b|nothing to change|close enough|no single transfer improves/i.test(tr.advice)
+  const noTransfer = W.decision?.kind === 'hold'
+    || (!W.decision && !plan?.worth_it
+      && /nothing compelling|\bhold\b|nothing to change|close enough|no single transfer improves/i.test(tr.advice))
+  const keepTeam = noTransfer && lineupMatches
   const price_ = W.price
   const stamp = new Date(W.generated)
   const stampStr = isNaN(stamp.getTime()) ? W.generated
@@ -392,7 +395,11 @@ function Digest({
         </div>
         <div className="decision-body">
           <p className="decision-title">
-            {keepTeam ? 'Keep the team exactly as it is set in FPL.' : transferInstruction}
+            {keepTeam
+              ? 'Keep the team exactly as it is set in FPL.'
+              : noTransfer
+                ? 'Keep the same 15, but update your lineup to match the pitch.'
+                : transferInstruction}
           </p>
           {keepTeam ? (
             <p>
@@ -400,10 +407,15 @@ function Digest({
               vice-captain <strong>{nameOf(m.vice)}</strong>. Your official lineup and
               the model now match, including bench order.
             </p>
+          ) : noTransfer ? (
+            <p>
+              Do not make a transfer. Apply the captain, vice, starting-XI or
+              bench-order corrections listed below.
+            </p>
           ) : (
             <p>
-              This is the current action. The pitch below shows the resulting XI;
-              optional comparisons remain collapsed further down.
+              This is the current transfer action. The pitch below is for the
+              squad currently analysed; rerun the refresh after making the move.
             </p>
           )}
           {(W.squad.changes?.length ?? 0) > 0 && (

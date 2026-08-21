@@ -196,6 +196,10 @@ export interface WeeklyPlan {
 
 export interface WeeklyPriceRow { id: number; net: number; pressure: number }
 export interface WeeklyPrice { locked: boolean; rises: WeeklyPriceRow[]; falls: WeeklyPriceRow[] }
+export interface WeeklyDecision {
+  kind: 'hold' | 'transfer' | 'rebuild'
+  instruction: string
+}
 
 export interface Weekly {
   gw: number
@@ -208,6 +212,7 @@ export interface Weekly {
   lineup_issues: string[]
   checks: WeeklyCheck[]
   transfers: WeeklyTransfers
+  decision?: WeeklyDecision
   plan?: WeeklyPlan | null
   chips?: ChipsData | null
   price: WeeklyPrice

@@ -32,17 +32,22 @@ export default function App() {
   // The drafted squad (My squad → Draft mode). Persisted so the weekly view
   // can fall back to it, and so a phone does not lose it between visits.
   const [picks, setPicks] = useState<Player[]>(() => {
-    const confirmedAt = D.weekly?.squad.confirmed_at ?? ''
     const confirmedIds = D.weekly?.squad.ids ?? []
+    const snapshotKey = D.weekly && confirmedIds.length === 15
+      ? D.weekly.squad.confirmed_at || JSON.stringify([
+          confirmedIds,
+          D.weekly.squad.lineup ?? null,
+        ])
+      : ''
     try {
       const saved = JSON.parse(localStorage.getItem('fplSquad') ?? '[]') as number[]
-      const unseenConfirmation = confirmedAt
-        && localStorage.getItem('fplConfirmedSquadAt') !== confirmedAt
+      const unseenSnapshot = snapshotKey
+        && localStorage.getItem('fplEmbeddedSquadKey') !== snapshotKey
         && confirmedIds.length === 15
-      if (unseenConfirmation) {
-        localStorage.setItem('fplConfirmedSquadAt', confirmedAt)
+      if (unseenSnapshot) {
+        localStorage.setItem('fplEmbeddedSquadKey', snapshotKey)
       }
-      const initial = unseenConfirmation || saved.length === 0 ? confirmedIds : saved
+      const initial = unseenSnapshot || saved.length === 0 ? confirmedIds : saved
       return initial.map(id => byId.get(id)).filter((p): p is Player => !!p)
     } catch {
       return confirmedIds.map(id => byId.get(id)).filter((p): p is Player => !!p)

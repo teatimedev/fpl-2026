@@ -84,13 +84,12 @@ HOLD_THRESHOLD = 2.0     # a free transfer worth less than this over the window
                          # is usually better banked: next week has more information
 
 
-def worth_rebuilding(diff, n_moves, unlimited=False):
+def worth_rebuilding(diff, n_moves):
     """Only overturn a settled squad when the gain clears churn per move.
 
     Unlimited transfers remove the points cost, not the uncertainty and
     decision cost of replacing most of a confirmed squad.
     """
-    _ = unlimited
     return n_moves > 0 and diff >= HOLD_THRESHOLD * n_moves
 
 
@@ -686,6 +685,7 @@ def main():
         L.append('')
 
         # ---- transfers
+        action_kind = 'hold'
         L.append(f'## Transfers  (£{bank:.1f}m in the bank, '
                  f'{"unlimited" if ft >= 15 else ft} free)')
         L.append('')
@@ -741,6 +741,7 @@ def main():
                            if u['replacement']), None)
             L.append('')
             if ft >= 15 and forced:
+                action_kind = 'transfer'
                 L.append(f'**Recommended:** {forced["out"]["name"]} → '
                          f'{forced["in_"]["name"]} ({forced["gain"]:+.1f}). '
                          f'The outgoing player is unavailable and transfers are free '
@@ -749,6 +750,7 @@ def main():
                 P.append(f'Fix unavailable: {forced["out"]["name"]}→'
                          f'{forced["in_"]["name"]} {forced["gain"]:+.1f}')
             elif ft >= 15:
+                action_kind = ('transfer' if best['gain'] >= HOLD_THRESHOLD else 'hold')
                 L.append(f'**Recommended:** {best["out"]["name"]} → {best["in_"]["name"]} '
                          f'({best["gain"]:+.1f}); everything is free before Gameweek 1.'
                          if best['gain'] >= HOLD_THRESHOLD else
@@ -758,6 +760,7 @@ def main():
                          f'{best["gain"]:+.1f}' if best['gain'] >= HOLD_THRESHOLD else
                          'Transfers: squad already optimal')
             elif ft >= MAX_FT:
+                action_kind = 'transfer'
                 L.append(f'**Recommended:** you have {MAX_FT} free transfers and cannot '
                          f'bank more — use one. {best["out"]["name"]} → '
                          f'{best["in_"]["name"]} ({best["gain"]:+.1f}).')
@@ -770,6 +773,7 @@ def main():
                          f'{min(MAX_FT, ft + 1)}).')
                 P.append(f'Transfers: HOLD (best is only {best["gain"]:+.1f})')
             else:
+                action_kind = 'transfer'
                 L.append(f'**Recommended:** {best["out"]["name"]} → {best["in_"]["name"]}, '
                          f'{best["gain"]:+.1f} over the window with a free transfer.')
                 P.append(f'Transfer: {best["out"]["name"]}→{best["in_"]["name"]} '
@@ -798,6 +802,7 @@ def main():
                              'The exact full-squad comparison below remains the '
                              'authoritative pre-season decision.')
                 else:
+                    action_kind = 'transfer'
                     L.append(f'The pair {o1["name"]}+{o2["name"]} → '
                              f'{n1["name"]}+{n2["name"]} '
                              + (f'beats any single move even after the hit '
@@ -871,7 +876,7 @@ def main():
                     # transfers remove the points cost, not the uncertainty of
                     # overturning a settled and manually confirmed squad.
                     unlimited = ft >= 15
-                    worth_it = worth_rebuilding(diff, n_now, unlimited)
+                    worth_it = worth_rebuilding(diff, n_now)
                     J['plan'] = dict(total=free['total'], hold_total=hold['total'],
                                      diff=round(diff, 1), hits=free['hits'],
                                      n_now=n_now, worth_it=worth_it,
@@ -879,6 +884,7 @@ def main():
                                                  captain=w['captain'], ft=w['ft'],
                                                  in_=w['in'], out=w['out']) for w in free['weeks']])
                     if worth_it and unlimited and free_source == 'exact static build':
+                        action_kind = 'rebuild'
                         recommendation = (
                             '**Recommended:** use the free pre-GW1 rebuild shown in '
                             f'the plan below ({diff:+.1f} versus holding/re-planning). '
@@ -889,6 +895,8 @@ def main():
                             L, P, J['transfers'], recommendation,
                             f'Use the free pre-GW1 rebuild ({diff:+.1f})',
                         )
+                    elif worth_it:
+                        action_kind = 'rebuild' if n_now > 1 else 'transfer'
                     lead = ('Best exact-scored pre-season build'
                             if free_source == 'exact static build' else 'Best path from here')
                     L.append(f'{lead}: **{free["total"]:.1f}** pts '
@@ -942,6 +950,11 @@ def main():
             except Exception as ex:      # optional; never sink the digest
                 L.append(f'_Chips unavailable: {ex}_')
                 L.append('')
+
+        J['decision'] = {
+            'kind': action_kind,
+            'instruction': J['transfers']['advice'],
+        }
 
     # ---- price watch
     rises, falls = price_watch(boot, players, set(ids))

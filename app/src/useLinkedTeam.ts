@@ -28,17 +28,17 @@ export interface LinkedTeam {
 
 export function useLinkedTeam(defaultEntryId = ''): LinkedTeam {
   const [entryId, setEntryIdState] = useState(
-    () => localStorage.getItem('fplEntryId') ?? defaultEntryId)
+    () => localStorage.getItem('fplEntryId') || defaultEntryId)
   const setEntryId = useCallback((id: string) => {
     localStorage.setItem('fplEntryId', id)
     setEntryIdState(id)
   }, [])
 
   useEffect(() => {
-    if (!localStorage.getItem('fplEntryId') && defaultEntryId) {
-      localStorage.setItem('fplEntryId', defaultEntryId)
+    if (!entryId && defaultEntryId) {
+      setEntryId(defaultEntryId)
     }
-  }, [defaultEntryId])
+  }, [defaultEntryId, entryId, setEntryId])
 
   const [live, setLive] = useState<LiveState | null>(null)
   const [team, setTeam] = useState<LoadedTeam | null>(null)
