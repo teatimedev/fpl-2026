@@ -22,7 +22,9 @@ next deadline, and solves the whole modelled window as one integer program:
 Assumptions worth knowing: prices are held static across the window, and FPL's
 sell-price rule (you bank only half of any rise) is not modelled — the budget is
 today's prices plus your bank. Both are minor over six weeks; both make the
-plan slightly optimistic. Chips are not modelled.
+plan slightly optimistic. wildcard_week models one wildcard gameweek:
+unlimited free transfers that week, bank preserved (+1 accrues at the next
+deadline as usual). Other chips are not modelled.
 
     from planner import plan
     res = plan(players, squad_ids, bank=0.5, ft=1, gw=7, horizon=12)
@@ -68,13 +70,17 @@ def _pool(players, owned, gw, horizon):
 
 
 def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
-         freeze_this_week=False, time_limit=30):
+         freeze_this_week=False, time_limit=30, wildcard_week=None):
     """Optimal transfer path from `owned` over GW gw..horizon.
 
     `ft` is the number of free transfers available at the coming deadline
     (before Gameweek 1 pass 15: everything is free). `freeze_this_week`
     forbids any transfer before the coming deadline — solve both and the
     difference is what using the transfer now is worth versus holding it.
+    Set `wildcard_week` to a gameweek inside the window to model playing the
+    wildcard chip that week: unlimited free transfers at no point cost, and
+    per FPL's chip rules the free-transfer bank is neither spent nor gained
+    that week (it rolls over plus one as usual into the following deadline).
     """
     pool = _pool(players, owned, gw, horizon)
     ids = [p['id'] for p in pool]
@@ -82,6 +88,17 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
     GW = list(range(gw, horizon + 1))
     if not GW:
         return None
+    if wildcard_week is not None:
+        if wildcard_week not in GW:
+            raise ValueError(
+                f'wildcard_week {wildcard_week} outside planned window '
+                f'GW{gw}..{horizon}')
+        if gw == 1:
+            # GW1's "unlimited pre-season transfers, nothing carries" rule
+            # and the wildcard accounting would both govern the same solve;
+            # refuse rather than pick a silent precedence.
+            raise ValueError('wildcard_week cannot be combined with a '
+                             'pre-season window starting at GW1')
     pts = {(i, g): (P[i]['proj_by_gw'][g - 1] if g - 1 < len(P[i]['proj_by_gw']) else 0.0)
            for i in ids for g in GW}
     price = {i: int(round(P[i]['price'] * 10)) for i in ids}
@@ -140,15 +157,27 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
         n_out = pulp.lpSum(tout[(i, g)] for i in ids)
         if k == 0:
             prob += ftv[g] == ft
-        prob += hits[g] >= n_out - ftv[g]
+        wc = g == wildcard_week
+        # Wildcard week: unlimited free transfers make the hit floor moot.
+        # The hits variable stays (output code indexes it); the objective's
+        # -HIT per hit pins it to 0 without an explicit constraint.
+        if not wc:
+            prob += hits[g] >= n_out - ftv[g]
         if not allow_hits:
             prob += hits[g] == 0
         if freeze_this_week and k == 0:
             prob += n_out == 0
         if k + 1 < len(GW):
             nxt = GW[k + 1]
-            # what is left rolls over, plus one, capped at five
-            prob += ftv[nxt] <= ftv[g] - n_out + hits[g] + 1
+            if wc:
+                # Wildcard week (FPL chip rules): FTs are neither spent nor
+                # gained — unlimited outs must not drain the bank, so the
+                # standard rollover inequality is dropped for this single
+                # transition and only the preserved bank (+1, capped) carries.
+                prob += ftv[nxt] <= ftv[g] + 1
+            else:
+                # what is left rolls over, plus one, capped at five
+                prob += ftv[nxt] <= ftv[g] - n_out + hits[g] + 1
             prob += ftv[nxt] <= MAX_BANK
             if g == 1:
                 # pre-season transfers are unlimited but nothing carries over:

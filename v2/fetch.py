@@ -165,34 +165,57 @@ def load_histories(cx, boot):
                 for p in boot['elements']}
 
     def one(pid):
+        # (pid, result|None): a None here is a silent price-prior regression
+        # waiting to happen, so the pid is remembered for the retry pass below.
         try:
-            return get(f'{FPL}/element-summary/{pid}/')
+            return pid, get(f'{FPL}/element-summary/{pid}/')
         except Exception:
-            return None
+            return pid, None
 
-    out, done = [], 0
+    def rows_for(res):
+        return [(
+            h['element_code'], h['season_name'], None, code_pos.get(h['element_code']),
+            h['minutes'], h.get('starts'), h['total_points'],
+            h['goals_scored'], h['assists'], h['clean_sheets'],
+            h['goals_conceded'], h.get('saves'), h.get('bonus'),
+            h.get('bps'), h.get('yellow_cards'), h.get('red_cards'),
+            f(h.get('expected_goals')), f(h.get('expected_assists')),
+            f(h.get('expected_goal_involvements')),
+            f(h.get('expected_goals_conceded')),
+            h.get('clearances_blocks_interceptions'), h.get('tackles'),
+            h.get('recoveries'), h.get('defensive_contribution'),
+            h.get('start_cost'), h.get('end_cost'),
+        ) for h in res.get('history_past', [])]
+
+    out, done, failed = [], 0, []
     with ThreadPoolExecutor(max_workers=6) as ex:
-        for res in ex.map(one, ids):
+        for pid, res in ex.map(one, ids):
             done += 1
             if done % 100 == 0:
                 print(f'    {done}/{len(ids)}', flush=True)
             if not res:
+                failed.append(pid)
                 continue
-            for h in res.get('history_past', []):
-                code = h['element_code']
-                out.append((
-                    code, h['season_name'], None, code_pos.get(code),
-                    h['minutes'], h.get('starts'), h['total_points'],
-                    h['goals_scored'], h['assists'], h['clean_sheets'],
-                    h['goals_conceded'], h.get('saves'), h.get('bonus'),
-                    h.get('bps'), h.get('yellow_cards'), h.get('red_cards'),
-                    f(h.get('expected_goals')), f(h.get('expected_assists')),
-                    f(h.get('expected_goal_involvements')),
-                    f(h.get('expected_goals_conceded')),
-                    h.get('clearances_blocks_interceptions'), h.get('tackles'),
-                    h.get('recoveries'), h.get('defensive_contribution'),
-                    h.get('start_cost'), h.get('end_cost'),
-                ))
+            out.extend(rows_for(res))
+
+    # Sequential second pass: the parallel fan-out can trip rate limiting that
+    # has usually cleared by the time the rest of the requests finish.
+    if failed:
+        print(f'  {len(failed)} element-summary fetch(es) failed; retrying once: {failed}')
+        for pid in list(failed):
+            try:
+                res = get(f'{FPL}/element-summary/{pid}/')
+            except Exception:
+                continue
+            failed.remove(pid)
+            out.extend(rows_for(res))
+    if failed:
+        # CI starts with an empty DB every run (see weekly.yml), so a player
+        # whose history never arrives silently falls back to the price prior.
+        # A red build is the honest outcome here, not a quietly worse model.
+        print(f'FATAL: element-summary unavailable for {len(failed)} player(s) '
+              f'after retries: {sorted(failed)}', file=sys.stderr)
+        sys.exit(1)
     cx.executemany(
         'INSERT OR REPLACE INTO season_stat VALUES '
         '(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', out)

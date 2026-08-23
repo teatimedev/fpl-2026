@@ -85,10 +85,40 @@ export default function ThisWeek(
   const days = Math.floor(msLeft / 86400000)
   const hours = Math.floor(msLeft / 3600000) % 24
 
+  // Stale-model guard: projections are baked at deploy time by the scheduled
+  // refresh; live prices/injuries keep moving between deploys, so if the
+  // pipeline stops landing this must be visible, not silent.
+  // 72h, not less: legitimate cadence gaps exceed two days whenever the
+  // next deadline sits more than a day past the guaranteed Thursday build
+  // (midweek gameweeks, international breaks). Alerting earlier would cry
+  // wolf weekly; a truly stalled pipeline grows this number without bound.
+  const generatedAt = D.meta.generated
+    ? new Date(D.meta.generated.replace(' ', 'T').replace(/ UTC$/, 'Z'))
+    : null
+  const dataAgeH = generatedAt && !isNaN(generatedAt.getTime())
+    ? Math.floor((Date.now() - generatedAt.getTime()) / 3600000)
+    : null
+  const staleData = dataAgeH != null && dataAgeH > 72
+
   const nameOf = (id: number) => poolById.get(id)?.name ?? `#${id}`
 
   return (
     <div className="week">
+      {staleData && (
+        <p
+          role="alert"
+          /* Same treatment as .drawer-news: alert colour on a soft red strip. */
+          style={{
+            margin: '0 0 12px', padding: '7px 10px', fontSize: 12,
+            color: 'var(--alert)', background: 'rgba(255, 90, 90, 0.09)',
+            borderLeft: '2px solid var(--alert)', lineHeight: 1.5,
+            borderRadius: '0 var(--r) var(--r) 0',
+          }}
+        >
+          Model data {dataAgeH} h old (rebuilt {D.meta.generated}). If a refresh
+          should have landed by now, check the Actions "Refresh" workflow.
+        </p>
+      )}
       <section className="panel">
         <div className="panel-hd">
           <h2>Gameweek {gw}</h2>

@@ -42,5 +42,53 @@ class RefreshModeTests(unittest.TestCase):
             output.assert_called_once_with(run='true', mode='news', reason='news-hourly', gw=1, hours='1.5')
 
 
+class ApiUnreachableTests(unittest.TestCase):
+    """The gate must retry before failing open, and fail open with gw=0 so the
+    workflow skips mark()/notify (a GW0 mark would wipe the real GW's done-list)."""
+
+    def _run(self, urlopen_mock):
+        with tempfile.TemporaryDirectory() as tmp, \
+                patch.object(refresh, "MARKER", Path(tmp) / "last.json"), \
+                patch.object(refresh.urllib.request, "urlopen", urlopen_mock), \
+                patch.object(refresh.time, "sleep") as snooze, \
+                patch.dict(os.environ, {}, clear=True):
+            with patch.object(refresh, "out") as output:
+                refresh.main()
+        return output, snooze
+
+    def test_fails_open_with_gw_zero_after_retries(self):
+        import urllib.error
+        calls = []
+
+        def boom(req, timeout):
+            calls.append(req)
+            raise urllib.error.URLError("down")
+
+        output, snooze = self._run(boom)
+        self.assertEqual(len(calls), 3)          # initial attempt + 2 retries
+        self.assertEqual(snooze.call_count, 2)
+        output.assert_called_once_with(
+            run='true', mode='full', reason='api-unreachable', gw='0', hours='0')
+
+    def test_transient_failure_recovers_without_fail_open(self):
+        events = {"events": [{"id": 2, "is_next": True,
+                              "deadline_time": "2026-08-21T17:30:00Z"}]}
+        ok = unittest.mock.MagicMock()
+        ok.__enter__.return_value.read.return_value = json.dumps(events).encode()
+        responses = [unittest.mock.MagicMock(side_effect=OSError("blip")), ok]
+
+        def flaky(req, timeout):
+            return responses.pop(0)
+
+        output, snooze = self._run(flaky)
+        snooze.assert_called_once()
+        # One blip then success: the gate must sleep once and proceed down the
+        # normal path (real GW id, whatever window decide_mode picks), not the
+        # api-unreachable fail-open.
+        kwargs = output.call_args.kwargs
+        self.assertNotEqual(kwargs["reason"], "api-unreachable")
+        self.assertEqual(kwargs["gw"], 2)
+
+
 if __name__ == "__main__":
     unittest.main()

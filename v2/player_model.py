@@ -527,6 +527,13 @@ def project(players, view, priors):
     return out
 
 
+# Calibration anchor seasons: outfield multipliers fit against the mean of
+# pts/38 across BOTH completed seasons; an earlier season counts once its stint
+# clears CAL_STINT_MINS (hold-out: research/totals-holdout.md, 2024/25 target).
+CAL_ANCHORS = ('2024/25', '2025/26')
+CAL_STINT_MINS = 900
+
+
 def calibrate(rows, players):
     """Remove the positional level bias introduced by shrinkage.
 
@@ -536,22 +543,50 @@ def calibrate(rows, players):
     comparable players actually scored last season. Uncorrected, that makes a
     goalkeeper look like a captaincy pick.
 
-    The fix is a single multiplier per position, fitted so that established
-    players (2,000+ minutes last season) project in line with what they actually
-    delivered. It rescales levels only — the within-position ordering, which the
+    The multiplier is fitted so established players (2,000+ minutes in the most
+    recent completed season) project in line with what they actually delivered.
+    A single-season anchor inherits that season's scoring environment: the
+    totals hold-out (research/totals-holdout.md) measured forwards calibrated
+    on the record-high 2023/24 landing at 1.38x over in the low-scoring
+    2024/25. Outfield positions therefore fit against the mean of pts/38 across
+    the LAST TWO completed seasons, with an earlier season contributing once its
+    stint clears CAL_STINT_MINS. Hold-out effect on the 2024/25 target:
+    FWD sum(proj)/sum(act) 1.38 -> 1.28, MID 1.14 -> 1.12, DEF 1.23 -> 1.18,
+    ALL Spearman 0.495 -> 0.501, >150-point counts inside tolerance; identical
+    on 2023/24 by construction (only one training season exists behind it).
+    Wider cohorts (450/900-minute fits) were also tested and REJECTED: they
+    collapse the projected tail (>150 count 17 -> 9-10 vs 18 actual on 2023/24)
+    because part-season players realise fewer points per 38 than the
+    availability-aware projection assumes. Keepers keep the single-season
+    anchor: pooling moved their level away from parity (sum p/a 0.99 -> 1.15)
+    because keeper output swung most between the two environments.
+
+    It rescales levels only -- the within-position ordering, which the
     backtest showed is v2's real strength, is untouched.
     """
-    actual = {}
+    hist = {}
     for p in players.values():
-        h = next((x for x in p['hist'] if x['season'] == '2025/26'), None)
-        if h and h['mins'] >= 2000:
-            actual[p['id']] = h['pts'] / 38.0
+        obs = [(x['season'], x['mins'], x['pts'])
+               for x in p['hist'] if x['season'] in CAL_ANCHORS]
+        latest = next((o for o in obs if o[0] == CAL_ANCHORS[-1]), None)
+        if not latest or latest[1] < 2000:
+            continue
+        qual = [o for o in obs if o[1] >= CAL_STINT_MINS]
+        if not qual:
+            continue
+        hist[p['id']] = (
+            sum(o[2] for o in qual) / len(qual) / 38.0,   # two-season mean
+            latest[2] / 38.0,                             # most recent season
+        )
 
     for pos in ('GKP', 'DEF', 'MID', 'FWD'):
         proj, act = [], []
         for r in rows:
-            if r['pos'] == pos and r['id'] in actual:
-                proj.append(r['proj_gw']); act.append(actual[r['id']])
+            h = hist.get(r['id'])
+            if r['pos'] != pos or h is None:
+                continue
+            proj.append(r['proj_gw'])
+            act.append(h[1] if pos == 'GKP' else h[0])
         if len(proj) < 6:
             continue
         ratio = (sum(proj) / len(proj)) / (sum(act) / len(act))

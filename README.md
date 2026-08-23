@@ -75,6 +75,9 @@ gameweek, then fall back only to the vice-captain if the captain does not play.
 
 ### Changelog
 
+- **23 Aug 2026** — `calibrate()` now anchors outfield multipliers on the last
+  two completed seasons (keepers stay single-season), per the season-totals
+  hold-out: DEF levels −9%, MID −5%, FWD −2% vs the old single-season fit.
 - **6 Aug 2026** — fixed the minutes model (see point 5). Previously it used
   `last season's minutes / 38`, which had Isak — Liverpool's first-choice striker
   and No.1 penalty taker — projected at 19 minutes a game off the back of 8

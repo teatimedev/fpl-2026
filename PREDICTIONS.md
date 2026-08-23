@@ -202,6 +202,11 @@ database. The league sim lands the champion on 86 (real mean 87), fourth on 68
    therefore given a full starter's chance of reaching 10 defensive actions.
    243 players projected to start under 35% of games collect 7,573 points
    between them, 59% of their appearances being cameos.
+   **Fixed in production since**: the availability forecast now splits starter
+   and cameo minutes (`availability.py` builds expected minutes as
+   `p_start * start_minutes + (1 - p_start) * p_cameo * cameo_minutes`), so a
+   substitute no longer inherits a starter's minute load. `predict/components.py`
+   still models it the old way; its numbers are research-only.
 
 2. **`calibrate()` is fitted on a survivor cohort.** The per-position multiplier
    is set against players who logged 2,000+ minutes last season, then applied
@@ -210,6 +215,11 @@ database. The league sim lands the champion on 86 (real mean 87), fourth on 68
    as many total points as a season contains. The very top is unaffected (5 past
    200, against 4–5 in reality), which is why the ordering — the part the
    backtest validated — is still trustworthy and only the level is not.
+   *Correction (2026-08-23):* rebuilt as-of in `v2/backtest_totals.py`, the
+   >150-point phantom does not reproduce — projected vs actual tail counts are
+   15 vs 18 (2023/24) and 17 vs 18 (2024/25). The real defect was broad level
+   inflation (Σproj/Σact 1.18–1.31 per outfield group), not a tail pathology;
+   see the hold-out record below for what shipped against it.
 
 3. **The volume multiplier double-counts team strength over a full season.**
    `f['xg']/1.45` is a fixture adjustment, correct over a six-week window. Over
@@ -221,8 +231,43 @@ database. The league sim lands the champion on 86 (real mean 87), fourth on 68
    is v1's error (README: *"Players who stayed put get no team-strength
    multiplier"*) surviving in a different form.
 
-None of these change the ordering enough to move the picks. All three are worth
-fixing before the level numbers are quoted anywhere.
+None of these change the ordering enough to move the picks. Item 1 is fixed in
+production (availability's starter/cameo minute split); item 3 was tested against
+the season-totals hold-out and deliberately **not** shipped. Item 2 is partially
+fixed — the calibration anchor now spans two seasons for outfield positions.
+
+### Season-totals hold-out record (2026-08-23)
+
+`v2/backtest_totals.py` rebuilds every 2023/24 and 2024/25 projection from what
+was knowable before that season and scores full-season totals; full numbers live
+in `research/totals-holdout.md`. Ordering survives every variant (Spearman
+0.45–0.50); levels do not, and the hold-out judged three candidates:
+
+- **Shipped — two-season calibration anchor for outfield positions.**
+  `calibrate()` now fits DEF/MID/FWD against the mean of pts/38 across 2024/25
+  and 2025/26 (an earlier season counts once its stint clears 900 minutes);
+  keepers keep the single-season anchor. On the hold-out's 2024/25 target —
+  trained into a low-scoring season from the record-high 2023/24 — this moves
+  FWD Σproj/Σact from 1.38 to 1.31, MID 1.14 to 1.13, DEF 1.23 to 1.17, with
+  ALL Spearman up (0.495 to 0.502) and tail counts inside tolerance (16 vs 18).
+  On 2023/24 it is identical by construction: only one training season exists
+  behind that target.
+- **Rejected — widening the calibration cohort** to 450-minute (or 900-minute)
+  players with a minutes-weighted fit. Levels improve on paper (ALL Σp/a
+  1.22 to 1.13), but part-season players realise fewer points per 38 than an
+  availability-aware projection assumes, so the multiplier over-corrects:
+  forwards overshoot below parity (1.05 to 0.89 on 2023/24), Spearman_ALL dips
+  to ~0.44, and the projected >150-point count collapses to 9–10 against 18
+  actual — outside any sane tolerance.
+- **Rejected — blind volume attenuation (λ=0.56).** Order-neutral (+0.011 /
+  −0.006 Spearman across targets) and level-neutral (Σp/a moves ≤0.02): over a
+  full season the league-wide renormalisation cancels the attenuation almost
+  exactly, exactly as the hold-out predicted. It does not fix totals and costs
+  forward accuracy when applied alone (FWD 1.38 to 1.42).
+
+Production effect of the shipped change (regenerated projections): DEF levels
+−9%, MID −5%, FWD −2%, GKP unchanged vs the previous single-season anchor;
+Haaland 39.8 → 39.1 six-week points, Isak 25.9 → 25.5, Gabriel 31.7 → 28.3.
 
 ### Known limits
 

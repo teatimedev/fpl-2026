@@ -173,9 +173,11 @@ def infer_free_transfers(history, upto_gw):
         if g not in made:
             break
         if chips.get(g) in ('wildcard', 'freehit'):
-            ft = min(MAX_FT, ft + 1)
-        else:
-            ft = min(MAX_FT, max(ft - made[g], 0) + 1)
+            # FPL rule: a wildcard or free-hit week neither spends nor gains
+            # free transfers — event_transfers (~11) is not a spend, and no
+            # +1 accrues either, so the bank carries into next week intact.
+            continue
+        ft = min(MAX_FT, max(ft - made[g], 0) + 1)
     return ft
 
 
@@ -879,8 +881,13 @@ def main():
                                     free = exact_plan
                                     free_source = 'exact static build'
                 if args.chips and free and ft < 15 and gw >= 2:
-                    # what a wildcard would add: unlimited moves this week
-                    wc = plan(players, ids, bank, 15, gw, horizon)
+                    # What a wildcard would add: unlimited moves ONLY in the
+                    # WC week itself — later weeks accrue normally from the
+                    # bank the chip preserves (planner Contract P1), so the
+                    # solve is seeded with the REAL bank; seeding 15 would
+                    # model five free transfers the week after the wildcard.
+                    wc = plan(players, ids, bank, ft, gw, horizon,
+                              wildcard_week=gw)
                     if wc:
                         wc_now = round(wc['total'] - free['total'], 1)
                 if free and hold:

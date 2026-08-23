@@ -303,7 +303,8 @@ export function inferFreeTransfers(history: EntryHistory | null, uptoGw: number)
   for (let g = 2; g < uptoGw; g++) {
     if (!made.has(g)) break
     const chip = chips.get(g)
-    if (chip === 'wildcard' || chip === 'freehit') ft = Math.min(MAX_FT, ft + 1)
+    if (chip === 'wildcard' || chip === 'freehit')
+      continue // FPL rule: WC/FH neither spends nor gains FTs; bank carries over
     else ft = Math.min(MAX_FT, Math.max(ft - (made.get(g) ?? 0), 0) + 1)
   }
   return ft

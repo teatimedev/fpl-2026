@@ -115,23 +115,46 @@ jobs:
         run: python export_app_data.py
 
       - name: Record this refresh
-        if: needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true'
+        # api-unreachable means we never learned the real GW id; mark() resets
+        # its done-list whenever gw changes, so marking GW0 would wipe the real
+        # GW's record and let the next window rerun a completed rebuild.
+        if: needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true' && needs.gate.outputs.reason != 'api-unreachable'
         run: python v2/should_refresh.py mark "${{ needs.gate.outputs.reason }}" "${{ needs.gate.outputs.gw }}"
+
+      - name: Commit if anything changed
+        if: (needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true') || steps.news.outputs.state_changed == 'true'
+        run: |
+          git config user.name  "fpl-bot"
+          git config user.email "actions@github.com"
+          git add data/ app/src/data/ v2/team_ratings.json v2/season_view.json \
+                  v2/projections_v2.json v2/digest.md v2/availability.generated.json \
+                  v2/player_aliases.json
+          if git diff --cached --quiet; then
+            echo "No change."
+          else
+            git commit -m "Refresh (${{ needs.gate.outputs.reason }}, GW${{ needs.gate.outputs.gw }}): $(date -u +%Y-%m-%d\ %H:%M)"
+            git pull --rebase --autostash origin master
+            git push
+          fi
 
       - name: Push the digest to your phone
         # ntfy.sh needs no account: subscribe to the topic in the ntfy app and
         # every deadline-window refresh lands as a notification. NTFY_TOPIC is a
-        # repository secret. Only the
-        # deadline windows and manual runs push — Thursday's routine refresh
-        # would just be noise.
-        if: needs.gate.outputs.reason != 'weekly' && ((needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true') || steps.news.outputs.notify_required == 'true')
+        # repository secret. Only the deadline windows and manual runs push —
+        # Thursday's routine refresh would just be noise.
+        #
+        # Commit first: it is the durable artefact; this push is derived output.
+        # continue-on-error keeps a flaky ntfy from failing the job after a
+        # rebuild already succeeded, and api-unreachable never pushes (the gate
+        # never learned the real GW id, so the title would read GW0).
+        if: needs.gate.outputs.reason != 'weekly' && needs.gate.outputs.reason != 'api-unreachable' && ((needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true') || steps.news.outputs.notify_required == 'true')
+        continue-on-error: true
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
         run: |
           if [ -z "$NTFY_TOPIC" ]; then
-            echo "NTFY_TOPIC secret is not configured; required notification failed."
-            exit 1
-          fi
+            echo "NTFY_TOPIC secret is not configured; notification skipped."
+          else
           PRIORITY="default"
           if [ "${{ steps.news.outputs.urgent }}" = "true" ]; then PRIORITY="urgent"; fi
           PUSH_FILE="v2/push.txt"
@@ -152,21 +175,6 @@ jobs:
               "https://ntfy.sh/$NTFY_TOPIC" > /dev/null
             echo "pushed to ntfy topic"
           fi
-
-      - name: Commit if anything changed
-        if: (needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true') || steps.news.outputs.state_changed == 'true'
-        run: |
-          git config user.name  "fpl-bot"
-          git config user.email "actions@github.com"
-          git add data/ app/src/data/ v2/team_ratings.json v2/season_view.json \
-                  v2/projections_v2.json v2/digest.md v2/availability.generated.json \
-                  v2/player_aliases.json
-          if git diff --cached --quiet; then
-            echo "No change."
-          else
-            git commit -m "Refresh (${{ needs.gate.outputs.reason }}, GW${{ needs.gate.outputs.gw }}): $(date -u +%Y-%m-%d\ %H:%M)"
-            git pull --rebase --autostash origin master
-            git push
           fi
 
       - name: Fail visibly when official FPL is stale
@@ -174,3 +182,24 @@ jobs:
         run: |
           echo "Official FPL bootstrap or fixtures were unavailable; cached data was not allowed to rebuild the model."
           exit 1
+
+      - name: Ping healthcheck
+        if: always()
+        # Dead-man's switch for external monitoring (healthchecks.io or any
+        # compatible service): success pings the base URL, anything else pings
+        # /fail so the monitor alerts immediately instead of waiting out its
+        # grace period. Optional feature: an unset secret is a silent no-op,
+        # and a monitoring outage never fails the build.
+        env:
+          HEALTHCHECK_URL: ${{ secrets.HEALTHCHECK_URL }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          if [ -z "$HEALTHCHECK_URL" ]; then
+            echo "HEALTHCHECK_URL secret not configured; skipping ping."
+            exit 0
+          fi
+          if [ "$JOB_STATUS" = "success" ]; then
+            curl -fsS --max-time 10 "$HEALTHCHECK_URL" > /dev/null || true
+          else
+            curl -fsS --max-time 10 "$HEALTHCHECK_URL/fail" > /dev/null || true
+          fi

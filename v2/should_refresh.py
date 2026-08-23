@@ -22,6 +22,7 @@ reason=<window>, gw=<n>, hours=<h to deadline>.
 import json
 import os
 import sys
+import time
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -60,13 +61,26 @@ def out(**kv):
 def main():
     forced = os.environ.get('GITHUB_EVENT_NAME') == 'workflow_dispatch'
     now = datetime.now(timezone.utc)
-    try:
-        req = urllib.request.Request(f'{FPL}/bootstrap-static/',
-                                     headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            events = json.loads(r.read())['events']
-    except Exception as ex:
-        # if the API is down we would rather refresh than not
+    # GitHub's hourly cron meets a real CDN sometimes; one transient 5xx must
+    # not push us into the fail-open rebuild from a stale cache. Two retries
+    # with ~5s backoff, then fail open (refresh anyway) — an unnecessary full
+    # rebuild costs ~10 min of CI; a missed deadline window costs decisions.
+    events = None
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request(f'{FPL}/bootstrap-static/',
+                                         headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                events = json.loads(r.read())['events']
+            break
+        except Exception:
+            if attempt < 2:
+                time.sleep(5)
+    if events is None:
+        # if the API is down we would rather refresh than not. gw=0 tells the
+        # workflow to skip mark() and the ntfy push: mark('api-unreachable', 0)
+        # would wipe the done-list for the real GW (mark resets on gw change),
+        # and reason != 'weekly' would fire a bogus GW0 notification.
         out(run='true', mode='full', reason='api-unreachable', gw='0', hours='0')
         return
     nxt = next((e for e in events if e.get('is_next')), None)
