@@ -6,3 +6,6 @@ v2/cache/
 v2/fpl.db
 v2/push.txt
 v2/projections_season.json
+
+# Regenerable prediction artefacts (v2/predict/run.py)
+v2/predict/_out/
