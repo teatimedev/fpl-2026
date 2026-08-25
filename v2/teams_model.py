@@ -282,6 +282,59 @@ def walk_forward(matches, half_life, min_train=600, step=40):
                 model_brier=float(np.mean(m_br)), book_brier=float(np.mean(b_br)))
 
 
+def walk_forward_adjusted(matches, half_life, adjust, seasons, min_train=600, step=20):
+    """P6's variant of walk_forward: after each rolling fit the post-fit
+    adjustments are applied exactly as production applies them, via
+    `adjust(model, season, n_matches) -> (atk, dfn, clubs_of_interest)`, and
+    ONLY matches involving a club of interest (promoted / new manager) in the
+    target block are scored. `n_matches` is the number of that season's
+    matches already in the training window, per club — the quantity the
+    decay is a function of. Log-loss against the bookmaker on the same
+    matches, never looking ahead."""
+    m_ll, b_ll, m_br, b_br, n = [], [], [], [], 0
+    i = min_train
+    while i < len(matches):
+        train = matches[:i]
+        test = matches[i:i + step]
+        try:
+            mdl = fit(train, half_life_days=half_life, ref_date=train[-1]['date'])
+            mdl['promoted_prior'] = dict(zip(('atk', 'dfn'), promoted_prior(train)))
+        except Exception:
+            i += step
+            continue
+        for m in test:
+            if m['season'] not in seasons:
+                continue
+            counts = {}
+            for t in train:
+                if t['season'] == m['season']:
+                    counts[t['home']] = counts.get(t['home'], 0) + 1
+                    counts[t['away']] = counts.get(t['away'], 0) + 1
+            atk, dfn, interest = adjust(mdl, m['season'], counts)
+            if m['home'] not in interest and m['away'] not in interest:
+                continue
+            if m['home'] not in atk or m['away'] not in atk:
+                continue
+            mk = devig(m['oh'], m['od'], m['oa'])
+            if mk is None:
+                continue
+            M, _, _ = score_matrix(dict(mdl, atk=atk, dfn=dfn), m['home'], m['away'])
+            pm = np.array(outcome_probs(M))
+            oi = 0 if m['hg'] > m['ag'] else (1 if m['hg'] == m['ag'] else 2)
+            m_ll.append(logloss(pm, oi))
+            b_ll.append(logloss(mk, oi))
+            act = np.zeros(3); act[oi] = 1
+            m_br.append(float(((pm - act) ** 2).sum()))
+            b_br.append(float(((mk - act) ** 2).sum()))
+            n += 1
+        i += step
+    if not n:
+        return dict(n=0, model_ll=float('nan'), book_ll=float('nan'),
+                    model_brier=float('nan'), book_brier=float('nan'))
+    return dict(n=n, model_ll=float(np.mean(m_ll)), book_ll=float(np.mean(b_ll)),
+                model_brier=float(np.mean(m_br)), book_brier=float(np.mean(b_br)))
+
+
 # ------------------------------------------------- promoted-team handling
 def promoted_prior(matches):
     """What rating should a newly promoted club get before it has played?
@@ -303,6 +356,13 @@ def promoted_prior(matches):
         if not newcomers:
             continue
         sub = [m for m in matches if m['season'] == seasons[k]]
+        # An incomplete season (the current one, once fetch.py writes its
+        # results; any partial training window in walk_forward_adjusted) must
+        # not enter: a 42-parameter fit on a dozen matches puts a newcomer
+        # anywhere inside the bounds, and P6 then leans on that prior most
+        # exactly when it has fewest matches to relax it.
+        if len(sub) < 300:
+            continue
         mdl = fit(sub, half_life_days=10_000)
         mean_a = np.mean(list(mdl['atk'].values()))
         mean_d = np.mean(list(mdl['dfn'].values()))
