@@ -306,6 +306,39 @@ class AvailabilityForecastTests(unittest.TestCase):
             deadline_start_probability(0.80, "d", chance=75), 0.60
         )
 
+    def test_blend_weight_mixes_the_row_with_the_model_baseline(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "availability.json"
+            path.write_text(
+                """{"updated_at": "2026-08-28T12:00:00Z", "overrides": [{
+                  "player_id": 12, "from_gw": 2, "through_gw": 2,
+                  "p_start": 0.85, "p_cameo": 0.2, "blend_weight": 0.5,
+                  "start_minutes": 80, "cameo_minutes": 25,
+                  "confidence": "low", "source": "predicted line-up"
+                }]}"""
+            )
+            overrides = load_overrides(path)
+        forecast = availability_forecast(
+            player_id=12, gw=2, base_start=0.6, base_start_minutes=86,
+            status="a", overrides=overrides,
+        )
+        self.assertAlmostEqual(forecast.p_start, 0.725)
+        self.assertEqual(forecast.start_minutes, 80.0)
+
+    def test_blend_weight_must_be_a_probability(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "availability.json"
+            path.write_text(
+                """{"updated_at": "2026-08-28T12:00:00Z", "overrides": [{
+                  "player_id": 12, "from_gw": 2, "through_gw": 2,
+                  "p_start": 0.85, "p_cameo": 0.2, "blend_weight": 1.5,
+                  "start_minutes": 80, "cameo_minutes": 25,
+                  "confidence": "low", "source": "predicted line-up"
+                }]}"""
+            )
+            with self.assertRaisesRegex(ValueError, "blend_weight"):
+                load_overrides(path)
+
     def test_reserve_goalkeeper_has_no_default_cameo_route(self):
         forecast = availability_forecast(
             player_id=999,

@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-21T16:36:16Z",
+ "generated": "2026-08-25T09:27:29Z",
  "summary": {
   "n_gws": 0,
   "spearman_starters": null,
@@ -20,12 +20,26 @@
   "minutes_mae": null,
   "minutes_bias": null,
   "baseline_start_brier": null,
-  "start_brier_lift": null
+  "start_brier_lift": null,
+  "recency_start_brier": null,
+  "aggregate_start_brier": null,
+  "recency_vs_aggregate_lift": null,
+  "n_rule_gws": 0,
+  "recency_wins": 0,
+  "level_ratio_cum": {},
+  "spearman_ep_next_starters": null,
+  "spearman_ep_next_pool": null,
+  "mae_ep_next_starters": null,
+  "n_retro_gws": 0,
+  "goal_logloss_model": null,
+  "goal_logloss_market": null
  },
  "gws": [],
  "notes": [
   "Hold-out backtest before the season: rank correlation ~0.46 on points per 90 among established players.",
   "spearman_starters is over players the model gave a 60%+ chance of starting; spearman_pool over everyone projected 0.5+.",
-  "Captain and XI rows need a known squad at snapshot time."
+  "Captain and XI rows need a known squad at snapshot time.",
+  "level_ratio_cum is sum(actual)/sum(proj) over likely starters, cumulative; with the calibration frozen (P4) it measures drift. Do not feed it back before GW8 (P7).",
+  "recency_vs_aggregate_lift > 0 means the recency minutes rule had the lower start Brier that week; production switches only after it wins over four or more gameweeks (P2)."
  ]
 }

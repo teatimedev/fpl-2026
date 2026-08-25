@@ -39,6 +39,35 @@ class NewsPipelineTests(unittest.TestCase):
         out = build_generated_overrides([claim], gw=2, deadlines=deadlines, generated_at="x")
         self.assertEqual(out["overrides"][0]["through_gw"], 3)
 
+    def test_predicted_lineup_is_a_review_only_blend_row(self):
+        claim = self.claim(id="ev-p", claim_type="predicted_start", decision="candidate",
+                           excerpt="Saka is expected to start.")
+        out = build_generated_overrides([claim], gw=2, deadlines={2: "2026-08-29T11:00:00Z"},
+                                        generated_at="x")
+        self.assertEqual(len(out["overrides"]), 1)
+        row = out["overrides"][0]
+        self.assertEqual(row["generation_rule"], "predicted_lineup_v1")
+        self.assertEqual(row["status"], "review")           # not promoted yet
+        self.assertEqual((row["from_gw"], row["through_gw"]), (2, 2))
+        self.assertEqual(row["blend_weight"], 0.5)
+        self.assertEqual(row["p_start"], 0.85)
+        # review rows never reach the model or trigger a rebuild
+        self.assertFalse(materiality({"overrides": []}, out, owned_ids={12}, captain=12,
+                                     vice=13, hours_to_deadline=2)["rebuild_required"])
+
+    def test_predicted_lineup_never_overrides_an_explicit_absence(self):
+        claims = [self.claim(), self.claim(id="ev-p", claim_type="predicted_start",
+                                          decision="candidate", excerpt="Saka is expected to start.")]
+        out = build_generated_overrides(claims, gw=2, deadlines={2: "2026-08-29T11:00:00Z"},
+                                        generated_at="x")
+        self.assertEqual([r["generation_rule"] for r in out["overrides"]], ["explicit_absence_v1"])
+
+    def test_conflicting_lineup_predictions_produce_no_row(self):
+        claims = [self.claim(id="ev-a", claim_type="predicted_start", decision="candidate"),
+                  self.claim(id="ev-b", claim_type="predicted_bench", decision="candidate")]
+        out = build_generated_overrides(claims, gw=2, deadlines={}, generated_at="x")
+        self.assertEqual(out["overrides"], [])
+
     def test_owned_player_override_is_material(self):
         old = {"overrides": []}
         new = build_generated_overrides([self.claim()], gw=2, deadlines={}, generated_at="x")
