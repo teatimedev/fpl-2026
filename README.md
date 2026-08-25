@@ -75,6 +75,15 @@ gameweek, then fall back only to the vice-captain if the captain does not play.
 
 ### Changelog
 
+- **25 Aug 2026** — in-season learning plan implemented
+  (`RESEARCH-INSEASON-LEARNING.md` §0): zero-minute non-appearances reach the
+  minutes model; per-gameweek rows persist (`gw_stat`); a recency-weighted,
+  availability-conditioned minutes rule runs as a graded shadow column; the
+  calibration multipliers are frozen in `v2/calibration.json`; a per-gameweek
+  retrospective (`v2/retro.py`) classifies why each player diverged and the
+  digest renders it without touching a transfer number; promoted / new-manager
+  adjustments decay with matches; scorecard grades level drift and FPL's
+  `ep_next`. Written but not yet executed in the authoring session.
 - **23 Aug 2026** — `calibrate()` now anchors outfield multipliers on the last
   two completed seasons (keepers stay single-season), per the season-totals
   hold-out: DEF levels −9%, MID −5%, FWD −2% vs the old single-season fit.

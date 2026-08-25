@@ -83,6 +83,9 @@ scorecard = (json.load(open('data/scorecard.json'))
              if os.path.exists('data/scorecard.json') else None)
 # chip valuation for the digest squad (v2/chips.py via weekly.py --chips)
 chips = json.load(open('data/chips.json')) if os.path.exists('data/chips.json') else None
+# the gameweek retrospective's rolling summary (v2/retro.py, P3); the
+# per-player review for the digest squad travels inside weekly['retro']
+retro = json.load(open('data/retro.json')) if os.path.exists('data/retro.json') else None
 
 def load_json(path):
     return json.load(open(path)) if os.path.exists(path) else None
@@ -108,6 +111,7 @@ out = {
     'scorecard': scorecard,
     'chips': chips,
     'weekly': weekly,
+    'retro': retro,
     'movers': movers,
     'ticker': ticker,
     'news': news,

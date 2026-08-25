@@ -118,6 +118,13 @@ def _load_override_file(path, *, generated=False):
             value = float(row[field])
             if not 0.0 <= value <= 1.0:
                 raise ValueError(f"{path}: override {index} has invalid {field}")
+        # P8.1: a predicted line-up is an opinion, so its row may carry
+        # blend_weight w and mean "p_start = w * row + (1 - w) * the model's
+        # own rate" rather than replacing the model outright.
+        if row.get("blend_weight") is not None:
+            weight = float(row["blend_weight"])
+            if not 0.0 <= weight <= 1.0:
+                raise ValueError(f"{path}: override {index} has invalid blend_weight")
         for field, limit in (("start_minutes", 95), ("cameo_minutes", 59)):
             value = float(row[field])
             if not 0.0 <= value <= limit:
@@ -186,6 +193,9 @@ def availability_forecast(*, player_id, gw, base_start, base_start_minutes,
         elif status == "i":
             default_cameo = min(DEFAULT_CAMEO_PROBABILITY, base_start)
         p_start = _clamp_probability(row.get("p_start", base_start) if row else base_start)
+        if row and row.get("blend_weight") is not None:
+            weight = _clamp_probability(row["blend_weight"])
+            p_start = _clamp_probability(weight * p_start + (1.0 - weight) * base_start)
         p_cameo = _clamp_probability(
             row.get("p_cameo", default_cameo) if row else default_cameo
         )

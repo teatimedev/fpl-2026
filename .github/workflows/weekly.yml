@@ -94,21 +94,34 @@ jobs:
           python optimise.py --json
           python validate.py
 
+      - name: Grade finished gameweeks and review the last one
+        if: (needs.gate.outputs.mode == 'full' || steps.news.outputs.rebuild_required == 'true') && steps.news.outputs.official_fpl_ok == 'true'
+        # Runs BEFORE the digest (P3): the scorecard only needs last week's
+        # snapshot and the API, and the retrospective it feeds is what the
+        # digest for the next gameweek renders. Both are idempotent and re-run
+        # at T-24h and T-2h; bonus-dependent pieces are re-scored once FPL
+        # marks the round data-checked. Neither touches a projection.
+        run: |
+          python v2/scorecard.py
+          python v2/retro.py
+
       - name: Digest, snapshot, price log
         if: (needs.gate.outputs.mode == 'full' || steps.news.outputs.rebuild_required == 'true') && steps.news.outputs.official_fpl_ok == 'true'
         # --team reads your real squad once picks are public (after GW1's
         # deadline); before that weekly.py falls back to v2/my_squad.txt.
         # FPL_ENTRY_ID is a repository *variable* (Settings → Secrets and
         # variables → Actions → Variables), not a secret — it is not sensitive.
+        # ODDS_API_PLAYER_PROPS opts the snapshot into anytime-scorer props
+        # (P8.2, shadow-only): set the repository variable to 1 once the key's
+        # plan is known to include player props.
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          ODDS_API_PLAYER_PROPS: ${{ vars.ODDS_API_PLAYER_PROPS }}
         run: |
           TEAM_ARG=""
           if [ -n "${{ vars.FPL_ENTRY_ID }}" ]; then TEAM_ARG="--team ${{ vars.FPL_ENTRY_ID }}"; fi
           python v2/weekly.py --no-refresh --plan --chips --snapshot --price-log --push-file --json $TEAM_ARG
           python v2/movers.py
-
-      - name: Grade finished gameweeks
-        if: (needs.gate.outputs.mode == 'full' || steps.news.outputs.rebuild_required == 'true') && steps.news.outputs.official_fpl_ok == 'true'
-        run: python v2/scorecard.py
 
       - name: Export for the app
         if: (needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true') || steps.news.outputs.state_changed == 'true'
@@ -129,6 +142,9 @@ jobs:
           git add data/ app/src/data/ v2/team_ratings.json v2/season_view.json \
                   v2/projections_v2.json v2/digest.md v2/availability.generated.json \
                   v2/player_aliases.json
+          # the frozen calibration (P4) exists only after the first full
+          # rebuild; an unmatched pathspec would fail the news-mode commit
+          if [ -f v2/calibration.json ]; then git add v2/calibration.json; fi
           if git diff --cached --quiet; then
             echo "No change."
           else

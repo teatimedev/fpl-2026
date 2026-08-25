@@ -25,15 +25,16 @@ buf = io.StringIO()
 with contextlib.redirect_stdout(buf):
     players = PM.load()
     PM.GAMES_PLAYED.update(PM.games_played())
+    PM.TEAM_FIXTURES.update(PM.team_fixtures())
+    PM.SNAPSHOT_STATUS.update(PM.load_snapshot_status())
     view = json.loads(PM.SEASON_VIEW.read_text())
     priors = PM.positional_priors(players)
     rows = PM.project(players, view, priors)
 cal = [l for l in buf.getvalue().splitlines() if 'calibration' in l]
 print('\n'.join(cal))
-K = {}
-for l in cal:
-    pos = l.split()[1].rstrip(':')
-    K[pos] = float(l.split('scaled by')[1])
+# the multipliers now travel on the rows (frozen in v2/calibration.json, P4)
+# rather than only in calibrate()'s stdout
+K = {r['pos']: r.get('calibration_k', 1.0) for r in rows}
 print()
 
 out = []

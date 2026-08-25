@@ -43,6 +43,57 @@ def _atomic_json(path: Path, payload: dict):
     return True
 
 
+# P8.1: predicted line-ups as a LOW-CONFIDENCE generated tier. A predicted
+# start sets p_start to a 50/50 blend of the model's own rate and the source's
+# implied rate (blend_weight, availability.py), never overrides an explicit
+# absence, and expires at the deadline. It stays REVIEW-ONLY (status
+# "review", which the loader skips) until two graded deadlines show a
+# positive start_brier_lift for generation_rule predicted_lineup_v1 in
+# scorecard.availability_groups.claim_type — the standard WORKFLOW-NOTES.md
+# sets for nuanced claims. Flip PROMOTE_PREDICTED_LINEUPS to promote.
+PROMOTE_PREDICTED_LINEUPS = False
+PREDICTED_START_IMPLIED = 0.85
+PREDICTED_BENCH_IMPLIED = 0.15
+PREDICTED_BLEND_WEIGHT = 0.5
+
+
+def build_predicted_lineup_overrides(claims: list[dict], *, gw: int, generated_at: str,
+                                     absent_ids: set[int]) -> list[dict]:
+    """Rows for predicted_start / predicted_bench claims about this gameweek."""
+    by_player: dict[int, list[dict]] = {}
+    for claim in claims:
+        if claim.get("claim_type") not in ("predicted_start", "predicted_bench"):
+            continue
+        if claim.get("gw") not in (None, gw):
+            continue
+        by_player.setdefault(int(claim["player_id"]), []).append(claim)
+    rows = []
+    for player_id, evidence in sorted(by_player.items()):
+        if player_id in absent_ids:
+            continue                     # an explicit absence always wins
+        kinds = {claim["claim_type"] for claim in evidence}
+        if len(kinds) != 1:
+            continue                     # start AND bench predicted: no opinion
+        kind = kinds.pop()
+        evidence = sorted(evidence, key=lambda row: row["id"])
+        start = kind == "predicted_start"
+        rows.append({
+            "player_id": player_id, "name": evidence[0]["player"],
+            "from_gw": gw, "through_gw": gw,
+            "p_start": PREDICTED_START_IMPLIED if start else PREDICTED_BENCH_IMPLIED,
+            "p_cameo": 0.2 if start else 0.5,
+            "start_minutes": 80.0, "cameo_minutes": 25.0,
+            "blend_weight": PREDICTED_BLEND_WEIGHT, "confidence": "low",
+            "source": " ; ".join(dict.fromkeys(row["url"] for row in evidence)),
+            "note": evidence[0]["excerpt"],
+            "status": "applied" if PROMOTE_PREDICTED_LINEUPS else "review",
+            "evidence_ids": [row["id"] for row in evidence],
+            "generation_rule": "predicted_lineup_v1", "generated_at": generated_at,
+            "last_updated": generated_at,
+        })
+    return rows
+
+
 def build_generated_overrides(claims: list[dict], *, gw: int, deadlines: dict[int, str],
                               generated_at: str) -> dict:
     rows = []
@@ -83,6 +134,9 @@ def build_generated_overrides(claims: list[dict], *, gw: int, deadlines: dict[in
             "generation_rule": "explicit_absence_v1", "generated_at": generated_at,
             "last_updated": generated_at,
         })
+    absent = {int(row["player_id"]) for row in rows}
+    rows.extend(build_predicted_lineup_overrides(claims, gw=gw, generated_at=generated_at,
+                                                 absent_ids=absent))
     return {"version": 1, "updated_at": generated_at, "overrides": rows}
 
 
@@ -106,9 +160,13 @@ def resolve_claim_conflicts(claims: list[dict]) -> list[dict]:
 
 
 def _semantic_generated(value: dict) -> list[dict]:
+    """The rows that reach the model: applied ones. Review-only rows (P8.1's
+    predicted line-ups until promoted) are archived but never a reason to
+    rebuild or notify."""
     ignored = {"generated_at", "last_updated"}
     return [{k: v for k, v in row.items() if k not in ignored}
-            for row in value.get("overrides", [])]
+            for row in value.get("overrides", [])
+            if row.get("status", "applied") == "applied"]
 
 
 def materiality(old: dict, new: dict, *, owned_ids: set[int], captain: int | None,

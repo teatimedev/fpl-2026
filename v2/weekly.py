@@ -424,10 +424,19 @@ def log_prices(boot):
     return path
 
 
-def snapshot(gw, deadline, players, squad, model, yours):
+def snapshot(gw, deadline, players, squad, model, yours, elem=None, props=None):
     """Archive what the model believed before this gameweek's deadline, so
     scorecard.py can grade it afterwards. Overwritten on every refresh; the
-    last one before the deadline is the one that counts."""
+    last one before the deadline is the one that counts.
+
+    Beyond the projection and the deadline start/appearance mixture, each row
+    keeps what the retrospective (retro.py, P3) needs to rebuild the
+    projection's components after the fact — the shrunk per-90 rates, the
+    calibration multiplier, the set-piece orders — the shadow minutes rule's
+    probability (P2), and FPL's own `ep_next` as a benchmark (P7).
+    `elem` is the bootstrap's elements by id; `props` optional per-player
+    market goal probabilities (player_props.py, P8.2).
+    """
     HISTORY.mkdir(parents=True, exist_ok=True)
     view = json.loads(VIEW.read_text())['view'] if VIEW.exists() else {}
     team_cs = {}
@@ -436,14 +445,23 @@ def snapshot(gw, deadline, players, squad, model, yours):
         if fx:
             team_cs[t] = [dict(opp=f['opp'], home=f['home'], cs=round(f['cs'], 4),
                                xg=round(f['xg'], 3), xgc=round(f['xgc'], 3)) for f in fx]
+    elem = elem or {}
+    props = props or {}
     rows = []
     for p in players.values():
         start_by_gw = p.get('start_by_gw') or []
         play_by_gw = p.get('play_by_gw') or []
         mins_by_gw = p.get('mins_by_gw') or []
+        recency_by_gw = p.get('start_recency_by_gw') or []
+        aggregate_by_gw = p.get('start_aggregate_by_gw') or []
         idx = gw - 1
         forecast_by_gw = p.get('availability_by_gw') or []
         forecast = forecast_by_gw[idx] if idx < len(forecast_by_gw) else None
+        e = elem.get(p['id'], {})
+        try:
+            ep_next = float(e.get('ep_next')) if e.get('ep_next') not in (None, '') else None
+        except (TypeError, ValueError):
+            ep_next = None
         rows.append(dict(id=p['id'], name=p['name'], team=p['team'], pos=p['pos'],
                          price=p['price'], sel_pct=p['sel_pct'],
                          proj=round(gw_pts(p, gw), 3),
@@ -451,7 +469,26 @@ def snapshot(gw, deadline, players, squad, model, yours):
                          p_start=round(start_by_gw[idx], 4) if idx < len(start_by_gw) else p['start_rate'],
                          p_play=round(play_by_gw[idx], 4) if idx < len(play_by_gw) else p['start_rate'],
                          expected_minutes=round(mins_by_gw[idx], 2) if idx < len(mins_by_gw) else None,
-                         baseline_start=round(p['start_rate'], 4),
+                         # the minutes model's OWN rate, before the deadline
+                         # flag/override layer. It used to copy p_start, which
+                         # made the scorecard's start_brier_lift identically 0.
+                         baseline_start=round(p.get('baseline_start_rate', p['start_rate']), 4),
+                         minutes_rule=p.get('minutes_rule'),
+                         p_start_recency=(round(recency_by_gw[idx], 4)
+                                          if idx < len(recency_by_gw) else None),
+                         p_start_aggregate=(round(aggregate_by_gw[idx], 4)
+                                            if idx < len(aggregate_by_gw) else None),
+                         p_cameo=(forecast or {}).get('p_cameo'),
+                         start_minutes=(forecast or {}).get('start_minutes'),
+                         cameo_minutes=(forecast or {}).get('cameo_minutes'),
+                         xg90=p.get('xg90'), xa90=p.get('xa90'), dc90=p.get('dc90'),
+                         bonus90=p.get('bonus90'), saves90=p.get('saves90'),
+                         yellow90=p.get('yellow90'), evidence=p.get('evidence'),
+                         dc_evidence=p.get('dc_evidence'), k=p.get('calibration_k'),
+                         pens=p.get('pens'), corners=p.get('corners'), fk=p.get('fk'),
+                         ep_next=ep_next,
+                         p_goal_model=(props.get(p['id']) or {}).get('p_goal_model'),
+                         p_goal_market=(props.get(p['id']) or {}).get('p_goal_market'),
                          availability_source=(forecast or {}).get('source', p.get('availability_source', 'model baseline')),
                          availability_confidence=(forecast or {}).get('confidence', p.get('availability_confidence', 'model')),
                          generation_rule=(forecast or {}).get('generation_rule')))
@@ -463,6 +500,239 @@ def snapshot(gw, deadline, players, squad, model, yours):
     path = HISTORY / f'gw{gw}.json'
     path.write_text(json.dumps(out, separators=(',', ':')))
     return path
+
+
+# -------------------------------------------------- the review (P3)
+# Everything below READS the retrospective (data/history/gw{n}_retro.json,
+# written by retro.py) and the digest's own inputs. None of it mutates
+# `players`, `squad`, the transfer engine's output or J['transfers'] /
+# J['decision']: the retrospective changes ordering and wording, never
+# numbers (tests/test_weekly_coherence.py holds the line).
+RETRO_CLASS_ORDER = ('unavailable', 'minutes_loss', 'minutes_watch', 'minutes_gain',
+                     'role_change', 'variance', 'on_model')
+RETRO_POOL_LISTS = (
+    ('breakout minutes (started at <= 40%)', lambda r: r['class'] == 'minutes_gain'),
+    ('set-piece duty changed', lambda r: 'setpiece_change' in (r.get('tags') or [])),
+    ('lost their place — benched while healthy', lambda r: r['class'] == 'minutes_loss'),
+    ('hauled on low xG — do not chase', lambda r: 'hauled_low_xg' in (r.get('tags') or [])),
+    ('blanked on good xG — unchanged as targets',
+     lambda r: 'blanked_good_xg' in (r.get('tags') or [])),
+)
+RETRO_POOL_CAP = 5
+
+
+def load_retro(gw):
+    """The retrospective for gameweek `gw` (the one just played), or None."""
+    if gw < 1:
+        return None
+    path = HISTORY / f'gw{gw}_retro.json'
+    if not path.exists():
+        return None
+    try:
+        d = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return None
+    return d if d.get('players') else None
+
+
+def retro_graded_gws():
+    """How many gameweeks the scorecard has graded the classes over — printed
+    so the reader knows how far to trust the wording."""
+    path = ROOT / 'data' / 'retro.json'
+    if not path.exists():
+        return 0
+    try:
+        return int(json.loads(path.read_text()).get('classes_graded_gws') or 0)
+    except (OSError, ValueError, TypeError):
+        return 0
+
+
+def _retro_class_label(r):
+    return r['class'].replace('_', ' ') + (f" ({r['subtype']})" if r.get('subtype') else '')
+
+
+def _retro_projection_clause(r):
+    if r.get('proj_next') is None:
+        return ''
+    s = f"Projection GW{r['next_gw']}: {r['proj_next']:.1f}"
+    if r.get('start_move'):
+        s += f" ({r['start_move']})"
+    return s + '.'
+
+
+def retro_review_lines(retro, players, gw, horizon, owned, graded_gws=0):
+    """The '## GW{n} in review' section, the push line and J['retro'].
+
+    Owned players come first (act on / hold), then a residual table for the
+    squad, then pool lists ORDERED BY PROJECTED POINTS from this gameweek to
+    the horizon — never by the size of last week's residual, which would be
+    the very loop the review exists to prevent.
+    """
+    rows = retro.get('players') or []
+    counts = retro.get('counts') or {}
+    n = retro.get('n_players') or len(rows)
+    L = [f"## GW{retro['gw']} in review — what happened, and what it does and does not change",
+         '']
+    mix = ', '.join(f"{counts.get(c, 0)} {c.replace('_', ' ')}" for c in RETRO_CLASS_ORDER
+                    if counts.get(c))
+    L.append(f'_{n} players classified: {mix}. Retrospective classes graded: '
+             f'{graded_gws} week{"s" if graded_gws != 1 else ""}. A blank is printed with '
+             f'its xG; a haul with its xG; selection is a fact, finishing is a sample._')
+    L.append('')
+    mine = [r for r in rows if r['id'] in owned]
+    act = sorted((r for r in mine if r['class'] in ('minutes_loss', 'role_change')),
+                 key=lambda r: (r['class'] != 'minutes_loss', -abs(r['actual'] - r['proj'])))
+    hold = sorted((r for r in mine if r['class'] == 'variance'),
+                  key=lambda r: -abs(r['actual'] - r['proj']))
+    watch = sorted((r for r in mine if r['class'] in ('minutes_watch', 'minutes_gain')),
+                   key=lambda r: -abs(r['actual'] - r['proj']))
+    if act:
+        L.append('**Act on**')
+        L.append('')
+        for r in act:
+            L.append(f"- **{r['name']}** ({r['team']}) — {r['note']} "
+                     f"{_retro_projection_clause(r)}".rstrip())
+        L.append('')
+    if hold:
+        L.append('**Hold — variance, no action**')
+        L.append('')
+        for r in hold:
+            L.append(f"- **{r['name']}** ({r['team']}) — {r['note']} "
+                     f"{_retro_projection_clause(r)}".rstrip())
+        L.append('')
+    if watch:
+        L.append('**Watch**')
+        L.append('')
+        for r in watch:
+            L.append(f"- **{r['name']}** ({r['team']}) — {_retro_class_label(r)}: "
+                     f"{r['note']} {_retro_projection_clause(r)}".rstrip())
+        L.append('')
+    table = sorted(mine, key=lambda r: -abs(r['actual'] - r['proj']))
+    if table:
+        L.append('| player | proj | actual | mins | Δ | minutes / chance / finishing / '
+                 'team / bonus | class |')
+        L.append('|---|---|---|---|---|---|---|')
+        for r in table:
+            c = r['components']
+            L.append(f"| {r['name']} | {r['proj']:.1f} | {r['actual']:.0f} | {r['minutes']} | "
+                     f"{r['actual'] - r['proj']:+.1f} | {c['minutes']:+.1f} / {c['chance']:+.1f} "
+                     f"/ {c['finishing']:+.1f} / {c['team']:+.1f} / {c['bonus']:+.1f} | "
+                     f"{_retro_class_label(r)} |")
+        L.append('')
+    elif not rows:
+        L.append('_No players in scope._')
+        L.append('')
+
+    pool_out, pool_lines = {}, []
+    for label, pred in RETRO_POOL_LISTS:
+        cand = [r for r in rows if r['id'] not in owned and r['id'] in players and pred(r)]
+        cand.sort(key=lambda r: -remaining(players[r['id']], gw, horizon))
+        picks = cand[:RETRO_POOL_CAP]
+        if not picks:
+            continue
+        pool_out[label] = [r['id'] for r in picks]
+        pool_lines.append(f'- {label}: ' + ', '.join(
+            f"{r['name']} ({r['team']}, {r['xg']:.1f} xG, {r['actual']:.0f} pts; "
+            f"GW{gw}–{horizon} {remaining(players[r['id']], gw, horizon):.1f})" for r in picks))
+    if pool_lines:
+        L.append(f'**Pool** — ordered by projected points GW{gw}–{horizon}, capped at '
+                 f'{RETRO_POOL_CAP} a list, not by last week\'s residual:')
+        L.append('')
+        L.extend(pool_lines)
+        L.append('')
+
+    bits = []
+    for r in act[:2]:
+        if r['class'] == 'minutes_loss':
+            bits.append(f"{r['name']} benched (healthy) — "
+                        f"{'sell' if (r.get('streak') or 0) >= 2 else 'check'}")
+        else:
+            bits.append(f"{r['name']} role change — reassess")
+    for r in hold[:1]:
+        bits.append(f"{r['name']} {'blank' if r['actual'] < r['proj'] else 'haul'} = "
+                    f"variance, hold")
+    push = ('Last GW: ' + ' · '.join(bits)) if bits else None
+    J = dict(gw=retro['gw'], counts=counts, graded_gws=graded_gws,
+             act=[r['id'] for r in act], hold=[r['id'] for r in hold],
+             table=[dict(id=r['id'], proj=r['proj'], actual=r['actual'], minutes=r['minutes'],
+                         components=r['components'], cls=r['class'],
+                         subtype=r.get('subtype'), note=r['note'],
+                         proj_next=r.get('proj_next'), start_move=r.get('start_move'))
+                    for r in table],
+             pool=pool_out, push=push)
+    return L, push, J
+
+
+def retro_check_flags(retro, owned):
+    """{player id: flag text} for owned role_change / minutes_watch players —
+    they join the 'check before the deadline' list with what changed."""
+    out = {}
+    for r in retro.get('players') or []:
+        if r['id'] not in owned:
+            continue
+        if r['class'] == 'role_change':
+            out[r['id']] = f"role: {r['note']}"
+        elif r['class'] == 'minutes_watch':
+            out[r['id']] = f"minutes watch: {r['note']} last week"
+    return out
+
+
+def retro_minutes_warnings(retro, squad, eng):
+    """Minutes warning lines for owned minutes_loss players, ahead of the
+    singles table — with the best same-position move and its gain EVEN when
+    the gain is under HOLD_THRESHOLD. Reads eng; never writes it."""
+    lines = []
+    owned = {p['id'] for p in squad}
+    for r in retro.get('players') or []:
+        if r['id'] not in owned or r['class'] != 'minutes_loss':
+            continue
+        move = next((s for s in eng.get('all_singles') or []
+                     if s['out']['id'] == r['id']), None)
+        grade = 'sell-grade' if (r.get('streak') or 0) >= 2 else 'check first'
+        p_start = r.get('p_start')
+        est = f", deadline start estimate {p_start * 100:.0f}%" if p_start is not None else ''
+        text = (f"**Minutes warning:** {r['name']} did not start last week while healthy "
+                f"({r['minutes']}'{est}) — {grade}.")
+        if move:
+            text += (f" Best legal same-position replacement: {move['in_']['name']} "
+                     f"({move['gain']:+.1f}: {move['xi_gain']:+.1f} XI/captain, "
+                     f"{move['autosub_gain']:+.1f} auto-sub cover)")
+            text += (', under the hold threshold on the numbers alone.'
+                     if move['gain'] < HOLD_THRESHOLD else '.')
+        else:
+            text += ' No legal same-position replacement improves the squad on the numbers.'
+        lines.extend([text, ''])
+    return lines
+
+
+def retro_table_notes(retro, eng):
+    """One line per player in the singles table (out or in column) whose
+    class is not on_model."""
+    by_id = {r['id']: r for r in retro.get('players') or []}
+    notes, seen = [], set()
+    for s in eng.get('singles') or []:
+        for p in (s['out'], s['in_']):
+            r = by_id.get(p['id'])
+            if not r or r['class'] == 'on_model' or p['id'] in seen:
+                continue
+            seen.add(p['id'])
+            notes.append(f"- {r['name']} — {_retro_class_label(r)}: {r['note']}")
+    if not notes:
+        return []
+    return ['', '_Last week, for the names above:_'] + notes
+
+
+def retro_verdict_lines(retro, squad):
+    """The clause under the verdict. A separate line, so the verdict itself
+    (which J['transfers']['advice'] is read from) is untouched."""
+    owned = {p['id'] for p in squad}
+    cases = [r for r in retro.get('players') or []
+             if r['id'] in owned and r['class'] == 'minutes_loss']
+    if not cases:
+        return []
+    names = ', '.join(r['name'] for r in cases)
+    return [f'_Minutes check:_ the verdict above is on the numbers; {names} '
+            f'{"are" if len(cases) > 1 else "is"} a check-first case (see the review).']
 
 
 # ------------------------------------------------------------- digest
@@ -486,6 +756,8 @@ def main():
                     help='write the digest as data for the app to data/weekly.json')
     ap.add_argument('--ft', type=int, help='override free transfers available')
     ap.add_argument('--bank', type=float, help='override money in the bank (£m)')
+    ap.add_argument('--no-retro', action='store_true',
+                    help='do not render last gameweek\'s retrospective (retro.py)')
     args = ap.parse_args()
 
     if not args.no_refresh:
@@ -501,6 +773,7 @@ def main():
         print(f'  FPL API unavailable; using cached bootstrap from {cached_boot.name}')
     elem = {e['id']: e for e in boot['elements']}
     gw, deadline = next_gw(boot['events'])
+    played_gw = gw - 1               # the gameweek just played, before any clamp
     players, horizon, start_gw = load_projections()
     if gw > horizon:
         print(f'  projections end at GW{horizon}; rerun without --no-refresh')
@@ -536,6 +809,17 @@ def main():
         J['squad']['changes'] = st['changes']
     squad = [players[i] for i in ids if i in players]
     model_out, yours_out = {}, {}
+
+    # ---- last gameweek in review (P3): ordering and wording only
+    retro = None if args.no_retro else load_retro(played_gw)
+    retro_flags = {}
+    if retro:
+        review_lines, review_push, J['retro'] = retro_review_lines(
+            retro, players, gw, horizon, set(ids), retro_graded_gws())
+        L.extend(review_lines)
+        if review_push:
+            P.append(review_push)
+        retro_flags = retro_check_flags(retro, set(ids))
 
     if len(squad) != 15:
         L.append('## No squad loaded')
@@ -679,6 +963,8 @@ def main():
                 flags.append(f'starts only {p["start_rate"]*100:.0f}% of the time')
             if (p.get('joined') or '') >= '2026-05-01' and p in xi:
                 flags.append('new signing — role still settling')
+            if p['id'] in retro_flags:
+                flags.append(retro_flags[p['id']])
             if flags:
                 checks.append((p, flags))
         J['checks'] = [dict(id=p['id'], xi=p in xi, flags=fl) for p, fl in checks]
@@ -737,6 +1023,8 @@ def main():
                 L.append(f'**Availability warning:** {dead["name"]} has effectively '
                          f'no route to points; replace him when a legal move is available.')
             L.append('')
+        if retro:
+            L.extend(retro_minutes_warnings(retro, squad, eng))
         if not eng['singles']:
             L.append('**No single transfer improves the squad.**'
                      + (' Nothing to change.' if ft >= 15 else ' Bank the free transfer.'))
@@ -751,6 +1039,8 @@ def main():
                          f'{s["in_"]["name"]} ({s["in_"]["team"]}) | {delta:+.1f} | '
                          f'{s["xi_gain"]:+.1f} | {s["autosub_gain"]:+.1f} | '
                          f'**{s["gain"]:+.1f}** | {s["net"]:+.1f} |')
+            if retro:
+                L.extend(retro_table_notes(retro, eng))
             best = eng['singles'][0]
             forced = next((u['replacement'] for u in eng['unavailable']
                            if u['replacement']), None)
@@ -793,6 +1083,11 @@ def main():
                          f'{best["gain"]:+.1f} over the window with a free transfer.')
                 P.append(f'Transfer: {best["out"]["name"]}→{best["in_"]["name"]} '
                          f'{best["gain"]:+.1f}')
+        if retro:
+            clause = retro_verdict_lines(retro, squad)
+            if clause:
+                L.append('')          # its own paragraph, under the verdict
+                L.extend(clause)
         if eng['pairs']:
             L.append('')
             L.append('**Best two-move combinations** (net of any hit):')
@@ -1042,7 +1337,13 @@ def main():
         PUSH.write_text('\n'.join(P) + '\n')
         print(f'(push summary written to {PUSH}, {len(PUSH.read_text())} chars)')
     if args.snapshot:
-        path = snapshot(gw, deadline, players, squad, model_out, yours_out)
+        props = {}
+        try:
+            from player_props import load_props_for_snapshot
+            props = load_props_for_snapshot(gw, players)
+        except Exception as ex:          # shadow-only signal; never sink the snapshot
+            print(f'  (player goal props unavailable: {ex})')
+        path = snapshot(gw, deadline, players, squad, model_out, yours_out, elem, props)
         print(f'(projections for GW{gw} archived to {path})')
     if args.price_log:
         path = log_prices(boot)

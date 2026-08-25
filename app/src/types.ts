@@ -115,8 +115,21 @@ export interface ScorecardGw {
   captain?: { model?: ScorecardPick; yours?: ScorecardPick; best: ScorecardPick }
   xi?: { model?: number; yours?: number; best: number }
   cs?: { n: number; brier: number; predicted_rate: number; actual_rate: number }
-  availability?: { n: number; start_brier: number; appearance_brier: number; minutes_mae: number; minutes_bias: number }
+  availability?: {
+    n: number; start_brier: number; appearance_brier: number; minutes_mae: number; minutes_bias: number
+    baseline_start_brier?: number; start_brier_lift?: number
+    /** P2: the two in-season minutes rules graded on identical rows */
+    minutes_rule?: string; n_rules?: number
+    recency_start_brier?: number; aggregate_start_brier?: number; recency_vs_aggregate_lift?: number
+  }
   availability_groups?: Record<string, Record<string, { n: number; start_brier: number }>>
+  /** P7: sum(actual)/sum(proj) over likely starters, per position and ALL */
+  level_ratio?: Record<string, number | null>
+  ep_next?: { n: number; spearman_pool: number | null; spearman_starters: number | null; mae_starters: number | null }
+  /** P3: what happened this week to players the previous retrospective put in each class */
+  retro_class?: Record<string, { n: number; next_start_rate: number; next_play_rate: number; next_residual_mean: number }>
+  retro_gw?: number
+  goals?: { n: number; logloss_model: number | null; logloss_market: number | null; brier_model: number | null; brier_market: number | null; actual_rate: number }
 }
 
 export interface ScorecardSummary {
@@ -140,6 +153,18 @@ export interface ScorecardSummary {
   minutes_bias?: number | null
   baseline_start_brier?: number | null
   start_brier_lift?: number | null
+  recency_start_brier?: number | null
+  aggregate_start_brier?: number | null
+  recency_vs_aggregate_lift?: number | null
+  n_rule_gws?: number
+  recency_wins?: number
+  level_ratio_cum?: Record<string, number | null>
+  spearman_ep_next_starters?: number | null
+  spearman_ep_next_pool?: number | null
+  mae_ep_next_starters?: number | null
+  n_retro_gws?: number
+  goal_logloss_model?: number | null
+  goal_logloss_market?: number | null
 }
 
 export interface Scorecard {
@@ -210,6 +235,45 @@ export interface WeeklyDecision {
   instruction: string
 }
 
+/* ------------------------------------------------------------ retro (P3)
+   The gameweek review: why each player diverged from the archived projection
+   and whether it carries information. Ordering and wording only — it never
+   changes a projection or a transfer number. */
+export type RetroClass =
+  | 'unavailable' | 'minutes_loss' | 'minutes_watch' | 'minutes_gain'
+  | 'role_change' | 'variance' | 'on_model'
+
+export interface RetroComponents {
+  minutes: number; chance: number; finishing: number; team: number
+  defcon: number; bonus: number; other: number; unexplained: number
+}
+
+export interface WeeklyRetroRow {
+  id: number; proj: number; actual: number; minutes: number
+  components: RetroComponents; cls: RetroClass; subtype?: string | null
+  note: string; proj_next?: number | null; start_move?: string | null
+}
+
+export interface WeeklyRetro {
+  gw: number
+  counts: Partial<Record<RetroClass, number>>
+  graded_gws: number
+  act: number[]
+  hold: number[]
+  table: WeeklyRetroRow[]
+  pool: Record<string, number[]>
+  push?: string | null
+}
+
+export interface RetroSummary {
+  generated: string
+  latest_gw: number
+  gws: { gw: number; n: number; counts: Partial<Record<RetroClass, number>>; generated: string }[]
+  classes_graded_gws: number
+  by_class: Record<string, { n: number; gws: number; next_start_rate: number | null; next_residual_mean: number | null }>
+  note: string
+}
+
 export interface Weekly {
   gw: number
   deadline: string
@@ -225,6 +289,7 @@ export interface Weekly {
   plan?: WeeklyPlan | null
   chips?: ChipsData | null
   price: WeeklyPrice
+  retro?: WeeklyRetro | null
 }
 
 /* ----------------------------------------------------------------- chips
@@ -354,6 +419,7 @@ export interface Data {
   squads: SquadPreset[]
   scorecard?: Scorecard | null
   weekly?: Weekly | null
+  retro?: RetroSummary | null
   chips?: ChipsData | null
   movers?: Movers | null
   ticker?: Ticker | null

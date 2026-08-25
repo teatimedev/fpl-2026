@@ -8,14 +8,22 @@ instead of only against its own assumptions.
 ## The pipeline
 
 ```bash
-.venv/bin/python v2/fetch.py          # all data -> v2/fpl.db
+.venv/bin/python v2/fetch.py          # all data -> v2/fpl.db (+ gw_stat, data/gw_stats.csv)
 .venv/bin/python v2/teams_model.py    # Dixon-Coles fit + market validation
-.venv/bin/python v2/season_view.py    # 2026/27 fixture parameters
+.venv/bin/python v2/season_view.py    # 2026/27 fixture parameters (post-fit adjustments decay)
 .venv/bin/python v2/stability.py      # what actually predicts next season
-.venv/bin/python v2/player_model.py   # projections
+.venv/bin/python v2/player_model.py   # projections (calibration frozen in v2/calibration.json)
 .venv/bin/python v2/backtest.py       # hold-out evaluation
 .venv/bin/python v2/to_csv.py         # feed the optimiser and web app
+.venv/bin/python v2/scorecard.py      # grade finished gameweeks
+.venv/bin/python v2/retro.py          # why each player diverged last week (feeds the digest)
 ```
+
+In-season learning — what moves each week, what does not, and the shadow
+columns that decide the next switch — is documented in
+[`../RESEARCH-INSEASON-LEARNING.md`](../RESEARCH-INSEASON-LEARNING.md). The
+backward harnesses (`import_gw_history.py` + `backtest_inseason.py`) and the
+DefCon dispersion test (`defcon_dispersion.py`) live alongside.
 
 Or just `python v2/weekly.py --team <entry id>`, which runs the lot.
 
@@ -124,9 +132,10 @@ changed. A backtest that flatters a method is usually leaking.
 - **Unknown players lean on the price prior.** Kostoulas and Thiaw rate well on
   little evidence. Treat low-ownership, low-history names in the output with
   suspicion.
-- **No per-match player data.** FPL only serves the current season's match log,
-  so DefCon dispersion (Poisson vs negative binomial) cannot yet be tested. It
-  can be, after a few gameweeks of 2026/27.
+- **Per-match player data is now kept** (`gw_stat`, filled from the same
+  element-summary responses; past seasons via `import_gw_history.py`). The
+  DefCon dispersion test (`defcon_dispersion.py`) runs once players have six
+  full matches; until it has, `r = 4 + 11·evidence` remains a judgement.
 
 ## Deadline availability and squad value
 
