@@ -1,0 +1,22 @@
+{
+ "generated": "2026-08-25T12:32:49Z",
+ "latest_gw": 1,
+ "gws": [
+  {
+   "gw": 1,
+   "n": 457,
+   "counts": {
+    "on_model": 188,
+    "variance": 66,
+    "minutes_loss": 87,
+    "unavailable": 31,
+    "minutes_watch": 54,
+    "minutes_gain": 31
+   },
+   "generated": "2026-08-25T12:32:49Z"
+  }
+ ],
+ "classes_graded_gws": 0,
+ "by_class": {},
+ "note": "Classes never change a projection or a transfer number; they change what the digest shows first and how it words it."
+}
