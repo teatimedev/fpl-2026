@@ -5,7 +5,9 @@ Pulls three sources into one SQLite database:
 
   1. FPL bootstrap-static   -- current prices, positions, ownership, availability
   2. FPL element-summary    -- FOUR seasons of per-player history for all 572
-                               players, with xG/xA/xGC and DefCon components
+                               players, with xG/xA/xGC and DefCon components,
+                               plus the CURRENT season's per-round rows
+                               (gw_stat, exported to data/gw_stats.csv)
   3. football-data.co.uk    -- four seasons of real match results (1,520 matches)
                                plus closing bookmaker odds, and forward fixtures
                                with market odds once they are posted
@@ -92,7 +94,36 @@ def schema(cx):
         PRIMARY KEY (date, home, away)
     );
     CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT);
+    -- One row per player per fixture: the per-round history the element-summary
+    -- endpoint returns for the CURRENT season (P1). Past seasons can be imported
+    -- from the public vaastav dataset (import_gw_history.py) into the same
+    -- table; the season column keeps them apart.
+    CREATE TABLE IF NOT EXISTS gw_stat (
+        code INTEGER, season TEXT, round INTEGER, fixture_id INTEGER,
+        team TEXT, pos TEXT, opponent TEXT, was_home INTEGER, kickoff TEXT,
+        minutes INTEGER, starts INTEGER, points INTEGER,
+        goals INTEGER, assists INTEGER, clean_sheets INTEGER,
+        goals_conceded INTEGER, own_goals INTEGER,
+        pens_saved INTEGER, pens_missed INTEGER,
+        xg REAL, xa REAL, xgc REAL, defcon INTEGER,
+        bps INTEGER, bonus INTEGER, saves INTEGER, yellow INTEGER, red INTEGER,
+        threat REAL, creativity REAL, influence REAL,
+        price INTEGER, selected INTEGER,
+        PRIMARY KEY (code, season, fixture_id)
+    );
     """)
+
+
+GW_STAT_COLUMNS = (
+    'code', 'season', 'round', 'fixture_id', 'team', 'pos', 'opponent', 'was_home',
+    'kickoff', 'minutes', 'starts', 'points', 'goals', 'assists',
+    'clean_sheets', 'goals_conceded', 'own_goals', 'pens_saved', 'pens_missed',
+    'xg', 'xa', 'xgc', 'defcon', 'bps', 'bonus', 'saves', 'yellow', 'red',
+    'threat', 'creativity', 'influence', 'price', 'selected',
+)
+GW_STAT_INSERT = ('INSERT OR REPLACE INTO gw_stat VALUES ('
+                  + ','.join('?' * len(GW_STAT_COLUMNS)) + ')')
+GW_STATS_CSV = ROOT / 'data' / 'gw_stats.csv'
 
 
 # football-data.co.uk uses its own club names; map them to FPL short codes.
@@ -158,11 +189,102 @@ def load_fpl(cx):
     return boot
 
 
+def gw_rows_for(code, team, pos, res, team_short, season=None):
+    """gw_stat rows from one element-summary response's per-round `history`.
+
+    The endpoint returns every fixture of the current season the player's club
+    has played, including the ones he did not appear in (minutes 0, starts 0)
+    — that non-appearance row is the whole point of the table (P1/P2).
+    `team_short` maps FPL team ids to short names; `team` and `pos` are the
+    player's current club and position (history rows do not carry them).
+    """
+    season = season or CURRENT_SEASON
+    rows = []
+    for h in res.get('history', []) or []:
+        rows.append((
+            code, season, i(h.get('round')), i(h.get('fixture')), team, pos,
+            team_short.get(h.get('opponent_team')),
+            1 if h.get('was_home') else 0, h.get('kickoff_time'),
+            i(h.get('minutes')) or 0, i(h.get('starts')), i(h.get('total_points')) or 0,
+            i(h.get('goals_scored')) or 0, i(h.get('assists')) or 0,
+            i(h.get('clean_sheets')) or 0, i(h.get('goals_conceded')) or 0,
+            i(h.get('own_goals')) or 0, i(h.get('penalties_saved')) or 0,
+            i(h.get('penalties_missed')) or 0,
+            f(h.get('expected_goals')), f(h.get('expected_assists')),
+            f(h.get('expected_goals_conceded')), i(h.get('defensive_contribution')),
+            i(h.get('bps')) or 0, i(h.get('bonus')) or 0, i(h.get('saves')) or 0,
+            i(h.get('yellow_cards')) or 0, i(h.get('red_cards')) or 0,
+            f(h.get('threat')), f(h.get('creativity')), f(h.get('influence')),
+            i(h.get('value')), i(h.get('selected')),
+        ))
+    return rows
+
+
+def check_gw_stats(cx, boot, fixtures=None, season=None):
+    """P1 validation, run on every fetch: for every player the per-round rows
+    must add up to the bootstrap's running season totals (minutes, points,
+    starts), and no player may have more rows than his club has played
+    fixtures (fewer is legitimate: a mid-season signing's history starts at
+    his first club fixture). Returns human-readable discrepancies (empty = ok).
+    """
+    season = season or CURRENT_SEASON
+    sums = {}
+    for code, mins, pts, starts, n in cx.execute(
+            'SELECT code, SUM(minutes), SUM(points), SUM(starts), COUNT(*) '
+            'FROM gw_stat WHERE season = ? GROUP BY code', (season,)):
+        sums[code] = (mins or 0, pts or 0, starts or 0, n)
+    live = any(e.get('is_current') or e.get('finished') for e in boot['events'])
+    problems = []
+    if not live:
+        return problems
+    played = {}
+    for x in fixtures or []:
+        if x.get('finished') and x.get('team_h_score') is not None:
+            played[x['team_h']] = played.get(x['team_h'], 0) + 1
+            played[x['team_a']] = played.get(x['team_a'], 0) + 1
+    for p in boot['elements']:
+        got = sums.get(p['code'])
+        want = (p.get('minutes') or 0, p.get('total_points') or 0, p.get('starts') or 0)
+        if got is None:
+            if any(want):
+                problems.append(f"{p['web_name']}: bootstrap has {want[0]} minutes "
+                                f"but no gw_stat rows")
+            continue
+        if got[:3] != want:
+            problems.append(f"{p['web_name']}: gw_stat sums {got[:3]} vs bootstrap "
+                            f"(minutes, points, starts) {want}")
+        if fixtures is not None and got[3] > played.get(p['team'], 0):
+            problems.append(f"{p['web_name']}: {got[3]} gw_stat rows but his club "
+                            f"has played {played.get(p['team'], 0)} fixture(s)")
+    return problems
+
+
+def export_gw_stats(cx, path=GW_STATS_CSV, season=None):
+    """data/gw_stats.csv: the current season's per-round rows, so the app,
+    retro.py and offline analysis have them without the (uncommitted) DB."""
+    season = season or CURRENT_SEASON
+    rows = cx.execute(
+        f"SELECT {','.join(GW_STAT_COLUMNS)} FROM gw_stat WHERE season = ? "
+        'ORDER BY round, fixture_id, code', (season,)).fetchall()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, 'w', newline='') as fh:
+        w = csv.writer(fh)
+        w.writerow(GW_STAT_COLUMNS)
+        w.writerows(rows)
+    return len(rows)
+
+
 def load_histories(cx, boot):
-    """Four seasons of per-player history. 572 requests, run politely in parallel."""
+    """Four seasons of per-player history. 572 requests, run politely in parallel.
+
+    The same response also carries the per-round `history` array for the
+    current season; it used to be discarded (W3). It now fills gw_stat — zero
+    extra requests."""
     ids = [p['id'] for p in boot['elements']]
     code_pos = {p['code']: {1: 'GKP', 2: 'DEF', 3: 'MID', 4: 'FWD'}[p['element_type']]
                 for p in boot['elements']}
+    team_short = {t['id']: t['short_name'] for t in boot['teams']}
+    by_id = {p['id']: p for p in boot['elements']}
 
     def one(pid):
         # (pid, result|None): a None here is a silent price-prior regression
@@ -187,7 +309,12 @@ def load_histories(cx, boot):
             h.get('start_cost'), h.get('end_cost'),
         ) for h in res.get('history_past', [])]
 
-    out, done, failed = [], 0, []
+    def gw_rows(pid, res):
+        p = by_id[pid]
+        return gw_rows_for(p['code'], team_short[p['team']], code_pos.get(p['code']),
+                           res, team_short)
+
+    out, gw_out, done, failed = [], [], 0, []
     with ThreadPoolExecutor(max_workers=6) as ex:
         for pid, res in ex.map(one, ids):
             done += 1
@@ -197,6 +324,7 @@ def load_histories(cx, boot):
                 failed.append(pid)
                 continue
             out.extend(rows_for(res))
+            gw_out.extend(gw_rows(pid, res))
 
     # Sequential second pass: the parallel fan-out can trip rate limiting that
     # has usually cleared by the time the rest of the requests finish.
@@ -209,6 +337,7 @@ def load_histories(cx, boot):
                 continue
             failed.remove(pid)
             out.extend(rows_for(res))
+            gw_out.extend(gw_rows(pid, res))
     if failed:
         # CI starts with an empty DB every run (see weekly.yml), so a player
         # whose history never arrives silently falls back to the price prior.
@@ -219,7 +348,22 @@ def load_histories(cx, boot):
     cx.executemany(
         'INSERT OR REPLACE INTO season_stat VALUES '
         '(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', out)
-    print(f'  season-stat rows {len(out)}')
+    # The current season's rows are replaced wholesale: a postponed fixture
+    # that is re-keyed, or a player who moved clubs mid-season, must not leave
+    # a stale row behind.
+    cx.execute('DELETE FROM gw_stat WHERE season = ?', (CURRENT_SEASON,))
+    cx.executemany(GW_STAT_INSERT, gw_out)
+    print(f'  season-stat rows {len(out)}; gw-stat rows {len(gw_out)}')
+    fixtures_cache = CACHE / 'fixtures.json'
+    fixtures = json.loads(fixtures_cache.read_text()) if fixtures_cache.exists() else None
+    problems = check_gw_stats(cx, boot, fixtures)
+    if problems:
+        print(f'  WARNING: {len(problems)} player(s) whose per-round rows do not '
+              f'add up to the bootstrap totals:', file=sys.stderr)
+        for line in problems[:10]:
+            print(f'    {line}', file=sys.stderr)
+    n_csv = export_gw_stats(cx)
+    print(f'  gw_stats.csv: {n_csv} rows -> {GW_STATS_CSV}')
 
 
 CURRENT_SEASON = '2026/27'
@@ -502,7 +646,7 @@ def main():
     cx.commit()
 
     print(f'\nwrote {DB}')
-    for t in ('player', 'season_stat', 'match', 'fixture', 'market'):
+    for t in ('player', 'season_stat', 'gw_stat', 'match', 'fixture', 'market'):
         print(f'  {t:<12} {cx.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]:>6}')
     cx.close()
 
