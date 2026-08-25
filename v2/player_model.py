@@ -30,6 +30,8 @@ discounted and a small age adjustment (peak 24, 13% swing across the range).
 """
 import json
 import math
+import os
+import re
 import sqlite3
 import sys
 from collections import defaultdict
@@ -46,12 +48,48 @@ SEASONS = ['2022/23', '2023/24', '2024/25', '2025/26', '2026/27']
 SEASON_WEIGHT = {'2022/23': 0.30, '2023/24': 0.50, '2024/25': 0.75, '2025/26': 1.0,
                  '2026/27': 1.0}
 CURRENT = '2026/27'
-# How the model learns in-season: the current season is one more row in the
-# panel, weighted by minutes like every other, so a regular's own 2026/27 rates
-# are ~40% of his evidence by GW10 and half by GW19 (see shrink()). Minutes are
-# handled separately in minutes_model(): this season's start rate is trusted
-# n/(n+4) after n team games — half weight after four.
+# How the model learns in-season. The current season is one more row in the
+# panel, weighted by minutes like every other. Because a regular's prior
+# seasons already carry ~7,000 weighted minutes, his own 2026/27 rates are only
+# ~10% of his evidence by GW10 and ~17% by GW19 (a one-season player: ~21% and
+# ~30%); see RESEARCH-INSEASON-LEARNING.md §1.3. For a stable player that is
+# right (xG/90 repeats at 0.90); a per-player `current_mult` (P5) can raise the
+# current season's weight once the measurement in backtest_inseason.py --rates
+# says by how much.
+#
+# Minutes are handled separately in minutes_model(). Two rules exist:
+#
+#   aggregate  this season's start rate = starts / team games played, trusted
+#              n / (n + CURRENT_TRUST_K) after n team games (production).
+#   recency    per-fixture evidence (gw_stat, P1): each fixture the player was
+#              AVAILABLE for counts as a start (1) or not (0), weighted
+#              0.5 ** (games_ago / RECENCY_HALF_LIFE); the weighted rate is
+#              trusted n_eff / (n_eff + RECENCY_K). Games he was injured,
+#              suspended or not yet signed for are not evidence (P2 / W2).
+#
+# MINUTES_RULE picks production; the other rule is always computed too and
+# archived in the snapshot (p_start_recency / p_start_aggregate) so
+# scorecard.py grades both side by side. Switch production only once the
+# recency rule has the lower start Brier over >= 4 graded gameweeks.
+#
+# RECENCY_K and RECENCY_HALF_LIFE are PLACEHOLDERS: nothing has measured them
+# yet. backtest_inseason.py --minutes grids K in {2,4,6,8} x HALF_LIFE in
+# {2,3,5,inf} on the imported 2022/23-2025/26 per-GW rows; quote its result
+# here when it has run. (K=4 keeps the two rules comparable at n=1; note that
+# at K=4, HL=3 three straight benchings take a 0.9 regular to ~0.56, not the
+# <0.4 the plan asks for — K~1.5 would, which is exactly what the grid must
+# decide.)
 CURRENT_TRUST_K = 4.0
+RECENCY_K = 4.0
+RECENCY_HALF_LIFE = 3.0
+MINUTES_RULE = os.environ.get('FPL_MINUTES_RULE', 'aggregate')
+if MINUTES_RULE not in ('aggregate', 'recency'):
+    raise SystemExit(f'FPL_MINUTES_RULE must be aggregate or recency, not {MINUTES_RULE!r}')
+# Deadline availability per archived gameweek, {gw: {player id: (status,
+# p_start)}}, read from data/history/gw{n}.json by main(): the "was he
+# available" signal the recency rule conditions on.
+SNAPSHOT_STATUS = {}
+GW_ROWS_LOADED = False
 
 # The projection window ROLLS: it starts at the next gameweek and runs six
 # ahead. `proj_by_gw` is indexed by absolute gameweek (entry 0 = GW1) so every
@@ -131,20 +169,53 @@ def load():
         FROM season_stat WHERE season IN ({','.join('?' * len(SEASONS))})""", SEASONS):
         (code, season, mins, starts, pts, g, a, xg, xa, xgc, dc, cs, bonus,
          saves, yellow, bps) = row
-        if not mins:
+        # A past season with no minutes carries no information and is dropped.
+        # THIS season's zero row is different: it is the record of a player
+        # who has not played while his team has, and the minutes model needs
+        # it (P0 / W1 in RESEARCH-INSEASON-LEARNING.md). Dropping it meant a
+        # benched regular kept his pre-season start rate until his first
+        # minute, while a five-minute cameo by someone else was penalised.
+        # The rate consumers are unaffected: shrink() needs 200+ minutes and
+        # positional_priors() 450+, so a zero row never reaches either.
+        if not mins and season != CURRENT:
             continue
-        p90 = mins / 90.0
+        mins = mins or 0
+        p90 = mins / 90.0 if mins else None
+
+        def per90(v):
+            return (v or 0) / p90 if p90 else 0.0
         by_code[code].append(dict(
-            season=season, mins=mins, starts=starts or 0, pts=pts,
-            pts90=pts / p90, xg90=(xg or 0) / p90, xa90=(xa or 0) / p90,
-            dc90=(dc or 0) / p90, bonus90=(bonus or 0) / p90,
-            saves90=(saves or 0) / p90, yellow90=(yellow or 0) / p90,
-            g=g, a=a, cs=cs, defcon_raw=dc))
+            season=season, mins=mins, starts=starts or 0, pts=pts or 0,
+            pts90=per90(pts), xg90=per90(xg), xa90=per90(xa),
+            dc90=per90(dc), bonus90=per90(bonus),
+            saves90=per90(saves), yellow90=per90(yellow),
+            g=g or 0, a=a or 0, cs=cs or 0, defcon_raw=dc or 0,
+            xg=xg or 0.0, xa=xa or 0.0))
+    # this season's per-fixture rows (P1): the sequence behind the aggregate,
+    # which the recency-weighted minutes rule (P2) and the retrospective read.
+    gw_by_code = defaultdict(list)
+    if cx.execute("SELECT name FROM sqlite_master WHERE name = 'gw_stat'").fetchone():
+        for row in cx.execute("""
+            SELECT code, round, fixture_id, opponent, was_home, kickoff, minutes,
+                   starts, points, goals, assists, xg, xa, xgc, defcon, bonus,
+                   bps, saves, yellow, red
+            FROM gw_stat WHERE season = ? ORDER BY kickoff, fixture_id""", (CURRENT,)):
+            (code, rnd, fid, opp, home, kickoff, mins, starts, pts, g, a, xg, xa,
+             xgc, dc, bonus, bps, saves, yellow, red) = row
+            gw_by_code[code].append(dict(
+                round=rnd, fixture_id=fid, opp=opp, home=bool(home),
+                # starts stays None when the source did not record it, so
+                # match_evidence() can fall back to the 60-minute rule
+                kickoff=kickoff or '', mins=mins or 0, starts=starts,
+                pts=pts or 0, g=g or 0, a=a or 0, xg=xg or 0.0, xa=xa or 0.0,
+                xgc=xgc or 0.0, defcon=dc or 0, bonus=bonus or 0, bps=bps or 0,
+                saves=saves or 0, yellow=yellow or 0, red=red or 0))
     for p in players.values():
         p['hist'] = sorted(by_code.get(p['code'], []), key=lambda h: h['season'])
         # this season's row is kept separately too: it is what the minutes
         # model reads for "how often is he starting NOW"
         p['now'] = next((h for h in p['hist'] if h['season'] == CURRENT), None)
+        p['gw'] = gw_by_code.get(p['code'], [])
     cx.close()
     return players
 
@@ -165,6 +236,30 @@ def games_played():
 
 
 GAMES_PLAYED = {}
+
+
+def team_fixtures():
+    """{team short: [dict(fixture_id, event, kickoff)] finished this season,
+    in kickoff order} — the sequence the recency-weighted minutes rule (P2)
+    walks. Same source as games_played(); empty when there is no cache."""
+    path = ROOT / 'v2' / 'cache' / 'fixtures.json'
+    boot = ROOT / 'v2' / 'cache' / 'bootstrap.json'
+    if not path.exists() or not boot.exists():
+        return {}
+    short = {t['id']: t['short_name'] for t in json.loads(boot.read_text())['teams']}
+    out = defaultdict(list)
+    for x in json.loads(path.read_text()):
+        if x.get('finished') and x.get('team_h_score') is not None:
+            row = dict(fixture_id=x['id'], event=x.get('event'),
+                       kickoff=x.get('kickoff_time') or '')
+            out[short[x['team_h']]].append(row)
+            out[short[x['team_a']]].append(row)
+    for rows in out.values():
+        rows.sort(key=lambda r: (r['kickoff'], r['fixture_id']))
+    return dict(out)
+
+
+TEAM_FIXTURES = {}
 
 
 def positional_priors(players):
@@ -210,15 +305,47 @@ def load_overlay():
 OVERLAY, PRESEASON_FORM = load_overlay()
 
 
-def shrink(p, metric, priors):
+# P5: how much MORE to believe the current season's rates for a player whose
+# context changed (new club, new manager). 1.0 = the plain minutes weight,
+# i.e. no change. This is a PLACEHOLDER until backtest_inseason.py --rates has
+# measured, on the imported per-GW rows, whether first-n-GW xG/90 predicts the
+# rest of the season better than the multi-season prior for movers vs stayers,
+# and by how much. Do not raise it on judgement.
+CONTEXT_CURRENT_MULT = 1.0
+
+
+def context_changed(p):
+    """True when the player's prior-season rates were earned in a different
+    context: a summer arrival, or a club with a new manager. (Position and
+    penalty-duty changes are in the plan too, but the database does not keep
+    a player's past-season position or pen order, so they cannot be detected
+    here; the retrospective's role_change class surfaces pen changes weekly.)"""
+    if (p.get('joined') or '') >= '2026-05-01':
+        return True
+    try:
+        from manager_changes import NEW_MANAGER
+    except ImportError:
+        return False
+    return p.get('team') in NEW_MANAGER
+
+
+def context_multiplier(p):
+    return CONTEXT_CURRENT_MULT if context_changed(p) else 1.0
+
+
+def shrink(p, metric, priors, current_mult=None):
     """Empirical-Bayes estimate of a player's true rate for one metric.
 
     Blends his own (recency-weighted) history with the positional prior. The
     weight on his own number is n/(n+k), where n is his effective sample in
     full-season units and k is set by the measured stability: a stable metric
     needs little evidence to be believed, an unstable one needs a lot.
+
+    `current_mult` scales the CURRENT season's minutes weight (P5); by default
+    it is context_multiplier(p), which is 1.0 until measured.
     """
     prior = priors.get(p['pos'], {}).get(metric, 0.0)
+    mult = context_multiplier(p) if current_mult is None else current_mult
     stab = STABILITY.get(metric, 0.5)
     if metric == 'bonus90' and p['pos'] == 'DEF':
         stab = STABILITY_DEF_BONUS
@@ -235,6 +362,8 @@ def shrink(p, metric, priors):
     num = den = 0.0
     for h in seasons:
         w = SEASON_WEIGHT[h['season']] * h['mins']
+        if h['season'] == CURRENT:
+            w *= mult
         num += h[metric] * w
         den += w
     own = num / den
@@ -245,15 +374,17 @@ def shrink(p, metric, priors):
 
 
 # --------------------------------------------------------------- minutes
-def minutes_model(p, players):
-    """Expected minutes per appearance and probability of starting.
+def minutes_prior(p, players):
+    """The pre-season part of the minutes model: (start rate, minutes per
+    start) from past seasons, the club/position pecking order and the overlay.
 
     Start rate measured 0.46 stability year to year, so the observed rate is
     shrunk towards the club/position pecking order — the same correction v1
-    arrived at by hand, now with a number behind it.
+    arrived at by hand, now with a number behind it. This season's evidence is
+    applied on top by minutes_model().
     """
-    # past seasons: start rate over 38; this season is handled below, because
-    # starts/38 is meaningless in October
+    # past seasons: start rate over 38; this season is handled by the update
+    # rules, because starts/38 is meaningless in October
     hist = [h for h in p['hist'] if h['mins'] >= 200 and h['season'] != CURRENT]
     if hist:
         num = den = 0.0
@@ -301,13 +432,103 @@ def minutes_model(p, players):
         # the overlay states expected minutes per gameweek directly — pre-season
         # research that replaces what history says
         start_rate = min(0.97, ov['mins'] / max(mps, 1.0))
+    return start_rate, mps
 
-    # This season overrides all of the above as it accumulates. After n team
-    # games the observed 2026/27 start rate carries weight n/(n+4): a fifth
-    # after one game, half after four, three quarters after twelve. A summer
-    # signing who is clearly first choice, or a regular who has lost his place,
-    # moves quickly; one benching does not flip the estimate.
+
+def load_snapshot_status(history_dir=None):
+    """{gw: {player id: (deadline status, deadline p_start)}} from the archived
+    pre-deadline snapshots (weekly.py --snapshot). This is the availability
+    record the recency rule needs: a healthy player who did not start was
+    benched; a flagged one was absent, which is not evidence about his place."""
+    history_dir = history_dir or (ROOT / 'data' / 'history')
+    out = {}
+    if not history_dir.exists():
+        return out
+    for path in sorted(history_dir.glob('gw*.json')):
+        if not re.fullmatch(r'gw\d+\.json', path.name):
+            continue
+        try:
+            d = json.loads(path.read_text())
+        except (OSError, ValueError):
+            continue
+        out[int(d['gw'])] = {
+            int(r['id']): (r.get('status', 'a'),
+                           float(r.get('p_start', r.get('start_rate', 1.0)) or 0.0))
+            for r in d.get('players', [])}
+    return out
+
+
+def match_evidence(p, fixtures=None, snapshots=None, min_available_start=0.05):
+    """The per-fixture start record the recency rule reads.
+
+    Returns [(games_ago, started, minutes)] over this season's fixtures of the
+    player's club, most recent first, keeping only fixtures he was AVAILABLE
+    for: he played, or the archived deadline snapshot had him status 'a' with
+    a start probability above `min_available_start` (i.e. not overridden to
+    zero). Fixtures before he joined, fixtures with no row for him (not in the
+    squad), and fixtures he was flagged for are skipped — they say nothing
+    about whether the manager picks him. `games_ago` counts ALL club fixtures
+    back from the latest, so evidence from before a long absence ages.
+    """
+    team_fx = (TEAM_FIXTURES if fixtures is None else fixtures).get(p['team'], [])
+    snaps = SNAPSHOT_STATUS if snapshots is None else snapshots
+    rows = {g['fixture_id']: g for g in (p.get('gw') or [])}
+    joined = (p.get('joined') or '')[:10]
+    out = []
+    for games_ago, fx in enumerate(reversed(team_fx)):
+        row = rows.get(fx['fixture_id'])
+        if row is None:
+            continue
+        kickoff = (fx.get('kickoff') or row.get('kickoff') or '')[:10]
+        if joined and kickoff and kickoff < joined:
+            continue
+        mins = row.get('mins') or 0
+        started = row.get('starts')
+        started = int(started > 0) if started is not None else int(mins >= 60)
+        if mins <= 0 and not started:
+            snap = snaps.get(fx.get('event'), {}).get(p['id'])
+            if snap is not None:
+                status, p_start = snap
+                if status != 'a' or p_start < min_available_start:
+                    continue          # absent, not benched: not evidence
+        out.append((games_ago, started, mins))
+    return out
+
+
+def recency_update(p, prior_rate, prior_mps, k=None, half_life=None, evidence=None):
+    """P2's rule: recency-weighted start rate over the fixtures the player was
+    available for, trusted n_eff / (n_eff + k) against the prior; minutes per
+    start from started fixtures only (no cameo contamination, W9)."""
+    k = RECENCY_K if k is None else k
+    half_life = RECENCY_HALF_LIFE if half_life is None else half_life
+    ev = match_evidence(p) if evidence is None else evidence
+    if not ev:
+        return max(0.0, min(0.97, prior_rate)), prior_mps
+    sw = ss = mw = mm = 0.0
+    for games_ago, started, mins in ev:
+        w = 1.0 if not half_life or math.isinf(half_life) else 0.5 ** (games_ago / half_life)
+        sw += w
+        ss += w * started
+        if started:
+            mw += w
+            mm += w * min(92.0, mins)
+    rate_now = ss / sw if sw else 0.0
+    trust = sw / (sw + k)
+    start_rate = trust * rate_now + (1 - trust) * prior_rate
+    mps = prior_mps
+    if mw > 0:
+        t_m = mw / (mw + k)
+        mps = t_m * (mm / mw) + (1 - t_m) * prior_mps
+    return max(0.0, min(0.97, start_rate)), mps
+
+
+def aggregate_update(p, prior_rate, prior_mps):
+    """The original in-season rule: this season's starts / team games,
+    trusted n / (n + CURRENT_TRUST_K) after n team games — a fifth after one
+    game, half after four, three quarters after twelve. Order-blind and
+    availability-blind (W2), and mps includes cameo minutes (W9)."""
     now, n_games = p.get('now'), GAMES_PLAYED.get(p['team'], 0)
+    start_rate, mps = prior_rate, prior_mps
     if now and n_games > 0:
         rate_now = min(1.0, (now['starts'] or 0) / n_games)
         trust = n_games / (n_games + CURRENT_TRUST_K)
@@ -315,8 +536,24 @@ def minutes_model(p, players):
         if now['starts']:
             mps_now = min(92.0, now['mins'] / now['starts'])
             mps = trust * mps_now + (1 - trust) * mps
-
     return max(0.0, min(0.97, start_rate)), mps
+
+
+def minutes_model(p, players, rule=None):
+    """Expected minutes per start and probability of starting.
+
+    The prior (past seasons, pecking order, overlay — minutes_prior()) is then
+    updated with this season's evidence by `rule`: MINUTES_RULE (production)
+    unless one is named. 'recency' falls back to the aggregate rule only when
+    no per-fixture rows have been loaded at all (an old database), never for
+    an individual player without rows — for him the absence of rows IS the
+    evidence (he is not in a matchday squad, or has just signed).
+    """
+    prior_rate, prior_mps = minutes_prior(p, players)
+    rule = rule or MINUTES_RULE
+    if rule == 'recency' and (GW_ROWS_LOADED or p.get('gw')):
+        return recency_update(p, prior_rate, prior_mps)
+    return aggregate_update(p, prior_rate, prior_mps)
 
 
 def poisson_at_least(mean, k):
@@ -389,16 +626,21 @@ def defcon_hit_prob(mean, k, evidence):
 
 
 # ------------------------------------------------------------ projection
-def project(players, view, priors):
+def project(players, view, priors, refit_calibration=False, feedback=False):
     # median price per position, used to temper the prior for unknown players
     for pos in ('GKP', 'DEF', 'MID', 'FWD'):
         prices = sorted(q['price'] for q in players.values() if q['pos'] == pos)
         PRICE_MEDIAN[pos] = prices[len(prices) // 2] if prices else 5.5
 
     out = []
+    shadow_rule = 'recency' if MINUTES_RULE == 'aggregate' else 'aggregate'
     for p in players.values():
         pos = p['pos']
         base_start_rate, mps = minutes_model(p, players)
+        # the other minutes rule, archived for side-by-side grading (P2)
+        shadow_start_rate, _ = minutes_model(p, players, rule=shadow_rule)
+        rate_recency = shadow_start_rate if shadow_rule == 'recency' else base_start_rate
+        rate_aggregate = shadow_start_rate if shadow_rule == 'aggregate' else base_start_rate
 
         xg90, w_xg = shrink(p, 'xg90', priors)
         xa90, _ = shrink(p, 'xa90', priors)
@@ -426,19 +668,26 @@ def project(players, view, priors):
         play_by_gw = [0.0] * (START_GW - 1)
         mins_by_gw = [0.0] * (START_GW - 1)
         availability_by_gw = [None] * (START_GW - 1)
+        # the two minutes rules through the same deadline/override layer, so
+        # the scorecard compares like with like
+        start_recency_by_gw = [0.0] * (START_GW - 1)
+        start_aggregate_by_gw = [0.0] * (START_GW - 1)
         for gw in range(START_GW, LAST_GW + 1):
             effective_status = status_for_gameweek(
                 p['status'], gw, START_GW, news=p['news'],
                 gw_deadline=GW_DEADLINES.get(gw),
             )
-            start_input = (deadline_start_probability(
-                base_start_rate, effective_status, p['chance'], p['news']
-            ) if effective_status != 'a' else base_start_rate)
-            av = availability_forecast(
-                player_id=p['id'], gw=gw, base_start=start_input,
-                base_start_minutes=mps, position=pos, status=effective_status,
-                overrides=AVAILABILITY_OVERRIDES,
-            )
+
+            def deadline_forecast(rate):
+                start_input = (deadline_start_probability(
+                    rate, effective_status, p['chance'], p['news']
+                ) if effective_status != 'a' else rate)
+                return availability_forecast(
+                    player_id=p['id'], gw=gw, base_start=start_input,
+                    base_start_minutes=mps, position=pos, status=effective_status,
+                    overrides=AVAILABILITY_OVERRIDES,
+                )
+            av = deadline_forecast(base_start_rate)
             p_start = av.p_start
             p_cameo = (1.0 - p_start) * av.p_cameo
             p_play = av.p_play
@@ -449,6 +698,14 @@ def project(players, view, priors):
                 start_by_gw.append(round(p_start, 3))
                 play_by_gw.append(round(p_play, 3))
                 mins_by_gw.append(round(av.expected_minutes, 1))
+                if shadow_start_rate == base_start_rate:
+                    shadow_p_start = p_start
+                else:
+                    shadow_p_start = deadline_forecast(shadow_start_rate).p_start
+                start_recency_by_gw.append(round(
+                    shadow_p_start if shadow_rule == 'recency' else p_start, 3))
+                start_aggregate_by_gw.append(round(
+                    shadow_p_start if shadow_rule == 'aggregate' else p_start, 3))
                 availability_by_gw.append(dict(
                     source=av.source, confidence=av.confidence, note=av.note,
                     p_cameo=round(av.p_cameo, 3),
@@ -457,6 +714,10 @@ def project(players, view, priors):
                     last_updated=av.last_updated,
                     from_gw=av.from_gw,
                     through_gw=av.through_gw,
+                    # the generated rule behind an override, so the scorecard
+                    # can grade by claim type (it was never written before,
+                    # so the claim_type group was always 'baseline')
+                    generation_rule=av.generation_rule,
                 ))
             fx = fixtures.get(str(gw)) or []
             if not fx:
@@ -510,7 +771,22 @@ def project(players, view, priors):
             mins_by_gw=mins_by_gw, availability_by_gw=availability_by_gw,
             availability_source=current_availability['source'],
             availability_confidence=current_availability['confidence'],
+            # the minutes model's own rate BEFORE the deadline flag/override
+            # layer — what the scorecard's baseline_start should be — and the
+            # shadow rule's, for side-by-side grading (P2)
+            baseline_start_rate=round(base_start_rate, 4),
+            start_minutes=round(mps, 1),
+            minutes_rule=MINUTES_RULE,
+            start_rate_recency=round(rate_recency, 4),
+            start_rate_aggregate=round(rate_aggregate, 4),
+            start_recency_by_gw=start_recency_by_gw,
+            start_aggregate_by_gw=start_aggregate_by_gw,
+            n_match_evidence=len(match_evidence(p)),
             xg90=round(xg90, 4), xa90=round(xa90, 4), dc90=round(dc90, 3),
+            # the remaining shrunk rates, so a snapshot can reconstruct the
+            # projection's components after the fact (P3 retro)
+            bonus90=round(bonus90, 4), saves90=round(saves90, 4),
+            yellow90=round(yellow90, 4), dc_evidence=round(w_dc, 3),
             evidence=round(w_xg, 2),
             seasons=len([h for h in p['hist'] if h['mins'] >= 450]),
             note=OVERLAY.get(p['id'], {}).get('note', '')
@@ -522,7 +798,7 @@ def project(players, view, priors):
             starts_now=(p['now'] or {}).get('starts', 0) if p.get('now') else 0,
             games_now=GAMES_PLAYED.get(p['team'], 0),
         ))
-    calibrate(out, players)
+    calibrate(out, players, refit=refit_calibration, feedback=feedback)
     out.sort(key=lambda r: -r['proj_6gw'])
     return out
 
@@ -534,8 +810,129 @@ CAL_ANCHORS = ('2024/25', '2025/26')
 CAL_STINT_MINS = 900
 
 
-def calibrate(rows, players):
+CALIBRATION = ROOT / 'v2' / 'calibration.json'
+# A calibration-cohort member whose modelled start probability over the window
+# is below this fraction of his own baseline is being depressed by a status
+# flag or an override (dated injury, suspension, tactical zero). He would drag
+# the cohort's proj_gw down and inflate everyone else in his position, so he
+# is left out of the FIT (never out of the application).
+CALIBRATION_MIN_AVAIL = 0.6
+# P7: feed the observed in-season level back into k only once there is enough
+# of it. A starter's weekly points have sd ~3 and a position has ~60 starters,
+# so one gameweek's cohort mean has sd ~0.4 on a mean of ~4: a 10% level error
+# is 1 sigma per gameweek, 3 sigma at nine. Blending at n_gw / (n_gw + K_C)
+# with K_C = 8 means nothing faster than that. Validate K_C on the imported
+# per-GW rows (backtest_inseason.py) before relying on it.
+FEEDBACK_MIN_GWS = 8
+FEEDBACK_MIN_DRIFT = 0.10
+FEEDBACK_K = 8.0
+
+
+def load_calibration(path=None):
+    path = path or CALIBRATION
+    if not path.exists():
+        return None
+    try:
+        d = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return None
+    if not isinstance(d.get('k'), dict):
+        return None
+    return d
+
+
+def fit_calibration(rows, players):
+    """Per-position multipliers, fitted the way the docstring of calibrate()
+    describes, on the anchor cohort minus players whose window is depressed by
+    availability. Returns {pos: dict(k, ratio, n, n_excluded)}."""
+    hist = {}
+    for p in players.values():
+        obs = [(x['season'], x['mins'], x['pts'])
+               for x in p['hist'] if x['season'] in CAL_ANCHORS]
+        latest = next((o for o in obs if o[0] == CAL_ANCHORS[-1]), None)
+        if not latest or latest[1] < 2000:
+            continue
+        qual = [o for o in obs if o[1] >= CAL_STINT_MINS]
+        if not qual:
+            continue
+        hist[p['id']] = (
+            sum(o[2] for o in qual) / len(qual) / 38.0,   # two-season mean
+            latest[2] / 38.0,                             # most recent season
+        )
+
+    out = {}
+    for pos in ('GKP', 'DEF', 'MID', 'FWD'):
+        proj, act, excluded = [], [], 0
+        for r in rows:
+            h = hist.get(r['id'])
+            if r['pos'] != pos or h is None:
+                continue
+            window = [v for v in (r.get('start_by_gw') or [])[START_GW - 1:HORIZON]]
+            baseline = r.get('baseline_start_rate')
+            if window and baseline and (sum(window) / len(window)) < CALIBRATION_MIN_AVAIL * baseline:
+                excluded += 1
+                continue
+            proj.append(r['proj_gw'])
+            act.append(h[1] if pos == 'GKP' else h[0])
+        if len(proj) < 6:
+            continue
+        ratio = (sum(proj) / len(proj)) / (sum(act) / len(act))
+        if ratio <= 0:
+            continue
+        k = max(0.7, min(1.45, 1.0 / ratio))   # never rescale by more than ~45%
+        out[pos] = dict(k=round(k, 4), ratio=round(ratio, 4), n=len(proj),
+                        n_excluded=excluded)
+    return out
+
+
+def apply_calibration(rows, ks):
+    for pos, k in ks.items():
+        for r in rows:
+            if r['pos'] != pos:
+                continue
+            r['proj_by_gw'] = [round(v * k, 3) for v in r['proj_by_gw']]
+            r['proj_6gw'] = round(sum(r['proj_by_gw']), 2)
+            r['proj_gw'] = round(r['proj_6gw'] / WINDOW, 3)
+            if r['id'] in SEASON:
+                SEASON[r['id']] = [round(v * k, 3) for v in SEASON[r['id']]]
+            r['value'] = round(r['proj_6gw'] / r['price'], 4) if r['price'] else 0
+            r['calibration_k'] = round(k, 4)
+
+
+def feedback_blend(ks, level_ratios, n_gws, k_c=FEEDBACK_K,
+                   min_gws=FEEDBACK_MIN_GWS, min_drift=FEEDBACK_MIN_DRIFT):
+    """P7's deferred loop: blend the frozen k with the observed in-season
+    level (`level_ratios` = sum(actual)/sum(proj) per position over likely
+    starters, cumulative), at weight n_gws / (n_gws + k_c), and only when the
+    drift is outside +-min_drift with at least min_gws graded. Returns a new
+    {pos: k} and the list of positions it moved."""
+    out, moved = dict(ks), []
+    if n_gws < min_gws:
+        return out, moved
+    w = n_gws / (n_gws + k_c)
+    for pos, k in ks.items():
+        ratio = (level_ratios or {}).get(pos)
+        if ratio is None or abs(ratio - 1.0) <= min_drift:
+            continue
+        # k_obs is the multiplier that would have made the level right
+        k_obs = max(0.7, min(1.45, k * ratio))
+        out[pos] = round((1 - w) * k + w * k_obs, 4)
+        moved.append(pos)
+    return out, moved
+
+
+def calibrate(rows, players, refit=False, feedback=False):
     """Remove the positional level bias introduced by shrinkage.
+
+    FROZEN IN-SEASON (P4). The multipliers are fitted once and stored in
+    v2/calibration.json; later runs apply the stored values. Re-fitting on
+    every refresh pinned the level of the established cohort to 2024/25-2025/26
+    history, so anything the team or minutes model learned in-season about the
+    LEVEL of scoring was rescaled straight back out (only ordering survived),
+    and long-term absences in the anchor cohort inflated everyone else in the
+    position. Pass refit=True (player_model.py --refit-calibration) to re-fit
+    deliberately. With feedback=True (--feedback) the stored k is blended with
+    the scorecard's cumulative level ratio under feedback_blend()'s guards.
 
     Shrinking every player towards a positional mean that includes fringe
     squad members drags regular starters down, and it does so unevenly: raw v2
@@ -564,57 +961,72 @@ def calibrate(rows, players):
     It rescales levels only -- the within-position ordering, which the
     backtest showed is v2's real strength, is untouched.
     """
-    hist = {}
-    for p in players.values():
-        obs = [(x['season'], x['mins'], x['pts'])
-               for x in p['hist'] if x['season'] in CAL_ANCHORS]
-        latest = next((o for o in obs if o[0] == CAL_ANCHORS[-1]), None)
-        if not latest or latest[1] < 2000:
-            continue
-        qual = [o for o in obs if o[1] >= CAL_STINT_MINS]
-        if not qual:
-            continue
-        hist[p['id']] = (
-            sum(o[2] for o in qual) / len(qual) / 38.0,   # two-season mean
-            latest[2] / 38.0,                             # most recent season
-        )
-
-    for pos in ('GKP', 'DEF', 'MID', 'FWD'):
-        proj, act = [], []
-        for r in rows:
-            h = hist.get(r['id'])
-            if r['pos'] != pos or h is None:
-                continue
-            proj.append(r['proj_gw'])
-            act.append(h[1] if pos == 'GKP' else h[0])
-        if len(proj) < 6:
-            continue
-        ratio = (sum(proj) / len(proj)) / (sum(act) / len(act))
-        if ratio <= 0:
-            continue
-        k = 1.0 / ratio
-        k = max(0.7, min(1.45, k))          # never rescale by more than ~45%
-        for r in rows:
-            if r['pos'] != pos:
-                continue
-            r['proj_by_gw'] = [round(v * k, 3) for v in r['proj_by_gw']]
-            r['proj_6gw'] = round(sum(r['proj_by_gw']), 2)
-            r['proj_gw'] = round(r['proj_6gw'] / WINDOW, 3)
-            if r['id'] in SEASON:
-                SEASON[r['id']] = [round(v * k, 3) for v in SEASON[r['id']]]
-            r['value'] = round(r['proj_6gw'] / r['price'], 4) if r['price'] else 0
-        print(f'  calibration {pos}: raw was {ratio:.2f}x actual, scaled by {k:.3f}')
+    stored = None if refit else load_calibration()
+    if stored:
+        ks = {pos: float(v['k'] if isinstance(v, dict) else v)
+              for pos, v in stored['k'].items()}
+        print(f'  calibration: applying multipliers stored {stored.get("fitted_at", "?")} '
+              f'(as of GW{stored.get("start_gw", "?")}; --refit-calibration to re-fit): '
+              + ', '.join(f'{pos} {k:.3f}' for pos, k in sorted(ks.items())))
+    else:
+        fit = fit_calibration(rows, players)
+        ks = {pos: v['k'] for pos, v in fit.items()}
+        for pos, v in sorted(fit.items()):
+            print(f'  calibration {pos}: raw was {v["ratio"]:.2f}x actual, scaled by '
+                  f'{v["k"]:.3f} (cohort {v["n"]}, {v["n_excluded"]} excluded for '
+                  f'availability)')
+        from datetime import datetime, timezone
+        CALIBRATION.write_text(json.dumps(dict(
+            fitted_at=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+            start_gw=START_GW, horizon=HORIZON, anchors=list(CAL_ANCHORS),
+            stint_mins=CAL_STINT_MINS, min_avail=CALIBRATION_MIN_AVAIL,
+            k={pos: v for pos, v in fit.items()},
+            note='Frozen per-position level multipliers (P4). Re-fit with '
+                 'player_model.py --refit-calibration.',
+        ), indent=1))
+        print(f'  calibration stored -> {CALIBRATION}')
+    if feedback:
+        sc = ROOT / 'data' / 'scorecard.json'
+        summary = {}
+        if sc.exists():
+            try:
+                summary = json.loads(sc.read_text()).get('summary', {})
+            except (OSError, ValueError):
+                summary = {}
+        ks, moved = feedback_blend(ks, summary.get('level_ratio_cum') or {},
+                                   int(summary.get('n_gws') or 0))
+        print('  calibration feedback: '
+              + (('moved ' + ', '.join(f'{p} -> {ks[p]:.3f}' for p in moved))
+                 if moved else 'no position outside the drift/sample guards'))
+    apply_calibration(rows, ks)
+    return ks
 
 
 if __name__ == '__main__':
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--refit-calibration', action='store_true',
+                    help='re-fit the per-position level multipliers instead of '
+                         'applying the ones frozen in v2/calibration.json (P4)')
+    ap.add_argument('--feedback', action='store_true',
+                    help='blend the frozen multipliers with the scorecard\'s '
+                         'cumulative level ratio, subject to the GW8+/10%% guards (P7)')
+    args = ap.parse_args()
     players = load()
     GAMES_PLAYED.update(games_played())
+    TEAM_FIXTURES.update(team_fixtures())
+    SNAPSHOT_STATUS.update(load_snapshot_status())
+    GW_ROWS_LOADED = any(p.get('gw') for p in players.values())
     view = json.loads(SEASON_VIEW.read_text())
     priors = positional_priors(players)
     n_now = sum(1 for p in players.values() if p.get('now') and p['now']['mins'] >= 200)
     if GAMES_PLAYED:
+        n_rows = sum(len(p.get('gw') or []) for p in players.values())
         print(f'This season: {max(GAMES_PLAYED.values())} rounds played, '
-              f'{n_now} players with 200+ minutes feeding the model')
+              f'{n_now} players with 200+ minutes feeding the model, '
+              f'{n_rows} per-fixture rows, minutes rule "{MINUTES_RULE}" '
+              f'(shadow: {"recency" if MINUTES_RULE == "aggregate" else "aggregate"}), '
+              f'{len(SNAPSHOT_STATUS)} deadline snapshot(s) for availability')
     else:
         print('This season: no matches played yet — projections rest on history, '
               'price and pre-season research')
@@ -626,9 +1038,13 @@ if __name__ == '__main__':
         print(f"{pos:<5}{d.get('xg90',0):>8.3f}{d.get('xa90',0):>8.3f}"
               f"{d.get('dc90',0):>10.2f}{d.get('bonus90',0):>9.3f}")
 
-    rows = project(players, view, priors)
+    rows = project(players, view, priors, refit_calibration=args.refit_calibration,
+                   feedback=args.feedback)
     json.dump({'players': rows, 'horizon': HORIZON, 'start_gw': START_GW,
-               'window': WINDOW}, open(OUT, 'w'))
+               'window': WINDOW, 'minutes_rule': MINUTES_RULE,
+               'calibration': {r['pos']: r.get('calibration_k') for r in rows
+                               if r.get('calibration_k') is not None}},
+              open(OUT, 'w'))
     print(f'\nprojected {len(rows)} players over GW{START_GW}-{HORIZON} -> {OUT}')
     # the coarse full-season projection, for chip timing (chips.py)
     season = [dict(id=r['id'], name=r['name'], team=r['team'], pos=r['pos'],

@@ -1,0 +1,38 @@
+{
+ "fitted_at": "2026-08-25T00:17:42Z",
+ "start_gw": 2,
+ "horizon": 7,
+ "anchors": [
+  "2024/25",
+  "2025/26"
+ ],
+ "stint_mins": 900,
+ "min_avail": 0.6,
+ "k": {
+  "GKP": {
+   "k": 1.1023,
+   "ratio": 0.9072,
+   "n": 16,
+   "n_excluded": 1
+  },
+  "DEF": {
+   "k": 1.0057,
+   "ratio": 0.9943,
+   "n": 48,
+   "n_excluded": 3
+  },
+  "MID": {
+   "k": 1.1421,
+   "ratio": 0.8756,
+   "n": 50,
+   "n_excluded": 2
+  },
+  "FWD": {
+   "k": 1.1028,
+   "ratio": 0.9068,
+   "n": 11,
+   "n_excluded": 0
+  }
+ },
+ "note": "Frozen per-position level multipliers (P4). Re-fit with player_model.py --refit-calibration."
+}
