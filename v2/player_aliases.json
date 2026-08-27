@@ -484,7 +484,6 @@
     {
       "aliases": [
         "Alysson",
-        "Alysson Edward",
         "da Rocha dos Santos",
         "Alysson Edward Franco da Rocha dos Santos"
       ],
@@ -1219,7 +1218,7 @@
         "Carlos Baleba"
       ],
       "canonical": "Carlos Baleba",
-      "club": "BHA",
+      "club": "MUN",
       "player_id": 131
     },
     {
@@ -1784,9 +1783,9 @@
     {
       "aliases": [
         "Andrews",
-        "Kaine Andrews"
+        "Kai Andrews"
       ],
-      "canonical": "Kaine Andrews",
+      "canonical": "Kai Andrews",
       "club": "COV",
       "player_id": 192
     },
@@ -3711,12 +3710,12 @@
     },
     {
       "aliases": [
-        "Savinho",
+        "S\u00e1vio",
         "Moreira de Oliveira",
         "S\u00e1vio Moreira de Oliveira"
       ],
       "canonical": "S\u00e1vio Moreira de Oliveira",
-      "club": "MCI",
+      "club": "TOT",
       "player_id": 403
     },
     {
@@ -5534,6 +5533,151 @@
       "canonical": "Ibrahim Osman",
       "club": "BHA",
       "player_id": 600
+    },
+    {
+      "aliases": [
+        "Williams-Barnett",
+        "Luca Williams-Barnett"
+      ],
+      "canonical": "Luca Williams-Barnett",
+      "club": "TOT",
+      "player_id": 601
+    },
+    {
+      "aliases": [
+        "Humphreys",
+        "Cameron Humphreys"
+      ],
+      "canonical": "Cameron Humphreys",
+      "club": "IPS",
+      "player_id": 602
+    },
+    {
+      "aliases": [
+        "Lienou",
+        "Jayden Lienou"
+      ],
+      "canonical": "Jayden Lienou",
+      "club": "LEE",
+      "player_id": 603
+    },
+    {
+      "aliases": [
+        "Cresswell",
+        "Alfie Cresswell"
+      ],
+      "canonical": "Alfie Cresswell",
+      "club": "LEE",
+      "player_id": 604
+    },
+    {
+      "aliases": [
+        "Yalcouy\u00e9",
+        "Malick Yalcouy\u00e9"
+      ],
+      "canonical": "Malick Yalcouy\u00e9",
+      "club": "BHA",
+      "player_id": 605
+    },
+    {
+      "aliases": [
+        "Rowe",
+        "Triston Rowe"
+      ],
+      "canonical": "Triston Rowe",
+      "club": "AVL",
+      "player_id": 606
+    },
+    {
+      "aliases": [
+        "Lynch",
+        "Luka Lynch"
+      ],
+      "canonical": "Luka Lynch",
+      "club": "AVL",
+      "player_id": 607
+    },
+    {
+      "aliases": [
+        "Jebbison",
+        "Daniel Jebbison"
+      ],
+      "canonical": "Daniel Jebbison",
+      "club": "BOU",
+      "player_id": 608
+    },
+    {
+      "aliases": [
+        "Shahar",
+        "Leo Shahar"
+      ],
+      "canonical": "Leo Shahar",
+      "club": "NEW",
+      "player_id": 609
+    },
+    {
+      "aliases": [
+        "De Fougerolles",
+        "Luc De Fougerolles"
+      ],
+      "canonical": "Luc De Fougerolles",
+      "club": "FUL",
+      "player_id": 610
+    },
+    {
+      "aliases": [
+        "Wan-Bissaka",
+        "Aaron Wan-Bissaka"
+      ],
+      "canonical": "Aaron Wan-Bissaka",
+      "club": "AVL",
+      "player_id": 611
+    },
+    {
+      "aliases": [
+        "Methalie",
+        "M\u00e9thalie",
+        "Dayann M\u00e9thalie"
+      ],
+      "canonical": "Dayann M\u00e9thalie",
+      "club": "SUN",
+      "player_id": 612
+    },
+    {
+      "aliases": [
+        "Ahoka",
+        "Jules Ahoka"
+      ],
+      "canonical": "Jules Ahoka",
+      "club": "SUN",
+      "player_id": 613
+    },
+    {
+      "aliases": [
+        "Hadjam",
+        "Jaouen Hadjam"
+      ],
+      "canonical": "Jaouen Hadjam",
+      "club": "BHA",
+      "player_id": 614
+    },
+    {
+      "aliases": [
+        "Di Gregorio",
+        "Michele Di Gregorio"
+      ],
+      "canonical": "Michele Di Gregorio",
+      "club": "BOU",
+      "player_id": 615
+    },
+    {
+      "aliases": [
+        "Bouaddi",
+        "Ayyoub Bouaddi"
+      ],
+      "canonical": "Ayyoub Bouaddi",
+      "club": "MCI",
+      "player_id": 616
     }
   ],
   "version": 1

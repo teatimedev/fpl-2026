@@ -1,12 +1,12 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-08-21T16:37:03Z",
-  "claims": 2,
+  "checked_at": "2026-08-27T15:42:54Z",
+  "claims": 1,
   "coverage": 0.95,
-  "deadline": "2026-08-21T17:30:00Z",
-  "gw": 1,
-  "notification_key": "b09490327693f6521482",
+  "deadline": "2026-08-28T17:30:00Z",
+  "gw": 2,
+  "notification_key": "a0e7c66ba25a93097eae",
   "notify_required": false,
   "official_fpl": {
     "1": {
@@ -20,9 +20,9 @@
       "status": "a"
     },
     "100": {
-      "chance": 75,
-      "news": "Lack of match fitness - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "101": {
       "chance": 75,
@@ -90,9 +90,9 @@
       "status": "a"
     },
     "113": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "114": {
       "chance": null,
@@ -155,9 +155,9 @@
       "status": "a"
     },
     "125": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "126": {
       "chance": null,
@@ -191,7 +191,7 @@
     },
     "131": {
       "chance": 0,
-      "news": "Ankle injury - Expected back 23 Aug",
+      "news": "Ankle injury - Unknown return date",
       "status": "i"
     },
     "132": {
@@ -215,9 +215,9 @@
       "status": "a"
     },
     "136": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "137": {
       "chance": 0,
@@ -265,14 +265,14 @@
       "status": "a"
     },
     "145": {
-      "chance": 0,
-      "news": "Suspended until 6 Sep",
-      "status": "s"
-    },
-    "146": {
-      "chance": null,
+      "chance": 100,
       "news": "",
       "status": "a"
+    },
+    "146": {
+      "chance": 0,
+      "news": "Has joined Napoli on loan for the rest of the season",
+      "status": "u"
     },
     "147": {
       "chance": null,
@@ -305,9 +305,9 @@
       "status": "a"
     },
     "152": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "153": {
       "chance": null,
@@ -315,7 +315,7 @@
       "status": "a"
     },
     "154": {
-      "chance": null,
+      "chance": 100,
       "news": "",
       "status": "a"
     },
@@ -340,9 +340,9 @@
       "status": "a"
     },
     "159": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "16": {
       "chance": null,
@@ -440,9 +440,9 @@
       "status": "a"
     },
     "177": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Hamstring injury - Unknown return date",
+      "status": "i"
     },
     "178": {
       "chance": null,
@@ -460,9 +460,9 @@
       "status": "a"
     },
     "180": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
     },
     "181": {
       "chance": null,
@@ -555,9 +555,9 @@
       "status": "u"
     },
     "198": {
-      "chance": 75,
-      "news": "Ankle injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "199": {
       "chance": null,
@@ -605,9 +605,9 @@
       "status": "a"
     },
     "206": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
     },
     "207": {
       "chance": null,
@@ -615,9 +615,9 @@
       "status": "a"
     },
     "208": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Groin injury - Unknown return date",
+      "status": "i"
     },
     "209": {
       "chance": null,
@@ -785,9 +785,9 @@
       "status": "a"
     },
     "239": {
-      "chance": 25,
-      "news": "Groin injury - 25% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "24": {
       "chance": null,
@@ -830,9 +830,9 @@
       "status": "a"
     },
     "247": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Knock - 75% chance of playing",
+      "status": "d"
     },
     "248": {
       "chance": null,
@@ -865,9 +865,9 @@
       "status": "a"
     },
     "253": {
-      "chance": 0,
-      "news": "Suspended until 30 Aug",
-      "status": "s"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "254": {
       "chance": null,
@@ -1005,7 +1005,7 @@
       "status": "i"
     },
     "279": {
-      "chance": null,
+      "chance": 100,
       "news": "",
       "status": "a"
     },
@@ -1015,7 +1015,7 @@
       "status": "a"
     },
     "280": {
-      "chance": null,
+      "chance": 100,
       "news": "",
       "status": "a"
     },
@@ -1031,7 +1031,7 @@
     },
     "283": {
       "chance": 0,
-      "news": "Hip injury - Expected back 29 Aug",
+      "news": "Hip injury - Expected back 5 Sep",
       "status": "i"
     },
     "284": {
@@ -1225,9 +1225,9 @@
       "status": "u"
     },
     "318": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Ankle injury - Unknown return date",
+      "status": "i"
     },
     "319": {
       "chance": 0,
@@ -1250,9 +1250,9 @@
       "status": "a"
     },
     "322": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Sheffield Wednesday on loan for the rest of the season",
+      "status": "u"
     },
     "323": {
       "chance": null,
@@ -1265,9 +1265,9 @@
       "status": "a"
     },
     "325": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "326": {
       "chance": null,
@@ -1485,9 +1485,9 @@
       "status": "a"
     },
     "365": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined St Mirren on loan for the rest of the season",
+      "status": "u"
     },
     "366": {
       "chance": null,
@@ -1515,9 +1515,9 @@
       "status": "a"
     },
     "370": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Back injury - Unknown return date",
+      "status": "i"
     },
     "371": {
       "chance": null,
@@ -1546,7 +1546,7 @@
     },
     "376": {
       "chance": 0,
-      "news": "Hamstring injury - Expected back 23 Aug",
+      "news": "Hamstring injury - Unknown return date",
       "status": "i"
     },
     "377": {
@@ -1615,9 +1615,9 @@
       "status": "a"
     },
     "389": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 50,
+      "news": "Unspecified injury - 50% chance of playing",
+      "status": "d"
     },
     "39": {
       "chance": 0,
@@ -1850,14 +1850,14 @@
       "status": "a"
     },
     "430": {
-      "chance": 50,
-      "news": "Foot injury - 50% chance of playing",
+      "chance": 75,
+      "news": "Foot injury - 75% chance of playing",
       "status": "d"
     },
     "431": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "432": {
       "chance": null,
@@ -1895,9 +1895,9 @@
       "status": "a"
     },
     "439": {
-      "chance": 75,
-      "news": "Shin injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "44": {
       "chance": null,
@@ -1945,9 +1945,9 @@
       "status": "a"
     },
     "448": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Ankle injury - Expected back 14 Sep",
+      "status": "i"
     },
     "449": {
       "chance": null,
@@ -2040,9 +2040,9 @@
       "status": "a"
     },
     "465": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 25,
+      "news": "Foot injury - 25% chance of playing",
+      "status": "d"
     },
     "466": {
       "chance": null,
@@ -2125,12 +2125,12 @@
       "status": "i"
     },
     "480": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Knee injury - 75% chance of playing",
+      "status": "d"
     },
     "481": {
-      "chance": null,
+      "chance": 100,
       "news": "",
       "status": "a"
     },
@@ -2150,9 +2150,9 @@
       "status": "a"
     },
     "485": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Lille on loan for the rest of the season",
+      "status": "u"
     },
     "486": {
       "chance": null,
@@ -2225,9 +2225,9 @@
       "status": "a"
     },
     "499": {
-      "chance": 0,
-      "news": "Lack of match fitness - Expected back 29 Aug",
-      "status": "i"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "5": {
       "chance": 0,
@@ -2255,9 +2255,9 @@
       "status": "a"
     },
     "503": {
-      "chance": 0,
-      "news": "Unspecified injury - Expected back 29 Aug",
-      "status": "i"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "504": {
       "chance": null,
@@ -2305,8 +2305,8 @@
       "status": "a"
     },
     "512": {
-      "chance": 25,
-      "news": "Thigh injury - 25% chance of playing",
+      "chance": 50,
+      "news": "Thigh injury - 50% chance of playing",
       "status": "d"
     },
     "513": {
@@ -2320,9 +2320,9 @@
       "status": "a"
     },
     "515": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Shoulder injury - 75% chance of playing",
+      "status": "d"
     },
     "516": {
       "chance": null,
@@ -2456,8 +2456,8 @@
     },
     "54": {
       "chance": 0,
-      "news": "Calf injury - Unknown return date",
-      "status": "i"
+      "news": "Suspended until 19 Sep",
+      "status": "s"
     },
     "540": {
       "chance": 0,
@@ -2535,9 +2535,9 @@
       "status": "a"
     },
     "554": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Valencia on loan for the rest of the season",
+      "status": "u"
     },
     "555": {
       "chance": null,
@@ -2575,9 +2575,9 @@
       "status": "a"
     },
     "561": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 25,
+      "news": "Hamstring injury - 25% chance of playing",
+      "status": "d"
     },
     "562": {
       "chance": null,
@@ -2585,9 +2585,9 @@
       "status": "a"
     },
     "563": {
-      "chance": 50,
-      "news": "Calf injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "564": {
       "chance": null,
@@ -2630,9 +2630,9 @@
       "status": "a"
     },
     "571": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Calf injury - 75% chance of playing",
+      "status": "d"
     },
     "572": {
       "chance": null,
@@ -2710,7 +2710,7 @@
       "status": "a"
     },
     "586": {
-      "chance": null,
+      "chance": 100,
       "news": "",
       "status": "a"
     },
@@ -2730,9 +2730,9 @@
       "status": "a"
     },
     "59": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined MK Dons permanently",
+      "status": "u"
     },
     "590": {
       "chance": null,
@@ -2740,7 +2740,7 @@
       "status": "a"
     },
     "591": {
-      "chance": null,
+      "chance": 100,
       "news": "",
       "status": "a"
     },
@@ -2799,7 +2799,87 @@
       "news": "",
       "status": "a"
     },
+    "601": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "602": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "603": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "604": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "605": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "606": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "607": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "608": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "609": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
     "61": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "610": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "611": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "612": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "613": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "614": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "615": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "616": {
       "chance": null,
       "news": "",
       "status": "a"
@@ -2865,19 +2945,19 @@
       "status": "a"
     },
     "73": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "74": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "75": {
-      "chance": 0,
-      "news": "Suspended until 29 Aug",
-      "status": "s"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "76": {
       "chance": null,
@@ -2910,9 +2990,9 @@
       "status": "u"
     },
     "81": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "82": {
       "chance": null,
@@ -3011,8 +3091,8 @@
     }
   },
   "official_fpl_ok": true,
-  "rebuild_required": false,
-  "state_changed": false,
+  "rebuild_required": true,
+  "state_changed": true,
   "status": "amber",
   "urgent": false,
   "version": 1
