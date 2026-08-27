@@ -18,14 +18,48 @@ class RefreshModeTests(unittest.TestCase):
         self.assertEqual(decide_mode(2.0, datetime(2026, 8, 21, 10, tzinfo=UTC)), ("full", "T-2h"))
 
     def test_news_every_three_hours_from_t30_to_t6(self):
-        self.assertEqual(decide_mode(20, datetime(2026, 8, 21, 9, tzinfo=UTC)), ("news", "news-3h"))
-        self.assertEqual(decide_mode(20, datetime(2026, 8, 21, 10, tzinfo=UTC)), ("noop", "news-cadence"))
+        done = ("T-24h",)   # the news cadence assumes the T-24h rebuild happened
+        self.assertEqual(decide_mode(20, datetime(2026, 8, 21, 9, tzinfo=UTC), done), ("news", "news-3h"))
+        self.assertEqual(decide_mode(20, datetime(2026, 8, 21, 10, tzinfo=UTC), done), ("noop", "news-cadence"))
 
     def test_news_hourly_inside_six_hours(self):
-        self.assertEqual(decide_mode(5, datetime(2026, 8, 21, 10, tzinfo=UTC)), ("news", "news-hourly"))
+        self.assertEqual(decide_mode(5, datetime(2026, 8, 21, 10, tzinfo=UTC), ("T-24h",)), ("news", "news-hourly"))
+        # ...and with no rebuild at all this gameweek, the cheap tick becomes the late T-24h
+        self.assertEqual(decide_mode(5, datetime(2026, 8, 21, 10, tzinfo=UTC)), ("full", "T-24h"))
 
     def test_stops_at_forty_five_minutes(self):
         self.assertEqual(decide_mode(0.5, datetime(2026, 8, 21, 10, tzinfo=UTC)), ("noop", "deadline-lock"))
+
+    # Thu 27 Aug 2026: GitHub dropped every hourly run between 23:46 and
+    # 10:00 UTC and the 06:00-09:00 weekly slot was never taken. Any Thursday
+    # hour now qualifies until the marker says it ran.
+    def test_weekly_catches_up_any_thursday_hour(self):
+        thu = datetime(2026, 8, 27, 10, tzinfo=UTC)          # 31.5h to deadline
+        self.assertEqual(decide_mode(31.5, thu), ("full", "weekly"))
+        self.assertEqual(decide_mode(31.5, thu.replace(hour=6)), ("full", "weekly"))
+        self.assertEqual(decide_mode(31.5, thu.replace(hour=23)), ("full", "weekly"))
+        self.assertEqual(decide_mode(31.5, thu.replace(hour=5)), ("noop", "outside-windows"))
+        fri = datetime(2026, 8, 28, 10, tzinfo=UTC)
+        self.assertEqual(decide_mode(31.5, fri), ("noop", "outside-windows"))
+
+    def test_done_weekly_falls_through_to_news_cadence(self):
+        thu = datetime(2026, 8, 27, 12, tzinfo=UTC)
+        self.assertEqual(decide_mode(29.5, thu, done=("weekly",)), ("news", "news-3h"))
+        self.assertEqual(decide_mode(29.5, thu.replace(hour=13), done=("weekly",)), ("noop", "news-cadence"))
+
+    def test_missed_t24_is_taken_late(self):
+        thu = datetime(2026, 8, 27, 22, tzinfo=UTC)          # 19.5h out, window was 22.5-26.5
+        self.assertEqual(decide_mode(19.5, thu), ("full", "T-24h"))    # catch-up outranks the weekly slot
+        fri = datetime(2026, 8, 28, 2, tzinfo=UTC)
+        self.assertEqual(decide_mode(15.5, fri), ("full", "T-24h"))
+        self.assertEqual(decide_mode(15.5, fri, done=("T-24h",)), ("noop", "news-cadence"))
+        self.assertEqual(decide_mode(15.5, fri.replace(hour=3), done=("T-24h",)), ("news", "news-3h"))
+        # never inside the T-2h window or after lock
+        self.assertEqual(decide_mode(3.0, fri), ("full", "T-2h"))
+        self.assertEqual(decide_mode(0.5, fri), ("noop", "deadline-lock"))
+
+    def test_done_t2_falls_through_to_hourly_news(self):
+        self.assertEqual(decide_mode(2.0, datetime(2026, 8, 21, 10, tzinfo=UTC), done=("T-2h",)), ("news", "news-hourly"))
 
     def test_completed_t2_full_run_downgrades_later_tick_to_news(self):
         events = {"events": [{"id": 1, "is_next": True, "deadline_time": "2026-08-21T17:30:00Z"}]}

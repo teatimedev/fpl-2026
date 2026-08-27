@@ -9,12 +9,18 @@ gameweek (data/last_refresh.json remembers):
            usually posted by now and the pressers are still to come
   T-2h     0.75–3.5 hours before the deadline — the last word: late injury
            news, the closing line
-  weekly   Thursday 06:00–09:00 UTC — a guaranteed refresh in international
-           breaks and any week the deadline windows are missed
+  weekly   Thursday from 06:00 UTC — a guaranteed refresh in international
+           breaks and any week the deadline windows are missed. Any Thursday
+           hour qualifies; the marker makes sure it runs once.
   manual   workflow_dispatch: always
 
 Windows are wider than the hourly cadence because GitHub's cron can slip by
-half an hour or more at busy times.
+half an hour or more at busy times — and it drops runs outright: on Thu 27 Aug
+2026 nothing fired between 23:46 and 10:00 UTC, which skipped the old
+06:00–09:00 weekly slot entirely. So every full window now catches up: a
+missed T-24h is taken late (any hour before the T-2h window opens) and a
+missed Thursday morning is taken later that day. A window already recorded
+in data/last_refresh.json falls through to the news cadence instead.
 
 Writes GitHub Actions outputs: run=true|false, mode=full|news|noop,
 reason=<window>, gw=<n>, hours=<h to deadline>.
@@ -31,14 +37,24 @@ ROOT = Path(__file__).resolve().parent.parent
 MARKER = ROOT / 'data' / 'last_refresh.json'
 FPL = 'https://fantasy.premierleague.com/api'
 WINDOWS = (('T-2h', 0.75, 3.5), ('T-24h', 22.5, 26.5))
+T2_HI, T24_LO = WINDOWS[0][2], WINDOWS[1][1]
 
 
-def decide_mode(hours, now):
-    """Return the scheduled work mode and its stable reason."""
+WEEKLY_DAY, WEEKLY_HOUR = 3, 6   # Thursday, from 06:00 UTC
+
+
+def decide_mode(hours, now, done=()):
+    """Return the scheduled work mode and its stable reason.
+
+    `done` lists the full windows already rebuilt for this gameweek; a done
+    window is skipped so the tick falls through to the news cadence."""
     for name, lo, hi in WINDOWS:
-        if lo <= hours <= hi:
+        if lo <= hours <= hi and name not in done:
             return 'full', name
-    if now.weekday() == 3 and 6 <= now.hour < 9:
+    # catch-up: the T-24h window went by without a rebuild (dropped cron)
+    if T2_HI < hours < T24_LO and 'T-24h' not in done:
+        return 'full', 'T-24h'
+    if now.weekday() == WEEKLY_DAY and now.hour >= WEEKLY_HOUR and 'weekly' not in done:
         return 'full', 'weekly'
     if hours < 0.75:
         return 'noop', 'deadline-lock'
@@ -92,23 +108,18 @@ def main():
     dl = datetime.fromisoformat(nxt['deadline_time'].replace('Z', '+00:00'))
     hours = (dl - now).total_seconds() / 3600
 
-    mode, window = decide_mode(hours, now)
+    # windows already rebuilt for this gameweek fall through to the news
+    # cadence — a completed T-2h must not suppress the hourly news checks,
+    # which are precisely where last-minute press updates arrive.
+    last = json.loads(MARKER.read_text()) if MARKER.exists() else {}
+    done = tuple(last.get('done', [])) if last.get('gw') == gw else ()
+    mode, window = decide_mode(hours, now, done)
     if forced:
         mode = os.environ.get('INPUT_MODE') or 'full'
         window = f'manual-{mode}'
 
     if mode == 'noop':
         out(run='false', mode='noop', reason=window, gw=gw, hours=f'{hours:.1f}')
-        return
-
-    last = json.loads(MARKER.read_text()) if MARKER.exists() else {}
-    if mode == 'full' and not window.startswith('manual') and last.get('gw') == gw and window in last.get('done', []):
-        # A completed T-2h rebuild must not suppress the later hourly news
-        # checks. They are precisely where last-minute press updates arrive.
-        if window == 'T-2h' and hours >= 0.75:
-            out(run='true', mode='news', reason='news-hourly', gw=gw, hours=f'{hours:.1f}')
-            return
-        out(run='false', mode='noop', reason=f'{window}-already-done', gw=gw, hours=f'{hours:.1f}')
         return
     out(run='true', mode=mode, reason=window, gw=gw, hours=f'{hours:.1f}')
 
