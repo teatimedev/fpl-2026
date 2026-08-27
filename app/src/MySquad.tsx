@@ -404,8 +404,9 @@ function SquadView({
                         <button className="plink" onClick={() => openPlayer(o.in.id)}>{o.in.name}</button>
                       </span>
                       <span className="g mono">
-                        £{signed(o.costChange)} · <span style={{ color: 'var(--flood-soft)' }}>+{o.gain.toFixed(1)}</span>
-                        {o.net < o.gain - 0.05 && <span className="s"> net {signed(o.net)}</span>}
+                        £{signed(o.costChange)} · <span style={{ color: 'var(--flood-soft)' }}>{signed(o.xiGain)}</span>
+                        <span className="s"> on pitch · {signed(o.gain)} with cover</span>
+                        {o.net < o.gain - 0.05 && <span className="s"> · net {signed(o.net)}</span>}
                       </span>
                       <button className="toggle" onClick={() => trySuggestion(o)} disabled={full}>try</button>
                     </li>
@@ -461,7 +462,8 @@ function SquadView({
                 </ul>
                 <div className="sandbox-foot">
                   <span>
-                    Over GW{gw}–{horizon}: <strong className="mono">{signed(gain.gain)}</strong> pts ·{' '}
+                    Over GW{gw}–{horizon}: <strong className="mono">{signed(gain.xiGain)}</strong> on pitch
+                    {' '}(<span className="mono">{signed(gain.gain)}</span> with auto-sub cover) ·{' '}
                     {pending.length} move{pending.length === 1 ? '' : 's'},{' '}
                     {Math.min(pending.length, ft)} free
                     {gain.hits > 0 && <>, hit <span className="mono" style={{ color: 'var(--alert)' }}>−{gain.hitCost}</span></>}

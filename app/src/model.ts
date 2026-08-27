@@ -213,6 +213,8 @@ export interface Gain {
   before: number
   after: number
   gain: number
+  /** the part of `gain` that happens on the pitch: XI + captain, no auto-sub cover */
+  xiGain: number
   hits: number
   hitCost: number
   net: number
@@ -222,18 +224,21 @@ export interface Gain {
 export function sandboxGain(
   squad: Player[], moves: Move[], ft: number, gw: number, horizon: number,
 ): Gain {
-  const before = squadScore(squad, gw, horizon)
-  const after = squadScore(applyMoves(squad, moves), gw, horizon)
-  const gain = after - before
+  const b = squadBreakdown(squad, gw, horizon)
+  const a = squadBreakdown(applyMoves(squad, moves), gw, horizon)
+  const gain = a.total - b.total
+  const xiGain = (a.xi + a.captain) - (b.xi + b.captain)
   const hits = Math.max(0, moves.length - ft)
   const hitCost = hits * HIT_COST
-  return { before, after, gain, hits, hitCost, net: gain - hitCost }
+  return { before: b.total, after: a.total, gain, xiGain, hits, hitCost, net: gain - hitCost }
 }
 
 export interface TransferOption {
   out: Player
   in: Player
   gain: number
+  /** XI + captain lift only — what the verdict is judged on */
+  xiGain: number
   net: number
   costChange: number
   worthAHit: boolean
@@ -252,7 +257,9 @@ export function rankTransfers(
   gw: number, horizon: number, limit = 8,
 ): TransferOption[] {
   const budget = squad.reduce((s, p) => s + p.price, 0) + bank
-  const base = squadScore(squad, gw, horizon)
+  const baseB = squadBreakdown(squad, gw, horizon)
+  const base = baseB.total
+  const basePitch = baseB.xi + baseB.captain
   const owned = new Set(squad.map(p => p.id))
   const cands: Record<Pos, Player[]> = { GKP: [], DEF: [], MID: [], FWD: [] }
   for (const pos of POS_ORDER) {
@@ -272,11 +279,12 @@ export function rankTransfers(
       if (n.price > cash + 1e-9) continue
       const after = applyMoves(squad, [{ out: o, in: n }])
       if (!isLegal(after, budget)) continue
-      const gain = squadScore(after, gw, horizon) - base
+      const ab = squadBreakdown(after, gw, horizon)
+      const gain = ab.total - base
       if (gain <= 0.05) continue
       if (!best || gain > best.gain) {
         best = {
-          out: o, in: n, gain, net: gain - hit,
+          out: o, in: n, gain, xiGain: (ab.xi + ab.captain) - basePitch, net: gain - hit,
           costChange: Math.round((n.price - o.price) * 10) / 10,
           worthAHit: gain > HIT_COST,
         }
