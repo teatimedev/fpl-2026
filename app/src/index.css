@@ -975,3 +975,19 @@ tbody tr:not(.benchrow) + tr.benchrow td { border-top: 1px dashed rgba(232, 240,
   .drawer-hd h2 { font-size: 24px; }
   .facts .v { font-size: 17px; }
 }
+
+/* folded panels: club-news scan and the footer */
+details.news-health > summary,
+.foot > details > summary {
+  cursor: pointer; list-style: none; font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--chalk-dim);
+}
+details.news-health > summary { padding: 11px 14px; }
+details.news-health > summary::-webkit-details-marker,
+.foot > details > summary::-webkit-details-marker { display: none; }
+details.news-health > summary::before,
+.foot > details > summary::before { content: '▸ '; }
+details[open].news-health > summary::before,
+.foot > details[open] > summary::before { content: '▾ '; }
+.foot > details > p { margin: 8px 0 0; }
+.decision-body .problems { margin: 10px 0 0; }

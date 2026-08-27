@@ -327,7 +327,11 @@ export function Outlook({
 /* ---------------------------------------------------------------- context
    Fixture outlook, club spread and squad shape for any 15 (or fewer). Shared
    by the squad page and the draft builder's sidebar. */
-export function ContextPanels({ D, squad, xi }: { D: Data; squad: Player[]; xi: Set<number> }) {
+export function ContextPanels({ D, squad, xi, draft = false }: {
+  D: Data; squad: Player[]; xi: Set<number>
+  /** club spread and squad shape only matter while a squad is being built */
+  draft?: boolean
+}) {
   const state = useMemo(() => analyse(squad), [squad])
   const outlook = useMemo(
     () => squadOutlook(squad, xi, D.schedule, D.meta.horizon, D.meta.start_gw ?? 1),
@@ -344,11 +348,12 @@ export function ContextPanels({ D, squad, xi }: { D: Data; squad: Player[]; xi: 
           <Outlook rows={outlook} />
           <p style={{ fontSize: 11.5, color: 'var(--chalk-dim)', margin: '10px 0 0', lineHeight: 1.55 }}>
             Taller and redder means your starting XI collectively faces harder
-            opponents that week. Hover a bar to see which clubs.
+            opponents that week. Tap a bar to see which clubs.
           </p>
         </div>
       </section>
 
+      {draft && (<>
       <section className="panel" style={{ marginTop: 16 }}>
         <div className="panel-hd">
           <h2>Club spread</h2>
@@ -384,6 +389,7 @@ export function ContextPanels({ D, squad, xi }: { D: Data; squad: Player[]; xi: 
           ))}
         </div>
       </section>
+      </>)}
     </>
   )
 }

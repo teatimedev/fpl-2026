@@ -6,7 +6,7 @@ import {
   type TransferOption,
 } from './model'
 import { signed } from './squad'
-import { LinkTeamForm, Pitch } from './components'
+import { Pitch } from './components'
 import type { LinkedTeam } from './useLinkedTeam'
 
 /**
@@ -119,37 +119,18 @@ export default function ThisWeek(
           should have landed by now, check the Actions "Refresh" workflow.
         </p>
       )}
-      <section className="panel">
-        <div className="panel-hd">
-          <h2>Gameweek {gw}</h2>
-          <span className="sub">
-            {`deadline ${dl.toLocaleString('en-GB', {
-              weekday: 'short', day: 'numeric', month: 'short',
-              hour: '2-digit', minute: '2-digit',
-            })}`}
-          </span>
-        </div>
-        <div className="week-hd">
-          {msLeft > 0 && (
-            <p className="lede">
-              <strong className="mono">{days}d {hours}h</strong> until the deadline.
-              {live && ` Prices and injuries are live; projections rebuilt ${D.meta.generated}.`}
-            </p>
-          )}
-          <LinkTeamForm
-            entryId={entryId} onSave={linked.setEntryId} busy={busy} err={err}
-            hint="Find the number in the URL of your FPL points page. Until you link it, this uses the squad from the My squad tab."
-            linkedLine={usingReal && fromGw != null
-              ? <> · picks from GW{fromGw} · £{bank.toFixed(1)}m banked</>
-              : (!busy && !err ? ' · picks not public yet, using the My squad tab squad' : null)}
-            unlinkedLine={builtSquad.length === 15
-              ? <>Using the squad from the <strong>My squad</strong> tab</>
-              : undefined}
-          />
-        </div>
-      </section>
-
-      <NewsStatus D={D} squadIds={squad.map(p => p.id)} openPlayer={openPlayer} />
+      <p className="stamp mono" style={{ margin: '0 2px 6px' }}>
+        Gameweek {gw} · deadline {dl.toLocaleString('en-GB', {
+          weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+        })}{msLeft > 0 && <> · <strong>{days}d {hours}h</strong> to go</>}
+        {entryId
+          ? <> · entry {entryId}{usingReal && fromGw != null && <> · picks from GW{fromGw}</>}</>
+          : builtSquad.length === 15
+            ? <> · drafted squad (link your team in <strong>My squad</strong>)</>
+            : null}
+        {busy && ' · loading live data…'}
+        {err && ` · could not reach the FPL API: ${err}`}
+      </p>
 
       {!ready && (
         <section className="panel" style={{ marginTop: 16 }}>
@@ -176,7 +157,7 @@ export default function ThisWeek(
       {ready && digest && weekly && (
         <Digest D={D} W={weekly} gw={gw} horizon={horizon} poolById={poolById}
           nameOf={nameOf}
-          liveIssues={issues} fromGw={fromGw} openPlayer={openPlayer} />
+          liveIssues={issues} openPlayer={openPlayer} />
       )}
 
       {ready && !digest && (
@@ -340,6 +321,8 @@ export default function ThisWeek(
           </section>
         </>
       )}
+
+      <NewsStatus D={D} squadIds={squad.map(p => p.id)} openPlayer={openPlayer} />
     </div>
   )
 }
@@ -350,12 +333,12 @@ function NewsStatus({ D, squadIds, openPlayer }: {
   const news = D.news
   if (!news?.run || !news.health) {
     return (
-      <section className="panel news-health news-health-red" style={{ marginTop: 16 }}>
-        <div className="panel-hd"><h2>Team-news automation</h2><span className="sub">not yet verified</span></div>
+      <details className="panel news-health news-health-red" style={{ marginTop: 16 }}>
+        <summary>Club news scan · none in this build</summary>
         <div className="empty-state">
           No completed public-source scan is bundled into this build. Treat the FPL injury flags above as the only live news.
         </div>
-      </section>
+      </details>
     )
   }
   const squad = new Set(squadIds)
@@ -367,13 +350,17 @@ function NewsStatus({ D, squadIds, openPlayer }: {
   const checkedText = isNaN(checked.getTime()) ? news.run.checked_at
     : checked.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
   const tone = news.health.status
-  const headline = tone === 'green' ? 'Healthy at last published change' : tone === 'amber' ? 'Partly degraded' : 'Degraded'
+  // Plumbing stays folded unless it has something to say about your 15 (or
+  // the official feed was down, which changes what the numbers above mean).
+  const matters = owned.length > 0 || news.health.official_fpl_ok === false || tone === 'red'
+  const headline = owned.length > 0
+    ? `${owned.length} claim${owned.length === 1 ? '' : 's'} about your 15`
+    : 'nothing new about your 15'
   return (
-    <section className={`panel news-health news-health-${tone}`} style={{ marginTop: 16 }}>
-      <div className="panel-hd">
-        <h2>Team-news automation</h2>
-        <span className="sub">{headline} · {news.health.healthy}/{news.health.enabled} sources · {checkedText}</span>
-      </div>
+    <details className={`panel news-health news-health-${tone}`} style={{ marginTop: 16 }} open={matters}>
+      <summary>
+        Club news scan · {headline} · {news.health.healthy}/{news.health.enabled} sources · {checkedText}
+      </summary>
       <div className="news-health-body">
         <p>
           {news.health.official_fpl_ok === false
@@ -395,7 +382,7 @@ function NewsStatus({ D, squadIds, openPlayer }: {
           </ul>
         </details>
       </div>
-    </section>
+    </details>
   )
 }
 
@@ -418,7 +405,7 @@ function NewsClaimRow({ claim, applied = false, openPlayer }: {
 /* ---------------------------------------------------------------- digest
    The CI-computed analysis, rendered when the loaded squad is the one it saw. */
 function Digest({
-  D, W, gw, horizon, poolById, nameOf, liveIssues, fromGw, openPlayer,
+  D, W, gw, horizon, poolById, nameOf, liveIssues, openPlayer,
 }: {
   D: Data
   W: Weekly
@@ -427,7 +414,6 @@ function Digest({
   poolById: Map<number, Player>
   nameOf: (id: number) => string
   liveIssues: { head: string; body: string }[] | null
-  fromGw: number | null
   openPlayer: (id: number) => void
 }) {
   const m = W.model
@@ -514,10 +500,20 @@ function Digest({
               the model now match, including bench order.
             </p>
           ) : noTransfer ? (
-            <p>
-              Do not make a transfer. Apply the captain, vice, starting-XI or
-              bench-order corrections listed below.
-            </p>
+            <>
+              <p>Do not make a transfer. Fix these in the FPL app:</p>
+              {liveIssues !== null ? (
+                <ul className="problems" style={{ margin: '10px 0 0' }}>
+                  {liveIssues.map((it, i) => (
+                    <li key={i}><strong>{it.head}</strong> {it.body}</li>
+                  ))}
+                </ul>
+              ) : (
+                <ul className="problems" style={{ margin: '10px 0 0' }}>
+                  {issues.map((line, i) => <li key={i}><Md line={line} /></li>)}
+                </ul>
+              )}
+            </>
           ) : (
             <p>
               This is the current transfer action. The pitch below is for the
@@ -571,44 +567,6 @@ function Digest({
           vice={m.vice} openPlayer={openPlayer} />
       </section>
 
-      {(hasDigestLineup || liveIssues !== null) && (
-        <section className="panel" style={{ marginTop: 16 }}>
-          <div className="panel-hd">
-            <h2>Your lineup vs the model</h2>
-            <span className="sub">
-              {liveIssues !== null ? `picks from GW${fromGw}` : `lineup from ${W.squad.source}`}
-            </span>
-          </div>
-          {liveIssues !== null ? (
-            liveIssues.length === 0 ? (
-              <div style={{ padding: '2px 14px 14px' }}>
-                <div className="ready">
-                  Your captain, vice, XI and bench order all match the model. ✓
-                </div>
-              </div>
-            ) : (
-              <ul className="problems" style={{ margin: 14 }}>
-                {liveIssues.map((it, i) => (
-                  <li key={i}><strong>{it.head}</strong> {it.body}</li>
-                ))}
-              </ul>
-            )
-          ) : hasDigestLineup ? (
-            issues.length === 0 ? (
-              <div style={{ padding: '2px 14px 14px' }}>
-                <div className="ready">
-                  Your captain, vice, XI and bench order all match the model. ✓
-                </div>
-              </div>
-            ) : (
-              <ul className="problems" style={{ margin: 14 }}>
-                {issues.map((line, i) => <li key={i}><Md line={line} /></li>)}
-              </ul>
-            )
-          ) : null}
-        </section>
-      )}
-
       <section className="panel" style={{ marginTop: 16 }}>
         <div className="panel-hd">
           <h2>Check before the deadline</h2>
@@ -633,9 +591,7 @@ function Digest({
       <section className="panel" style={{ marginTop: 16 }}>
         <div className="panel-hd">
           <h2>Transfers</h2>
-          <span className="sub">
-            hold = {tr.base.toFixed(1)} over GW{gw}–{horizon}
-          </span>
+          <span className="sub">GW{gw}–{horizon} window</span>
         </div>
         {decisionInstruction && <p className="lede-sm">{decisionInstruction}</p>}
         {tr.singles.length === 0 && tr.pairs.length === 0 ? (
@@ -728,7 +684,7 @@ function Digest({
             )}
           </p>
           <details className="scenario-details">
-            <summary>{plan.worth_it ? 'See the model path' : 'See the rejected model scenario'}</summary>
+            <summary>See the six-week path</summary>
             <div className="scenario-body tbl-scroll">
               <table>
               <thead>

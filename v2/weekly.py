@@ -211,6 +211,7 @@ def load_squad(team_id, players, gw):
             print(f'  loaded your real squad and lineup from Gameweek {ev} '
                   f'(bank £{bank:.1f}m, {ft} free transfer{"s" if ft != 1 else ""})')
             return dict(ids=ids, bank=bank, ft=ft, lineup=lineup, history=hist,
+                        entry_id=team_id,
                         source=f'FPL entry {team_id}, picks from GW{ev}')
         print('  no public picks yet for that entry (they appear after a deadline)')
 
@@ -910,6 +911,9 @@ def main():
                         swap = [q for q in yxi if q['id'] not in mset and q['pos'] == p['pos']]
                         alt = swap[0] if swap else next((q for q in yxi if q['id'] not in mset), None)
                         gap = key(p) - (key(alt) if alt else 0)
+                        # a swap worth under half a point is not an instruction
+                        if alt and gap < 0.5:
+                            continue
                         issues.append(f'**Bench → start:** {p["name"]} ({key(p):.1f}) is on '
                                       f'your bench; the model starts him'
                                       + (f' over {alt["name"]} ({key(alt):.1f}), {gap:+.1f}.'
@@ -920,11 +924,7 @@ def main():
                     issues.append(f'**Bench order:** your first sub is {yfirst["name"]} '
                                   f'({key(yfirst):.1f}); {mfirst["name"]} ({key(mfirst):.1f}) '
                                   f'is the better first man off.')
-                yshape = {pos: sum(1 for p in yxi if p['pos'] == pos) for pos in POS_ORDER}
-                if yshape != shape:
-                    issues.append(f'Formation: you {yshape["DEF"]}-{yshape["MID"]}-'
-                                  f'{yshape["FWD"]}, model {shape["DEF"]}-{shape["MID"]}-'
-                                  f'{shape["FWD"]}.')
+                # (formation is a consequence of the swaps above, not a separate fix)
             J['lineup_issues'] = list(issues)
             L.append(f'## Your lineup vs the model  ({st["source"]})')
             L.append('')

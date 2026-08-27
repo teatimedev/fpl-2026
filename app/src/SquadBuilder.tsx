@@ -136,7 +136,7 @@ export default function SquadBuilder({
         </section>
 
         <div style={{ marginTop: 16 }}>
-          <ContextPanels D={D} squad={picks} xi={xi} />
+          <ContextPanels D={D} squad={picks} xi={xi} draft />
         </div>
       </aside>
     </div>

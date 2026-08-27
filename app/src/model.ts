@@ -375,6 +375,8 @@ export function lineupIssues(
       const alt = yxi.find(q => !mset.has(q.id) && q.pos === p.pos)
         ?? yxi.find(q => !mset.has(q.id))
       const gap = key(p) - (alt ? key(alt) : 0)
+      // a swap worth under half a point is not an instruction (mirrors weekly.py)
+      if (alt && gap < 0.5) continue
       issues.push({
         head: 'Bench → start:',
         body: `${p.name} (${f1(key(p))}) is on your bench; the model starts him`
@@ -390,11 +392,7 @@ export function lineupIssues(
           + `${mfirst.name} (${f1(key(mfirst))}) is the better first man off.`,
       })
     }
-    const shape = (ps: Player[]) =>
-      (['DEF', 'MID', 'FWD'] as Pos[]).map(k => ps.filter(p => p.pos === k).length).join('-')
-    if (shape(yxi) !== shape(xi)) {
-      issues.push({ head: 'Formation:', body: `you ${shape(yxi)}, model ${shape(xi)}.` })
-    }
+    // (formation is a consequence of the swaps above, not a separate fix)
   }
   return issues
 }

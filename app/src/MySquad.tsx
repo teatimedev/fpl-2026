@@ -136,7 +136,7 @@ export default function MySquad({
             <div className="week-hd" style={summary ? { paddingTop: 10 } : undefined}>
               <LinkTeamForm
                 entryId={entryId} onSave={linked.setEntryId} busy={busy} err={err} inputId="entry-ms"
-                hint="Find the number in the URL of your FPL points page. Picks become public after the first deadline."
+                hint="Find the number in the URL of your FPL points page."
                 linkedLine={linked.team
                   ? <> · picks from GW{linked.team.fromGw} · £{linked.team.bank.toFixed(1)}m banked</>
                   : (!busy && !err ? ' · picks not public yet' : null)}
@@ -146,7 +146,7 @@ export default function MySquad({
                   Showing the squad confirmed from official FPL on <strong>{genStr}</strong>
                   {' '}({weekly?.squad.source})
                   {!summary && bankShown != null && <> · £{bankShown.toFixed(1)}m in the bank</>}
-                  {' '}— public picks will take over automatically after the deadline.
+                  .
                 </p>
               )}
               <p className="draft-row">
@@ -316,7 +316,7 @@ function SquadView({
     const mv = D.movers?.players?.[String(p.id)]
     if (mv) {
       const bits: string[] = []
-      if (Math.abs(mv.d_sel_7) >= 1) bits.push(`ownership ${signed(mv.d_sel_7)}pp 7d`)
+      // ownership drift is market chatter, not squad health; a price move is money
       if (Math.abs(mv.d_price_7) >= 0.1) bits.push(`price ${signed(mv.d_price_7)} 7d`)
       if (bits.length) flags.push({ tone: 'info', text: bits.join(', ') })
     }

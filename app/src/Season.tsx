@@ -87,10 +87,6 @@ export default function Season({
     : []
 
   const days = movers?.days ?? 0
-  const flow = [
-    ...(movers?.top.bought_event ?? []).map(r => ({ r, dir: '▲' })),
-    ...(movers?.top.sold_event ?? []).map(r => ({ r, dir: '▼' })),
-  ]
 
   return (
     <div className="season">
@@ -225,7 +221,7 @@ export default function Season({
         <div className="panel-hd">
           <h2>Movers</h2>
           <span className="sub">
-            {movers ? `${days} day${days === 1 ? '' : 's'} of ownership log` : 'no log yet'}
+            {movers ? `logged since ${movers.first}` : 'no log yet'}
           </span>
         </div>
         {!movers ? (
@@ -250,34 +246,10 @@ export default function Season({
                 )}
               </div>
             </div>
-            <h3 className="movers-h">This gameweek's flow</h3>
-            {flow.length === 0 ? (
-              <p className="movers-empty">
-                No transfer flow recorded yet this gameweek.
-              </p>
-            ) : (
-              <div className="spread" style={{ padding: '4px 0 0' }}>
-                {flow.map(({ r, dir }) => {
-                  const p = byId.get(r.id)
-                  const st = movers.players?.[String(r.id)]
-                  if (!p || !st) return null
-                  return (
-                    <button key={`${dir}${r.id}`}
-                      className={`club-chip plainbtn${dir === '▲' ? ' full' : ''}`}
-                      onClick={() => openPlayer(p.id)}>
-                      {dir} {p.name}{' '}
-                      <span className="mono">
-                        {st.net_event > 0 ? '+' : ''}{st.net_event.toLocaleString()}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            )}
             <p className="season-caveat" style={{ padding: '10px 0 0' }}>
               {days < 7
-                ? `The ownership log started ${movers.first} — ${days} day${days === 1 ? '' : 's'} of data so far, so weekly deltas are still filling in.`
-                : `Ownership log ${movers.first} → ${movers.latest}.`}
+                ? `${days} refresh${days === 1 ? '' : 'es'} logged since ${movers.first}; the 7-day columns fill in as the log grows. This gameweek's transfer flow is under Price watch on This week.`
+                : `Ownership logged ${movers.first} → ${movers.latest}. This gameweek's transfer flow is under Price watch on This week.`}
             </p>
           </div>
         )}

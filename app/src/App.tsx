@@ -26,6 +26,10 @@ export default function App() {
     return hasSquad || hasTeam || hasConfirmedSquad ? 'week' : 'squad'
   })
 
+  // Each tab is its own page: start it at the top, not wherever the last one
+  // was scrolled to.
+  const go = (t: Tab) => { setTab(t); window.scrollTo(0, 0) }
+
   // Live prices, availability and the linked team, loaded once for every tab.
   const linked = useLinkedTeam(D.weekly?.squad.entry_id?.toString() ?? '')
 
@@ -103,15 +107,15 @@ export default function App() {
   return (
     <div className="shell">
       <header className="topbar">
-        <h1>FPL <em>26/27</em> Selector</h1>
+        <h1>FPL <em>26/27</em></h1>
         <span className="tag">
-          {D.players.length} players · live prices · locked until deadline
+          live prices · model rebuilt {D.meta.generated}
         </span>
         <div className="seg tabs">
-          <button aria-pressed={tab === 'week'} onClick={() => setTab('week')}>This week</button>
-          <button aria-pressed={tab === 'season'} onClick={() => setTab('season')}>Season</button>
-          <button aria-pressed={tab === 'squad'} onClick={() => setTab('squad')}>My squad</button>
-          <button aria-pressed={tab === 'score'} onClick={() => setTab('score')}>Scorecard</button>
+          <button aria-pressed={tab === 'week'} onClick={() => go('week')}>This week</button>
+          <button aria-pressed={tab === 'season'} onClick={() => go('season')}>Season</button>
+          <button aria-pressed={tab === 'squad'} onClick={() => go('squad')}>My squad</button>
+          <button aria-pressed={tab === 'score'} onClick={() => go('score')}>Scorecard</button>
         </div>
         <div className="countdown">
           <span className="k">Gameweek {D.meta.start_gw ?? 1} deadline</span>
@@ -144,17 +148,23 @@ export default function App() {
       )}
 
       <footer className="foot">
-        Prices, injuries and your squad are read live from the official Fantasy
-        Premier League API each time you open this. Projections are rebuilt about
-        24 hours and 2 hours before every deadline (and each Thursday). Public
-        official club news is scanned every three hours from T−30h, then hourly
-        from T−6h to T−45m; an owned-player change triggers another full rebuild.
-        Bookmaker odds are blended in where posted — model last built {D.meta.generated}.<br />
-        Attack and defence ratings are fitted by maximum likelihood on four
-        seasons of real results and validated against bookmaker closing odds;
-        player rates are shrunk by measured year-over-year stability. Hold-out
-        rank correlation is about 0.46, so treat the ordering as a strong hint
-        and the totals as rough.
+        <details>
+          <summary>How this works · model last built {D.meta.generated}</summary>
+          <p>
+            Prices, injuries and your squad are read live from the official Fantasy
+            Premier League API each time you open this. Projections are rebuilt about
+            24 hours and 2 hours before every deadline (and each Thursday); public
+            official club news is scanned in the run-up, and a change to one of your
+            players triggers another rebuild. Bookmaker odds are blended in where posted.
+          </p>
+          <p>
+            Attack and defence ratings are fitted by maximum likelihood on four
+            seasons of real results and validated against bookmaker closing odds;
+            player rates are shrunk by measured year-over-year stability. Hold-out
+            rank correlation is about 0.46, so treat the ordering as a strong hint
+            and the totals as rough.
+          </p>
+        </details>
       </footer>
     </div>
   )

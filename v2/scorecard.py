@@ -541,17 +541,19 @@ def main():
     )
     out = dict(generated=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                summary=summary, gws=graded,
-               notes=['Hold-out backtest before the season: rank correlation ~0.46 '
-                      'on points per 90 among established players.',
-                      'spearman_starters is over players the model gave a 60%+ chance '
-                      'of starting; spearman_pool over everyone projected 0.5+.',
-                      'Captain and XI rows need a known squad at snapshot time.',
-                      'level_ratio_cum is sum(actual)/sum(proj) over likely starters, '
-                      'cumulative; with the calibration frozen (P4) it measures drift. '
-                      'Do not feed it back before GW8 (P7).',
-                      'recency_vs_aggregate_lift > 0 means the recency minutes rule '
-                      'had the lower start Brier that week; production switches only '
-                      'after it wins over four or more gameweeks (P2).'])
+               notes=['Before the season, the hold-out backtest gave a rank '
+                      'correlation of about 0.46 on points per 90 among established '
+                      'players — one gameweek is far noisier than that.',
+                      '"Starters" are players the model gave a 60%+ chance of '
+                      'starting; "pool" is everyone projected 0.5+.',
+                      'Captain and XI compare the model\'s pick, yours, and the '
+                      'hindsight-best pick from the same squad.',
+                      'Level: actual points as a share of projected, cumulative over '
+                      'likely starters. The calibration is frozen, so this measures '
+                      'drift; it is not fed back into the model before GW8.',
+                      'Start lift: how much better the in-season minutes rule '
+                      '(recency-weighted, in production since GW2) predicts starts '
+                      'than the pre-season prior; positive is better.'])
     OUT.write_text(json.dumps(out, indent=1))
     print(f'scorecard: {len(graded)} gameweek(s) graded -> {OUT}')
 
