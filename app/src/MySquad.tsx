@@ -485,8 +485,10 @@ function SquadView({
               </p>
             )}
             <p className="hint" style={{ padding: '0 14px 14px', margin: 0 }}>
-              Gain is the lift to your best XI over GW{gw}–{horizon}, captain included;
-              hits cost {HIT_COST} each beyond your free transfers.
+              On pitch is the lift to your best XI and captain over GW{gw}–{horizon};
+              "with cover" adds the bench playing when a starter sits — real expectation,
+              not a reason to buy a rotation risk. Hits cost {HIT_COST} each beyond your
+              free transfers.
             </p>
           </section>
 

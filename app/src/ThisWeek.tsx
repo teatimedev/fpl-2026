@@ -529,6 +529,8 @@ function Digest({
         </div>
       </section>
 
+      <div className="week-grid">
+      <div className="wcol">
       <section className="panel accent" style={{ marginTop: 10 }}>
         <div className="panel-hd">
           <h2>Captain</h2>
@@ -601,19 +603,6 @@ function Digest({
         </div>
       </section>
 
-      {W.retro && W.retro.table.length > 0 && (
-        <LastWeek retro={W.retro} poolById={poolById} openPlayer={openPlayer} />
-      )}
-
-      <section className="panel" style={{ marginTop: 16 }}>
-        <div className="panel-hd">
-          <h2>Your recommended lineup</h2>
-          <span className="sub">{shape}</span>
-        </div>
-        <Pitch D={D} xi={xiPlayers} bench={benchPlayers} captain={m.captain}
-          vice={m.vice} openPlayer={openPlayer} />
-      </section>
-
       {checks.length > 0 && (
         <section className="panel" style={{ marginTop: 16 }}>
           <div className="panel-hd">
@@ -630,7 +619,6 @@ function Digest({
           </ul>
         </section>
       )}
-
       <section className="panel" style={{ marginTop: 16 }}>
         <div className="panel-hd">
           <h2>Transfers</h2>
@@ -742,6 +730,24 @@ function Digest({
           </details>
         )}
       </section>
+      </div>
+      <div className="wcol">
+      {W.retro && W.retro.table.length > 0 && (
+        <LastWeek retro={W.retro} poolById={poolById} openPlayer={openPlayer} />
+      )}
+
+      <section className="panel" style={{ marginTop: 16 }}>
+        <div className="panel-hd">
+          <h2>Your recommended lineup</h2>
+          <span className="sub">{shape}</span>
+        </div>
+        <Pitch D={D} xi={xiPlayers} bench={benchPlayers} captain={m.captain}
+          vice={m.vice} openPlayer={openPlayer} />
+      </section>
+      </div>
+      </div>
+
+
 
 
     </>

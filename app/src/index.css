@@ -1041,3 +1041,26 @@ details[open].news-health > summary::before,
   .retro-bar { grid-area: bar; } .retro-why { grid-area: why; }
   .cap-table th:nth-child(3), .cap-table td:nth-child(3) { display: none; }
 }
+
+/* This week: one column on a phone, two at a desk (decisions left, evidence right) */
+.week-grid { display: grid; grid-template-columns: minmax(0, 1fr); }
+.week-grid > .wcol { min-width: 0; }
+@media (min-width: 1180px) {
+  .week { max-width: none; }
+  .week-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 20px; align-items: start; }
+  .week-grid > .wcol > .panel:first-child { margin-top: 10px; }
+}
+
+/* Phone: the tabs live at the bottom, under the thumb, not under the title. */
+@media (max-width: 700px) {
+  .seg.tabs {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+    margin: 0; display: flex; border: 0; border-top: var(--line-strong); border-radius: 0;
+    background: rgba(7, 21, 15, 0.96); backdrop-filter: blur(10px);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .seg.tabs button { flex: 1 1 0; padding: 13px 2px; font-size: 11px; letter-spacing: 0.06em; border-right: var(--line); }
+  .seg.tabs button:last-child { border-right: 0; }
+  .shell { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+  .topbar { margin-bottom: 12px; }
+}
