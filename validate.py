@@ -4,10 +4,16 @@ Deliberately does not import the optimiser -- it re-derives every constraint
 from the official game rules and the raw API prices so a bug in the solver
 cannot hide behind a bug in its own validation.
 """
-import json, sys
+import json, os, sys
 from collections import Counter
 
-BOOT = json.load(open('data/bootstrap.json'))
+# Prices must be the ones the optimiser priced against: v2's fetch writes this
+# run's bootstrap to v2/cache/, and data/bootstrap.json is the v1 dump from
+# 6 Aug 2026. The first refresh after prices started moving (27 Aug) failed
+# on a £0.1m mismatch for exactly that reason.
+BOOT_PATH = ('v2/cache/bootstrap.json' if os.path.exists('v2/cache/bootstrap.json')
+             else 'data/bootstrap.json')
+BOOT = json.load(open(BOOT_PATH))
 PRICE = {p['id']: p['now_cost'] for p in BOOT['elements']}
 POS = {p['id']: p['element_type'] for p in BOOT['elements']}
 TEAM = {p['id']: p['team'] for p in BOOT['elements']}
