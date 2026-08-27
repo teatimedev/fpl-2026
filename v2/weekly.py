@@ -697,8 +697,8 @@ def retro_minutes_warnings(retro, squad, eng):
             text += (f" Best legal same-position replacement: {move['in_']['name']} "
                      f"({move['gain']:+.1f}: {move['xi_gain']:+.1f} XI/captain, "
                      f"{move['autosub_gain']:+.1f} auto-sub cover)")
-            text += (', under the hold threshold on the numbers alone.'
-                     if move['gain'] < HOLD_THRESHOLD else '.')
+            text += (', under the hold threshold on the pitch alone.'
+                     if move['xi_gain'] < HOLD_THRESHOLD else '.')
         else:
             text += ' No legal same-position replacement improves the squad on the numbers.'
         lines.extend([text, ''])
@@ -1041,7 +1041,8 @@ def main():
                          f'**{s["gain"]:+.1f}** | {s["net"]:+.1f} |')
             if retro:
                 L.extend(retro_table_notes(retro, eng))
-            best = eng['singles'][0]
+            best = eng['singles'][0]                       # by total (table order)
+            pitch = max(eng['singles'], key=lambda m: m['xi_gain'])   # by XI + captain
             forced = next((u['replacement'] for u in eng['unavailable']
                            if u['replacement']), None)
             L.append('')
@@ -1071,18 +1072,30 @@ def main():
                          f'{best["in_"]["name"]} ({best["gain"]:+.1f}).')
                 P.append(f'Use a FT (you have {ft}): {best["out"]["name"]}→'
                          f'{best["in_"]["name"]} {best["gain"]:+.1f}')
-            elif best['gain'] < HOLD_THRESHOLD:
+            elif pitch['xi_gain'] < HOLD_THRESHOLD:
+                # Judged on the pitch (XI + captain). Auto-sub cover is real
+                # expectation, but it is the bench playing more because the
+                # newcomer sits — buying a rotation risk so the bench mops up
+                # is not a reason to transfer. GW2 2026/27: Milenković →
+                # Gvardiol showed +3.7 (+1.3 XI, +2.5 cover) while the planner
+                # on the same data said hold; the digest contradicted itself.
+                cover = ''
+                if best is not pitch or best['autosub_gain'] >= 1.0:
+                    cover = (f' ({best["out"]["name"]} → {best["in_"]["name"]} reaches '
+                             f'{best["gain"]:+.1f} only once auto-sub cover is counted, '
+                             f'and cover is the bench playing more, not the XI improving)')
                 L.append(f'**Recommended: hold.** The best free move is only '
-                         f'{best["gain"]:+.1f} over the window; a banked transfer is '
-                         f'worth more next week when you know more (you would have '
-                         f'{min(MAX_FT, ft + 1)}).')
-                P.append(f'Transfers: HOLD (best is only {best["gain"]:+.1f})')
+                         f'{pitch["xi_gain"]:+.1f} on the pitch over the window{cover}; '
+                         f'a banked transfer is worth more next week when you know more '
+                         f'(you would have {min(MAX_FT, ft + 1)}).')
+                P.append(f'Transfers: HOLD (best is only {pitch["xi_gain"]:+.1f} on the pitch)')
             else:
                 action_kind = 'transfer'
-                L.append(f'**Recommended:** {best["out"]["name"]} → {best["in_"]["name"]}, '
-                         f'{best["gain"]:+.1f} over the window with a free transfer.')
-                P.append(f'Transfer: {best["out"]["name"]}→{best["in_"]["name"]} '
-                         f'{best["gain"]:+.1f}')
+                L.append(f'**Recommended:** {pitch["out"]["name"]} → {pitch["in_"]["name"]}, '
+                         f'{pitch["xi_gain"]:+.1f} on the pitch over the window with a free '
+                         f'transfer ({pitch["gain"]:+.1f} with auto-sub cover).')
+                P.append(f'Transfer: {pitch["out"]["name"]}→{pitch["in_"]["name"]} '
+                         f'{pitch["xi_gain"]:+.1f}')
         if retro:
             clause = retro_verdict_lines(retro, squad)
             if clause:
@@ -1101,9 +1114,13 @@ def main():
                          f'{delta:+.1f} | {pr["xi_gain"]:+.1f} | '
                          f'{pr["autosub_gain"]:+.1f} | {pr["gain"]:+.1f} | '
                          f'**{pr["net"]:+.1f}** |')
-            top = eng['pairs'][0]
-            if top['net'] > (eng['singles'][0]['net'] if eng['singles'] else 0) + 1.0 \
-                    and top['net'] > 2.0:
+            # same rule as the singles: promote a pair on what it does on the
+            # pitch net of hits, not on auto-sub cover
+            def xi_net(m):
+                return m['xi_gain'] - (m['gain'] - m['net'])
+            top = max(eng['pairs'], key=xi_net)
+            if xi_net(top) > (xi_net(pitch) if eng['singles'] else 0) + 1.0 \
+                    and xi_net(top) > HOLD_THRESHOLD:
                 o1, o2 = top['out']; n1, n2 = top['in_']
                 L.append('')
                 if ft >= 15:
@@ -1116,12 +1133,13 @@ def main():
                     pair_names = (f'{o1["name"]}+{o2["name"]} → '
                                   f'{n1["name"]}+{n2["name"]}')
                     recommendation = (
-                        f'**Recommended:** {pair_names} ({top["net"]:+.1f} net); '
+                        f'**Recommended:** {pair_names} ({xi_net(top):+.1f} on the pitch '
+                        f'net of hits, {top["net"]:+.1f} with auto-sub cover); '
                         'this is the best package and beats any single move.'
                     )
                     _supersede_transfer_recommendation(
                         L, P, J['transfers'], recommendation,
-                        f'Transfers: {pair_names} net {top["net"]:+.1f}',
+                        f'Transfers: {pair_names} net {xi_net(top):+.1f}',
                     )
         L.append('')
 
@@ -1232,6 +1250,38 @@ def main():
                         _supersede_transfer_recommendation(
                             L, P, J['transfers'], recommendation,
                             f'Plan this week: {plan_text}',
+                        )
+                    elif action_kind == 'transfer' and not unlimited:
+                        # The singles table found a move worth its window gain,
+                        # but using the free transfer NOW rather than next week
+                        # is worth less than the hold threshold: the gain is
+                        # real, the urgency is not. One verdict, in one voice
+                        # (GW2 2026/27: Milenković → Gvardiol +4.1 on the
+                        # pitch over the window; acting now +1.0).
+                        action_kind = 'hold'
+                        w = free['weeks'][0]
+                        paired = []
+                        for pos in POS_ORDER:
+                            incoming = [i for i in w['in'] if players[i]['pos'] == pos]
+                            outgoing = [o for o in w['out'] if players[o]['pos'] == pos]
+                            paired.extend(zip(outgoing, incoming))
+                        queued = ', '.join(f"{players[o]['name']} → {players[i]['name']}"
+                                           for o, i in paired)
+                        lead_in = (f'{queued} is the move queued — worth taking over the '
+                                   'window, but taking it now rather than next week'
+                                   if queued else
+                                   'The best move is worth its window gain, but making it '
+                                   'now rather than next week')
+                        recommendation = (
+                            f'**Recommended: hold.** {lead_in} is worth only {diff:+.1f} '
+                            f'(the plan scores {free["total"]:.1f} against {hold["total"]:.1f} '
+                            f'with the transfer banked); bank it — you would have '
+                            f'{min(MAX_FT, ft + 1)}.'
+                        )
+                        _supersede_transfer_recommendation(
+                            L, P, J['transfers'], recommendation,
+                            f'Transfers: HOLD ({queued or "best move"} queued; '
+                            f'acting now only {diff:+.1f})',
                         )
                     lead = ('Best exact-scored pre-season build'
                             if free_source == 'exact static build' else 'Best path from here')

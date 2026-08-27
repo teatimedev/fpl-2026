@@ -178,3 +178,24 @@ justifies a hit, availability flags, and price-change pressure. Writes
 Before Gameweek 1 your picks are not public, so list your 15 in
 `v2/my_squad.txt` instead. Add `--full` once a week to refresh the four-season
 histories; the default skips them.
+
+## 6. In-season learning (measured 27 Aug 2026)
+
+Per-gameweek rows for 2022/23–2025/26 are imported from vaastav
+(`import_gw_history.py`) into `gw_stat`, and `backtest_inseason.py` walks
+forward over them. What it settled — full tables in
+`RESEARCH-INSEASON-LEARNING.md` §0.1:
+
+- **Minutes:** the recency rule (per-fixture evidence, half-life 3 games,
+  trust n_eff/(n_eff+1)) beats the season-aggregate rule on 107,801
+  predictions, Brier 0.118 → 0.095 (regulars 0.174 → 0.135). Production
+  switched (`player_model.MINUTES_RULE = 'recency'`); the aggregate rule is
+  archived alongside so `scorecard.py` keeps grading both.
+- **Attacking rates:** the multi-season blend already learns for players
+  whose context changed; a context multiplier buys nothing
+  (`CONTEXT_CURRENT_MULT = 1.0`).
+- **Team layer:** decaying promoted/new-manager adjustments beat fixed ones
+  (log-loss 0.9615 vs 0.9723 on 526 fixtures); K_T=30, K_M=15.
+- **Classes:** after a variance week, holding beats swapping by +2.0 over
+  three gameweeks; a fit player benched once starts next week 23% of the
+  time; a three-start xGI window is 3.6× worse than the prior.

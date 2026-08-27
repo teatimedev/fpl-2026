@@ -652,7 +652,7 @@ function Digest({
                   <thead>
                     <tr>
                       <th className="l">Out</th><th className="l">In</th>
-                      <th>£</th><th>Gain</th><th>Net of hits</th>
+                      <th>£</th><th>On pitch</th><th>Gain</th><th>Net of hits</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -661,6 +661,7 @@ function Digest({
                         <td className="l">{names([s.out])} <span className="s">{teamOf(s.out)}</span></td>
                         <td className="l">{names([s.in_])} <span className="s">{teamOf(s.in_)}</span></td>
                         <td>{money([s.out], [s.in_])}</td>
+                        <td className="mono">{s.xi_gain == null ? '—' : signed(s.xi_gain)}</td>
                         <td style={{ color: 'var(--flood-soft)' }}>+{s.gain.toFixed(1)}</td>
                         <td>{netCell(s.net, s.gain)}</td>
                       </tr>
@@ -677,7 +678,7 @@ function Digest({
                     <thead>
                       <tr>
                         <th className="l">Out</th><th className="l">In</th>
-                        <th>£</th><th>Gain</th><th>Net of hits</th>
+                        <th>£</th><th>On pitch</th><th>Gain</th><th>Net of hits</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -686,6 +687,7 @@ function Digest({
                           <td className="l">{names(s.out)}</td>
                           <td className="l">{names(s.in_)}</td>
                           <td>{money(s.out, s.in_)}</td>
+                          <td className="mono">{s.xi_gain == null ? '—' : signed(s.xi_gain)}</td>
                           <td style={{ color: 'var(--flood-soft)' }}>+{s.gain.toFixed(1)}</td>
                           <td>{netCell(s.net, s.gain)}</td>
                         </tr>
@@ -696,8 +698,10 @@ function Digest({
               </>
             )}
             <p className="hint" style={{ padding: '10px 14px 14px' }}>
-              Gain is projected points over GW{gw}–{horizon} against holding; net
-              takes off {HIT_COST} per move beyond your free transfers.
+              On pitch is the lift to your expected XI and captain over GW{gw}–{horizon};
+              gain adds auto-sub cover (the bench playing when a starter sits) and is
+              not what the verdict is judged on; net takes off {HIT_COST} per move
+              beyond your free transfers.
             </p>
             </div>
           </details>

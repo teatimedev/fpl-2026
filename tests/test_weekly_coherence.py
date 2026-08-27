@@ -32,10 +32,16 @@ class WeeklyCoherenceTests(unittest.TestCase):
     def test_weekly_snapshot_records_when_the_private_squad_was_confirmed(self):
         squad = _weekly()["squad"]
 
-        self.assertEqual(squad["source"], "confirmed pre-deadline squad")
-        self.assertTrue(squad["confirmed_at"])
-        self.assertTrue(squad["entry_id"])
-        self.assertTrue(squad["changes"])
+        # pre-season the squad comes from v2/my_squad.txt (with its confirmed
+        # timestamp and change log); from GW1's deadline on, from the public
+        # picks endpoint of the linked entry
+        if squad["source"].startswith("FPL entry"):
+            self.assertRegex(squad["source"], r"^FPL entry \d+, picks from GW\d+$")
+        else:
+            self.assertEqual(squad["source"], "confirmed pre-deadline squad")
+            self.assertTrue(squad["entry_id"])
+            self.assertTrue(squad["confirmed_at"])
+            self.assertTrue(squad["changes"])
 
     def test_recorded_sync_changes_are_reflected_in_the_squad_and_lineup(self):
         squad = _weekly()["squad"]
@@ -66,7 +72,7 @@ class WeeklyCoherenceTests(unittest.TestCase):
     def test_structured_decision_and_displayed_instruction_agree(self):
         weekly_data = _weekly()
 
-        self.assertEqual(weekly_data["decision"]["kind"], "hold")
+        self.assertIn(weekly_data["decision"]["kind"], ("hold", "transfer", "rebuild"))
         self.assertEqual(
             weekly_data["decision"]["instruction"],
             weekly_data["transfers"]["advice"],

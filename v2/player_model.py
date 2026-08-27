@@ -69,20 +69,33 @@ CURRENT = '2026/27'
 #
 # MINUTES_RULE picks production; the other rule is always computed too and
 # archived in the snapshot (p_start_recency / p_start_aggregate) so
-# scorecard.py grades both side by side. Switch production only once the
-# recency rule has the lower start Brier over >= 4 graded gameweeks.
+# scorecard.py grades both side by side (recency_vs_aggregate_lift).
 #
-# RECENCY_K and RECENCY_HALF_LIFE are PLACEHOLDERS: nothing has measured them
-# yet. backtest_inseason.py --minutes grids K in {2,4,6,8} x HALF_LIFE in
-# {2,3,5,inf} on the imported 2022/23-2025/26 per-GW rows; quote its result
-# here when it has run. (K=4 keeps the two rules comparable at n=1; note that
-# at K=4, HL=3 three straight benchings take a 0.9 regular to ~0.56, not the
-# <0.4 the plan asks for — K~1.5 would, which is exactly what the grid must
-# decide.)
+# MEASURED 27 Aug 2026 (backtest_inseason.py --minutes, 107,801 player-GW
+# predictions over 2022/23-2025/26, "starts in GW n+1" from rows through n):
+#   aggregate (K=4)           Brier 0.1181   regulars (prior start >= 0.7) 0.1735
+#   recency K=2  HL=3               0.1014                                 0.1472
+#   recency K=1  HL=3               0.0952                                 0.1348
+#   recency K=0.5 HL=2              0.0911  (grid edge)                    0.1272
+# Recency wins in every phase (GW2-8, 9-24, 25-37) and every prior-start
+# band, and keeps improving to the smallest K and shortest half-life tested:
+# the last one or two games are nearly all the evidence that matters. The
+# harness cannot see injuries (every club fixture counts as evidence), so
+# some of that edge is the rule "predicting" a continued absence that the
+# availability layer handles in production; hence one step inside the
+# optimum: K=1, HL=3. At K=1/HL=3 a 0.9 regular is 0.45 after one benching
+# and 0.26 after three (the plan asked for < 0.4). The forward scorecard's
+# recency_vs_aggregate_lift is the check that this survives contact with
+# real availability; revisit K=0.5/HL=2 if it does over >= 4 gameweeks.
+#
+# Minutes per start use their own trust constant: the grid measured start
+# probability only, and K=1 would let one 67' start move a regular's 90 to
+# 78. RECENCY_MPS_K keeps the old, unmeasured behaviour for that half.
 CURRENT_TRUST_K = 4.0
-RECENCY_K = 4.0
+RECENCY_K = 1.0
 RECENCY_HALF_LIFE = 3.0
-MINUTES_RULE = os.environ.get('FPL_MINUTES_RULE', 'aggregate')
+RECENCY_MPS_K = 4.0
+MINUTES_RULE = os.environ.get('FPL_MINUTES_RULE', 'recency')
 if MINUTES_RULE not in ('aggregate', 'recency'):
     raise SystemExit(f'FPL_MINUTES_RULE must be aggregate or recency, not {MINUTES_RULE!r}')
 # Deadline availability per archived gameweek, {gw: {player id: (status,
@@ -306,11 +319,14 @@ OVERLAY, PRESEASON_FORM = load_overlay()
 
 
 # P5: how much MORE to believe the current season's rates for a player whose
-# context changed (new club, new manager). 1.0 = the plain minutes weight,
-# i.e. no change. This is a PLACEHOLDER until backtest_inseason.py --rates has
-# measured, on the imported per-GW rows, whether first-n-GW xG/90 predicts the
-# rest of the season better than the multi-season prior for movers vs stayers,
-# and by how much. Do not raise it on judgement.
+# context changed (new club, new manager). 1.0 = the plain minutes weight.
+# MEASURED 27 Aug 2026 (backtest_inseason.py --rates, rest-of-season xG/90
+# and xA/90 from the first n gameweeks, 2022/23-2025/26): for changed-context
+# players the plain blend already learns — prior-only wMAE 0.0667 vs blend
+# 0.0612 at n=3 (Spearman 0.656 -> 0.699) — and m=2 improves on m=1 by
+# 0.0002 at best (n=3-5) while m>=5 is worse everywhere; for stable players
+# m=1 is best at every n. So the multiplier stays at 1.0: the shrinkage is
+# right as it stands and there is nothing to buy here.
 CONTEXT_CURRENT_MULT = 1.0
 
 
@@ -517,7 +533,7 @@ def recency_update(p, prior_rate, prior_mps, k=None, half_life=None, evidence=No
     start_rate = trust * rate_now + (1 - trust) * prior_rate
     mps = prior_mps
     if mw > 0:
-        t_m = mw / (mw + k)
+        t_m = mw / (mw + RECENCY_MPS_K)
         mps = t_m * (mm / mw) + (1 - t_m) * prior_mps
     return max(0.0, min(0.97, start_rate)), mps
 

@@ -229,14 +229,24 @@ class RecencyRuleTests(unittest.TestCase):
         rate, _ = self._update(ev)
         self.assertGreater(rate, 0.8)
 
-    def test_three_straight_benchings_at_placeholder_constants(self):
+    def test_three_straight_benchings_at_measured_constants(self):
         ev = [(0, 0, 0), (1, 0, 0), (2, 0, 0)]
-        rate, _ = self._update(ev)                       # K=4, HL=3 placeholders
-        # documented in player_model.py: ~0.56, NOT the <0.4 the plan asks for
-        self.assertGreater(rate, 0.5)
-        self.assertLess(rate, 0.6)
-        tight, _ = self._update(ev, k=1.5)               # what K~1.5 would do
-        self.assertLess(tight, 0.4)
+        rate, _ = self._update(ev)                       # K=1, HL=3 (measured 27 Aug)
+        # documented in player_model.py: a 0.9 regular is ~0.26 after three
+        # straight benchings — the < 0.4 the plan asked for
+        self.assertLess(rate, 0.4)
+        self.assertGreater(rate, 0.15)
+        loose, _ = self._update(ev, k=4.0)               # the old placeholder: ~0.56
+        self.assertGreater(loose, 0.5)
+        one, _ = self._update([(0, 0, 0)])               # one benching: ~0.45
+        self.assertLess(one, 0.5)
+
+    def test_minutes_per_start_keep_their_own_trust(self):
+        # K=1 would let one 67' start pull a 90-minute regular to ~78; the
+        # mps half of the rule keeps RECENCY_MPS_K (4) so it moves to ~85
+        _, mps = self._update([(0, 1, 67)], mps=90.0)
+        self.assertGreater(mps, 84.0)
+        self.assertLess(mps, 86.0)
 
     def test_returning_absentee_is_judged_on_games_since_return(self):
         # out (flagged) for six fixtures, started the two since coming back

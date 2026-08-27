@@ -17,7 +17,7 @@ scorecard settles the availability-conditioned versions.
 
     --minutes   P2. For every GW n >= 2 predict "starts in GW n+1" with the
                 aggregate rule (production) and the recency rule over
-                K in {2,4,6,8} x HALF_LIFE in {2,3,5,inf}; Brier and log-loss,
+                K in {0.5,1,1.5,2,4,6,8} x HALF_LIFE in {2,3,5,inf}; Brier and log-loss,
                 by season phase and by prior-season start band.
     --rates     P5. For n in {3,5,8,12} predict rest-of-season xG/90 and xA/90
                 with the multi-season blend, the blend with the current
@@ -52,7 +52,7 @@ from manager_changes import new_manager_clubs   # noqa: E402
 
 DB = HERE / 'fpl.db'
 SEASONS = ['2022/23', '2023/24', '2024/25', '2025/26']
-K_GRID = (2.0, 4.0, 6.0, 8.0)
+K_GRID = (0.5, 1.0, 1.5, 2.0, 4.0, 6.0, 8.0)
 HL_GRID = (2.0, 3.0, 5.0, math.inf)
 RATE_N = (3, 5, 8, 12)
 RATE_MULT = (1, 2, 3, 5, 10)
@@ -167,7 +167,7 @@ def run_minutes(panel, hist_rows, meta, seasons):
         for pos in POSITIONS:
             prices = sorted(q['price'] for q in players.values() if q['pos'] == pos)
             PM.PRICE_MEDIAN[pos] = prices[len(prices) // 2] if prices else 5.5
-        priors = {code: PM.minutes_prior(p, peers) for code, p in players.items()}
+        priors = {code: PM.minutes_prior(p, players) for code, p in players.items()}
         for code, rows in rows_by_code.items():
             prior_rate, mps = priors[code]
             seq = seqs.get(rows[0]['team'], [])

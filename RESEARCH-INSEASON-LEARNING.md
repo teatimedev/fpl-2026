@@ -78,14 +78,14 @@ where two items touch the same file):
 
 | item | status | files | deviations from the spec |
 |---|---|---|---|
-| P0 | DONE (unrun) | `v2/player_model.py` load(); `tests/test_player_model.py` LoadKeepsCurrentSeasonZeroRow, MinutesModelAggregateRule | none. Per-90 rates of a zero row are 0.0 (no division). The "Thiago prints ~0.78" check needs the rebuild. |
-| P1 | DONE (unrun) | `v2/fetch.py` (gw_stat, `gw_rows_for`, `check_gw_stats`, `export_gw_stats`), `v2/player_model.py` load()/team_fixtures(); `tests/test_fetch_gw_stat.py` | added a `pos` column (the historical import needs per-season position) and goals/assists/cs/gc/own goals/pens/cards + threat/creativity/influence so the retro's actual side and P5's context split are covered. The row-count check flags only *more* rows than club fixtures (a mid-season signing legitimately has fewer). `--skip-histories` (weekly.py's default local refresh) leaves gw_stat stale — CI always full-fetches. |
-| P2 | DONE (unrun), shadow-only | `v2/player_model.py` (minutes_prior/match_evidence/recency_update/aggregate_update/minutes_model, SNAPSHOT_STATUS, MINUTES_RULE), `v2/weekly.py` snapshot(), `v2/scorecard.py`, `v2/import_gw_history.py`, `v2/backtest_inseason.py --minutes`; tests in `test_player_model.py` | Production stays on the aggregate rule (`MINUTES_RULE='aggregate'`, env `FPL_MINUTES_RULE=recency` to switch); the recency rule is computed for everyone and archived as `p_start_recency` next to `p_start_aggregate`, both through the deadline/override layer, and the scorecard grades them side by side (`recency_vs_aggregate_lift`, `recency_wins`). K=4/HL=3 are placeholders: at those values three straight benchings take a 0.9 regular to ~0.56, **not** the <0.4 the plan asks for (K≈1.5 would) — the grid decides. `games_ago` counts all club fixtures, so evidence from before a long absence ages. **Bug found and fixed on the way:** `snapshot()` archived `baseline_start` from the availability-adjusted `start_rate`, so `start_brier_lift` was identically 0; it now archives the minutes model's own `baseline_start_rate`. The vaastav import needs network (`import_gw_history.py`), and availability at past deadlines is not in that data (every fixture counts — the known gap). |
-| P3 | DONE (unrun) | `v2/retro.py` (new), `v2/weekly.py` (review section, minutes warning, table notes, verdict clause, push line, `--no-retro`, `J['retro']`), `v2/scorecard.py` (`explain`/stats kept, `retro_class` grouping), `.github/workflows/weekly.yml` (scorecard → retro → weekly), `export_app_data.py`/`app/src/types.ts` (`retro`, `weekly.retro`); `tests/test_retro.py`, `tests/test_weekly_coherence.py` RetroCoherenceTests | `E[xG│minutes]` includes the position's calibration `k` (so the identity holds without a separate calibration bucket); the snapshot's rounding gap is folded into `other` and reported as `recon_gap`, with `unexplained` (should be 0) as the check. GW1's snapshot lacks the rate fields: the review falls back to the *current* run's shrunk rates (`rates_source: current`) — under the 200-minute gate they are unchanged for a regular. A haul whose chance-quality piece is ≥1 point in magnitude falls to `on_model` + `large_residual` under the plan's `│chance│ < 1` gate (not `variance`); worth revisiting after the replay. The xGI window uses a fixture-average volume (per-past-match fixture xG is not archived). The coherence test is at function level (pure functions over a synthetic squad; `eng`/`J['transfers']` deep-equal before and after) plus a check that no review line can be picked up as the verdict — `main()` itself needs the network. |
-| P4 | DONE (unrun) | `v2/player_model.py` (fit_calibration/apply_calibration/calibrate, `CALIBRATION_MIN_AVAIL`, `--refit-calibration`), `.github/workflows/weekly.yml` (`v2/calibration.json` committed); regression test in `test_player_model.py` CalibrationTests | The stored `k` will be fitted on the **first run after this lands** (GW2 window), not at GW0 — the 23 Aug multipliers were never persisted. The +10% xG regression test runs on a synthetic one-player world with a frozen k=1 (a re-fitting k cannot be demonstrated with one player); it asserts a 3–10% rise. `backtest_totals.py` has its own calibrate() and calls only minutes_model/shrink/positional_priors, whose default behaviour is unchanged — verify bit-identity by re-running it. |
-| P5 | measurement harness DONE (unrun); multiplier wired at 1.0 | `v2/backtest_inseason.py --rates`, `v2/player_model.py` shrink(current_mult)/context_multiplier/`CONTEXT_CURRENT_MULT`, `v2/manager_changes.py` | The multiplier is a placeholder **1.0** (no behaviour change) until `--rates` has run; position-changed and pen-order-changed triggers are not detectable (the DB keeps neither for past seasons), so context = summer arrival or new-manager club. The historical manager table is a hand list from memory — verify it. `rate_mult` overlay entries are untouched. |
-| P6 | DONE (unrun) | `v2/season_view.py` (promoted_prior_weight/manager_shrink/adjust_ratings/build_ratings(n), `--validate-decay`), `v2/teams_model.py` walk_forward_adjusted(); `tests/test_season_view_decay.py` | K_T=30, K_M=15 as specified; IPS's 0.6 decays as 0.6·K_T/(K_T+n). Validation is a CLI (`season_view.py --validate-decay`), scoring only fixtures involving promoted / new-manager clubs, fixed vs decaying. |
-| P7 | monitor DONE (unrun); feedback mechanism built, off | `v2/scorecard.py` (level_ratio per GW, `level_ratio_cum`, ep_next Spearman/MAE), `v2/weekly.py` snapshot() archives `ep_next`, `v2/player_model.py` feedback_blend()/`--feedback` | The digest's "calibration drift" line is not rendered yet (the scorecard summary carries `level_ratio_cum`; add one line to weekly.py once ≥2 gameweeks exist — the review section already prints the graded count). Feedback is opt-in (`--feedback`) and guarded: ≥8 gameweeks, │ratio−1│>10%, weight n/(n+8). |
+| P0 | DONE (ran 25 Aug) | `v2/player_model.py` load(); `tests/test_player_model.py` LoadKeepsCurrentSeasonZeroRow, MinutesModelAggregateRule | none. Per-90 rates of a zero row are 0.0 (no division). The "Thiago prints ~0.78" check needs the rebuild. |
+| P1 | DONE (ran 25 Aug; vaastav import ran 27 Aug, §0.1) | `v2/fetch.py` (gw_stat, `gw_rows_for`, `check_gw_stats`, `export_gw_stats`), `v2/player_model.py` load()/team_fixtures(); `tests/test_fetch_gw_stat.py` | added a `pos` column (the historical import needs per-season position) and goals/assists/cs/gc/own goals/pens/cards + threat/creativity/influence so the retro's actual side and P5's context split are covered. The row-count check flags only *more* rows than club fixtures (a mid-season signing legitimately has fewer). `--skip-histories` (weekly.py's default local refresh) leaves gw_stat stale — CI always full-fetches. |
+| P2 | **MEASURED 27 Aug (§0.1) — production switched to recency K=1, HL=3** | `v2/player_model.py` (minutes_prior/match_evidence/recency_update/aggregate_update/minutes_model, SNAPSHOT_STATUS, MINUTES_RULE), `v2/weekly.py` snapshot(), `v2/scorecard.py`, `v2/import_gw_history.py`, `v2/backtest_inseason.py --minutes`; tests in `test_player_model.py` | Production stays on the aggregate rule (`MINUTES_RULE='aggregate'`, env `FPL_MINUTES_RULE=recency` to switch); the recency rule is computed for everyone and archived as `p_start_recency` next to `p_start_aggregate`, both through the deadline/override layer, and the scorecard grades them side by side (`recency_vs_aggregate_lift`, `recency_wins`). K=4/HL=3 are placeholders: at those values three straight benchings take a 0.9 regular to ~0.56, **not** the <0.4 the plan asks for (K≈1.5 would) — the grid decides. `games_ago` counts all club fixtures, so evidence from before a long absence ages. **Bug found and fixed on the way:** `snapshot()` archived `baseline_start` from the availability-adjusted `start_rate`, so `start_brier_lift` was identically 0; it now archives the minutes model's own `baseline_start_rate`. The vaastav import needs network (`import_gw_history.py`), and availability at past deadlines is not in that data (every fixture counts — the known gap). |
+| P3 | DONE (ran 25 Aug; backward replay 27 Aug, §0.1) | `v2/retro.py` (new), `v2/weekly.py` (review section, minutes warning, table notes, verdict clause, push line, `--no-retro`, `J['retro']`), `v2/scorecard.py` (`explain`/stats kept, `retro_class` grouping), `.github/workflows/weekly.yml` (scorecard → retro → weekly), `export_app_data.py`/`app/src/types.ts` (`retro`, `weekly.retro`); `tests/test_retro.py`, `tests/test_weekly_coherence.py` RetroCoherenceTests | `E[xG│minutes]` includes the position's calibration `k` (so the identity holds without a separate calibration bucket); the snapshot's rounding gap is folded into `other` and reported as `recon_gap`, with `unexplained` (should be 0) as the check. GW1's snapshot lacks the rate fields: the review falls back to the *current* run's shrunk rates (`rates_source: current`) — under the 200-minute gate they are unchanged for a regular. A haul whose chance-quality piece is ≥1 point in magnitude falls to `on_model` + `large_residual` under the plan's `│chance│ < 1` gate (not `variance`); worth revisiting after the replay. The xGI window uses a fixture-average volume (per-past-match fixture xG is not archived). The coherence test is at function level (pure functions over a synthetic squad; `eng`/`J['transfers']` deep-equal before and after) plus a check that no review line can be picked up as the verdict — `main()` itself needs the network. |
+| P4 | DONE (ran 25 Aug; calibration.json frozen) | `v2/player_model.py` (fit_calibration/apply_calibration/calibrate, `CALIBRATION_MIN_AVAIL`, `--refit-calibration`), `.github/workflows/weekly.yml` (`v2/calibration.json` committed); regression test in `test_player_model.py` CalibrationTests | The stored `k` will be fitted on the **first run after this lands** (GW2 window), not at GW0 — the 23 Aug multipliers were never persisted. The +10% xG regression test runs on a synthetic one-player world with a frozen k=1 (a re-fitting k cannot be demonstrated with one player); it asserts a 3–10% rise. `backtest_totals.py` has its own calibrate() and calls only minutes_model/shrink/positional_priors, whose default behaviour is unchanged — verify bit-identity by re-running it. |
+| P5 | **MEASURED 27 Aug (§0.1) — multiplier stays 1.0** | `v2/backtest_inseason.py --rates`, `v2/player_model.py` shrink(current_mult)/context_multiplier/`CONTEXT_CURRENT_MULT`, `v2/manager_changes.py` | The multiplier is a placeholder **1.0** (no behaviour change) until `--rates` has run; position-changed and pen-order-changed triggers are not detectable (the DB keeps neither for past seasons), so context = summer arrival or new-manager club. The historical manager table is a hand list from memory — verify it. `rate_mult` overlay entries are untouched. |
+| P6 | DONE; **validated 27 Aug (§0.1)** | `v2/season_view.py` (promoted_prior_weight/manager_shrink/adjust_ratings/build_ratings(n), `--validate-decay`), `v2/teams_model.py` walk_forward_adjusted(); `tests/test_season_view_decay.py` | K_T=30, K_M=15 as specified; IPS's 0.6 decays as 0.6·K_T/(K_T+n). Validation is a CLI (`season_view.py --validate-decay`), scoring only fixtures involving promoted / new-manager clubs, fixed vs decaying. |
+| P7 | monitor live since 25 Aug (level_ratio_cum 0.86 after GW1); feedback mechanism built, off | `v2/scorecard.py` (level_ratio per GW, `level_ratio_cum`, ep_next Spearman/MAE), `v2/weekly.py` snapshot() archives `ep_next`, `v2/player_model.py` feedback_blend()/`--feedback` | The digest's "calibration drift" line is not rendered yet (the scorecard summary carries `level_ratio_cum`; add one line to weekly.py once ≥2 gameweeks exist — the review section already prints the graded count). Feedback is opt-in (`--feedback`) and guarded: ≥8 gameweeks, │ratio−1│>10%, weight n/(n+8). |
 | P8 | 8.1 DONE (review-only); 8.2 DONE (shadow-only); 8.3/8.4 no code by design | `v2/news_pipeline.py` build_predicted_lineup_overrides + `_semantic_generated` (review rows never trigger rebuilds), `v2/availability.py` `blend_weight`; `v2/player_props.py` (new), `v2/weekly.py` snapshot() `p_goal_model`/`p_goal_market`, `v2/scorecard.py` goals log-loss | Predicted rows are written with `status: review` (skipped by the loader) until `PROMOTE_PREDICTED_LINEUPS = True`; implied start 0.85 / bench 0.15 at blend 0.5. Props need `ODDS_API_KEY` **and** `ODDS_API_PLAYER_PROPS=1`; single-sided "Yes" prices are de-vigged by a fixed 8% margin (two-way when a "No" is quoted). Name matching is full-name then unique surname within the two clubs. |
 | P9 | script DONE (unrun); waits for ≥6 rows per player | `v2/defcon_dispersion.py` | Also prints per-match xG sd for attackers → `retro.XGI_MATCH_SD`. |
 
@@ -114,6 +114,98 @@ GW n+1..n+3 (whether he was still in the game — marginal post-n
 information, noted in its docstring); and the digest's per-position
 "calibration drift" line (P7) is not rendered until two gameweeks are
 graded.
+
+## 0.1 Measurements — 2026-08-27
+
+Everything in §0 was run on 27 Aug (tests, rebuild, vaastav import,
+the three backtests and the decay validation). The import gives four seasons
+of per-GW rows — 113,582 in `gw_stat` — whose minutes reconcile with
+`season_stat` for 1,181 of 1,182 players. The numbers below are what the
+in-season constants now rest on; the commands are in §0.
+
+### P2 — minutes rule: recency wins, decisively (`--minutes`)
+
+107,801 "starts in GW n+1" predictions, 2022/23–2025/26, Brier:
+
+| rule | all | GW2–8 | GW9–24 | GW25–37 | prior start ≥ 0.7 |
+|---|---|---|---|---|---|
+| prior only | 0.207 | 0.217 | 0.208 | 0.201 | 0.344 |
+| aggregate (production until 27 Aug) | 0.118 | 0.110 | 0.120 | 0.120 | 0.174 |
+| recency K=2 HL=3 | 0.101 | 0.097 | 0.103 | 0.101 | 0.147 |
+| **recency K=1 HL=3 (production now)** | **0.095** | **0.085** | — | — | **0.135** |
+| recency K=0.5 HL=2 (grid edge) | 0.091 | 0.080 | — | — | 0.127 |
+
+Recency beats the aggregate rule in every phase and every prior-start band,
+and keeps improving to the smallest K and shortest half-life in the grid: the
+last one or two games are nearly all the evidence that matters. The harness
+cannot see availability (every club fixture counts), so part of the edge is
+the rule "predicting" a continued absence that production's availability
+layer already handles — hence one step inside the optimum. Production is
+`MINUTES_RULE='recency'`, `RECENCY_K=1`, `RECENCY_HALF_LIFE=3`, with minutes
+per start on their own unmeasured trust (`RECENCY_MPS_K=4`). The aggregate
+rule is still archived in every snapshot; `scorecard.recency_vs_aggregate_lift`
+is the forward check, and K=0.5/HL=2 is the next step if it holds over ≥ 4
+gameweeks.
+
+### P5 — context multiplier: nothing to buy (`--rates`)
+
+Rest-of-season xG/90 from the first n gameweeks, wMAE (Spearman):
+
+| n | context | prior only | blend m=1 | blend m=2 | current only |
+|---|---|---|---|---|---|
+| 3 | stable | 0.0671 (0.445) | **0.0654** (0.453) | 0.0659 | 0.0882 |
+| 3 | changed | 0.0667 (0.656) | 0.0612 (0.699) | **0.0610** (0.701) | 0.0764 |
+| 8 | stable | 0.0730 | **0.0703** | 0.0705 | 0.0828 |
+| 8 | changed | 0.0688 | **0.0592** (0.710) | 0.0600 | 0.0731 |
+
+The plain blend already learns for movers (prior-only → blend is the whole
+gain); m=2 adds 0.0002 at best and m ≥ 5 is worse everywhere. xA/90 says the
+same. `CONTEXT_CURRENT_MULT` stays 1.0.
+
+### P6 — decaying team adjustments: validated (`--validate-decay`)
+
+526 fixtures involving promoted or new-manager clubs, 1X2 log-loss:
+fixed 0.9723, **decaying 0.9615** (bookmaker 0.9463). K_T=30, K_M=15 stay.
+
+### P3 — the classes, replayed on 2023/24–2025/26 (`--retro`)
+
+| class | n | next-GW start | resid next 3 GW | 3-start xGI window err | prior err |
+|---|---|---|---|---|---|
+| on_model | 27,298 | 0.39 | −0.3 | 0.099 | 0.066 |
+| variance/finishing | 1,788 | 0.81 | +1.4 | 0.124 | 0.084 |
+| variance/team | 3,021 | 0.87 | +0.1 | 0.052 | 0.032 |
+| minutes_loss/dnp | 3,026 | **0.23** | −4.1 | 0.113 | 0.062 |
+| minutes_gain | 3,240 | 0.68 | +2.8 | 0.100 | 0.075 |
+| role_change/xgi | 740 | 0.85 | +0.1 | **0.435** | 0.121 |
+
+Hold-vs-swap after a `variance` week (n=4,959): holding beats the best
+same-position, same-or-cheaper alternative minus the hit by **+2.0 points
+over three gameweeks** (holding wins 58%). A fit player benched once starts
+next week 23% of the time — the sell signal is real and it is the benching,
+never the blank. The three-start xGI window is 3.6× worse than the prior
+for `role_change` — it stays a flag, never an input. 2022/23 is skipped
+(no team fit before it).
+
+### Fixed on the way
+
+- `backtest_inseason.py:170` — `NameError: peers` in `--minutes` (passed the
+  undefined name instead of the players dict).
+- `validate.py` priced squads against `data/bootstrap.json` (the 6 Aug v1
+  dump) while the optimiser used this run's `v2/cache/bootstrap.json`; the
+  first refresh after prices unlocked failed on a £0.1m mismatch. It now
+  prefers the cache like `export_app_data.py`.
+- `should_refresh.py` — GitHub dropped every hourly run between 23:46 and
+  10:00 UTC on Thu 27 Aug, so the 06:00–09:00 weekly slot never ran. Any
+  Thursday hour qualifies now, a missed T-24h is taken late, and done windows
+  fall through to the news cadence.
+- `weekly.py` — the transfer verdict speaks with one voice. It is judged on
+  XI + captain gain ("on the pitch"; auto-sub cover is shown but does not
+  decide), and when the planner ran and says acting now is worth less than
+  the hold threshold, it supersedes a "transfer" verdict with a hold that
+  names the queued move. GW2's digest had recommended Milenković → Gvardiol
+  +3.7 (+1.3 XI, +2.5 cover) two paragraphs above a planner saying hold; on
+  the recency rule the same move is +4.1 on the pitch over the window but
+  acting now rather than next week is worth +1.0 — hold, Gvardiol queued.
 
 ## 1. How learning works today
 
