@@ -477,7 +477,7 @@ function Digest({
           : stampStr}
         {W.squad.ft > 0 && ` · ${W.squad.ft >= 15 ? 'unlimited' : W.squad.ft} free transfer${W.squad.ft === 1 ? '' : 's'}`}
         {' '}· £{W.squad.bank.toFixed(1)}m banked
-        {checks.length === 0 && ' · nobody flagged, all 15 regular starters'}
+        {checks.length === 0 && ' · nobody flagged'}
       </p>
 
       <section className="panel decision" style={{ marginTop: 10 }}>

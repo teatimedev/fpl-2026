@@ -1064,3 +1064,8 @@ details[open].news-health > summary::before,
   .shell { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
   .topbar { margin-bottom: 12px; }
 }
+@media (max-width: 700px) {
+  /* backdrop-filter would make the sticky header the containing block for the
+     fixed tab bar (it pinned to the header's bottom edge, over the title). */
+  .topbar { backdrop-filter: none; background: rgba(7, 21, 15, 0.98); }
+}
