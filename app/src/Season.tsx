@@ -87,6 +87,7 @@ export default function Season({
     : []
 
   const days = movers?.days ?? 0
+  const price = D.weekly?.price ?? null
 
   return (
     <div className="season">
@@ -246,10 +247,28 @@ export default function Season({
                 )}
               </div>
             </div>
+            {price && !price.locked && (price.rises.length + price.falls.length) > 0 && (
+              <>
+                <h3 className="movers-h">This gameweek's transfer flow</h3>
+                <div className="spread" style={{ padding: '4px 0 0' }}>
+                  {price.rises.filter(r => r.net !== 0 || r.pressure !== 0).map(r => (
+                    <button className="club-chip plainbtn full" key={`r${r.id}`} onClick={() => openPlayer(r.id)}>
+                      ▲ {byId.get(r.id)?.name ?? `#${r.id}`}{' '}
+                      <span className="mono">{r.net > 0 ? '+' : ''}{r.net.toLocaleString()}</span>
+                    </button>
+                  ))}
+                  {price.falls.filter(r => r.net !== 0 || r.pressure !== 0).map(r => (
+                    <button className="club-chip plainbtn" key={`f${r.id}`} onClick={() => openPlayer(r.id)}>
+                      ▼ {byId.get(r.id)?.name ?? `#${r.id}`} <span className="mono">{r.net.toLocaleString()}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
             <p className="season-caveat" style={{ padding: '10px 0 0' }}>
               {days < 7
-                ? `${days} refresh${days === 1 ? '' : 'es'} logged since ${movers.first}; the 7-day columns fill in as the log grows. This gameweek's transfer flow is under Price watch on This week.`
-                : `Ownership logged ${movers.first} → ${movers.latest}. This gameweek's transfer flow is under Price watch on This week.`}
+                ? `${days} refresh${days === 1 ? '' : 'es'} logged since ${movers.first}; the 7-day columns fill in as the log grows.`
+                : `Ownership logged ${movers.first} → ${movers.latest}.`}
             </p>
           </div>
         )}

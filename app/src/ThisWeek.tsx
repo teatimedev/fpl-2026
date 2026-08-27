@@ -7,6 +7,7 @@ import {
 } from './model'
 import { signed } from './squad'
 import { Pitch } from './components'
+import { LastWeek } from './LastWeek'
 import type { LinkedTeam } from './useLinkedTeam'
 
 /**
@@ -426,7 +427,6 @@ function Digest({
     .map(k => m.xi.filter(id => posOf(id) === k).length).join('-')
   const xiPlayers = m.xi.map(id => poolById.get(id)).filter((p): p is Player => !!p)
   const benchPlayers = m.bench.map(id => poolById.get(id)).filter((p): p is Player => !!p)
-  const alts = m.ranked.filter(r => r.id !== m.captain).slice(0, 3)
 
   const issues = W.lineup_issues ?? []
   const hasDigestLineup = !!W.squad.lineup && (W.squad.lineup.xi?.length ?? 0) > 0
@@ -444,7 +444,6 @@ function Digest({
     || (!W.decision && !plan?.worth_it
       && /nothing compelling|\bhold\b|nothing to change|close enough|no single transfer improves/i.test(tr.advice))
   const keepTeam = noTransfer && lineupMatches
-  const price_ = W.price
   const stamp = new Date(W.generated)
   const stampStr = isNaN(stamp.getTime()) ? W.generated
     : stamp.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
@@ -478,6 +477,7 @@ function Digest({
           : stampStr}
         {W.squad.ft > 0 && ` · ${W.squad.ft >= 15 ? 'unlimited' : W.squad.ft} free transfer${W.squad.ft === 1 ? '' : 's'}`}
         {' '}· £{W.squad.bank.toFixed(1)}m banked
+        {checks.length === 0 && ' · nobody flagged, all 15 regular starters'}
       </p>
 
       <section className="panel decision" style={{ marginTop: 10 }}>
@@ -546,17 +546,64 @@ function Digest({
               {vice && <> · vice <strong>{vice.name}</strong> {m.vice_pts.toFixed(1)}</>}
             </span>
           </div>
-          <ol className="alts">
-            {alts.map((r, i) => (
-              <li key={r.id}>
-                <span className="n">{r.id === m.vice ? 'vice' : `#${i + 2}`}</span>
-                <button className="plink" onClick={() => openPlayer(r.id)}>{nameOf(r.id)}</button>
-                <span className="mono">{r.pts.toFixed(1)}</span>
-              </li>
-            ))}
-          </ol>
+        </div>
+        <div className="cap-ctx">
+          <table className="cap-table">
+            <thead>
+              <tr>
+                <th className="l">option</th><th className="l">fixture</th><th>team xG</th>
+                <th>starts</th><th>owned</th><th>pts</th>
+              </tr>
+            </thead>
+            <tbody>
+              {m.ranked.slice(0, 4).map((r, i) => {
+                const p = poolById.get(r.id)
+                const fx = p ? (D.ticker?.[p.team]?.find(t => t.gw === gw)?.fx ?? []) : []
+                const start = p ? (p.start_by_gw?.[gw - 1] ?? p.start_rate) : null
+                return (
+                  <tr key={r.id} className={i === 0 ? 'pick' : undefined}>
+                    <td className="l">
+                      <span className="n">{i === 0 ? 'C' : r.id === m.vice ? 'V' : `#${i + 1}`}</span>{' '}
+                      <button className="plink" onClick={() => openPlayer(r.id)}>{nameOf(r.id)}</button>
+                    </td>
+                    <td className="l mono">
+                      {fx.length === 0 ? '—' : fx.map((f, j) => (
+                        <span key={j}>{j > 0 && ' + '}{f.home ? '' : '@'}{f.opp}</span>
+                      ))}
+                    </td>
+                    <td className="mono">{fx.length === 0 ? '—' : fx.map(f => f.xg.toFixed(1)).join('+')}</td>
+                    <td className="mono">{start != null ? `${Math.round(start * 100)}%` : '—'}</td>
+                    <td className="mono">{p ? `${p.sel_pct.toFixed(0)}%` : '—'}</td>
+                    <td className="mono strong">{r.pts.toFixed(1)}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+          {m.ranked.length > 1 && (() => {
+            const edge = m.ranked[0].pts - m.ranked[1].pts
+            const a = poolById.get(m.ranked[0].id), b = poolById.get(m.ranked[1].id)
+            const template = a && b && b.sel_pct > a.sel_pct + 15 ? b : null
+            return (
+              <p className="cap-edge">
+                {edge >= 1.0 ? (
+                  <>Clear call: <strong>{nameOf(m.ranked[0].id)}</strong> is {edge.toFixed(1)} ahead ({(edge * 2).toFixed(1)} once doubled).</>
+                ) : (
+                  <>The edge is <strong className="mono">{edge.toFixed(1)}</strong> ({(edge * 2).toFixed(1)} doubled) — inside the noise of a single match.
+                    {template
+                      ? <> {template.name} is owned by {template.sel_pct.toFixed(0)}%: captaining him protects your rank if he hauls, {nameOf(m.ranked[0].id)} is the points play. Both are defensible.</>
+                      : ' Either is defensible; the model leans ' + nameOf(m.ranked[0].id) + '.'}
+                  </>
+                )}
+              </p>
+            )
+          })()}
         </div>
       </section>
+
+      {W.retro && W.retro.table.length > 0 && (
+        <LastWeek retro={W.retro} poolById={poolById} openPlayer={openPlayer} />
+      )}
 
       <section className="panel" style={{ marginTop: 16 }}>
         <div className="panel-hd">
@@ -567,16 +614,12 @@ function Digest({
           vice={m.vice} openPlayer={openPlayer} />
       </section>
 
-      <section className="panel" style={{ marginTop: 16 }}>
-        <div className="panel-hd">
-          <h2>Check before the deadline</h2>
-          <span className="sub">{checks.length === 0 ? 'nobody flagged' : `${checks.length} to watch`}</span>
-        </div>
-        {checks.length === 0 ? (
-          <div style={{ padding: '2px 14px 14px' }}>
-            <div className="ready">Nobody flagged. All 15 look available and are regular starters.</div>
+      {checks.length > 0 && (
+        <section className="panel" style={{ marginTop: 16 }}>
+          <div className="panel-hd">
+            <h2>Check before the deadline</h2>
+            <span className="sub">{`${checks.length} to watch`}</span>
           </div>
-        ) : (
           <ul className="problems soft" style={{ margin: 14 }}>
             {checks.map(c => (
               <li key={c.id}>
@@ -585,8 +628,8 @@ function Digest({
               </li>
             ))}
           </ul>
-        )}
-      </section>
+        </section>
+      )}
 
       <section className="panel" style={{ marginTop: 16 }}>
         <div className="panel-hd">
@@ -662,29 +705,9 @@ function Digest({
             </div>
           </details>
         )}
-      </section>
-
-      {plan && plan.weeks?.length > 0 && (
-        <section className="panel" style={{ marginTop: 16 }}>
-          <div className="panel-hd">
-            <h2>Next six weeks, planned</h2>
-            <span className="sub">{plan.hits > 0 ? `${plan.hits} hit${plan.hits === 1 ? '' : 's'}` : 'no hits'}</span>
-          </div>
-          <p className="lede-sm">
-            {plan.worth_it ? (
-              <>The model found a path worth <strong className="mono" style={{ color: 'var(--ok)' }}>
-                {signed(plan.diff)}
-              </strong> versus holding.</>
-            ) : (plan.n_now ?? 0) > 0 ? (
-              <>A {plan.n_now}-player alternative gains only <strong className="mono">
-                {signed(plan.diff)} projected points
-              </strong> over six weeks. That is below the churn threshold, so do not make it.</>
-            ) : (
-              <>There is no worthwhile move to make this week.</>
-            )}
-          </p>
+        {plan && plan.weeks?.length > 0 && (
           <details className="scenario-details">
-            <summary>See the six-week path</summary>
+            <summary>See the six-week path{plan.hits > 0 ? ` (${plan.hits} hit${plan.hits === 1 ? '' : 's'})` : ''} · acting now vs banking: {signed(plan.diff)}</summary>
             <div className="scenario-body tbl-scroll">
               <table>
               <thead>
@@ -717,37 +740,10 @@ function Digest({
               </p>
             </div>
           </details>
-        </section>
-      )}
-
-      <section className="panel" style={{ marginTop: 16 }}>
-        <div className="panel-hd">
-          <h2>Price watch</h2>
-          <span className="sub">net transfers this gameweek</span>
-        </div>
-        {price_.locked ? (
-          <div className="empty-state">
-            Prices are locked until the Gameweek 1 deadline, so there is no
-            transfer flow to read yet.
-          </div>
-        ) : (price_.rises.length + price_.falls.length) === 0 ? (
-          <div className="empty-state">No price pressure in your squad this week.</div>
-        ) : (
-          <div className="spread">
-            {price_.rises.filter(r => r.net !== 0 || r.pressure !== 0).map(r => (
-              <button className="club-chip plainbtn full" key={`r${r.id}`} onClick={() => openPlayer(r.id)}>
-                ▲ {nameOf(r.id)}{' '}
-                <span className="mono">{r.net > 0 ? '+' : ''}{r.net.toLocaleString()}</span>
-              </button>
-            ))}
-            {price_.falls.filter(r => r.net !== 0 || r.pressure !== 0).map(r => (
-              <button className="club-chip plainbtn" key={`f${r.id}`} onClick={() => openPlayer(r.id)}>
-                ▼ {nameOf(r.id)} <span className="mono">{r.net.toLocaleString()}</span>
-              </button>
-            ))}
-          </div>
         )}
       </section>
+
+
     </>
   )
 }
