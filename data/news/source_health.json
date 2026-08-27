@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-27T15:42:54Z",
+  "checked_at": "2026-08-27T16:41:27Z",
   "coverage": 0.95,
   "enabled": 20,
   "gw": 2,
@@ -65,7 +65,7 @@
       "content_hash": "511e5b401574ae56a77d5b61b461ef089e1aeda57ab4774e66f11e779e7743d8",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Thu, 27 Aug 2026 15:42:55 GMT",
+      "last_modified": "Thu, 27 Aug 2026 16:41:29 GMT",
       "publisher": "Brentford",
       "status": "ok",
       "url": "https://www.brentfordfc.com/en/news"
@@ -100,7 +100,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"814n24jx6ftjm9\"",
+      "etag": "\"k85m9t8xuptj04\"",
       "id": "cry-news",
       "publisher": "Crystal Palace",
       "status": "ok",
@@ -171,11 +171,11 @@
         }
       },
       "club": "IPS",
-      "content_hash": "cc83377ed06a7856156fce06bb1d68b1c324425f412317d83d6e35135a75ef82",
-      "documents": 2,
-      "etag": "\"5008ed7f0fdaa8a1cc00416b78553753\"",
+      "content_hash": "9528812be6585bda98c3affade58e0435edd0040ae2478289b7ca0a87cda4cef",
+      "documents": 1,
+      "etag": "\"0d2cf93aec38d2644513f059fb4dc055\"",
       "id": "ips-news",
-      "last_modified": "Thu, 27 Aug 2026 13:37:14 GMT",
+      "last_modified": "Thu, 27 Aug 2026 15:49:47 GMT",
       "publisher": "Ipswich Town",
       "status": "ok",
       "url": "https://www.itfc.co.uk/news/"
@@ -186,10 +186,10 @@
         "https://www.leedsunited.com/en/news/fpl-stach-to-once-more-impress": {}
       },
       "club": "LEE",
-      "content_hash": "7cbc0b5cc3e1c218a0ca9444f55bf2857c2c544aff539bdb34e367ca18068948",
+      "content_hash": "d5438e9a2fcb175bbda127141460cce51a953ef7dfa908ecc63f65ff8c2266f4",
       "documents": 2,
       "id": "lee-news",
-      "last_modified": "Thu, 27 Aug 2026 14:55:51 GMT",
+      "last_modified": "Thu, 27 Aug 2026 16:04:14 GMT",
       "publisher": "Leeds United",
       "status": "ok",
       "url": "https://www.leedsunited.com/en/news"
@@ -198,25 +198,22 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.liverpoolfc.com/news/andoni-iraola-press-conference-transfers-liverpool-v-nottingham-forest-balance-and-more": {
-          "etag": "\"26f08-BI8Xvui0Xzj2O/KjW9KYaZdcmJs\""
-        },
-        "https://www.liverpoolfc.com/news/araujo-munoz-and-more-watch-liverpool-squad-provide-name-pronunciations": {
-          "etag": "\"1cdcf-vUcMJqyUavT4tblkNmas5lRHD+Y\""
+          "etag": "\"26f08-m3JvXnzgA93W2A2j7hWjc4rGg8U\""
         },
         "https://www.liverpoolfc.com/news/demand-watch-andoni-iraolas-pre-nottingham-forest-press-conference": {
-          "etag": "\"1b8b7-zyLAyFPJZvfbl550gpLit/B8ohc\""
+          "etag": "\"1b8b7-x+ke5yRLwTVWudJG4HYr74mrIns\""
         },
         "https://www.liverpoolfc.com/news/fantasy-premier-league-five-liverpool-players-watch-gameweek-2": {
-          "etag": "\"2155b-CGPh5089He9YDunlqCJBaAiSXl4\""
+          "etag": "\"2155b-llyuzxXcsDemAIhBsuePh58AoEY\""
         },
         "https://www.liverpoolfc.com/news/federico-chiesa-injury-update-0": {
-          "etag": "\"1cc67-VgfEQjyY0fVEJNbn4MM3iKWsztM\""
+          "etag": "\"1cc67-/i05fK7VLNFaFluTjJ4HTmvc1IY\""
         }
       },
       "club": "LIV",
-      "content_hash": "c6ea62e7b09dc4f64bb3e3e7b1e2204351e03718c0e11753c2a0b336d892b918",
-      "documents": 6,
-      "etag": "\"33448-MDLtKUSF7306buXzQaUNFr5BYxY\"",
+      "content_hash": "b2a3e7959961771fdae0882fc4fef88939b589c79b38649b389a0fc8d3c3a67c",
+      "documents": 5,
+      "etag": "\"33231-kJtM84dDvDEBFjmh8O8MDHTdA88\"",
       "id": "liv-news",
       "publisher": "Liverpool",
       "status": "ok",
@@ -226,14 +223,13 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.mancity.com/citytv/mens/enzo-maresca-crystal-palace-away-video-preview-63923412": {},
-        "https://www.mancity.com/news/club/third-kit-launch-press-release-2026-27-puma-ai-creator-63923345": {},
         "https://www.mancity.com/news/mens/crystal-palace-kick-off-time-and-tv-information-63923172": {},
         "https://www.mancity.com/news/mens/enzo-maresca-crystal-palace-press-conference-injury-news-63923408": {},
         "https://www.mancity.com/news/mens/enzo-maresca-crystal-palace-written-preview-63923418": {}
       },
       "club": "MCI",
-      "content_hash": "7554dee007088b09d5fbb3c5d59209bb75fe4cf22bfd3337133acf5cdb43d6f6",
-      "documents": 6,
+      "content_hash": "991b76328cc0db978a6f9f8a0c94ccf33931317cc90f4cd15f19a0463ab88331",
+      "documents": 5,
       "id": "mci-news",
       "publisher": "Manchester City",
       "status": "ok",
@@ -254,7 +250,7 @@
         "https://www.newcastleunited.com/en/news/west-brom-carabao-cup-team-news-26-27": {}
       },
       "club": "NEW",
-      "content_hash": "44abe48058f4966700d0359d813b766c66a4be767c3bb9691fe0c4256929689b",
+      "content_hash": "44d2ea86a0e78ef2ecad515bbce970cdaf47d58aed1a73ca68459650f15367a8",
       "documents": 3,
       "id": "new-news",
       "publisher": "Newcastle United",
@@ -280,9 +276,9 @@
       "club": "SUN",
       "content_hash": "7a3cebfb60e6adae923252da91d99a1aaa75361948a69ec70326b273404ccac3",
       "documents": 1,
-      "etag": "\"c5a4eec43efda94cd6a43508414f2726\"",
+      "etag": "\"6f79cc2df3405ecdfaa6bf8589b48b77\"",
       "id": "sun-news",
-      "last_modified": "Thu, 27 Aug 2026 15:38:44 GMT",
+      "last_modified": "Thu, 27 Aug 2026 16:04:57 GMT",
       "publisher": "Sunderland",
       "status": "ok",
       "url": "https://www.safc.com/news"

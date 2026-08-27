@@ -1,7 +1,7 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-08-27T15:59:49Z",
+  "checked_at": "2026-08-27T16:41:27Z",
   "claims": 1,
   "coverage": 0.95,
   "deadline": "2026-08-28T17:30:00Z",
@@ -1615,8 +1615,8 @@
       "status": "a"
     },
     "389": {
-      "chance": 50,
-      "news": "Unspecified injury - 50% chance of playing",
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
       "status": "d"
     },
     "39": {
@@ -3091,7 +3091,7 @@
     }
   },
   "official_fpl_ok": true,
-  "rebuild_required": false,
+  "rebuild_required": true,
   "state_changed": false,
   "status": "amber",
   "urgent": false,

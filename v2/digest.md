@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 2
 
-Deadline **Fri 28 Aug, 17:30 UTC** — 1d 1h away.
+Deadline **Fri 28 Aug, 17:30 UTC** — 1d 0h away.
 Projections cover GW2–7.
 
 ## GW1 in review — what happened, and what it does and does not change
@@ -70,8 +70,6 @@ Projected 6.9 this week, doubled to 13.8. Vice: Haaland (6.5).
 
 - **Captain:** you have Haaland (6.5); the model prefers Mbeumo (6.9) — +0.8 expected once doubled.
 - **Bench → start:** Kluivert (4.6) is on your bench; the model starts him over Milenković (3.0), +1.7.
-- **Bench → start:** Sadiki (3.0) is on your bench; the model starts him over Milenković (3.0), +0.0.
-- Formation: you 5-3-2, model 3-5-2.
 
 ## Check before the deadline
 
@@ -140,15 +138,15 @@ Net transfers this gameweek as a share of current owners. Top of the left column
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Jebbison £5.0 | +147900.0% | +1,479 | Livramento £5.0 | -96600.0% | -966 |
-| Wan-Bissaka £4.5 | +85200.0% | +852 | Enes Ünal £5.5 | -93200.0% | -932 |
-| Humphreys £4.5 | +79600.0% | +796 | C.Jones £5.5 | -91400.0% | -914 |
-| Ahoka £4.5 | +75800.0% | +758 | Mitoma £6.0 | -90300.0% | -903 |
-| Hadjam £4.5 | +46900.0% | +469 | Joelinton £5.5 | -85100.0% | -851 |
-| Fofana £5.0 | +39900.0% | +399 | Adli £5.0 | -80800.0% | -808 |
+| Jebbison £5.0 | +148900.0% | +1,489 | Livramento £5.0 | -97400.0% | -974 |
+| Wan-Bissaka £4.5 | +86700.0% | +867 | Enes Ünal £5.5 | -93600.0% | -936 |
+| Humphreys £4.5 | +80200.0% | +802 | C.Jones £5.5 | -92200.0% | -922 |
+| Ahoka £4.5 | +78300.0% | +783 | Mitoma £6.0 | -90500.0% | -905 |
+| Hadjam £4.5 | +49000.0% | +490 | Joelinton £5.5 | -86000.0% | -860 |
+| Fofana £5.0 | +40200.0% | +402 | Adli £5.0 | -81000.0% | -810 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-08-27 16:10 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-08-27 16:51 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
