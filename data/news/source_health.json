@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-27T16:41:27Z",
+  "checked_at": "2026-08-27T20:36:12Z",
   "coverage": 0.95,
   "enabled": 20,
   "gw": 2,
@@ -65,7 +65,7 @@
       "content_hash": "511e5b401574ae56a77d5b61b461ef089e1aeda57ab4774e66f11e779e7743d8",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Thu, 27 Aug 2026 16:41:29 GMT",
+      "last_modified": "Thu, 27 Aug 2026 20:36:13 GMT",
       "publisher": "Brentford",
       "status": "ok",
       "url": "https://www.brentfordfc.com/en/news"
@@ -100,7 +100,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"k85m9t8xuptj04\"",
+      "etag": "\"yfg5k5h93vtjw0\"",
       "id": "cry-news",
       "publisher": "Crystal Palace",
       "status": "ok",
@@ -140,11 +140,11 @@
         }
       },
       "club": "FUL",
-      "content_hash": "393775f77a6559a887baa5b3548e548050d171c305ca104c51bbbcf3fc134c41",
-      "documents": 5,
-      "etag": "\"208ba316fbb2652de8bffde8a4ff0a6d\"",
+      "content_hash": "63417425e04e5bd98f09f5fab0bdb487099740474c6961b817af512231f9456b",
+      "documents": 1,
+      "etag": "\"4a643036160acd398428d23bfde4d790\"",
       "id": "ful-news",
-      "last_modified": "Thu, 27 Aug 2026 13:50:45 GMT",
+      "last_modified": "Thu, 27 Aug 2026 18:31:19 GMT",
       "publisher": "Fulham",
       "status": "ok",
       "url": "https://www.fulhamfc.com/news/"
@@ -171,11 +171,11 @@
         }
       },
       "club": "IPS",
-      "content_hash": "9528812be6585bda98c3affade58e0435edd0040ae2478289b7ca0a87cda4cef",
+      "content_hash": "cc44feea8cd79537f7a30c3bff6c45072024fc321bd107c35fc45822d235674f",
       "documents": 1,
-      "etag": "\"0d2cf93aec38d2644513f059fb4dc055\"",
+      "etag": "\"83312a4c435195a2baab1ce8f7f12eb4\"",
       "id": "ips-news",
-      "last_modified": "Thu, 27 Aug 2026 15:49:47 GMT",
+      "last_modified": "Thu, 27 Aug 2026 20:01:23 GMT",
       "publisher": "Ipswich Town",
       "status": "ok",
       "url": "https://www.itfc.co.uk/news/"
@@ -183,13 +183,14 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.leedsunited.com/en/news/fpl-stach-to-once-more-impress": {}
+        "https://www.leedsunited.com/en/news/fpl-stach-to-once-more-impress": {},
+        "https://www.leedsunited.com/en/news/team-news-halifax-women-vs-leeds-united-women": {}
       },
       "club": "LEE",
-      "content_hash": "d5438e9a2fcb175bbda127141460cce51a953ef7dfa908ecc63f65ff8c2266f4",
-      "documents": 2,
+      "content_hash": "de1debfee3af2842737b88cfe72ec77238893253c352fc9538e7ca8e8253ecea",
+      "documents": 3,
       "id": "lee-news",
-      "last_modified": "Thu, 27 Aug 2026 16:04:14 GMT",
+      "last_modified": "Thu, 27 Aug 2026 20:29:19 GMT",
       "publisher": "Leeds United",
       "status": "ok",
       "url": "https://www.leedsunited.com/en/news"
@@ -198,22 +199,25 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.liverpoolfc.com/news/andoni-iraola-press-conference-transfers-liverpool-v-nottingham-forest-balance-and-more": {
-          "etag": "\"26f08-m3JvXnzgA93W2A2j7hWjc4rGg8U\""
+          "etag": "\"26f08-h+14b1qJ3+JSes6lb7Ws8GiKHl0\""
         },
         "https://www.liverpoolfc.com/news/demand-watch-andoni-iraolas-pre-nottingham-forest-press-conference": {
-          "etag": "\"1b8b7-x+ke5yRLwTVWudJG4HYr74mrIns\""
+          "etag": "\"1b8b7-HwFiwfzuH4BzIM0q+ikGI7CYXKY\""
         },
         "https://www.liverpoolfc.com/news/fantasy-premier-league-five-liverpool-players-watch-gameweek-2": {
-          "etag": "\"2155b-llyuzxXcsDemAIhBsuePh58AoEY\""
+          "etag": "\"2155b-J6qf20IVmJy+yHWK9pG6pwARv58\""
         },
         "https://www.liverpoolfc.com/news/federico-chiesa-injury-update-0": {
-          "etag": "\"1cc67-/i05fK7VLNFaFluTjJ4HTmvc1IY\""
+          "etag": "\"1cc67-n43/vugfEI1E/xmefh2Lv5EPoRA\""
+        },
+        "https://www.liverpoolfc.com/news/liverpools-injury-list-suspensions-and-availability": {
+          "etag": "\"1caf1-hAlduNze40zO5vzHWrGDIeAotA4\""
         }
       },
       "club": "LIV",
-      "content_hash": "b2a3e7959961771fdae0882fc4fef88939b589c79b38649b389a0fc8d3c3a67c",
-      "documents": 5,
-      "etag": "\"33231-kJtM84dDvDEBFjmh8O8MDHTdA88\"",
+      "content_hash": "1a77753a979d9a9919b27c09266b77be0a6b7145e5c6b643c32331881c82b0f9",
+      "documents": 6,
+      "etag": "\"338e2-rmJJOMkPaIgziHOjvXJIn8NtYkY\"",
       "id": "liv-news",
       "publisher": "Liverpool",
       "status": "ok",
@@ -222,13 +226,15 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/citytv/mens/enzo-maresca-crystal-palace-away-video-preview-63923412": {},
+        "https://www.mancity.com/citytv/mens/enzo-maresca-crystal-palace-away-video-preview-63923412": {
+          "last_modified": "Thu, 27 Aug 2026 20:18:46 GMT"
+        },
         "https://www.mancity.com/news/mens/crystal-palace-kick-off-time-and-tv-information-63923172": {},
         "https://www.mancity.com/news/mens/enzo-maresca-crystal-palace-press-conference-injury-news-63923408": {},
         "https://www.mancity.com/news/mens/enzo-maresca-crystal-palace-written-preview-63923418": {}
       },
       "club": "MCI",
-      "content_hash": "991b76328cc0db978a6f9f8a0c94ccf33931317cc90f4cd15f19a0463ab88331",
+      "content_hash": "18c9c55cda96af3769bd3ed1a58d400ef2d914c79a16299bf646e5e9c644fbf1",
       "documents": 5,
       "id": "mci-news",
       "publisher": "Manchester City",
@@ -247,11 +253,12 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.newcastleunited.com/en/news/how-to-watch-newcastle-united-vs-west-brom-tv-channel-kick-off-time-and-team-news": {},
+        "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-gonzalez-an-option-for-spurs-trip": {},
         "https://www.newcastleunited.com/en/news/west-brom-carabao-cup-team-news-26-27": {}
       },
       "club": "NEW",
-      "content_hash": "44d2ea86a0e78ef2ecad515bbce970cdaf47d58aed1a73ca68459650f15367a8",
-      "documents": 3,
+      "content_hash": "953ebf01c5b284ccb5d3f0290fb96e148e7431b5da0f2ecffad9c4ebbb10d14c",
+      "documents": 4,
       "id": "new-news",
       "publisher": "Newcastle United",
       "status": "ok",

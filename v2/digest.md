@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 2
 
-Deadline **Fri 28 Aug, 17:30 UTC** — 1d 0h away.
+Deadline **Fri 28 Aug, 17:30 UTC** — 0d 20h away.
 Projections cover GW2–7.
 
 ## GW1 in review — what happened, and what it does and does not change
 
-_457 players classified: 39 unavailable, 82 minutes loss, 51 minutes watch, 30 minutes gain, 67 variance, 188 on model. Retrospective classes graded: 0 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_457 players classified: 38 unavailable, 82 minutes loss, 52 minutes watch, 30 minutes gain, 67 variance, 188 on model. Retrospective classes graded: 0 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Hold — variance, no action**
 
@@ -138,15 +138,15 @@ Net transfers this gameweek as a share of current owners. Top of the left column
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Jebbison £5.0 | +148900.0% | +1,489 | Livramento £5.0 | -97400.0% | -974 |
-| Wan-Bissaka £4.5 | +86700.0% | +867 | Enes Ünal £5.5 | -93600.0% | -936 |
-| Humphreys £4.5 | +80200.0% | +802 | C.Jones £5.5 | -92200.0% | -922 |
-| Ahoka £4.5 | +78300.0% | +783 | Mitoma £6.0 | -90500.0% | -905 |
-| Hadjam £4.5 | +49000.0% | +490 | Joelinton £5.5 | -86000.0% | -860 |
-| Fofana £5.0 | +40200.0% | +402 | Adli £5.0 | -81000.0% | -810 |
+| Jebbison £5.0 | +157600.0% | +1,576 | Chadi Riad £4.5 | -209700.0% | -2,097 |
+| Ahoka £4.5 | +95100.0% | +951 | Livramento £5.0 | -100900.0% | -1,009 |
+| Wan-Bissaka £4.5 | +94900.0% | +949 | Enes Ünal £5.5 | -95500.0% | -955 |
+| Humphreys £4.5 | +82600.0% | +826 | C.Jones £5.5 | -95000.0% | -950 |
+| Bouaddi £5.5 | +68900.0% | +689 | Mitoma £6.0 | -93100.0% | -931 |
+| Hadjam £4.5 | +57000.0% | +570 | Joelinton £5.5 | -88300.0% | -883 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-08-27 16:51 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-08-27 20:45 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
