@@ -281,10 +281,13 @@ export function rankTransfers(
       if (!isLegal(after, budget)) continue
       const ab = squadBreakdown(after, gw, horizon)
       const gain = ab.total - base
-      if (gain <= 0.05) continue
-      if (!best || gain > best.gain) {
+      const xiGain = (ab.xi + ab.captain) - basePitch
+      // judged on the pitch, like the digest: a move that only "gains" because
+      // the bench would play more is not a best move
+      if (xiGain <= 0.05) continue
+      if (!best || xiGain > best.xiGain) {
         best = {
-          out: o, in: n, gain, xiGain: (ab.xi + ab.captain) - basePitch, net: gain - hit,
+          out: o, in: n, gain, xiGain, net: gain - hit,
           costChange: Math.round((n.price - o.price) * 10) / 10,
           worthAHit: gain > HIT_COST,
         }
@@ -292,7 +295,7 @@ export function rankTransfers(
     }
     if (best) out.push(best)
   }
-  return out.sort((a, b) => b.gain - a.gain).slice(0, limit)
+  return out.sort((a, b) => b.xiGain - a.xiGain).slice(0, limit)
 }
 
 /**
