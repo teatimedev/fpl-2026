@@ -860,7 +860,6 @@ def main():
             L.append(f'| {i} | {p["name"]} | {p["team"]} | {key(p):.1f} | '
                      f'{p["start_rate"]*100:.0f} |')
         L.append('')
-        P.append(f'C {cap["name"]} ({key(cap):.1f}) · V {vice["name"]}')
 
         # ---- XI
         L.append('## Starting XI')
@@ -1216,9 +1215,28 @@ def main():
                     J['plan'] = dict(total=free['total'], hold_total=hold['total'],
                                      diff=round(diff, 1), hits=free['hits'],
                                      n_now=n_now, worth_it=worth_it,
+                                     move_bar=round(HOLD_THRESHOLD * n_now, 1),
                                      weeks=[dict(gw=w['gw'], pts=w['pts'], hits=w['hits'],
                                                  captain=w['captain'], ft=w['ft'],
                                                  in_=w['in'], out=w['out']) for w in free['weeks']])
+                    this_week_sim = None
+                    if n_now > 0 and not unlimited:
+                        move_squad = free['weeks'][0].get('squad')
+                        if move_squad and set(move_squad) != set(ids):
+                            try:
+                                from decision_sim import compare as compare_decisions
+                                from decision_sim import load_fixture_xg
+                                this_week_sim = compare_decisions(
+                                    ids, move_squad, players, load_fixture_xg(),
+                                    gw, gw, n_sims=4000,
+                                )
+                                this_week_sim['n_sims'] = 4000
+                                J['plan']['this_week_sim'] = this_week_sim
+                            except Exception as ex:
+                                # Simulation is a robustness check, never the
+                                # source of the projection or a reason to sink
+                                # the weekly digest.
+                                J['plan']['this_week_sim_error'] = str(ex)
                     if worth_it and unlimited and free_source == 'exact static build':
                         action_kind = 'rebuild'
                         recommendation = (
@@ -1282,6 +1300,34 @@ def main():
                             L, P, J['transfers'], recommendation,
                             f'Transfers: HOLD ({queued or "best move"} queued; '
                             f'acting now only {diff:+.1f})',
+                        )
+                    if this_week_sim:
+                        wins = this_week_sim['p_b_wins'] * 100
+                        mean_delta = this_week_sim['mean_delta']
+                        move_bar = HOLD_THRESHOLD * n_now
+                        if wins >= 60 and mean_delta >= move_bar:
+                            interpretation = (
+                                f'The advantage is both likely and large enough to clear '
+                                f'the {move_bar:.1f}-point bar for {n_now} move'
+                                f'{"s" if n_now != 1 else ""}.'
+                            )
+                        elif wins >= 60 and mean_delta > 0:
+                            interpretation = (
+                                f'There is probably a points edge, but its {mean_delta:+.1f} '
+                                f'average does not clear the {move_bar:.1f}-point bar for '
+                                f'spending {n_now} transfer{"s" if n_now != 1 else ""} now.'
+                            )
+                        else:
+                            interpretation = (
+                                'The proposed change does not have a reliable points edge '
+                                'this week.'
+                            )
+                        L.append('')
+                        L.append(
+                            f'**This Friday under uncertainty:** the planner\'s proposed '
+                            f'GW{gw} squad beats holding in {wins:.0f}% of '
+                            f'{this_week_sim["n_sims"]:,} simulations '
+                            f'(average {mean_delta:+.1f} points). {interpretation}'
                         )
                     lead = ('Best exact-scored pre-season build'
                             if free_source == 'exact static build' else 'Best path from here')
@@ -1364,6 +1410,53 @@ def main():
         if mine_f:
             P.append('Price: ' + ', '.join(f['p']['name'] for f in mine_f)
                      + ' under selling pressure')
+    # Price timing can make "wait a week" expensive even when the projected
+    # points survive the wait. Early snapshots cannot calibrate FPL's hidden
+    # thresholds, so this is a visible shadow check and never overturns the
+    # transfer verdict until it has at least six weeks of observed changes.
+    if len(squad) == 15 and J.get('decision', {}).get('kind') == 'hold':
+        try:
+            from price_risk import (PRICE_LOG as PRICE_RISK_LOG,
+                                    advisory as price_risk_advisory,
+                                    load_deadlines, load_snapshots)
+            snapshots = load_snapshots(PRICE_RISK_LOG)
+            target_ids = []
+            weeks = J.get('plan', {}).get('weeks') or []
+            if weeks:
+                target_ids.extend(weeks[0].get('in_', []))
+            if not target_ids:
+                target_ids.extend(
+                    move['in_'] for move in J.get('transfers', {}).get('singles', [])[:3]
+                )
+            target_ids = list(dict.fromkeys(
+                int(pid) for pid in target_ids if int(pid) in players
+            ))
+            risk_lines = price_risk_advisory(
+                snapshots,
+                [players[pid] for pid in ids if pid in players],
+                [players[pid] for pid in target_ids],
+                deadlines=load_deadlines(),
+            )
+            J['price']['hold_risk'] = {
+                'shadow': True,
+                'snapshots': len(snapshots),
+                'target_ids': target_ids,
+                'lines': risk_lines,
+            }
+            if risk_lines:
+                L.append('')
+                L.append('**Price risk if you wait (shadow-only):**')
+                L.append('')
+                L.extend(f'- {line}' for line in risk_lines)
+                L.append('')
+                L.append(
+                    f'_Based on {len(snapshots)} price snapshots. This warning is '
+                    'not part of the transfer verdict until at least six weeks of '
+                    'actual rises and falls can calibrate it._'
+                )
+        except Exception as ex:
+            # Optional and explicitly shadow-only: never sink the digest.
+            J['price']['hold_risk_error'] = str(ex)
     L.append('')
     L.append('---')
     L.append('')

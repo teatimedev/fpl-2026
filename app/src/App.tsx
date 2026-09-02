@@ -158,11 +158,20 @@ export default function App() {
             players triggers another rebuild. Bookmaker odds are blended in where posted.
           </p>
           <p>
-            Attack and defence ratings are fitted by maximum likelihood on four
-            seasons of real results and validated against bookmaker closing odds;
-            player rates are shrunk by measured year-over-year stability. Hold-out
-            rank correlation is about 0.46, so treat the ordering as a strong hint
-            and the totals as rough.
+            Attack and defence ratings learn from four seasons of results and
+            bookmaker odds. Player ability changes slowly; starting chances react
+            quickly to recent lineups, and expected minutes also learn from how each
+            current manager uses substitutes.
+          </p>
+          <p>
+            Transfer advice compares acting now with banking the moves, then runs this
+            gameweek 4,000 times to check whether the immediate advantage is reliable.
+            Price-timing warnings are experimental until enough real rises and falls
+            exist to calibrate them.
+          </p>
+          <p>
+            Hold-out rank correlation is about 0.46, so treat the ordering as a strong
+            hint and the totals as rough.
           </p>
         </details>
       </footer>

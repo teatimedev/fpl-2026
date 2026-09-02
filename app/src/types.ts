@@ -222,14 +222,35 @@ export interface WeeklyPlanWeek {
   gw: number; pts: number; hits: number; captain: number; ft: number
   in_: number[]; out: number[]
 }
+export interface WeeklyDecisionSim {
+  p_b_wins: number
+  mean_delta: number
+  p_delta_gt_2: number
+  p_delta_lt_minus_2: number
+  n_sims: number
+}
 export interface WeeklyPlan {
   total: number; hold_total: number; diff: number; hits: number; weeks: WeeklyPlanWeek[]
   /** moves the plan makes this week, and whether diff clears the per-move hold threshold */
-  n_now?: number; worth_it?: boolean
+  n_now?: number; worth_it?: boolean; move_bar?: number
+  this_week_sim?: WeeklyDecisionSim
+  this_week_sim_error?: string
 }
 
 export interface WeeklyPriceRow { id: number; net: number; pressure: number }
-export interface WeeklyPrice { locked: boolean; rises: WeeklyPriceRow[]; falls: WeeklyPriceRow[] }
+export interface WeeklyPriceHoldRisk {
+  shadow: boolean
+  snapshots: number
+  target_ids: number[]
+  lines: string[]
+}
+export interface WeeklyPrice {
+  locked: boolean
+  rises: WeeklyPriceRow[]
+  falls: WeeklyPriceRow[]
+  hold_risk?: WeeklyPriceHoldRisk
+  hold_risk_error?: string
+}
 export interface WeeklyDecision {
   kind: 'hold' | 'transfer' | 'rebuild'
   instruction: string

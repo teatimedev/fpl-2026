@@ -38,6 +38,11 @@ function Md({ line }: { line: string }) {
   return <>{out}</>
 }
 
+function splitRiskEvidence(line: string): { message: string; evidence: string | null } {
+  const match = line.match(/^(.*?)\s+\[(.+)\]$/)
+  return match ? { message: match[1], evidence: match[2] } : { message: line, evidence: null }
+}
+
 export default function ThisWeek(
   { D, linked, builtSquad, openPlayer, loadSquad }: {
     D: Data; linked: LinkedTeam; builtSquad: Player[]; openPlayer: (id: number) => void
@@ -433,6 +438,10 @@ function Digest({
   const checks = W.checks ?? []
   const tr = W.transfers
   const plan = W.plan ?? null
+  const sim = plan?.this_week_sim ?? null
+  const moveCount = plan?.n_now ?? 0
+  const moveBar = plan?.move_bar ?? moveCount * 2
+  const holdRisk = W.price?.hold_risk ?? null
   const lineupMatches = liveIssues !== null
     ? liveIssues.length === 0
     : hasDigestLineup && issues.length === 0
@@ -518,6 +527,20 @@ function Digest({
             <p>
               This is the current transfer action. The pitch below is for the
               squad currently analysed; rerun the refresh after making the move.
+            </p>
+          )}
+          {sim && (
+            <p className="decision-evidence">
+              In {sim.n_sims.toLocaleString('en-GB')} simulations, the proposed moves
+              beat holding <strong>{Math.round(sim.p_b_wins * 100)}% of the time</strong>
+              {' '}and gained <strong className="mono">{signed(sim.mean_delta)} pts</strong>
+              {' '}on average this gameweek. {noTransfer && moveCount > 0 ? (
+                <>Spending {moveCount} transfer{moveCount === 1 ? '' : 's'} now needs
+                  {' '}<strong className="mono">+{moveBar.toFixed(1)}</strong>, so the model
+                  still prefers keeping the flexibility.</>
+              ) : (
+                <>That supports acting now.</>
+              )}
             </p>
           )}
           {(W.squad.changes?.length ?? 0) > 0 && (
@@ -625,6 +648,28 @@ function Digest({
           <span className="sub">GW{gw}–{horizon} window</span>
         </div>
         {decisionInstruction && <p className="lede-sm">{decisionInstruction}</p>}
+        {holdRisk && holdRisk.lines.length > 0 && (
+          <details className="scenario-details price-risk-details">
+            <summary>Price timing if you wait · experimental</summary>
+            <div className="scenario-body">
+              <ul className="price-risk-list">
+                {holdRisk.lines.map((line, i) => {
+                  const { message, evidence } = splitRiskEvidence(line)
+                  return (
+                    <li key={`${i}-${message}`}>
+                      <span>{message}</span>
+                      {evidence && <span className="price-risk-evidence mono">{evidence}</span>}
+                    </li>
+                  )
+                })}
+              </ul>
+              <p className="hint">
+                Based on {holdRisk.snapshots} price snapshots. This does not change the
+                transfer advice until enough actual rises and falls exist to calibrate it.
+              </p>
+            </div>
+          </details>
+        )}
         {tr.singles.length === 0 && tr.pairs.length === 0 ? (
           <div className="empty-state">
             Nothing improves this squad over the remaining gameweeks. Bank it.

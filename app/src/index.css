@@ -657,6 +657,14 @@ tbody tr:not(.benchrow) + tr.benchrow td { border-top: 1px dashed rgba(232, 240,
   margin-bottom: 7px; color: var(--chalk); font-family: var(--display);
   font-size: clamp(22px, 4vw, 34px); letter-spacing: 0.01em; line-height: 1.08;
 }
+.decision-body > .decision-evidence {
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: var(--line);
+  color: var(--chalk-dim);
+  font-size: 12.5px;
+}
+.decision-evidence strong { color: var(--chalk); }
 .sync-details, .scenario-details {
   margin: 12px 14px 14px; border: var(--line); border-radius: var(--r);
   background: rgba(4, 22, 15, 0.34); overflow: hidden;
@@ -673,6 +681,32 @@ tbody tr:not(.benchrow) + tr.benchrow td { border-top: 1px dashed rgba(232, 240,
 .scenario-body { padding-top: 2px; }
 .scenario-body .tbl-scroll { margin: 0; }
 .scenario-body > table { margin: 0; }
+.price-risk-details { margin-top: 8px; }
+.price-risk-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 14px;
+}
+.price-risk-list li {
+  padding: 10px 0;
+  color: var(--chalk);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.price-risk-list li + li { border-top: var(--line); }
+.price-risk-evidence {
+  display: block;
+  margin-top: 3px;
+  color: var(--chalk-dim);
+  font-size: 10.5px;
+  line-height: 1.5;
+  white-space: normal;
+}
+.price-risk-details .hint {
+  margin: 0;
+  padding: 10px 14px 14px;
+  border-top: var(--line);
+}
 
 /* ------------------------------------------------------------------ season */
 .season { max-width: 1100px; }

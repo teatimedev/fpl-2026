@@ -155,6 +155,47 @@ class MinutesModelAggregateRule(unittest.TestCase):
         rec, _ = self._rate(now, 1, rule="recency")
         self.assertAlmostEqual(agg, rec)
 
+class ManagerMinutesBlendTests(unittest.TestCase):
+    def setUp(self):
+        self.player = make_player(pid=101, team="MCI", pos="FWD")
+        self.table = {
+            "cells": {
+                ("MCI", PM.CURRENT, "FWD"): {
+                    "n": 2,
+                    "raw_mps": 75.0,
+                    "mps": 78.0,
+                    "contributions": {
+                        101: {"n": 1, "minutes_sum": 90.0},
+                        202: {"n": 1, "minutes_sum": 60.0},
+                    },
+                },
+            },
+            "league": {
+                (PM.CURRENT, "FWD"): {
+                    "n": 20, "mps": 80.0, "hook_rate": 0.2, "full90": 0.5,
+                },
+            },
+            "provenance": {},
+        }
+
+    def test_blends_mps_but_never_start_probability(self):
+        rate, mps = PM.manager_minutes_blend(
+            self.player, (0.9, 90.0), table=self.table, weight=0.25
+        )
+
+        # Excluding the target leaves a 60-minute teammate and also removes
+        # his 90 from the league-position shrinkage prior.
+        league_mps = (80.0 * 20 - 90.0) / 19
+        manager_mps = (1 / 7) * 60.0 + (6 / 7) * league_mps
+        self.assertEqual(rate, 0.9)
+        self.assertAlmostEqual(mps, 0.75 * 90.0 + 0.25 * manager_mps)
+
+    def test_missing_production_table_is_inert(self):
+        self.assertEqual(
+            PM.manager_minutes_blend(self.player, (0.9, 90.0), table=None),
+            (0.9, 90.0),
+        )
+
 
 # ---------------------------------------------------------------------- P2
 class MatchEvidenceTests(unittest.TestCase):

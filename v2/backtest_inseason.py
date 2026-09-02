@@ -29,6 +29,9 @@ scorecard settles the availability-conditioned versions.
                 rest-of-season xGI/90 error of the three-start window vs the
                 prior; plus the hold-vs-swap policy simulation for every
                 `variance` player-week.
+    --mps       Compare the preseason player minutes-per-start prior with
+                manager/club-position blends on started rows. Manager evidence
+                is strictly before the target GW and excludes the target player.
 
     python v2/backtest_inseason.py --minutes --rates --retro
 """
@@ -46,15 +49,19 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import player_model as PM          # noqa: E402
 import retro as RT                 # noqa: E402
-import backtest_totals as BT       # noqa: E402
-import teams_model as TM           # noqa: E402
+# The historical total/rates modes need scipy through teams_model. Import
+# those modules lazily so the narrower --mps measurement can run without it.
+BT = None
+TM = None
 from manager_changes import new_manager_clubs   # noqa: E402
+import manager_minutes as MM       # noqa: E402
 
 DB = HERE / 'fpl.db'
 SEASONS = ['2022/23', '2023/24', '2024/25', '2025/26']
 K_GRID = (0.5, 1.0, 1.5, 2.0, 4.0, 6.0, 8.0)
 HL_GRID = (2.0, 3.0, 5.0, math.inf)
 RATE_N = (3, 5, 8, 12)
+MPS_WEIGHTS = (0.25, 0.50, 0.75)
 RATE_MULT = (1, 2, 3, 5, 10)
 # relative season weights for an as-of blend: the current season and the one
 # before it at 1.0, then 0.75, 0.5, 0.3 — production's ladder re-based
@@ -89,6 +96,23 @@ def load_gw_panel(seasons):
         for rows in panel[s].values():
             rows.sort(key=lambda r: (r['kickoff'] or '', r['round'], r['fixture_id'] or 0))
     return panel
+
+
+def load_mps_history():
+    """Minimal season_stat history needed by minutes_prior(), with no scipy."""
+    cx = sqlite3.connect(DB)
+    meta = {}
+    for code, name, dob, team in cx.execute(
+            'SELECT code, web_name, birth_date, team FROM player'):
+        meta[code] = dict(name=name, dob=dob, cur_team=team)
+    rows = defaultdict(dict)
+    for code, season, pos, mins, starts in cx.execute(
+            'SELECT code, season, pos, minutes, starts FROM season_stat'):
+        if mins:
+            rows[code][season] = dict(
+                season=season, pos=pos, mins=mins, starts=starts or 0)
+    cx.close()
+    return meta, rows
 
 
 def team_sequences(rows_by_code):
@@ -237,6 +261,126 @@ def run_minutes(panel, hist_rows, meta, seasons):
     print('Read: the recency K/HALF_LIFE pair with the lowest Brier among regulars '
           '(band >=0.7) is the one to quote in player_model.py; if the aggregate '
           'rule wins there, keep it and report why.')
+
+
+# --------------------------------------------------------------- --mps
+def run_mps(panel, hist_rows, meta, seasons):
+    """Walk-forward minutes-per-start comparison on started player-GW rows.
+
+    The player prediction is the production preseason prior: only season_stat
+    rows before the target season reach minutes_prior(). The manager estimate
+    uses this season's starts from earlier rounds only. Both its club cell and
+    league-position prior subtract every earlier row belonging to the target
+    player, so the purported manager signal cannot recycle the player's own
+    minutes tendency.
+    """
+    print('\n' + '=' * 78)
+    print('MPS  MINUTES PER START: player prior vs as-of manager blend')
+    print('=' * 78)
+    print('manager evidence: earlier GWs only; target player excluded')
+
+    errors = defaultdict(list)  # (rule, pos) -> absolute errors
+    manager_ns = []
+
+    for season in seasons:
+        rows_by_code = panel[season]
+        if not rows_by_code:
+            continue
+        players = asof_players(season, rows_by_code, hist_rows, meta)
+        for pos in POSITIONS:
+            prices = sorted(q['price'] for q in players.values() if q['pos'] == pos)
+            PM.PRICE_MEDIAN[pos] = prices[len(prices) // 2] if prices else 5.5
+        player_mps = {code: PM.minutes_prior(p, players)[1]
+                      for code, p in players.items()}
+
+        by_round = defaultdict(list)
+        for code, rows in rows_by_code.items():
+            for row in rows:
+                if row['started']:
+                    by_round[row['round']].append((code, row))
+
+        # Sufficient statistics through the end of the previous round. Keeping
+        # the update after the scoring loop is the mechanical no-leak barrier,
+        # including for double-GW fixtures in the same round.
+        team_sum = defaultdict(float)
+        team_n = defaultdict(int)
+        team_player_sum = defaultdict(float)
+        team_player_n = defaultdict(int)
+        league_sum = defaultdict(float)
+        league_n = defaultdict(int)
+        league_player_sum = defaultdict(float)
+        league_player_n = defaultdict(int)
+
+        for rnd in sorted(by_round):
+            targets = by_round[rnd]
+            for code, row in targets:
+                pos = row['pos'] or 'MID'
+                team = row['team']
+                actual = row['mins']
+                prior = player_mps[code]
+
+                lp_key = (pos, code)
+                ln = league_n[pos] - league_player_n[lp_key]
+                league = ((league_sum[pos] - league_player_sum[lp_key]) / ln
+                          if ln else prior)
+
+                cell_key = (team, pos)
+                cp_key = (team, pos, code)
+                cn = team_n[cell_key] - team_player_n[cp_key]
+                if cn:
+                    raw = ((team_sum[cell_key] - team_player_sum[cp_key]) / cn)
+                    trust = cn / (cn + MM.K)
+                    manager = trust * raw + (1 - trust) * league
+                else:
+                    manager = league
+                manager_ns.append(cn)
+
+                errors[('player', pos)].append(abs(prior - actual))
+                for weight in MPS_WEIGHTS:
+                    pred = (1 - weight) * prior + weight * manager
+                    errors[(f'w={weight:g}', pos)].append(abs(pred - actual))
+
+            for code, row in targets:
+                pos = row['pos'] or 'MID'
+                team = row['team']
+                mins = row['mins']
+                cell_key = (team, pos)
+                cp_key = (team, pos, code)
+                lp_key = (pos, code)
+                team_sum[cell_key] += mins
+                team_n[cell_key] += 1
+                team_player_sum[cp_key] += mins
+                team_player_n[cp_key] += 1
+                league_sum[pos] += mins
+                league_n[pos] += 1
+                league_player_sum[lp_key] += mins
+                league_player_n[lp_key] += 1
+
+    rules = ('player', *(f'w={w:g}' for w in MPS_WEIGHTS))
+
+    def mae(rule, pos=None):
+        vals = (errors[(rule, pos)] if pos else
+                [e for p in POSITIONS for e in errors[(rule, p)]])
+        return float(np.mean(vals)) if vals else float('nan')
+
+    n_obs = sum(len(errors[('player', pos)]) for pos in POSITIONS)
+    print(f'{n_obs} started player-fixture predictions over {", ".join(seasons)}')
+    print(f'{"rule":<10}{"overall":>10}' +
+          ''.join(f'{pos:>10}' for pos in POSITIONS))
+    for rule in rules:
+        print(f'{rule:<10}{mae(rule):>10.3f}' +
+              ''.join(f'{mae(rule, pos):>10.3f}' for pos in POSITIONS))
+
+    best_weight = min(MPS_WEIGHTS, key=lambda w: mae(f'w={w:g}'))
+    baseline = mae('player')
+    best = mae(f'w={best_weight:g}')
+    verdict = 'WINS' if best < baseline else 'DOES NOT WIN'
+    print(f'best weight: {best_weight:g} (MAE {best:.3f} vs player {baseline:.3f}; '
+          f'manager blend {verdict}, delta {best - baseline:+.3f})')
+    if manager_ns:
+        print(f'manager peer starts available: median {float(np.median(manager_ns)):.0f}')
+    return dict(n=n_obs, player_mae=baseline, best_weight=best_weight,
+                best_mae=best, manager_wins=best < baseline)
 
 
 # -------------------------------------------------------------- --rates
@@ -627,11 +771,19 @@ def main():
     ap.add_argument('--minutes', action='store_true')
     ap.add_argument('--rates', action='store_true')
     ap.add_argument('--retro', action='store_true')
+    ap.add_argument('--mps', action='store_true')
     ap.add_argument('--seasons', nargs='*', default=SEASONS)
     args = ap.parse_args()
-    if not (args.minutes or args.rates or args.retro):
+    if not (args.minutes or args.rates or args.retro or args.mps):
         args.minutes = args.rates = args.retro = True
-    meta, hist_rows = BT.load_panel()
+    global BT, TM
+    if args.minutes or args.rates or args.retro:
+        import backtest_totals as backtest_totals
+        import teams_model as teams_model
+        BT, TM = backtest_totals, teams_model
+        meta, hist_rows = BT.load_panel()
+    else:
+        meta, hist_rows = load_mps_history()
     panel = load_gw_panel(args.seasons)
     seasons = [s for s in args.seasons if panel.get(s)]
     print('per-GW rows: ' + ', '.join(f'{s} {sum(len(v) for v in panel[s].values())}'
@@ -642,6 +794,8 @@ def main():
         run_minutes(panel, hist_rows, meta, seasons)
     if args.rates:
         run_rates(panel, hist_rows, meta, seasons)
+    if args.mps:
+        run_mps(panel, hist_rows, meta, seasons)
     if args.retro:
         run_retro(panel, hist_rows, meta, seasons)
 

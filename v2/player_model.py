@@ -98,6 +98,15 @@ RECENCY_MPS_K = 4.0
 MINUTES_RULE = os.environ.get('FPL_MINUTES_RULE', 'recency')
 if MINUTES_RULE not in ('aggregate', 'recency'):
     raise SystemExit(f'FPL_MINUTES_RULE must be aggregate or recency, not {MINUTES_RULE!r}')
+# Minutes-per-start manager blend, measured 2 Sep 2026 on 30,448 no-leak
+# predictions over 2022/23-2025/26 (`backtest_inseason.py --mps`):
+#   player prior only  MAE 9.016 minutes
+#   25% manager blend MAE 8.829 (-0.186)
+# 50% and 75% were worse overall. The live entry point loads the current
+# season table after fetch; library callers and tests stay inert until they
+# explicitly supply one, so a missing/old database never changes projections.
+MANAGER_MPS_WEIGHT = 0.25
+MANAGER_MPS_TABLE = None
 # Deadline availability per archived gameweek, {gw: {player id: (status,
 # p_start)}}, read from data/history/gw{n}.json by main(): the "was he
 # available" signal the recency rule conditions on.
@@ -554,6 +563,28 @@ def aggregate_update(p, prior_rate, prior_mps):
             mps = trust * mps_now + (1 - trust) * mps
     return max(0.0, min(0.97, start_rate)), mps
 
+def manager_minutes_blend(p, result, table=None, weight=None):
+    """Blend minutes per start toward the current manager's measured hook.
+
+    Start probability is untouched. `table` defaults to the production table
+    loaded by main(); None keeps library callers and isolated tests unchanged.
+    The manager cell excludes this player's own starts, matching the backtest.
+    """
+    table = MANAGER_MPS_TABLE if table is None else table
+    weight = MANAGER_MPS_WEIGHT if weight is None else weight
+    if not table or weight <= 0:
+        return result
+    from manager_minutes import mps_expectation
+    manager_mps = mps_expectation(
+        table, p['team'], p['pos'], CURRENT, exclude_code=p.get('code')
+    )
+    if manager_mps is None:
+        return result
+    start_rate, player_mps = result
+    return start_rate, (1 - weight) * player_mps + weight * manager_mps
+
+
+
 
 def minutes_model(p, players, rule=None):
     """Expected minutes per start and probability of starting.
@@ -568,8 +599,10 @@ def minutes_model(p, players, rule=None):
     prior_rate, prior_mps = minutes_prior(p, players)
     rule = rule or MINUTES_RULE
     if rule == 'recency' and (GW_ROWS_LOADED or p.get('gw')):
-        return recency_update(p, prior_rate, prior_mps)
-    return aggregate_update(p, prior_rate, prior_mps)
+        updated = recency_update(p, prior_rate, prior_mps)
+    else:
+        updated = aggregate_update(p, prior_rate, prior_mps)
+    return manager_minutes_blend(p, updated)
 
 
 def poisson_at_least(mean, k):
@@ -1029,6 +1062,10 @@ if __name__ == '__main__':
                          'cumulative level ratio, subject to the GW8+/10%% guards (P7)')
     args = ap.parse_args()
     players = load()
+    from manager_minutes import load_from_db as load_manager_minutes
+    manager_table = load_manager_minutes([CURRENT], db=DB)
+    MANAGER_MPS_TABLE = (manager_table
+                         if manager_table['provenance']['start_rows'] else None)
     GAMES_PLAYED.update(games_played())
     TEAM_FIXTURES.update(team_fixtures())
     SNAPSHOT_STATUS.update(load_snapshot_status())
@@ -1046,6 +1083,10 @@ if __name__ == '__main__':
     else:
         print('This season: no matches played yet — projections rest on history, '
               'price and pre-season research')
+    if MANAGER_MPS_TABLE:
+        print(f'Manager minutes-per-start: {MANAGER_MPS_WEIGHT:.0%} blend from '
+              f'{len(MANAGER_MPS_TABLE["cells"])} current-season club/position cells '
+              '(target player excluded)')
 
     print('Positional priors (minutes-weighted per-90 means)')
     print(f"{'pos':<5}{'xG90':>8}{'xA90':>8}{'DefCon90':>10}{'bonus90':>9}")
@@ -1058,6 +1099,8 @@ if __name__ == '__main__':
                    feedback=args.feedback)
     json.dump({'players': rows, 'horizon': HORIZON, 'start_gw': START_GW,
                'window': WINDOW, 'minutes_rule': MINUTES_RULE,
+               'manager_mps_weight': (MANAGER_MPS_WEIGHT
+                                      if MANAGER_MPS_TABLE else 0.0),
                'calibration': {r['pos']: r.get('calibration_k') for r in rows
                                if r.get('calibration_k') is not None}},
               open(OUT, 'w'))
