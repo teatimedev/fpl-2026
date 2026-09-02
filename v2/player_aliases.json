@@ -265,7 +265,7 @@
         "Emiliano Mart\u00ednez Romero"
       ],
       "canonical": "Emiliano Mart\u00ednez Romero",
-      "club": "AVL",
+      "club": "CHE",
       "player_id": 28
     },
     {
@@ -846,7 +846,7 @@
         "Ethan Pinnock"
       ],
       "canonical": "Ethan Pinnock",
-      "club": "BRE",
+      "club": "COV",
       "player_id": 91
     },
     {
@@ -1421,7 +1421,7 @@
         "Axel Disasi"
       ],
       "canonical": "Axel Disasi",
-      "club": "CHE",
+      "club": "CRY",
       "player_id": 153
     },
     {
@@ -1551,7 +1551,7 @@
         "Nicolas Jackson"
       ],
       "canonical": "Nicolas Jackson",
-      "club": "CHE",
+      "club": "AVL",
       "player_id": 166
     },
     {
@@ -1560,7 +1560,7 @@
         "Liam Delap"
       ],
       "canonical": "Liam Delap",
-      "club": "CHE",
+      "club": "NFO",
       "player_id": 167
     },
     {
@@ -1869,7 +1869,7 @@
         "Daniel Mu\u00f1oz Mej\u00eda"
       ],
       "canonical": "Daniel Mu\u00f1oz Mej\u00eda",
-      "club": "CRY",
+      "club": "NFO",
       "player_id": 201
     },
     {
@@ -3694,7 +3694,7 @@
         "Omar Marmoush"
       ],
       "canonical": "Omar Marmoush",
-      "club": "MCI",
+      "club": "TOT",
       "player_id": 401
     },
     {
@@ -3734,7 +3734,7 @@
         "Nico Gonz\u00e1lez Iglesias"
       ],
       "canonical": "Nico Gonz\u00e1lez Iglesias",
-      "club": "MCI",
+      "club": "NEW",
       "player_id": 405
     },
     {
@@ -5678,6 +5678,124 @@
       "canonical": "Ayyoub Bouaddi",
       "club": "MCI",
       "player_id": 616
+    },
+    {
+      "aliases": [
+        "Cho",
+        "Mohamed-Ali Cho"
+      ],
+      "canonical": "Mohamed-Ali Cho",
+      "club": "HUL",
+      "player_id": 617
+    },
+    {
+      "aliases": [
+        "Goretzka",
+        "Leon Goretzka"
+      ],
+      "canonical": "Leon Goretzka",
+      "club": "AVL",
+      "player_id": 618
+    },
+    {
+      "aliases": [
+        "Palacios",
+        "Exequiel Palacios"
+      ],
+      "canonical": "Exequiel Palacios",
+      "club": "IPS",
+      "player_id": 619
+    },
+    {
+      "aliases": [
+        "Diouf",
+        "El Hadji Malick Diouf"
+      ],
+      "canonical": "El Hadji Malick Diouf",
+      "club": "BRE",
+      "player_id": 620
+    },
+    {
+      "aliases": [
+        "McAidoo",
+        "Ryan McAidoo"
+      ],
+      "canonical": "Ryan McAidoo",
+      "club": "MCI",
+      "player_id": 621
+    },
+    {
+      "aliases": [
+        "Braithwaite",
+        "Kaden Braithwaite"
+      ],
+      "canonical": "Kaden Braithwaite",
+      "club": "MCI",
+      "player_id": 622
+    },
+    {
+      "aliases": [
+        "Bentley",
+        "Dan Bentley"
+      ],
+      "canonical": "Dan Bentley",
+      "club": "COV",
+      "player_id": 623
+    },
+    {
+      "aliases": [
+        "Cozier-Duberry",
+        "Amario Cozier-Duberry"
+      ],
+      "canonical": "Amario Cozier-Duberry",
+      "club": "BHA",
+      "player_id": 624
+    },
+    {
+      "aliases": [
+        "Cairns",
+        "Alex Cairns"
+      ],
+      "canonical": "Alex Cairns",
+      "club": "LEE",
+      "player_id": 625
+    },
+    {
+      "aliases": [
+        "Zepa",
+        "Macauley Zepa"
+      ],
+      "canonical": "Macauley Zepa",
+      "club": "FUL",
+      "player_id": 626
+    },
+    {
+      "aliases": [
+        "Barcola",
+        "Bradley Barcola"
+      ],
+      "canonical": "Bradley Barcola",
+      "club": "LIV",
+      "player_id": 627
+    },
+    {
+      "aliases": [
+        "Allan",
+        "Andrade Elias",
+        "Allan Andrade Elias"
+      ],
+      "canonical": "Allan Andrade Elias",
+      "club": "MCI",
+      "player_id": 628
+    },
+    {
+      "aliases": [
+        "Zetterer",
+        "Michael Zetterer"
+      ],
+      "canonical": "Michael Zetterer",
+      "club": "LEE",
+      "player_id": 629
     }
   ],
   "version": 1
