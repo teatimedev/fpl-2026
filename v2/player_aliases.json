@@ -5998,6 +5998,15 @@
       "canonical": "Juan Angulo",
       "club": "SUN",
       "player_id": 651
+    },
+    {
+      "aliases": [
+        "Azeez",
+        "Femi Azeez"
+      ],
+      "canonical": "Femi Azeez",
+      "club": "BHA",
+      "player_id": 652
     }
   ],
   "version": 1

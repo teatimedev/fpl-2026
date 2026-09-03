@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-03T09:56:49Z",
+  "checked_at": "2026-09-03T18:47:10Z",
   "coverage": 0.95,
   "enabled": 20,
   "gw": 3,
@@ -28,9 +28,9 @@
       "club": "AVL",
       "content_hash": "54a857ed7e41f6d3ba6e05a20075b1b0dcc4bdfa5f28d8a5df97642d39d3e33c",
       "documents": 1,
-      "etag": "\"2d7c0ce862269a8752ba4b9fb3c410bd\"",
+      "etag": "\"8ca04765dd410333a0d590f1a3ebe541\"",
       "id": "avl-news",
-      "last_modified": "Thu, 03 Sep 2026 02:07:54 GMT",
+      "last_modified": "Thu, 03 Sep 2026 14:27:25 GMT",
       "publisher": "Aston Villa",
       "status": "ok",
       "url": "https://www.avfc.co.uk/news/"
@@ -58,7 +58,7 @@
       "content_hash": "cf7847b631790ecb60148b1cc18063c9ca752ff090b703899564ce12f4ab429e",
       "documents": 1,
       "id": "bou-news",
-      "last_modified": "Wed, 02 Sep 2026 08:48:40 GMT",
+      "last_modified": "Thu, 03 Sep 2026 14:27:58 GMT",
       "publisher": "AFC Bournemouth",
       "status": "ok",
       "url": "https://www.afcb.co.uk/news/"
@@ -70,7 +70,7 @@
       "content_hash": "511e5b401574ae56a77d5b61b461ef089e1aeda57ab4774e66f11e779e7743d8",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Thu, 03 Sep 2026 09:56:51 GMT",
+      "last_modified": "Thu, 03 Sep 2026 18:47:12 GMT",
       "publisher": "Brentford",
       "status": "ok",
       "url": "https://www.brentfordfc.com/en/news"
@@ -92,9 +92,9 @@
       "club": "COV",
       "content_hash": "3554129e1f24d0567ef56591d5bc9d490f2922a1a7e34bbf4e5ac2fd9588fb95",
       "documents": 1,
-      "etag": "\"cf874e4f18ff7567a83b5296d797517c\"",
+      "etag": "\"aa8149c43b38087b1397735773a93613\"",
       "id": "cov-news",
-      "last_modified": "Thu, 03 Sep 2026 02:07:57 GMT",
+      "last_modified": "Thu, 03 Sep 2026 14:27:41 GMT",
       "publisher": "Coventry City",
       "status": "ok",
       "url": "https://www.ccfc.co.uk/news/"
@@ -105,7 +105,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"m760u700iht813\"",
+      "etag": "\"a738xmwmgkta46\"",
       "id": "cry-news",
       "publisher": "Crystal Palace",
       "status": "ok",
@@ -117,9 +117,9 @@
       "club": "EVE",
       "content_hash": "7f2844b9f692f7f412b6ea5afd5433414d12302a05c9a406d86bec4a1c5a81d8",
       "documents": 1,
-      "etag": "\"3734a8f20dc0aebab8b193fd6d66edf8\"",
+      "etag": "\"58a1e0ddcccb2ae8e2c3df8458e2e1c1\"",
       "id": "eve-news",
-      "last_modified": "Thu, 03 Sep 2026 02:05:13 GMT",
+      "last_modified": "Thu, 03 Sep 2026 14:28:45 GMT",
       "publisher": "Everton",
       "status": "ok",
       "url": "https://www.evertonfc.com/news"
@@ -131,6 +131,10 @@
           "etag": "\"0d74d89bda05ca20c6e794aefacff01d\"",
           "last_modified": "Wed, 26 Aug 2026 10:13:52 GMT"
         },
+        "https://www.fulhamfc.com/news/2026/september/03/new-boys-squad-numbers/": {
+          "etag": "\"c4411170a3699a1a77dea0e44e84b321\"",
+          "last_modified": "Thu, 03 Sep 2026 17:05:37 GMT"
+        },
         "https://www.fulhamfc.com/riverside-development/artists-impression": {
           "etag": "\"f3cd60e1c9e8b522244c2ab6cea97389\"",
           "last_modified": "Wed, 26 Aug 2026 10:14:54 GMT"
@@ -141,11 +145,11 @@
         }
       },
       "club": "FUL",
-      "content_hash": "54ad1fd4bf089fd7456d68f0eedc598684fb785c3b6fd9284a34127f63b9a420",
-      "documents": 1,
-      "etag": "\"010aec1e5737608c86f21786e54b4e39\"",
+      "content_hash": "32d324a4a1ec4cb46c8c7c0f03b2c67ca7ddb3a79e7b9a71b2e18b814f245c97",
+      "documents": 2,
+      "etag": "\"248bd5163fc00c501a182b091613e5de\"",
       "id": "ful-news",
-      "last_modified": "Thu, 03 Sep 2026 09:48:15 GMT",
+      "last_modified": "Thu, 03 Sep 2026 17:35:09 GMT",
       "publisher": "Fulham",
       "status": "ok",
       "url": "https://www.fulhamfc.com/news/"
@@ -156,9 +160,9 @@
       "club": "HUL",
       "content_hash": "ea6460d922a745cff521f5005b7d44149337d52b5fa04f089301403474385771",
       "documents": 1,
-      "etag": "\"03e5ad8e5260d424e755bca4e5490f97\"",
+      "etag": "\"3ac268d3c8a5f4334cbcdd0e7b40fcdd\"",
       "id": "hul-news",
-      "last_modified": "Thu, 03 Sep 2026 02:06:56 GMT",
+      "last_modified": "Thu, 03 Sep 2026 17:22:08 GMT",
       "publisher": "Hull City",
       "status": "ok",
       "url": "https://www.wearehullcity.co.uk/news/"
@@ -169,14 +173,18 @@
         "https://www.itfc.co.uk/hospitality/conferences-meetings": {
           "etag": "\"7c149341b3690777f3bcdad4144d95e2\"",
           "last_modified": "Thu, 03 Sep 2026 02:17:01 GMT"
+        },
+        "https://www.itfc.co.uk/news/2026/september/03/matchday-guide---liverpool--h-/": {
+          "etag": "\"47459669992f0cd2dba0a045485526f3\"",
+          "last_modified": "Thu, 03 Sep 2026 15:38:44 GMT"
         }
       },
       "club": "IPS",
-      "content_hash": "3c31a8b3b556f11ff21a9e9156fa849591fcb49e94b487c1422239ae766b887e",
+      "content_hash": "3e0d4258d7ae145ad730093f5b8c02705f38113e0461215945dc5560ea78128a",
       "documents": 2,
-      "etag": "\"f8c57ab0dc9c54b44f5ebe1544b0d245\"",
+      "etag": "\"4e826e06391013af944ce3d75e63455c\"",
       "id": "ips-news",
-      "last_modified": "Thu, 03 Sep 2026 09:26:33 GMT",
+      "last_modified": "Thu, 03 Sep 2026 16:09:04 GMT",
       "publisher": "Ipswich Town",
       "status": "ok",
       "url": "https://www.itfc.co.uk/news/"
@@ -184,13 +192,15 @@
     {
       "article_errors": 0,
       "article_validators": {
+        "https://www.leedsunited.com/en/news/daniel-farke-provides-fitness-update-ahead-of-brighton-clash-a": {},
+        "https://www.leedsunited.com/en/news/outstanding-job-daniel-discusses-deadline-day-rodon-injury-and-more": {},
         "https://www.leedsunited.com/en/news/u21s-preview-charlton-athletic-vs-leeds-united": {}
       },
       "club": "LEE",
-      "content_hash": "54d4c5de7efe0c11cee25252dc91e98929a08d5ce85173dc17e278a4a8acbeaf",
-      "documents": 2,
+      "content_hash": "bd98e629e1876157cdb41de4217780acce49cefee21cad886d1045e04d51d95c",
+      "documents": 4,
       "id": "lee-news",
-      "last_modified": "Thu, 03 Sep 2026 09:56:53 GMT",
+      "last_modified": "Thu, 03 Sep 2026 18:31:35 GMT",
       "publisher": "Leeds United",
       "status": "ok",
       "url": "https://www.leedsunited.com/en/news"
@@ -198,20 +208,26 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.liverpoolfc.com/news/demand-watch-andoni-iraolas-press-conference-ahead-ipswich-v-liverpool": {
-          "etag": "\"1b936-xZiWgILoikXpOJArq6F1m1AgqJc\""
+        "https://www.liverpoolfc.com/news/fantasy-premier-league-bradley-barcola-focus-top-liverpool-picks-and-more": {
+          "etag": "\"24da8-tYh/iS2P0PpQ8onvMvLI0zSD8ro\""
         },
-        "https://www.liverpoolfc.com/news/im-very-happy-andoni-iraola-bradley-barcolas-arrival-and-availability-ipswich": {
-          "etag": "\"1e697-dWvggnBMtlX8boONZLhTPGCIVxk\""
+        "https://www.liverpoolfc.com/news/ipswich-town-v-liverpool-team-news": {
+          "etag": "\"21d23-hbOiXg2+4lV0UeRDHu+i54bVkLU\""
         },
-        "https://www.liverpoolfc.com/news/mao-itamura-withdraws-japans-u20-womens-world-cup-squad": {
-          "etag": "\"1be62-cq4jN2GMb5ixe28no0yvWbmoBCM\""
+        "https://www.liverpoolfc.com/news/lfc-women-team-news-updates-josendal-itamura-ward-parry-and-roman-haug": {
+          "etag": "\"21243-zpyOc3vuQqJ7EhUK0V8Be3nZU8Q\""
+        },
+        "https://www.liverpoolfc.com/news/liverpool-submit-premier-league-squad-list-2026-27": {
+          "etag": "\"1c7de-D7gz0Q+cdEfgW8VxASkizDQNPOQ\""
+        },
+        "https://www.liverpoolfc.com/news/press-conference-watch-gareth-taylor-preview-liverpools-wsl-opener-charlton": {
+          "etag": "\"1a6b5-j9rvDFjYthZzuY2q4ifiTlpwX34\""
         }
       },
       "club": "LIV",
-      "content_hash": "5936aff931f8892c4f96f7c2f3d1f7d778dd2ddb23ac39f39e4e53c5e4980fca",
-      "documents": 4,
-      "etag": "\"33566-lr/0c39unq0AGK+41z6RNWD4eeA\"",
+      "content_hash": "f55a2edecf8b7446c55552894ec223456129504c82460546bbf35d3a8a76dd0a",
+      "documents": 6,
+      "etag": "\"33f25-ujUAVd797VRBIw4rbHtA5mxfyP4\"",
       "id": "liv-news",
       "publisher": "Liverpool",
       "status": "ok",
@@ -220,13 +236,14 @@
     {
       "article_errors": 0,
       "article_validators": {
+        "https://www.mancity.com/news/mens/allan-manchester-city-squad-number-confirmed-63924046": {},
         "https://www.mancity.com/news/mens/city-v-coventry-match-preview-pl-5-sept-63923520": {},
-        "https://www.mancity.com/news/mens/enzo-fernandez-squad-number-revealed-63923952": {},
+        "https://www.mancity.com/news/mens/iliman-ndiaye-squad-number-63924046": {},
         "https://www.mancity.com/news/womens/birmingham-city-wsl-match-preview-september-2026-63923770": {}
       },
       "club": "MCI",
-      "content_hash": "e5f85fc01c742edd3854a1922b71a4293c7d5db2d593c543173aa997d3a25bf7",
-      "documents": 4,
+      "content_hash": "70139645202979e653fb1eece14d7c89e9112ffeefbf11594260107c966a5b31",
+      "documents": 5,
       "id": "mci-news",
       "publisher": "Manchester City",
       "status": "ok",
@@ -242,10 +259,12 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {},
+      "article_validators": {
+        "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-fernandez-pardo-latest-ahead-of-bournemouth-clash": {}
+      },
       "club": "NEW",
-      "content_hash": "ab74733ac6c697fd010eadce053810f0d7e4acd2d56f2273048b9cdbb76cdf41",
-      "documents": 1,
+      "content_hash": "ca090b049708d20f6e5c367e9ecc7b978db5c71d76fc1a4554ce75a0f31212f4",
+      "documents": 2,
       "id": "new-news",
       "publisher": "Newcastle United",
       "status": "ok",
@@ -257,9 +276,9 @@
       "club": "NFO",
       "content_hash": "135299ec2a5dde67198ce61c0c2220511057525416bc2f31889bdc7235c9b4a7",
       "documents": 1,
-      "etag": "\"696af9ebd68d680265735b8d33c54af2\"",
+      "etag": "\"aa5ca4a6c05446b8e2e03f378913c681\"",
       "id": "nfo-news",
-      "last_modified": "Thu, 03 Sep 2026 02:05:41 GMT",
+      "last_modified": "Thu, 03 Sep 2026 16:13:16 GMT",
       "publisher": "Nottingham Forest",
       "status": "ok",
       "url": "https://www.nottinghamforest.co.uk/news"
@@ -270,9 +289,9 @@
       "club": "SUN",
       "content_hash": "7a3cebfb60e6adae923252da91d99a1aaa75361948a69ec70326b273404ccac3",
       "documents": 1,
-      "etag": "\"1bdac670f233c9c36b90475925bfcde4\"",
+      "etag": "\"b5747c00ddfd879949f9d05d9f91cb61\"",
       "id": "sun-news",
-      "last_modified": "Thu, 03 Sep 2026 08:22:12 GMT",
+      "last_modified": "Thu, 03 Sep 2026 14:27:48 GMT",
       "publisher": "Sunderland",
       "status": "ok",
       "url": "https://www.safc.com/news"

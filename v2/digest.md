@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 3
 
-Deadline **Fri 04 Sep, 17:30 UTC** — 1d 7h away.
+Deadline **Fri 04 Sep, 17:30 UTC** — 0d 22h away.
 Projections cover GW3–8.
 
 ## GW2 in review — what happened, and what it does and does not change
 
-_420 players classified: 50 unavailable, 20 minutes loss, 53 minutes watch, 24 minutes gain, 6 role change, 63 variance, 204 on model. Retrospective classes graded: 1 week. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_420 players classified: 49 unavailable, 20 minutes loss, 54 minutes watch, 24 minutes gain, 6 role change, 63 variance, 204 on model. Retrospective classes graded: 1 week. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Hold — variance, no action**
 
@@ -143,23 +143,23 @@ Net transfers this gameweek as a share of current owners. Top of the left column
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Goretzka £6.0 | +208100.0% | +2,081 | M.Sarr £4.5 | -275300.0% | -2,753 |
-| Fernandez-Pardo £6.0 | +180600.0% | +1,806 | Minteh £5.9 | -149400.0% | -1,494 |
-| Norton-Cuffy £4.0 | +138400.0% | +1,384 | Reijnders £6.0 | -143400.0% | -1,434 |
-| Mbaye £6.0 | +121200.0% | +1,212 | Adingra £4.9 | -131200.0% | -1,312 |
-| Hadjam £4.5 | +112900.0% | +1,129 | Chadi Riad £4.4 | -115800.0% | -1,158 |
-| Palacios £5.0 | +84400.0% | +844 | Kesler-Hayden £4.0 | -87600.0% | -876 |
+| Fernandez-Pardo £6.0 | +271000.0% | +2,710 | M.Sarr £4.5 | -289300.0% | -2,893 |
+| Goretzka £6.0 | +221600.0% | +2,216 | Minteh £5.9 | -158300.0% | -1,583 |
+| Mbaye £6.0 | +185000.0% | +1,850 | Reijnders £6.0 | -150900.0% | -1,509 |
+| Hadjam £4.5 | +117100.0% | +1,171 | Adingra £4.9 | -139800.0% | -1,398 |
+| Fofana £5.5 | +112700.0% | +1,127 | Chadi Riad £4.4 | -120800.0% | -1,208 |
+| Ansah £5.0 | +88400.0% | +884 | Gomes £5.5 | -92500.0% | -925 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Target O'Reilly (net -137k this event) is drifting towards a fall; no rush — waiting could save 0.1m [net -137k this event (in 57k / out 193k), sel 19.2% = Q3 (~150k to move), price 6.5 over 5 snaps (+0.0m in window)]
-- Squad player Mbeumo (net -416k this event) at fall risk (-0.1m hurts the bank) [net -416k this event (in 59k / out 476k), sel 30.2% = Q3 (~150k to move), price 8.0 over 5 snaps (+0.0m in window)]
-- Squad player Thiago (net -168k this event) at fall risk (-0.1m hurts the bank) [net -168k this event (in 39k / out 207k), sel 14.5% = Q3 (~150k to move), price 8.0 over 5 snaps (+0.0m in window)]
+- Target O'Reilly (net -149k this event) is drifting towards a fall; no rush — waiting could save 0.1m [net -149k this event (in 64k / out 213k), sel 19.0% = Q3 (~150k to move), price 6.5 over 6 snaps (+0.0m in window)]
+- Squad player Mbeumo (net -458k this event) at fall risk (-0.1m hurts the bank) [net -458k this event (in 67k / out 524k), sel 29.6% = Q3 (~150k to move), price 8.0 over 6 snaps (+0.0m in window)]
+- Squad player Thiago (net -183k this event) at fall risk (-0.1m hurts the bank) [net -183k this event (in 44k / out 227k), sel 14.4% = Q3 (~150k to move), price 8.0 over 6 snaps (+0.0m in window)]
 
-_Based on 5 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
+_Based on 6 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-09-03 10:07 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-09-03 18:59 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
