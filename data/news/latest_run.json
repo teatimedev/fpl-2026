@@ -1,7 +1,7 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-09-03T18:47:10Z",
+  "checked_at": "2026-09-03T21:45:58Z",
   "claims": 0,
   "coverage": 0.95,
   "deadline": "2026-09-04T17:30:00Z",
@@ -2165,9 +2165,9 @@
       "status": "a"
     },
     "488": {
-      "chance": 0,
-      "news": "Calf injury - Unknown return date",
-      "status": "i"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "489": {
       "chance": 100,
@@ -2630,9 +2630,9 @@
       "status": "a"
     },
     "571": {
-      "chance": 75,
-      "news": "Calf injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "572": {
       "chance": null,

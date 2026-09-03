@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 3
 
-Deadline **Fri 04 Sep, 17:30 UTC** — 0d 22h away.
+Deadline **Fri 04 Sep, 17:30 UTC** — 0d 19h away.
 Projections cover GW3–8.
 
 ## GW2 in review — what happened, and what it does and does not change
 
-_420 players classified: 49 unavailable, 20 minutes loss, 54 minutes watch, 24 minutes gain, 6 role change, 63 variance, 204 on model. Retrospective classes graded: 1 week. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_420 players classified: 48 unavailable, 21 minutes loss, 54 minutes watch, 24 minutes gain, 6 role change, 63 variance, 204 on model. Retrospective classes graded: 1 week. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Hold — variance, no action**
 
@@ -133,7 +133,7 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 | Bench Boost | 10.3 | GW8: 11.5 | Hold. Best-looking week for this one is GW8 (11.5 from the bench); this week is 10.3. Second copy (GW20–38): best week GW20 (11.1). |
 | Triple Captain | 8.2 (Haaland) | GW7: 8.7 (Haaland) | **Play it on Haaland this week (8.2 extra expected) — no better week left in the half. Second copy (GW20–38): best week GW36, Haaland (7.7).** |
 | Free Hit | 4.2 | GW16: 7.1 | Hold. Widest gap left is GW16 (7.1 behind the best possible XI); this week 4.2. |
-| Wildcard | +2.4 over the window | — | Hold. Unlimited transfers now are worth 2.4 over the window. The squad is holding up (gap to the best possible XI 4.2–5.7 over the next weeks). |
+| Wildcard | +5.0 over the window | — | Hold. Unlimited transfers now are worth 5.0 over the window. The squad is holding up (gap to the best possible XI 4.2–5.7 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 
@@ -143,23 +143,23 @@ Net transfers this gameweek as a share of current owners. Top of the left column
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Fernandez-Pardo £6.0 | +271000.0% | +2,710 | M.Sarr £4.5 | -289300.0% | -2,893 |
-| Goretzka £6.0 | +221600.0% | +2,216 | Minteh £5.9 | -158300.0% | -1,583 |
-| Mbaye £6.0 | +185000.0% | +1,850 | Reijnders £6.0 | -150900.0% | -1,509 |
-| Hadjam £4.5 | +117100.0% | +1,171 | Adingra £4.9 | -139800.0% | -1,398 |
-| Fofana £5.5 | +112700.0% | +1,127 | Chadi Riad £4.4 | -120800.0% | -1,208 |
-| Ansah £5.0 | +88400.0% | +884 | Gomes £5.5 | -92500.0% | -925 |
+| Fernandez-Pardo £6.0 | +302000.0% | +3,020 | M.Sarr £4.5 | -294600.0% | -2,946 |
+| Goretzka £6.0 | +225900.0% | +2,259 | Minteh £5.9 | -160700.0% | -1,607 |
+| Mbaye £6.0 | +208700.0% | +2,087 | Reijnders £6.0 | -153000.0% | -1,530 |
+| Fofana £5.5 | +122500.0% | +1,225 | Adingra £4.9 | -142900.0% | -1,429 |
+| Hadjam £4.5 | +118900.0% | +1,189 | Chadi Riad £4.4 | -123700.0% | -1,237 |
+| Ansah £5.0 | +101000.0% | +1,010 | Kesler-Hayden £4.0 | -94500.0% | -945 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Target O'Reilly (net -149k this event) is drifting towards a fall; no rush — waiting could save 0.1m [net -149k this event (in 64k / out 213k), sel 19.0% = Q3 (~150k to move), price 6.5 over 6 snaps (+0.0m in window)]
-- Squad player Mbeumo (net -458k this event) at fall risk (-0.1m hurts the bank) [net -458k this event (in 67k / out 524k), sel 29.6% = Q3 (~150k to move), price 8.0 over 6 snaps (+0.0m in window)]
-- Squad player Thiago (net -183k this event) at fall risk (-0.1m hurts the bank) [net -183k this event (in 44k / out 227k), sel 14.4% = Q3 (~150k to move), price 8.0 over 6 snaps (+0.0m in window)]
+- Target O'Reilly (net -158k this event) is drifting towards a fall; no rush — waiting could save 0.1m [net -158k this event (in 70k / out 229k), sel 18.9% = Q3 (~150k to move), price 6.5 over 6 snaps (+0.0m in window)]
+- Squad player Mbeumo (net -499k this event) at fall risk (-0.1m hurts the bank) [net -499k this event (in 72k / out 572k), sel 29.0% = Q3 (~150k to move), price 8.0 over 6 snaps (+0.0m in window)]
+- Squad player Thiago (net -194k this event) at fall risk (-0.1m hurts the bank) [net -194k this event (in 50k / out 244k), sel 14.3% = Q3 (~150k to move), price 8.0 over 6 snaps (+0.0m in window)]
 
 _Based on 6 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-09-03 18:59 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-09-03 21:58 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
