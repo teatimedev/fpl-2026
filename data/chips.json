@@ -14,7 +14,7 @@
    "weeks": [
     [
      3,
-     10.4
+     10.3
     ],
     [
      4,
@@ -34,7 +34,7 @@
     ],
     [
      8,
-     11.6
+     11.5
     ],
     [
      9,
@@ -42,7 +42,7 @@
     ],
     [
      10,
-     10.4
+     10.3
     ],
     [
      11,
@@ -62,7 +62,7 @@
     ],
     [
      15,
-     10.3
+     10.2
     ],
     [
      16,
@@ -74,7 +74,7 @@
     ],
     [
      18,
-     9.7
+     9.6
     ],
     [
      19,
@@ -82,10 +82,10 @@
     ]
    ],
    "best_gw": 8,
-   "best": 11.6,
-   "now": 10.4,
+   "best": 11.5,
+   "now": 10.3,
    "play": false,
-   "advice": "Hold. Best-looking week for this one is GW8 (11.6 from the bench); this week is 10.4. Second copy (GW20\u201338): best week GW20 (11.1).",
+   "advice": "Hold. Best-looking week for this one is GW8 (11.5 from the bench); this week is 10.3. Second copy (GW20\u201338): best week GW20 (11.1).",
    "last_eligible": 19,
    "later": [
     {
@@ -221,7 +221,7 @@
     ],
     [
      5,
-     1.9
+     1.8
     ],
     [
      6,
@@ -245,11 +245,11 @@
     ],
     [
      11,
-     5.5
+     5.4
     ],
     [
      12,
-     7.1
+     7.0
     ],
     [
      13,
@@ -280,16 +280,16 @@
      4.9
     ]
    ],
-   "best_gw": 12,
+   "best_gw": 16,
    "best": 7.1,
    "now": 4.2,
    "play": false,
-   "advice": "Hold. Widest gap left is GW12 (7.1 behind the best possible XI); this week 4.2.",
+   "advice": "Hold. Widest gap left is GW16 (7.1 behind the best possible XI); this week 4.2.",
    "last_eligible": 19
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 5.1,
+   "now": 2.4,
    "gap_trend": [
     [
      3,
@@ -301,7 +301,7 @@
     ],
     [
      5,
-     1.9
+     1.8
     ],
     [
      6,
@@ -325,21 +325,21 @@
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 5.1 over the window. The squad is holding up (gap to the best possible XI 4.2\u20135.7 over the next weeks).",
+   "advice": "Hold. Unlimited transfers now are worth 2.4 over the window. The squad is holding up (gap to the best possible XI 4.2\u20135.7 over the next weeks).",
    "last_eligible": 19
   }
  },
  "gaps": {
   "3": 4.2,
   "4": 4.5,
-  "5": 1.9,
+  "5": 1.8,
   "6": 3.5,
   "7": 3.7,
   "8": 5.7,
   "9": 4.7,
   "10": 3.4,
-  "11": 5.5,
-  "12": 7.1,
+  "11": 5.4,
+  "12": 7.0,
   "13": 3.8,
   "14": 4.0,
   "15": 4.4,

@@ -1365,7 +1365,7 @@
         "Tosin Adarabioyo"
       ],
       "canonical": "Tosin Adarabioyo",
-      "club": "CHE",
+      "club": "TOT",
       "player_id": 147
     },
     {
@@ -1440,7 +1440,7 @@
         "Enzo Fern\u00e1ndez"
       ],
       "canonical": "Enzo Fern\u00e1ndez",
-      "club": "CHE",
+      "club": "MCI",
       "player_id": 155
     },
     {
@@ -2199,7 +2199,7 @@
         "Iliman Ndiaye"
       ],
       "canonical": "Iliman Ndiaye",
-      "club": "EVE",
+      "club": "MCI",
       "player_id": 237
     },
     {
@@ -2208,7 +2208,7 @@
         "Jack Grealish"
       ],
       "canonical": "Jack Grealish",
-      "club": "MCI",
+      "club": "EVE",
       "player_id": 238
     },
     {
@@ -2226,7 +2226,7 @@
         "Tim Iroegbunam"
       ],
       "canonical": "Tim Iroegbunam",
-      "club": "EVE",
+      "club": "HUL",
       "player_id": 240
     },
     {
@@ -4625,7 +4625,7 @@
         "Kevin Danso"
       ],
       "canonical": "Kevin Danso",
-      "club": "TOT",
+      "club": "SUN",
       "player_id": 501
     },
     {
@@ -5078,7 +5078,7 @@
     },
     {
       "aliases": [
-        "Angulo",
+        "N.Angulo",
         "Nilson Angulo"
       ],
       "canonical": "Nilson Angulo",
@@ -5331,7 +5331,7 @@
         "Mykhailo Mudryk"
       ],
       "canonical": "Mykhailo Mudryk",
-      "club": "CHE",
+      "club": "TOT",
       "player_id": 578
     },
     {
@@ -5796,6 +5796,208 @@
       "canonical": "Michael Zetterer",
       "club": "LEE",
       "player_id": 629
+    },
+    {
+      "aliases": [
+        "Harwood-Bellis",
+        "Taylor Harwood-Bellis"
+      ],
+      "canonical": "Taylor Harwood-Bellis",
+      "club": "AVL",
+      "player_id": 630
+    },
+    {
+      "aliases": [
+        "Mbaye",
+        "Ibrahim Mbaye"
+      ],
+      "canonical": "Ibrahim Mbaye",
+      "club": "AVL",
+      "player_id": 631
+    },
+    {
+      "aliases": [
+        "Ansah",
+        "Ilyas Ansah"
+      ],
+      "canonical": "Ilyas Ansah",
+      "club": "HUL",
+      "player_id": 632
+    },
+    {
+      "aliases": [
+        "Ahanor",
+        "Honest Ahanor"
+      ],
+      "canonical": "Honest Ahanor",
+      "club": "CRY",
+      "player_id": 633
+    },
+    {
+      "aliases": [
+        "Fernandez-Pardo",
+        "Matias Fernandez-Pardo"
+      ],
+      "canonical": "Matias Fernandez-Pardo",
+      "club": "NEW",
+      "player_id": 634
+    },
+    {
+      "aliases": [
+        "Larsson",
+        "Hugo Larsson"
+      ],
+      "canonical": "Hugo Larsson",
+      "club": "FUL",
+      "player_id": 635
+    },
+    {
+      "aliases": [
+        "\u00c1ngel",
+        "Manuel \u00c1ngel",
+        "Mor\u00e1n Ib\u00e1\u00f1ez",
+        "Manuel \u00c1ngel Mor\u00e1n Ib\u00e1\u00f1ez"
+      ],
+      "canonical": "Manuel \u00c1ngel Mor\u00e1n Ib\u00e1\u00f1ez",
+      "club": "FUL",
+      "player_id": 636
+    },
+    {
+      "aliases": [
+        "Vaz",
+        "Robinio Vaz"
+      ],
+      "canonical": "Robinio Vaz",
+      "club": "HUL",
+      "player_id": 637
+    },
+    {
+      "aliases": [
+        "Norton-Cuffy",
+        "Brooke Norton-Cuffy"
+      ],
+      "canonical": "Brooke Norton-Cuffy",
+      "club": "HUL",
+      "player_id": 638
+    },
+    {
+      "aliases": [
+        "Andr\u00e9s",
+        "Chema Andr\u00e9s",
+        "Andr\u00e9s Baixauli",
+        "Jos\u00e9 Mar\u00eda Andr\u00e9s Baixauli"
+      ],
+      "canonical": "Jos\u00e9 Mar\u00eda Andr\u00e9s Baixauli",
+      "club": "BHA",
+      "player_id": 639
+    },
+    {
+      "aliases": [
+        "Flemming",
+        "Zian Flemming"
+      ],
+      "canonical": "Zian Flemming",
+      "club": "IPS",
+      "player_id": 640
+    },
+    {
+      "aliases": [
+        "Bard",
+        "Melvin Bard"
+      ],
+      "canonical": "Melvin Bard",
+      "club": "LEE",
+      "player_id": 641
+    },
+    {
+      "aliases": [
+        "Thomas",
+        "Sorba Thomas"
+      ],
+      "canonical": "Sorba Thomas",
+      "club": "HUL",
+      "player_id": 642
+    },
+    {
+      "aliases": [
+        "Chilwell",
+        "Ben Chilwell"
+      ],
+      "canonical": "Ben Chilwell",
+      "club": "CRY",
+      "player_id": 643
+    },
+    {
+      "aliases": [
+        "Timber",
+        "Quinten Timber"
+      ],
+      "canonical": "Quinten Timber",
+      "club": "CRY",
+      "player_id": 644
+    },
+    {
+      "aliases": [
+        "Mouzakitis",
+        "Christos Mouzakitis"
+      ],
+      "canonical": "Christos Mouzakitis",
+      "club": "HUL",
+      "player_id": 645
+    },
+    {
+      "aliases": [
+        "Fofana",
+        "Malick Fofana"
+      ],
+      "canonical": "Malick Fofana",
+      "club": "SUN",
+      "player_id": 646
+    },
+    {
+      "aliases": [
+        "Osorio",
+        "Dar\u00edo Osorio"
+      ],
+      "canonical": "Dar\u00edo Osorio",
+      "club": "CRY",
+      "player_id": 647
+    },
+    {
+      "aliases": [
+        "Bahoya",
+        "Jean-Matt\u00e9o Bahoya"
+      ],
+      "canonical": "Jean-Matt\u00e9o Bahoya",
+      "club": "LEE",
+      "player_id": 648
+    },
+    {
+      "aliases": [
+        "Maitland-Niles",
+        "Ainsley Maitland-Niles"
+      ],
+      "canonical": "Ainsley Maitland-Niles",
+      "club": "EVE",
+      "player_id": 649
+    },
+    {
+      "aliases": [
+        "Affengruber",
+        "David Affengruber"
+      ],
+      "canonical": "David Affengruber",
+      "club": "FUL",
+      "player_id": 650
+    },
+    {
+      "aliases": [
+        "J.Angulo",
+        "Juan Angulo"
+      ],
+      "canonical": "Juan Angulo",
+      "club": "SUN",
+      "player_id": 651
     }
   ],
   "version": 1

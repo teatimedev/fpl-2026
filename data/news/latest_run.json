@@ -1,7 +1,7 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-09-02T10:00:45Z",
+  "checked_at": "2026-09-03T09:56:49Z",
   "claims": 0,
   "coverage": 0.95,
   "deadline": "2026-09-04T17:30:00Z",
@@ -115,9 +115,9 @@
       "status": "a"
     },
     "118": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Burnley permanently",
+      "status": "u"
     },
     "119": {
       "chance": null,
@@ -240,9 +240,9 @@
       "status": "a"
     },
     "140": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Como on loan for the rest of the season",
+      "status": "u"
     },
     "141": {
       "chance": 0,
@@ -365,9 +365,9 @@
       "status": "a"
     },
     "163": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined RC Strasbourg on loan for the rest of the season",
+      "status": "u"
     },
     "164": {
       "chance": 100,
@@ -410,9 +410,9 @@
       "status": "a"
     },
     "171": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Leyton Orient on loan for the rest of the season",
+      "status": "u"
     },
     "172": {
       "chance": null,
@@ -425,9 +425,9 @@
       "status": "a"
     },
     "174": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Sheffield United on loan for the rest of the season",
+      "status": "u"
     },
     "175": {
       "chance": null,
@@ -520,9 +520,9 @@
       "status": "a"
     },
     "191": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Burton Albion on loan for the rest of the season",
+      "status": "u"
     },
     "192": {
       "chance": 0,
@@ -600,9 +600,9 @@
       "status": "a"
     },
     "205": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined FC Cologne on loan for the rest of the season",
+      "status": "u"
     },
     "206": {
       "chance": 0,
@@ -655,14 +655,14 @@
       "status": "a"
     },
     "215": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Stoke City permanently",
+      "status": "u"
     },
     "216": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Millwall on loan for the rest of the season",
+      "status": "u"
     },
     "217": {
       "chance": null,
@@ -680,9 +680,9 @@
       "status": "a"
     },
     "22": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Borussia Dortmund on loan for the rest of the season",
+      "status": "u"
     },
     "220": {
       "chance": 0,
@@ -735,9 +735,9 @@
       "status": "a"
     },
     "23": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Hamburger SV permanently",
+      "status": "u"
     },
     "230": {
       "chance": null,
@@ -760,9 +760,9 @@
       "status": "a"
     },
     "234": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Torino permanently",
+      "status": "u"
     },
     "235": {
       "chance": 0,
@@ -835,9 +835,9 @@
       "status": "a"
     },
     "248": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Fiorentina permanently",
+      "status": "u"
     },
     "249": {
       "chance": null,
@@ -955,9 +955,9 @@
       "status": "a"
     },
     "27": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined FC Barcelona permanently",
+      "status": "u"
     },
     "270": {
       "chance": null,
@@ -1020,9 +1020,9 @@
       "status": "d"
     },
     "281": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Genoa permanently",
+      "status": "u"
     },
     "282": {
       "chance": null,
@@ -1031,8 +1031,8 @@
     },
     "283": {
       "chance": 0,
-      "news": "Hip injury - Expected back 5 Sep",
-      "status": "i"
+      "news": "Has joined Newport County on loan until January",
+      "status": "u"
     },
     "284": {
       "chance": null,
@@ -1050,9 +1050,9 @@
       "status": "a"
     },
     "287": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Birmingham on loan for the rest of the season",
+      "status": "u"
     },
     "288": {
       "chance": null,
@@ -1205,9 +1205,9 @@
       "status": "a"
     },
     "314": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Lincoln City on loan until January",
+      "status": "u"
     },
     "315": {
       "chance": null,
@@ -1355,9 +1355,9 @@
       "status": "i"
     },
     "341": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined ACF Fiorentina on loan for the rest of the season",
+      "status": "u"
     },
     "342": {
       "chance": 0,
@@ -1585,9 +1585,9 @@
       "status": "i"
     },
     "383": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Valencia on loan for the rest of the season",
+      "status": "u"
     },
     "384": {
       "chance": null,
@@ -1740,9 +1740,9 @@
       "status": "a"
     },
     "410": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Swansea City on loan for the rest of the season",
+      "status": "u"
     },
     "411": {
       "chance": null,
@@ -2030,9 +2030,9 @@
       "status": "a"
     },
     "463": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Juventus on loan for the rest of the season",
+      "status": "u"
     },
     "464": {
       "chance": null,
@@ -2070,9 +2070,9 @@
       "status": "a"
     },
     "470": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined West Ham on loan for the rest of the season",
+      "status": "u"
     },
     "471": {
       "chance": null,
@@ -2105,9 +2105,9 @@
       "status": "a"
     },
     "477": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Southampton on loan for the rest of the season",
+      "status": "u"
     },
     "478": {
       "chance": null,
@@ -2335,9 +2335,9 @@
       "status": "i"
     },
     "518": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Juventus on loan for the rest of the season",
+      "status": "u"
     },
     "519": {
       "chance": null,
@@ -2390,9 +2390,9 @@
       "status": "a"
     },
     "528": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Leyton Orient permanently",
+      "status": "u"
     },
     "529": {
       "chance": null,
@@ -2805,9 +2805,9 @@
       "status": "a"
     },
     "602": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Huddersfield Town on loan for the rest of the season",
+      "status": "u"
     },
     "603": {
       "chance": null,
@@ -2925,9 +2925,9 @@
       "status": "a"
     },
     "624": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Has joined Middlesbrough on loan for the rest of the season",
+      "status": "u"
     },
     "625": {
       "chance": null,
@@ -2959,7 +2959,107 @@
       "news": "Unspecified injury - Unknown return date",
       "status": "i"
     },
+    "630": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "631": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "632": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "633": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "634": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "635": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "636": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "637": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "638": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "639": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
     "64": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "640": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "641": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "642": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "643": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "644": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "645": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "646": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "647": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "648": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "649": {
       "chance": null,
       "news": "",
       "status": "a"
@@ -2968,6 +3068,16 @@
       "chance": 0,
       "news": "Thigh injury - Unknown return date",
       "status": "i"
+    },
+    "650": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "651": {
+      "chance": null,
+      "news": "",
+      "status": "a"
     },
     "66": {
       "chance": 100,
