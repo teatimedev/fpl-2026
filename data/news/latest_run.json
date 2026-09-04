@@ -1,7 +1,7 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-09-04T00:10:32Z",
+  "checked_at": "2026-09-04T09:44:42Z",
   "claims": 0,
   "coverage": 0.95,
   "deadline": "2026-09-04T17:30:00Z",
@@ -185,9 +185,9 @@
       "status": "a"
     },
     "130": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
     },
     "131": {
       "chance": 0,
@@ -3271,7 +3271,7 @@
     }
   },
   "official_fpl_ok": true,
-  "rebuild_required": false,
+  "rebuild_required": true,
   "state_changed": false,
   "status": "amber",
   "urgent": false,

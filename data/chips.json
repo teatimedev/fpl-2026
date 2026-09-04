@@ -213,7 +213,7 @@
    "weeks": [
     [
      3,
-     4.2
+     4.0
     ],
     [
      4,
@@ -277,23 +277,23 @@
     ],
     [
      19,
-     4.9
+     4.8
     ]
    ],
    "best_gw": 16,
    "best": 7.1,
-   "now": 4.2,
+   "now": 4.0,
    "play": false,
-   "advice": "Hold. Widest gap left is GW16 (7.1 behind the best possible XI); this week 4.2.",
+   "advice": "Hold. Widest gap left is GW16 (7.1 behind the best possible XI); this week 4.0.",
    "last_eligible": 19
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 5.0,
+   "now": 3.8,
    "gap_trend": [
     [
      3,
-     4.2
+     4.0
     ],
     [
      4,
@@ -325,12 +325,12 @@
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 5.0 over the window. The squad is holding up (gap to the best possible XI 4.2\u20135.7 over the next weeks).",
+   "advice": "Hold. Unlimited transfers now are worth 3.8 over the window. The squad is holding up (gap to the best possible XI 4.0\u20135.7 over the next weeks).",
    "last_eligible": 19
   }
  },
  "gaps": {
-  "3": 4.2,
+  "3": 4.0,
   "4": 4.5,
   "5": 1.8,
   "6": 3.5,
@@ -346,6 +346,6 @@
   "16": 7.1,
   "17": 3.8,
   "18": 5.0,
-  "19": 4.9
+  "19": 4.8
  }
 }

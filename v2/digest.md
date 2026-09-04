@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 3
 
-Deadline **Fri 04 Sep, 17:30 UTC** — 0d 19h away.
+Deadline **Fri 04 Sep, 17:30 UTC** — 0d 7h away.
 Projections cover GW3–8.
 
 ## GW2 in review — what happened, and what it does and does not change
 
-_420 players classified: 48 unavailable, 21 minutes loss, 54 minutes watch, 24 minutes gain, 6 role change, 63 variance, 204 on model. Retrospective classes graded: 1 week. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_420 players classified: 49 unavailable, 21 minutes loss, 54 minutes watch, 24 minutes gain, 6 role change, 62 variance, 204 on model. Retrospective classes graded: 1 week. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Hold — variance, no action**
 
@@ -39,7 +39,7 @@ _420 players classified: 48 unavailable, 21 minutes loss, 54 minutes watch, 24 m
 
 - breakout minutes (started at <= 40%): Cherki (MCI, 0.3 xG, 14 pts; GW3–8 24.7), N.Jackson (CHE, 0.0 xG, 2 pts; GW3–8 22.7), Marmoush (MCI, 0.2 xG, 2 pts; GW3–8 22.6), Rashford (MUN, 0.3 xG, 2 pts; GW3–8 18.5), Kostoulas (BHA, 0.2 xG, 5 pts; GW3–8 17.2)
 - set-piece duty changed: McAtee (NFO, 0.0 xG, 2 pts; GW3–8 23.4), Wharton (CRY, 0.0 xG, 2 pts; GW3–8 22.0), N.Williams (NFO, 0.1 xG, 6 pts; GW3–8 21.6), Pedro Porro (TOT, 0.3 xG, 1 pts; GW3–8 19.6), Robertson (TOT, 0.1 xG, 2 pts; GW3–8 16.2)
-- lost their place — benched while healthy: O.Dango (BRE, 0.0 xG, 1 pts; GW3–8 17.5), Muñoz (CRY, 0.0 xG, 0 pts; GW3–8 17.3), Wilson (LEE, 0.0 xG, 1 pts; GW3–8 14.5), Senesi (TOT, 0.0 xG, 0 pts; GW3–8 14.2), McNeil (CRY, 0.0 xG, 1 pts; GW3–8 13.8)
+- lost their place — benched while healthy: Muñoz (CRY, 0.0 xG, 0 pts; GW3–8 18.9), O.Dango (BRE, 0.0 xG, 1 pts; GW3–8 17.5), Wilson (LEE, 0.0 xG, 1 pts; GW3–8 14.5), Senesi (TOT, 0.0 xG, 0 pts; GW3–8 14.2), McNeil (CRY, 0.0 xG, 1 pts; GW3–8 13.8)
 - hauled on low xG — do not chase: Schade (BRE, 0.2 xG, 10 pts; GW3–8 26.5), Groß (BHA, 0.1 xG, 13 pts; GW3–8 24.9), Elanga (NEW, 0.2 xG, 8 pts; GW3–8 23.4)
 
 ## Captain: **Haaland** (MCI)
@@ -96,31 +96,31 @@ _Last week, for the names above:_
 - Tarkowski — variance (finishing): 90', 0.10 xG, 1 goal, 12 pts (proj 3.8). Finishing (+5.4).
 - Botman — variance (team): 90', 0.01 xG, 0 goals, 5 pts (proj 3.3). Team (+3.5).
 
-**Recommended: hold.** Tarkowski → Wieffer, Milenković → O'Reilly is the move queued — worth taking over the window, but taking it now rather than next week is worth only +2.9 (the plan scores 411.0 against 408.1 with the transfer banked); bank it — you would have 3.
+**Recommended: hold.** Milenković → Robinson, Sadiki → Barnes is the move queued — worth taking over the window, but taking it now rather than next week is worth only +1.4 (the plan scores 409.5 against 408.1 with the transfer banked); bank it — you would have 3.
 
 **Best two-move combinations** (net of any hit):
 
 | out | in | £ | XI + captain | auto-sub | total | net |
 |---|---|---|---|---|---|---|
-| Tarkowski + Sadiki | Wieffer + Barnes | +0.0 | +5.9 | +3.2 | +9.1 | **+9.1** |
 | Milenković + Sadiki | Robinson + Barnes | +0.0 | +5.6 | +2.9 | +8.6 | **+8.6** |
 | Tarkowski + Sadiki | Botman + Barnes | +0.0 | +4.5 | +3.9 | +8.4 | **+8.4** |
 | Milenković + Sadiki | Castagne + Barnes | +0.0 | +5.4 | +2.8 | +8.1 | **+8.1** |
-| Tarkowski + Sadiki | Wieffer + Schade | +0.0 | +4.8 | +3.1 | +7.9 | **+7.9** |
+| Tarkowski + Sadiki | Andersen + Barnes | +0.0 | +4.8 | +3.0 | +7.8 | **+7.8** |
+| Milenković + Sadiki | Maatsen + Barnes | +0.0 | +4.6 | +3.0 | +7.6 | **+7.6** |
 
 
 ## The next six weeks, planned
 
 
-**This Friday under uncertainty:** the planner's proposed GW3 squad beats holding in 62% of 4,000 simulations (average +2.7 points). There is probably a points edge, but its +2.7 average does not clear the 4.0-point bar for spending 2 transfers now.
-Best path from here: **411.0** pts (0 hits). Making no move this week and re-planning: 408.1. Acting now is worth **+2.9** across 2 moves — not enough; hold.
+**This Friday under uncertainty:** the planner's proposed GW3 squad beats holding in 61% of 4,000 simulations (average +1.6 points). There is probably a points edge, but its +1.6 average does not clear the 4.0-point bar for spending 2 transfers now.
+Best path from here: **409.5** pts (0 hits). Making no move this week and re-planning: 408.1. Acting now is worth **+1.4** across 2 moves — not enough; hold.
 
-- **GW3** 70.7 pts, C Haaland, 2 FT  Tarkowski → Wieffer, Milenković → O'Reilly
-- **GW4** 64.1 pts, C Haaland, 1 FT  hold
-- **GW5** 68.4 pts, C Haaland, 2 FT  Raya → Sels, Sadiki → Barnes
-- **GW6** 66.9 pts, C Mbeumo, 1 FT  hold
-- **GW7** 72.8 pts, C Haaland, 2 FT  hold
-- **GW8** 68.2 pts, C Palmer, 3 FT  O'Reilly → Gabriel, Kluivert → Palmer, Haaland → Isak
+- **GW3** 69.3 pts, C Haaland, 2 FT  Milenković → Robinson, Sadiki → Barnes
+- **GW4** 63.4 pts, C Haaland, 1 FT  hold
+- **GW5** 67.1 pts, C Haaland, 2 FT  hold
+- **GW6** 68.0 pts, C Mbeumo, 3 FT  hold
+- **GW7** 72.3 pts, C Haaland, 4 FT  Tarkowski → Andersen, Thiaw → Gvardiol
+- **GW8** 69.4 pts, C Palmer, 3 FT  Kluivert → Palmer, Haaland → João Pedro, Obi → Isak
 
 _The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
 
@@ -132,8 +132,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 10.3 | GW8: 11.5 | Hold. Best-looking week for this one is GW8 (11.5 from the bench); this week is 10.3. Second copy (GW20–38): best week GW20 (11.1). |
 | Triple Captain | 8.2 (Haaland) | GW7: 8.7 (Haaland) | **Play it on Haaland this week (8.2 extra expected) — no better week left in the half. Second copy (GW20–38): best week GW36, Haaland (7.7).** |
-| Free Hit | 4.2 | GW16: 7.1 | Hold. Widest gap left is GW16 (7.1 behind the best possible XI); this week 4.2. |
-| Wildcard | +5.0 over the window | — | Hold. Unlimited transfers now are worth 5.0 over the window. The squad is holding up (gap to the best possible XI 4.2–5.7 over the next weeks). |
+| Free Hit | 4.0 | GW16: 7.1 | Hold. Widest gap left is GW16 (7.1 behind the best possible XI); this week 4.0. |
+| Wildcard | +3.8 over the window | — | Hold. Unlimited transfers now are worth 3.8 over the window. The squad is holding up (gap to the best possible XI 4.0–5.7 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 
@@ -143,23 +143,22 @@ Net transfers this gameweek as a share of current owners. Top of the left column
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Fernandez-Pardo £6.0 | +302000.0% | +3,020 | M.Sarr £4.5 | -294600.0% | -2,946 |
-| Goretzka £6.0 | +225900.0% | +2,259 | Minteh £5.9 | -160700.0% | -1,607 |
-| Mbaye £6.0 | +208700.0% | +2,087 | Reijnders £6.0 | -153000.0% | -1,530 |
-| Fofana £5.5 | +122500.0% | +1,225 | Adingra £4.9 | -142900.0% | -1,429 |
-| Hadjam £4.5 | +118900.0% | +1,189 | Chadi Riad £4.4 | -123700.0% | -1,237 |
-| Ansah £5.0 | +101000.0% | +1,010 | Kesler-Hayden £4.0 | -94500.0% | -945 |
+| Fernandez-Pardo £6.0 | +361200.0% | +3,612 | M.Sarr £4.5 | -306300.0% | -3,063 |
+| Mbaye £6.0 | +249300.0% | +2,493 | Diarra £5.5 | -170300.0% | -1,703 |
+| Goretzka £6.0 | +236100.0% | +2,361 | Minteh £5.9 | -167600.0% | -1,676 |
+| Fofana £5.5 | +143800.0% | +1,438 | Reijnders £6.0 | -158300.0% | -1,583 |
+| Ansah £5.0 | +130700.0% | +1,307 | Adingra £4.9 | -151300.0% | -1,513 |
+| Hadjam £4.5 | +122200.0% | +1,222 | Chadi Riad £4.4 | -128700.0% | -1,287 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Target O'Reilly (net -158k this event) is drifting towards a fall; no rush — waiting could save 0.1m [net -158k this event (in 70k / out 229k), sel 18.9% = Q3 (~150k to move), price 6.5 over 6 snaps (+0.0m in window)]
-- Squad player Mbeumo (net -499k this event) at fall risk (-0.1m hurts the bank) [net -499k this event (in 72k / out 572k), sel 29.0% = Q3 (~150k to move), price 8.0 over 6 snaps (+0.0m in window)]
-- Squad player Thiago (net -194k this event) at fall risk (-0.1m hurts the bank) [net -194k this event (in 50k / out 244k), sel 14.3% = Q3 (~150k to move), price 8.0 over 6 snaps (+0.0m in window)]
+- Squad player Mbeumo (net -522k this event) at fall risk (-0.1m hurts the bank) [net -522k this event (in 74k / out 596k), sel 28.8% = Q3 (~150k to move), price 8.0 over 6 snaps (+0.0m in window)]
+- Squad player Thiago (net -199k this event) at fall risk (-0.1m hurts the bank) [net -199k this event (in 51k / out 251k), sel 14.3% = Q3 (~150k to move), price 8.0 over 6 snaps (+0.0m in window)]
 
 _Based on 6 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-09-03 21:58 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-09-04 09:57 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
