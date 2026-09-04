@@ -14,7 +14,7 @@
    "weeks": [
     [
      3,
-     10.3
+     9.7
     ],
     [
      4,
@@ -83,9 +83,9 @@
    ],
    "best_gw": 8,
    "best": 11.5,
-   "now": 10.3,
+   "now": 9.7,
    "play": false,
-   "advice": "Hold. Best-looking week for this one is GW8 (11.5 from the bench); this week is 10.3. Second copy (GW20\u201338): best week GW20 (11.1).",
+   "advice": "Hold. Best-looking week for this one is GW8 (11.5 from the bench); this week is 9.7. Second copy (GW20\u201338): best week GW20 (11.1).",
    "last_eligible": 19,
    "later": [
     {
@@ -101,7 +101,7 @@
    "weeks": [
     [
      3,
-     8.2,
+     9.3,
      "Haaland"
     ],
     [
@@ -185,16 +185,16 @@
      "Haaland"
     ]
    ],
-   "best_gw": 7,
-   "best": 8.7,
+   "best_gw": 3,
+   "best": 9.3,
    "best_name": "Haaland",
-   "now": 8.2,
+   "now": 9.3,
    "now_name": "Haaland",
    "play": true,
-   "advice": "Play it on Haaland this week (8.2 extra expected) \u2014 no better week left in the half. Second copy (GW20\u201338): best week GW36, Haaland (7.7).",
+   "advice": "Play it on Haaland this week (9.3 extra expected) \u2014 no better week left in the half. Second copy (GW20\u201338): best week GW36, Haaland (7.7).",
    "anyone": [
-    7,
-    8.7,
+    3,
+    9.3,
     "Haaland"
    ],
    "last_eligible": 19,
@@ -213,7 +213,7 @@
    "weeks": [
     [
      3,
-     4.0
+     5.7
     ],
     [
      4,
@@ -282,18 +282,18 @@
    ],
    "best_gw": 16,
    "best": 7.1,
-   "now": 4.0,
+   "now": 5.7,
    "play": false,
-   "advice": "Hold. Widest gap left is GW16 (7.1 behind the best possible XI); this week 4.0.",
+   "advice": "Hold. Widest gap left is GW16 (7.1 behind the best possible XI); this week 5.7.",
    "last_eligible": 19
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 3.8,
+   "now": 5.5,
    "gap_trend": [
     [
      3,
-     4.0
+     5.7
     ],
     [
      4,
@@ -325,12 +325,12 @@
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 3.8 over the window. The squad is holding up (gap to the best possible XI 4.0\u20135.7 over the next weeks).",
+   "advice": "Hold. Unlimited transfers now are worth 5.5 over the window. The squad is holding up (gap to the best possible XI 5.7\u20135.7 over the next weeks).",
    "last_eligible": 19
   }
  },
  "gaps": {
-  "3": 4.0,
+  "3": 5.7,
   "4": 4.5,
   "5": 1.8,
   "6": 3.5,
