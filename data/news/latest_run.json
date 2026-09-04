@@ -1,7 +1,7 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-09-03T21:45:58Z",
+  "checked_at": "2026-09-04T00:10:32Z",
   "claims": 0,
   "coverage": 0.95,
   "deadline": "2026-09-04T17:30:00Z",
@@ -3271,7 +3271,7 @@
     }
   },
   "official_fpl_ok": true,
-  "rebuild_required": true,
+  "rebuild_required": false,
   "state_changed": false,
   "status": "amber",
   "urgent": false,
