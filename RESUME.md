@@ -22,6 +22,13 @@ release documentation is commit `39f8373` on `agent/scouting-policy-review`.
   replacements covered. Eleven source indexes still lack usable recent articles.
 - Submitted picks and deadline forecasts are separate archives. Haaland's GW3
   Triple Captain is historical submitted state, not a recommendation to use it again.
+- Scorecard now leads with the linked team's actual weekly result, rank movement,
+  season points and chip, with a gameweek selector. Model-versus-submitted picks
+  use explicitly labelled basic points; actual FPL scores include captain/chip
+  scoring and deduct transfer hits once. All original accuracy stats remain,
+  with plain-language labels, explanations, detailed tables and methodology notes.
+  A newer FPL result can appear before its model review; missing or mismatched
+  submitted picks never become a personal comparison.
 - Policy alternatives, P60 and attacking/minutes stress tests are measurable
   experiments. No improved realised FPL points have yet been established.
 
@@ -43,7 +50,7 @@ forecast. Its chip advice is explicitly unavailable because that local digest
 did not run `--chips`; the next full scheduled rebuild is configured to evaluate
 chips. Export time must not be used to imply fresh numerical forecasts.
 
-Release checks: 265 Python tests, 13 app tests, lint and app build. Preview QA
+Release checks: 265 Python tests, 18 app tests, lint and app build. Preview QA
 covered 390×844 and 1240×900 layouts, player drawer, review selection and future
 path disclosures. Existing PuLP deprecation and app bundle-size warnings remain.
 After shipping, inspect the production deployment and rendered account state.

@@ -584,6 +584,79 @@ tbody tr.picked:hover { background: rgba(74, 222, 128, 0.11); }
 }
 .score-notes p.mono { font-size: 10.5px; }
 
+/* Scorecard: actual FPL results first, with readable model measurements below. */
+.score > .panel { margin-bottom: 20px; }
+.score h2, .score h3 { font-family: var(--body); text-transform: none; letter-spacing: 0; }
+.score-heading { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin: 28px 0; }
+.score-heading h2 { font-size: 30px; }
+.score-heading p:last-child { color: var(--chalk-dim); margin: 10px 0 0; max-width: 60ch; }
+.score-week { display: grid; gap: 7px; flex-shrink: 0; color: var(--chalk-dim); font-size: 12px; }
+.score-week select { background: var(--turf-2); border: var(--line-strong); border-radius: var(--r); color: var(--chalk); font: inherit; font-size: 14px; padding: 10px 32px 10px 12px; }
+.score .panel-hd { padding: 16px 20px; flex-wrap: wrap; }
+.score .panel-hd h2 { font-size: 17px; }
+.score-tag { margin-left: auto; color: var(--chalk-dim); font-size: 12px; }
+.score-results { border-top: 2px solid var(--flood); }
+.score-result-grid { display: grid; grid-template-columns: 1.05fr 1.15fr .9fr 1.3fr; }
+.score-metric { padding: 20px; min-width: 0; }
+.score-metric h3 { font-size: 14px; font-weight: 500; }
+.score-metric .score-value { color: var(--flood-soft); font-size: 27px; line-height: 1.25; margin: 12px 0 8px; overflow-wrap: anywhere; }
+.score-result-grid .score-metric + .score-metric { border-left: var(--line); }
+.score-result-grid .score-metric:first-child .score-value { font-size: 42px; line-height: 1; }
+.score-result-grid .score-metric:last-child .score-value { font-family: var(--body); font-size: 24px; }
+.score-detail { margin: 0; color: var(--chalk); font-size: 12px; }
+.score-explanation { color: var(--chalk-dim); font-size: 13px; line-height: 1.65; margin: 10px 0 0; }
+.score-copy { padding: 18px 20px; margin: 0; color: var(--chalk-dim); line-height: 1.65; }
+.score-copy p { margin: 0 0 10px; }
+.score-copy p:last-child { margin-bottom: 0; }
+.score-copy h3 { color: var(--chalk); font-size: 16px; margin-bottom: 8px; }
+.score-copy .score-verdict { color: var(--chalk); font-size: 18px; font-weight: 500; }
+.score-footnote { color: var(--chalk-dim); font-size: 12px; line-height: 1.6; margin: 0; padding: 12px 20px 18px; }
+.score-comparison { margin: 0 20px; }
+.score-comparison > div { display: grid; grid-template-columns: 1fr 1.3fr 1.3fr 1.3fr; gap: 12px; padding: 14px 0; border-bottom: var(--line); }
+.score-comparison > div:first-child { color: var(--chalk-dim); font-size: 12px; padding-top: 0; }
+.score-comparison > div > :last-child { color: var(--chalk-dim); }
+.score-learning { padding: 18px 20px; background: rgba(255, 158, 27, .035); border-top: var(--line); }
+.score-learning strong { font-size: 14px; font-weight: 500; }
+.score-learning p { margin: 7px 0 0; color: var(--chalk-dim); max-width: 95ch; font-size: 13px; line-height: 1.65; }
+.score-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: var(--line); }
+.score-metrics .score-metric { border-bottom: var(--line); }
+.score-metrics .score-metric:not(:nth-child(3n)) { border-right: var(--line); }
+.score-averages .score-footnote { padding: 10px 0 0; }
+.score th { font-weight: 500; }
+.score table thead th { color: var(--chalk-dim); font-family: var(--body); text-transform: none; letter-spacing: 0; font-size: 12px; line-height: 1.5; }
+.score table tbody th { font-family: var(--mono); font-size: 12px; }
+.score .tbl-scroll { max-width: 100%; }
+.score .tbl-scroll th:first-child { position: sticky; left: 0; z-index: 1; background: var(--turf-1); }
+.score-disclosure { border-top: var(--line); }
+.score-disclosure summary { cursor: pointer; padding: 16px 20px; color: var(--chalk); font-size: 14px; }
+.score-disclosure summary:hover { color: var(--flood-soft); }
+.score-disclosure summary:focus-visible { outline: 2px solid var(--flood); outline-offset: -3px; }
+.score-method .score-copy { padding-top: 0; }
+@media (max-width: 850px) {
+  .score-result-grid, .score-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .score-result-grid .score-metric:nth-child(3) { border-left: 0; }
+  .score-result-grid .score-metric:nth-child(n+3) { border-top: var(--line); }
+  .score-metrics .score-metric:not(:nth-child(3n)) { border-right: 0; }
+  .score-metrics .score-metric:nth-child(odd) { border-right: var(--line); }
+}
+@media (max-width: 540px) {
+  .score-heading { display: grid; gap: 18px; margin: 20px 0; }
+  .score-heading h2 { font-size: 27px; }
+  .score-week { grid-template-columns: 1fr 1fr; align-items: center; }
+  .score .panel-hd { padding: 14px; gap: 6px 12px; }
+  .score-tag { margin-left: 0; }
+  .score-metric { padding: 16px 14px; }
+  .score-metric .score-value { font-size: 24px; }
+  .score-result-grid .score-metric:last-child .score-value { font-size: 21px; }
+  .score-copy, .score-learning { padding: 16px 14px; }
+  .score-footnote { padding: 12px 14px 16px; }
+  .score-metrics { grid-template-columns: 1fr; }
+  .score-metrics .score-metric:nth-child(odd) { border-right: 0; }
+  .score-comparison { margin: 0 14px; font-size: 12px; }
+  .score-comparison > div { grid-template-columns: .9fr 1fr 1fr 1fr; gap: 8px; }
+  .score-disclosure summary { padding: 16px 14px; }
+}
+
 /* ------------------------------------------------------------ player links
    Any player name is a button that opens the drawer. Inherits the surrounding
    type; the dotted underline is the only tell. */

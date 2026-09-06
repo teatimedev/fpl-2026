@@ -143,7 +143,7 @@ export default function App() {
           loadSquad={ids => { setPresetXI(null); setPicks(ids.map(id => byId.get(id)).filter((p): p is Player => !!p)) }} />
       )}
       {tab === 'season' && <Season D={D} openPlayer={openPlayer} />}
-      {tab === 'score' && <Scorecard sc={D.scorecard ?? null} />}
+      {tab === 'score' && <Scorecard sc={D.scorecard ?? null} linked={linked} />}
       {tab === 'squad' && (
         <MySquad D={D} linked={linked} picks={picks} presetXI={presetXI} state={state}
           draftMode={draftMode} setDraftMode={setDraftMode}

@@ -114,6 +114,10 @@ export interface ScorecardGw {
   deciles: ScorecardDecile[]
   captain?: { model?: ScorecardPick; yours?: ScorecardPick; best: ScorecardPick }
   xi?: { model?: number; yours?: number; best: number }
+  submitted?: {
+    entry_id: number; chip: string | null; points: number; transfer_cost: number
+    credited_points: number; captain_multiplier: number | null
+  }
   cs?: { n: number; brier: number; predicted_rate: number; actual_rate: number }
   availability?: {
     n: number; start_brier: number; appearance_brier: number; minutes_mae: number; minutes_bias: number

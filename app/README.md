@@ -33,6 +33,26 @@ path. A hold uses `plan.hold_weeks`; a transfer's resulting lineup must not show
 the outgoing player. Public picks cannot confirm changes made since the last
 deadline. Chip advice is shown only for a matching gameweek.
 
+## Scorecard
+
+`Scorecard.tsx` puts the linked team's official weekly points, transfer hits,
+overall rank movement, season total and chip first. The gameweek selector can
+show a newer FPL result while the model review is still pending. Saved submitted
+results are an explicitly labelled fallback for the matching entry only.
+
+`scorecardView.ts` keeps scoring conventions explicit: event points include
+captain/chip scoring; deduct transfer costs once for the net weekly result.
+Official season totals already include hits. The model-versus-submitted XI
+comparison remains basic player points, without captain multipliers, automatic
+substitutions, chips or hits. Do not describe that difference as a proven gain
+from following the advice, or as validation of the transfer strategy.
+
+All original stats remain: plain-language accuracy tiles, named averages,
+expandable gameweek tables, calibration bands and original methodology notes.
+Missing measurements stay missing, and another entry's picks never become
+"yours". Scorecard regression tests cover hits, Triple Captain, missing data,
+official-history precedence and account mismatches.
+
 ## Release checks
 
 Run the app tests, lint and build, plus `.venv/bin/python -m pytest tests/ -q`
