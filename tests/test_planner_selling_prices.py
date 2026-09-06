@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'v2'))
-from planner import plan
+from planner import plan, transfer_ledger
 
 
 def pool():
@@ -24,6 +24,19 @@ def pool():
 
 
 class SellingPricesTests(unittest.TestCase):
+    def test_rolling_three_transfers_reaches_five_in_gw6(self):
+        players, owned = pool()
+        players.pop(16)  # No alternative players: every week must hold.
+        result = plan(players, owned, 0, 3, 4, 7)
+        self.assertEqual([w['ft'] for w in result['weeks']], [3, 4, 5, 5])
+        self.assertEqual([w['ft_lost'] for w in result['weeks']], [0, 0, 1, 1])
+        self.assertEqual(result['hits'], 0)
+
+    def test_one_transfer_at_cap_preserves_five_next_week(self):
+        self.assertEqual(transfer_ledger(5, 1, 6), dict(ft=5, hits=0, ft_next=5, ft_lost=0))
+        self.assertEqual(transfer_ledger(5, 0, 6), dict(ft=5, hits=0, ft_next=5, ft_lost=1))
+        self.assertEqual(transfer_ledger(2, 4, 6), dict(ft=2, hits=2, ft_next=1, ft_lost=0))
+
     def test_unsold_profit_does_not_make_holding_infeasible(self):
         players,owned = pool()
         result = plan(players,owned,0,1,4,4,freeze_this_week=True,sell_prices={8:5.1})

@@ -9,7 +9,7 @@ import { signed } from './squad'
 import { Pitch } from './components'
 import { LastWeek } from './LastWeek'
 import type { LinkedTeam } from './useLinkedTeam'
-import { recommendationState } from './coherence'
+import { recommendationState, planForInstruction } from './coherence'
 import { DecisionReview } from './DecisionReview'
 
 /**
@@ -454,6 +454,9 @@ function Digest({
     || (!W.decision && !plan?.worth_it
       && /nothing compelling|\bhold\b|nothing to change|close enough|no single transfer improves/i.test(tr.advice))
   const keepTeam = noTransfer && lineupMatches
+  const pathWeeks = planForInstruction(plan, noTransfer)
+  const pathHits = pathWeeks.reduce((sum, week) => sum + week.hits, 0)
+  const capGameweek = gw + Math.max(0, 5 - W.squad.ft)
   const stamp = new Date(W.generated)
   const stampStr = isNaN(stamp.getTime()) ? W.generated
     : stamp.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
@@ -650,6 +653,14 @@ function Digest({
           <span className="sub">GW{gw}–{horizon} window</span>
         </div>
         {decisionInstruction && <p className="lede-sm">{decisionInstruction}</p>}
+        {W.squad.ft < 15 && <p style={{ padding: '0 14px' }}>
+          You have <strong>{W.squad.ft} free transfers for GW{gw}</strong>.
+          {W.squad.ft < 5
+            ? <> Rolling every week would reach the five-transfer cap at GW{capGameweek}.</>
+            : <> Your transfer bank is full.</>}
+          {' '}At five, using one transfer leaves five available the following week;
+          making none forfeits that week’s new transfer. Reassess each deadline.
+        </p>}
         {holdRisk && holdRisk.lines.length > 0 && (
           <details className="scenario-details price-risk-details">
             <summary>Price timing if you wait · experimental</summary>
@@ -740,26 +751,26 @@ function Digest({
             </div>
           </details>
         )}
-        {plan && plan.weeks?.length > 0 && (
+        {plan && pathWeeks.length > 0 && (
           <details className="scenario-details">
-            <summary>See the six-week path{plan.hits > 0 ? ` (${plan.hits} hit${plan.hits === 1 ? '' : 's'})` : ''} · acting now vs banking: {signed(plan.diff)}</summary>
+            <summary>See the path if you {noTransfer ? `hold GW${gw}` : `make the GW${gw} moves`}{pathHits > 0 ? ` (${pathHits} hit${pathHits === 1 ? '' : 's'})` : ''}</summary>
             <div className="scenario-body tbl-scroll">
               <table>
               <thead>
                 <tr>
                   <th className="l">GW</th><th>Pts</th><th className="l">Captain</th>
-                  <th>FT</th><th className="l">Moves</th>
+                  <th>FT available</th><th className="l">Moves</th>
                 </tr>
               </thead>
               <tbody>
-                {plan.weeks.map(w => (
+                {pathWeeks.map(w => (
                   <tr key={w.gw}>
                     <td className="l mono">GW{w.gw}{w.hits > 0 && <span className="badge out">−{w.hits * HIT_COST}</span>}</td>
                     <td style={{ color: 'var(--flood-soft)' }}>{w.pts.toFixed(1)}</td>
                     <td className="l">
                       <button className="plink" onClick={() => openPlayer(w.captain)}>{nameOf(w.captain)}</button>
                     </td>
-                    <td>{w.ft >= 15 ? '∞' : w.ft}</td>
+                    <td>{w.ft >= 15 ? '∞' : w.ft}{!!w.ft_lost && <span className="badge out">new FT lost</span>}</td>
                     <td className="l moves">
                       {w.in_.length === 0 ? <span className="s">hold</span> : (
                         <>{names(w.in_)} <span className="s">for</span> {names(w.out)}</>
@@ -770,8 +781,9 @@ function Digest({
               </tbody>
               </table>
               <p className="hint" style={{ padding: '10px 14px 14px' }}>
-                This is a point-estimate scenario, not a second instruction. It is
-                re-planned every refresh and can churn on small fixture swings.
+                Transfers are available before each deadline and assume every earlier
+                move in this path happens. Future weeks are conditional and are recalculated
+                each refresh. Holding this week is not a commitment to keep holding.
               </p>
             </div>
           </details>

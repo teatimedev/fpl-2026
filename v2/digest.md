@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 4
 
-Deadline **Sat 12 Sep, 12:30 UTC** — 6d 2h away.
+Deadline **Sat 12 Sep, 12:30 UTC** — 6d 1h away.
 Projections cover GW4–9.
 
 ## Captain: **Haaland** (MCI)
@@ -54,7 +54,7 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 | Thiago (BRE) | João Pedro (CHE) | -0.3 | -0.7 | +0.9 | **+0.2** | +0.2 |
 | Obi (MUN) | Danns (LIV) | +0.0 | +0.0 | +0.1 | **+0.1** | +0.1 |
 
-**Recommended: hold.** Milenković → Ajayi, Sadiki → Gakpo, Foden → Barnes is the move queued — worth taking over the window, but taking it now rather than next week is worth only +0.4 (the plan scores 402.4 against 402.0 with the transfer banked); bank it — you would have 4.
+**Recommended: hold.** Milenković → Ajayi, Sadiki → Gakpo, Foden → Barnes is the move queued — worth taking over the window, but taking it now rather than next week is worth only +0.4 (the plan scores 402.4 against 402.0 with this week held). You would have 4 free transfers next week.
 
 **Best two-move combinations** (net of any hit):
 
@@ -88,12 +88,12 @@ Net transfers this gameweek as a share of current owners. Top of the left column
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Ansah £5.0 | +76900.0% | +769 | Diarra £5.4 | -33800.0% | -338 |
-| Mbaye £6.0 | +76500.0% | +765 | Humphreys £4.5 | -31600.0% | -316 |
-| Vaz £5.0 | +48200.0% | +482 | Morato £5.0 | -29800.0% | -298 |
-| Palacios £5.0 | +45400.0% | +454 | Esse £5.0 | -29000.0% | -290 |
-| Flemming £5.5 | +38700.0% | +387 | M.Sarr £4.5 | -25200.0% | -252 |
-| Fofana £5.5 | +33100.0% | +331 | Adingra £4.9 | -24000.0% | -240 |
+| Ansah £5.0 | +77600.0% | +776 | Elliott £5.4 | -60200.0% | -602 |
+| Mbaye £6.0 | +77300.0% | +773 | Diarra £5.4 | -34000.0% | -340 |
+| Vaz £5.0 | +48900.0% | +489 | Humphreys £4.5 | -31900.0% | -319 |
+| Palacios £5.0 | +46300.0% | +463 | Morato £5.0 | -30300.0% | -303 |
+| Flemming £5.5 | +39200.0% | +392 | Esse £5.0 | -29200.0% | -292 |
+| Fofana £5.5 | +34100.0% | +341 | M.Sarr £4.5 | -25500.0% | -255 |
 
 ⭑ = in your squad.
 
@@ -107,4 +107,4 @@ _Based on 5 price snapshots. This warning is not part of the transfer verdict un
 
 ---
 
-_Generated 2026-09-06 09:52 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-09-06 10:37 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._

@@ -224,6 +224,7 @@ export interface WeeklyTransfers {
 
 export interface WeeklyPlanWeek {
   gw: number; pts: number; hits: number; captain: number; ft: number
+  ft_next?: number; ft_lost?: number
   in_: number[]; out: number[]
 }
 export interface WeeklyDecisionSim {
@@ -235,6 +236,7 @@ export interface WeeklyDecisionSim {
 }
 export interface WeeklyPlan {
   total: number; hold_total: number; diff: number; hits: number; weeks: WeeklyPlanWeek[]
+  hold_weeks?: WeeklyPlanWeek[]
   /** moves the plan makes this week, and whether diff clears the per-move hold threshold */
   n_now?: number; worth_it?: boolean; move_bar?: number
   this_week_sim?: WeeklyDecisionSim

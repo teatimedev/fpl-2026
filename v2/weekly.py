@@ -1264,7 +1264,12 @@ def main():
                                      move_bar=round(HOLD_THRESHOLD * n_now, 1),
                                      weeks=[dict(gw=w['gw'], pts=w['pts'], hits=w['hits'],
                                                  captain=w['captain'], ft=w['ft'],
-                                                 in_=w['in'], out=w['out']) for w in free['weeks']])
+                                                 ft_next=w.get('ft_next'), ft_lost=w.get('ft_lost', 0),
+                                                 in_=w['in'], out=w['out']) for w in free['weeks']],
+                                     hold_weeks=[dict(gw=w['gw'], pts=w['pts'], hits=w['hits'],
+                                                      captain=w['captain'], ft=w['ft'],
+                                                      ft_next=w.get('ft_next'), ft_lost=w.get('ft_lost', 0),
+                                                      in_=w['in'], out=w['out']) for w in hold['weeks']])
                     this_week_sim = None
                     if n_now > 0 and not unlimited:
                         move_squad = free['weeks'][0].get('squad')
@@ -1339,8 +1344,10 @@ def main():
                         recommendation = (
                             f'**Recommended: hold.** {lead_in} is worth only {diff:+.1f} '
                             f'(the plan scores {free["total"]:.1f} against {hold["total"]:.1f} '
-                            f'with the transfer banked); bank it — you would have '
-                            f'{min(MAX_FT, ft + 1)}.'
+                            f'with this week held). '
+                            + (f'You would have {ft + 1} free transfers next week.' if ft < MAX_FT else
+                               'Your bank stays at five; holding forfeits the next weekly transfer. '
+                               'The remaining reason to wait is uncertainty, not gaining another transfer.')
                         )
                         _supersede_transfer_recommendation(
                             L, P, J['transfers'], recommendation,

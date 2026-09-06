@@ -43,6 +43,18 @@ MAX_BANK = 5
 POOL = 120
 
 
+def transfer_ledger(ft, moves, gw, wildcard=False):
+    """Exact available transfers, hit count and rollover for a selected path."""
+    if gw == 1:
+        return dict(ft=ft, hits=0, ft_next=1, ft_lost=0)
+    if wildcard:
+        return dict(ft=ft, hits=0, ft_next=ft, ft_lost=0)
+    remaining = max(0, ft - moves)
+    return dict(ft=ft, hits=max(0, moves - ft),
+                ft_next=min(MAX_BANK, remaining + 1),
+                ft_lost=max(0, remaining + 1 - MAX_BANK))
+
+
 def _valid_incumbent(prob, tolerance=1e-5):
     """Whether PuLP currently holds a complete, integral, feasible solution."""
     for variable in prob.variables():
@@ -266,6 +278,7 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
 
     out = {'weeks': [], 'total': 0.0, 'hits': 0, 'gw': gw, 'horizon': horizon,
            'solver': diagnostics}
+    available_ft = ft
     for g in GW:
         squad = [i for i in ids if (x[(i, g)].value() or 0) > 0.5]
         evaluation = evaluate_squad([P[i] for i in squad], g, g)
@@ -273,7 +286,12 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
         xi = [p['id'] for p in lineup.xi]
         cap = lineup.captain['id'] if lineup.captain else None
         wk = evaluation.total
-        h = int(round(hits[g].value() or 0))
+        outgoing = [i for i in ids if (tout[(i, g)].value() or 0) > 0.5]
+        # The MILP's upper bounds may leave unused FT variables below their
+        # true value. Reconstruct the actual bank from the selected transfers;
+        # those arbitrary slack values must never be shown as account balances.
+        ledger = transfer_ledger(available_ft, len(outgoing), g, g == wildcard_week)
+        h = ledger['hits']
         out['total'] += wk - HIT * h
         out['hits'] += h
         out['weeks'].append({
@@ -281,10 +299,11 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
             'squad': squad, 'xi': xi, 'captain': cap,
             'autosub': round(evaluation.autosub_points, 1),
             'in': [i for i in ids if (tin[(i, g)].value() or 0) > 0.5],
-            'out': [i for i in ids if (tout[(i, g)].value() or 0) > 0.5],
-            'ft': int(round(ftv[g].value() or 0)),
+            'out': outgoing,
+            **ledger,
             'cost': sum(price[i] for i in squad) / 10,
         })
+        available_ft = ledger['ft_next']
     out['total_unrounded'] = out['total']
     out['total'] = round(out['total'], 1)
     return out

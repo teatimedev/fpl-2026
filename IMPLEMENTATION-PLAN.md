@@ -119,6 +119,15 @@ warnings remain.
 
 ## Next milestones
 
+Transfer-bank follow-up, 6 September: the planner's displayed FT balance is
+reconstructed from actual moves rather than loose solver variables. A hold
+instruction now displays the path constrained to hold this week, instead of
+showing a competing path that already spent transfers. The app explains the cap
+and labels when an additional weekly transfer is forfeited. With three FT in
+GW4, making no transfers gives 3, 4, 5, 5 at the GW4–7 deadlines. This corrects
+accounting and presentation; the existing two-point policy remains unvalidated.
+Follow-up validation: 262 Python tests, seven app tests, lint and build pass.
+
 1. Improve dated article extraction and add reliable independent sources until
    owned players and serious transfer targets have useful coverage. Audit a sample
    of extracted claims against the articles before allowing wider influence.

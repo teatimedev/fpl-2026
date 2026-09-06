@@ -1,5 +1,10 @@
-import type { Data } from './types'
+import type { Data, WeeklyPlan } from './types'
 import type { LiveState } from './weekly'
+
+/** A hold instruction cannot display a path that spends transfers now. */
+export function planForInstruction(plan: WeeklyPlan | null, hold: boolean) {
+  return (hold ? plan?.hold_weeks : plan?.weeks) ?? []
+}
 
 /** Pure contract: a live label must never relabel a different forecast. */
 export function recommendationState(D: Data, live: LiveState | null, ids: number[],
@@ -10,6 +15,7 @@ export function recommendationState(D: Data, live: LiveState | null, ids: number
   w?.transfers?.singles.forEach(r => relevant.add(r.in_))
   w?.transfers?.pairs.forEach(r => r.in_.forEach(id => relevant.add(id)))
   w?.plan?.weeks.forEach(r => r.in_.forEach(id => relevant.add(id)))
+  w?.plan?.hold_weeks?.forEach(r => r.in_.forEach(id => relevant.add(id)))
   w?.transfer_review?.players.forEach(r => { if (r.replacement != null) relevant.add(r.replacement) })
   const reason: string[] = []
   if (!live) reason.push('Waiting for live FPL data to verify the deadline and player status.')

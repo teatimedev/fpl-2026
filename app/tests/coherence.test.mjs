@@ -1,6 +1,14 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { recommendationState } from '../src/coherence.ts'
+import { recommendationState, planForInstruction } from '../src/coherence.ts'
+
+test('hold instructions use the banked path and do not assume rejected moves happened', () => {
+  const act = [{ gw: 4, ft: 3, in_: [1, 2], out: [3, 4] }]
+  const hold = [{ gw: 4, ft: 3, in_: [], out: [] }, { gw: 5, ft: 4, in_: [], out: [] }]
+  assert.deepEqual(planForInstruction({ weeks: act, hold_weeks: hold }, true), hold)
+  assert.deepEqual(planForInstruction({ weeks: act, hold_weeks: hold }, false), act)
+  assert.deepEqual(planForInstruction({ weeks: act }, true), [])
+})
 
 const now = Date.parse('2026-09-06T10:00:00Z')
 const ids = Array.from({ length: 15 }, (_, i) => i + 1)
