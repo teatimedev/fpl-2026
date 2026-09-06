@@ -1,4 +1,4 @@
-import { useMemo, type ReactNode } from 'react'
+import { useMemo } from 'react'
 import type { Data, NewsClaim, Player, Pos, Weekly } from './types'
 import { withLive, priceMovers } from './weekly'
 import {
@@ -11,6 +11,7 @@ import { LastWeek } from './LastWeek'
 import type { LinkedTeam } from './useLinkedTeam'
 import { recommendationState, planForInstruction } from './coherence'
 import { DecisionReview } from './DecisionReview'
+import { WeeklyBrief } from './WeeklyBrief'
 
 /**
  * The weekly view: what to actually do before this deadline.
@@ -23,18 +24,6 @@ import { DecisionReview } from './DecisionReview'
  * the deep digest — two-move combos, six-week plan, availability checks — is
  * rendered instead of the browser's own quick pass.
  */
-
-/** Render `**bold lead** rest` lines the digest emits. */
-function Md({ line }: { line: string }) {
-  const parts = line.split(/\*\*/)
-  if (parts.length < 3) return <>{line}</>
-  const out: ReactNode[] = []
-  parts.forEach((s, i) => {
-    if (!s) return
-    out.push(i % 2 === 1 ? <strong key={i}>{s}</strong> : <span key={i}>{s}</span>)
-  })
-  return <>{out}</>
-}
 
 function splitRiskEvidence(line: string): { message: string; evidence: string | null } {
   const match = line.match(/^(.*?)\s+\[(.+)\]$/)
@@ -119,22 +108,17 @@ export default function ThisWeek(
             borderRadius: '0 var(--r) var(--r) 0',
           }}
         >
-          Model data {dataAgeH} h old (rebuilt {D.meta.generated}). If a refresh
-          should have landed by now, check the Actions "Refresh" workflow.
+          This analysis is over three days old. It needs updating before you act on it.
         </p>
       )}
-      <p className="stamp mono" style={{ margin: '0 2px 6px' }}>
+      <p className="week-deadline">
         Gameweek {gw} · deadline {dl.toLocaleString('en-GB', {
           weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
         })}{msLeft > 0 && <> · <strong>{days}d {hours}h</strong> to go</>}
-        {entryId
-          ? <> · entry {entryId}{usingReal && fromGw != null && <> · picks from GW{fromGw}</>}</>
-          : builtSquad.length === 15
-            ? <> · drafted squad (link your team in <strong>My squad</strong>)</>
-            : null}
-        {busy && ' · loading live data…'}
-        {err && ` · could not reach the FPL API: ${err}`}
+        {!entryId && builtSquad.length === 15 && <> · drafted squad</>}
       </p>
+
+      {busy && !digest && <p className="week-refresh" role="status">Checking your team and the latest player news…</p>}
 
       {!ready && (
         <section className="panel" style={{ marginTop: 16 }}>
@@ -147,24 +131,33 @@ export default function ThisWeek(
 
       {ready && !digest && !busy && (
         <section className="panel" role="status" style={{ marginTop: 12 }}>
-          <div className="panel-hd"><h2>Recommendation needs a refresh</h2></div>
-          <ul className="problems soft" style={{ margin: 14 }}>
-            {state.reasons.map(reason => <li key={reason}>{reason}</li>)}
-          </ul>
-          <p className="hint" style={{ padding: '0 14px 14px' }}>The last published analysis remains available as a dated comparison below. It is not a current transfer instruction.</p>
+          <div className="panel-hd"><h2>Your weekly advice needs updating</h2></div>
+          <p className="week-refresh">{err
+            ? 'Your latest team could not be checked. Reload the page to try again.'
+            : 'Your team or the latest information no longer matches this analysis. Fresh advice is needed before making transfers.'}</p>
+          <details className="scenario-details"><summary>What needs updating?</summary>
+            <ul className="problems soft" style={{ margin: 14 }}>
+              {state.reasons.map(reason => <li key={reason}>{reason}</li>)}
+            </ul>
+          </details>
         </section>
       )}
 
-      {ready && <DecisionReview D={D} gw={gw} ids={squad.map(p => p.id)} current={digest} openPlayer={openPlayer} />}
-
       {ready && digest && weekly && (
-        <Digest D={D} W={weekly} gw={gw} horizon={horizon} poolById={poolById}
-          nameOf={nameOf}
-          liveIssues={issues} openPlayer={openPlayer} />
+        <>
+          <WeeklyBrief D={D} W={weekly} poolById={poolById} currentLineup={lineup} openPlayer={openPlayer} />
+          <details className="weekly-more">
+            <summary>Why this recommendation?</summary>
+            <div className="weekly-more-body"><Digest D={D} W={weekly} gw={gw} horizon={horizon} poolById={poolById}
+              nameOf={nameOf} openPlayer={openPlayer} /></div>
+          </details>
+        </>
       )}
 
       {ready && !digest && state.projectionsReady && captain && (
-        <>
+        <details className="weekly-more">
+          <summary>See the last available lineup and estimates</summary>
+          <div className="weekly-more-body">
           <section className="panel accent" style={{ marginTop: 16 }}>
             <div className="panel-hd">
               <h2>Captain</h2>
@@ -322,10 +315,18 @@ export default function ThisWeek(
               </div>
             )}
           </section>
-        </>
+          </div>
+        </details>
       )}
 
-      <NewsStatus D={D} gw={gw} squadIds={squad.map(p => p.id)} openPlayer={openPlayer} />
+      {ready && <details className="weekly-more">
+        <summary>Review a player: keep or sell?</summary>
+        <div className="weekly-more-body"><DecisionReview D={D} gw={gw} ids={squad.map(p => p.id)} current={digest} openPlayer={openPlayer} /></div>
+      </details>}
+      <details className="weekly-more">
+        <summary>Club news and sources</summary>
+        <div className="weekly-more-body"><NewsStatus D={D} gw={gw} squadIds={squad.map(p => p.id)} openPlayer={openPlayer} /></div>
+      </details>
     </div>
   )
 }
@@ -412,7 +413,7 @@ function NewsClaimRow({ claim, applied = false, openPlayer }: {
 /* ---------------------------------------------------------------- digest
    The CI-computed analysis, rendered when the loaded squad is the one it saw. */
 function Digest({
-  D, W, gw, horizon, poolById, nameOf, liveIssues, openPlayer,
+  D, W, gw, horizon, poolById, nameOf, openPlayer,
 }: {
   D: Data
   W: Weekly
@@ -420,7 +421,6 @@ function Digest({
   horizon: number
   poolById: Map<number, Player>
   nameOf: (id: number) => string
-  liveIssues: { head: string; body: string }[] | null
   openPlayer: (id: number) => void
 }) {
   const m = W.model
@@ -434,8 +434,6 @@ function Digest({
   const xiPlayers = m.xi.map(id => poolById.get(id)).filter((p): p is Player => !!p)
   const benchPlayers = m.bench.map(id => poolById.get(id)).filter((p): p is Player => !!p)
 
-  const issues = W.lineup_issues ?? []
-  const hasDigestLineup = !!W.squad.lineup && (W.squad.lineup.xi?.length ?? 0) > 0
   const checks = W.checks ?? []
   const tr = W.transfers
   const plan = W.plan ?? null
@@ -443,17 +441,10 @@ function Digest({
   const moveCount = plan?.n_now ?? 0
   const moveBar = plan?.move_bar ?? moveCount * 2
   const holdRisk = W.price?.hold_risk ?? null
-  const lineupMatches = liveIssues !== null
-    ? liveIssues.length === 0
-    : hasDigestLineup && issues.length === 0
   const decisionInstruction = W.decision?.instruction ?? tr.advice
-  const transferInstruction = decisionInstruction
-    .replace(/^Recommended:\s*/i, '')
-    .replace(/^No single transfer improves the squad\.\s*/i, '')
   const noTransfer = W.decision?.kind === 'hold'
     || (!W.decision && !plan?.worth_it
       && /nothing compelling|\bhold\b|nothing to change|close enough|no single transfer improves/i.test(tr.advice))
-  const keepTeam = noTransfer && lineupMatches
   const pathWeeks = planForInstruction(plan, noTransfer)
   const pathHits = pathWeeks.reduce((sum, week) => sum + week.hits, 0)
   const capGameweek = gw + Math.max(0, 5 - W.squad.ft)
@@ -495,44 +486,10 @@ function Digest({
 
       <section className="panel decision" style={{ marginTop: 10 }}>
         <div className="panel-hd">
-          <h2>Your deadline plan</h2>
-          <span className="sub">one clear instruction</span>
+          <h2>How the transfer decision was made</h2>
         </div>
         <div className="decision-body">
-          <p className="decision-title">
-            {keepTeam
-              ? 'The recommended lineup matches your latest public picks.'
-              : noTransfer
-                ? 'The current transfer policy favours holding. Review the alternatives above.'
-                : transferInstruction}
-          </p>
-          {keepTeam ? (
-            <p>
-              Start the {shape} shown below. Captain <strong>{nameOf(m.captain)}</strong>,
-              vice-captain <strong>{nameOf(m.vice)}</strong>. Your official lineup and
-              the model match, including bench order. Changes made since the last deadline are not public yet.
-            </p>
-          ) : noTransfer ? (
-            <>
-              <p>The current policy favours holding. Compare this lineup with what you have set in FPL:</p>
-              {liveIssues !== null ? (
-                <ul className="problems" style={{ margin: '10px 0 0' }}>
-                  {liveIssues.map((it, i) => (
-                    <li key={i}><strong>{it.head}</strong> {it.body}</li>
-                  ))}
-                </ul>
-              ) : (
-                <ul className="problems" style={{ margin: '10px 0 0' }}>
-                  {issues.map((line, i) => <li key={i}><Md line={line} /></li>)}
-                </ul>
-              )}
-            </>
-          ) : (
-            <p>
-              This is the current transfer action. The pitch below is for the
-              squad currently analysed; rerun the refresh after making the move.
-            </p>
-          )}
+          <p>{decisionInstruction}</p>
           {sim && (
             <p className="decision-evidence">
               In {sim.n_sims.toLocaleString('en-GB')} simulations, the proposed moves
@@ -753,7 +710,7 @@ function Digest({
         )}
         {plan && pathWeeks.length > 0 && (
           <details className="scenario-details">
-            <summary>See the path if you {noTransfer ? `hold GW${gw}` : `make the GW${gw} moves`}{pathHits > 0 ? ` (${pathHits} hit${pathHits === 1 ? '' : 's'})` : ''}</summary>
+            <summary>Explore future weeks · plans can change{pathHits > 0 ? ` (${pathHits * HIT_COST} points in transfer costs)` : ''}</summary>
             <div className="scenario-body tbl-scroll">
               <table>
               <thead>

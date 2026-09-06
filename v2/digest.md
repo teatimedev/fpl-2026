@@ -88,12 +88,12 @@ Net transfers this gameweek as a share of current owners. Top of the left column
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Ansah £5.0 | +77600.0% | +776 | Elliott £5.4 | -60200.0% | -602 |
-| Mbaye £6.0 | +77300.0% | +773 | Diarra £5.4 | -34000.0% | -340 |
-| Vaz £5.0 | +48900.0% | +489 | Humphreys £4.5 | -31900.0% | -319 |
-| Palacios £5.0 | +46300.0% | +463 | Morato £5.0 | -30300.0% | -303 |
-| Flemming £5.5 | +39200.0% | +392 | Esse £5.0 | -29200.0% | -292 |
-| Fofana £5.5 | +34100.0% | +341 | M.Sarr £4.5 | -25500.0% | -255 |
+| Ansah £5.0 | +77900.0% | +779 | Elliott £5.4 | -60600.0% | -606 |
+| Mbaye £6.0 | +77200.0% | +772 | Diarra £5.4 | -34400.0% | -344 |
+| Vaz £5.0 | +49100.0% | +491 | Humphreys £4.5 | -31900.0% | -319 |
+| Palacios £5.0 | +46500.0% | +465 | Morato £5.0 | -30500.0% | -305 |
+| Flemming £5.5 | +39600.0% | +396 | Esse £5.0 | -29300.0% | -293 |
+| Fofana £5.5 | +34300.0% | +343 | M.Sarr £4.5 | -25600.0% | -256 |
 
 ⭑ = in your squad.
 
@@ -107,4 +107,4 @@ _Based on 5 price snapshots. This warning is not part of the transfer verdict un
 
 ---
 
-_Generated 2026-09-06 10:37 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-09-06 10:52 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._

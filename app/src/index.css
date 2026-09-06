@@ -1086,6 +1086,58 @@ details[open].news-health > summary::before,
 /* This week: one column on a phone, two at a desk (decisions left, evidence right) */
 .week-grid { display: grid; grid-template-columns: minmax(0, 1fr); }
 .week-grid > .wcol { min-width: 0; }
+
+/* The weekly answer comes before the optional analysis. */
+.week-deadline { margin: 0 0 18px; color: var(--chalk-dim); font-size: 13px; }
+.week-refresh { padding: 12px 16px; color: var(--chalk-dim); }
+.weekly-brief { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; align-items: start; }
+.weekly-actions { min-width: 0; padding: 4px 0 8px; }
+.brief-eyebrow { margin: 0 0 8px; color: var(--flood-soft); font-size: 12px; font-weight: 600; }
+.weekly-actions h2 { font-size: clamp(30px, 3.2vw, 43px); line-height: 1.04; letter-spacing: 0; text-transform: none; }
+.brief-reason { max-width: 60ch; color: var(--chalk-dim); margin: 12px 0 20px; }
+.weekly-steps { counter-reset: week-step; list-style: none; padding: 0; margin: 0; }
+.weekly-steps > li { position: relative; padding: 14px 0 14px 42px; border-top: var(--line); }
+.weekly-steps > li::before {
+  counter-increment: week-step; content: counter(week-step); position: absolute; left: 0; top: 17px;
+  width: 25px; height: 25px; border: 1px solid var(--chalk-faint); border-radius: 50%;
+  display: grid; place-items: center; font-size: 12px; color: var(--flood-soft);
+}
+.step-label { font-size: 11px; color: var(--chalk-dim); margin-bottom: 4px; }
+.step-main, .brief-moves { font-size: 17px; font-weight: 500; margin: 0; line-height: 1.45; }
+.step-detail { color: var(--chalk-dim); font-size: 13px; line-height: 1.5; margin: 6px 0 0; }
+.step-detail strong { font-weight: 500; color: var(--chalk); }
+.brief-moves, .brief-checks { list-style: none; padding: 0; }
+.brief-moves li + li, .brief-checks li + li { margin-top: 7px; }
+.brief-checks { margin: 0; line-height: 1.5; }
+.brief-moves .plink, .step-main .plink { font-size: inherit; }
+.brief-hit { color: var(--alert); font-weight: 600; margin: 6px 0; }
+.brief-armband { display: inline-grid; place-items: center; font-size: 12px; width: 21px; height: 21px; border-radius: 50%; color: var(--turf-0); background: var(--flood); vertical-align: 1px; margin-left: 3px; }
+.brief-vice { display: inline-block; margin-left: 18px; font-size: 14px; color: var(--chalk-dim); }
+.brief-source { color: var(--chalk-dim); font-size: 12px; margin: 12px 0; max-width: 64ch; }
+.brief-fpl-link { display: inline-block; color: var(--flood-soft); font-weight: 500; padding: 4px 0; text-underline-offset: 4px; }
+.brief-lineup { min-width: 0; margin: 0; }
+.brief-lineup .panel-hd h2 { text-transform: none; letter-spacing: 0; font-family: var(--body); }
+.brief-lineup .pitch .row { margin-bottom: 22px; }
+.brief-lineup .bench-strip .row { margin-bottom: 0; }
+.brief-bench { padding: 2px 16px 16px; font-size: 12px; color: var(--chalk-dim); }
+.brief-bench strong { font-weight: 500; color: var(--chalk); }
+.brief-bench p { margin: 5px 0 0; }
+.weekly-more { margin-top: 16px; border-top: var(--line-strong); min-width: 0; }
+.weekly-more > summary { cursor: pointer; padding: 16px 4px; color: var(--chalk-dim); font-weight: 500; }
+.weekly-more > summary:hover, .weekly-more[open] > summary { color: var(--chalk); }
+.weekly-more > summary:focus-visible { outline: 2px solid var(--flood); outline-offset: 2px; }
+.weekly-more-body { padding-bottom: 14px; }
+.weekly-more th { position: static; }
+@media (min-width: 1000px) {
+  .weekly-brief { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 36px; }
+}
+@media (max-width: 600px) {
+  .week-deadline { font-size: 12px; margin-bottom: 16px; }
+  .weekly-actions h2 { font-size: 33px; }
+  .weekly-steps > li { padding-left: 36px; }
+  .brief-vice { margin-left: 10px; }
+  .step-main, .brief-moves { font-size: 16px; }
+}
 @media (min-width: 1180px) {
   .week { max-width: none; }
   .week-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 20px; align-items: start; }

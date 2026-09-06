@@ -260,6 +260,12 @@ export interface WeeklyPrice {
 export interface WeeklyDecision {
   kind: 'hold' | 'transfer' | 'rebuild'
   instruction: string
+  /** Selected action only; diagnostic alternatives are never copied here. */
+  moves?: { out: number; in_: number }[]
+  lineup?: WeeklyLineup
+  hit_points?: number
+  ft_next?: number
+  ft_lost?: number
 }
 
 /* ------------------------------------------------------------ retro (P3)

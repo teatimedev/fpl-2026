@@ -38,6 +38,7 @@ export interface ShirtMarks {
 export function Shirt({
   player, team, fixtures, isCaptain, isVice, onClick,
   swapOut, swapIn, capModel, viceModel, hint,
+  simple = false,
 }: {
   player: Player
   team: Team
@@ -45,6 +46,7 @@ export function Shirt({
   isCaptain: boolean
   isVice?: boolean
   onClick: () => void
+  simple?: boolean
 } & ShirtMarks) {
   const flagged = player.status !== 'a'
   const cls = `shirt${swapOut ? ' swap-out' : ''}${swapIn ? ' swap-in' : ''}`
@@ -67,8 +69,8 @@ export function Shirt({
         }}
       />
       <span className="nm">{player.name}</span>
-      <span className="meta">£{player.price.toFixed(1)} · {player.proj_6gw.toFixed(0)}</span>
-      <Pips fixtures={fixtures} />
+      {!simple && <><span className="meta">£{player.price.toFixed(1)} · {player.proj_6gw.toFixed(0)}</span>
+        <Pips fixtures={fixtures} /></>}
     </button>
   )
 }
@@ -88,7 +90,7 @@ export function EmptyShirt({ pos }: { pos: Pos }) {
    shirts fill an empty keeper slot or an empty row while a squad is being
    drafted. `marks` overlays the model's opinion per player (see Shirt). */
 export function Pitch({
-  D, xi, bench, captain, vice, marks, openPlayer,
+  D, xi, bench, captain, vice, marks, openPlayer, simple = false,
 }: {
   D: Data
   xi: Player[]
@@ -97,6 +99,7 @@ export function Pitch({
   vice: number | null
   marks?: (p: Player) => ShirtMarks | undefined
   openPlayer: (id: number) => void
+  simple?: boolean
 }) {
   const rowsByPos = (p: Pos) => xi.filter(s => s.pos === p)
   return (
@@ -115,6 +118,7 @@ export function Pitch({
                   fixtures={D.schedule[pl.team] ?? []}
                   isCaptain={captain === pl.id}
                   isVice={vice === pl.id}
+                  simple={simple}
                   onClick={() => openPlayer(pl.id)}
                   {...marks?.(pl)}
                 />
@@ -128,7 +132,7 @@ export function Pitch({
         })}
         <div className="bench-strip">
           <div className="bench-label">
-            Bench — in order they come on
+            {simple ? 'Your substitutes' : 'Bench — in order they come on'}
           </div>
           <div className="row" style={{ marginBottom: 0 }}>
             {bench.length === 0 && <EmptyShirt pos="GKP" />}
@@ -139,6 +143,7 @@ export function Pitch({
                 team={D.teams[pl.team]}
                 fixtures={D.schedule[pl.team] ?? []}
                 isCaptain={false}
+                simple={simple}
                 onClick={() => openPlayer(pl.id)}
                 {...marks?.(pl)}
               />

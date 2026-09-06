@@ -146,3 +146,21 @@ The local preview is http://127.0.0.1:5173/. The hosted branch preview is
 https://fpl-2026-git-agent-scouting-p-a951e9-jordanrippon2020s-projects.vercel.app.
 The production site and its scheduled workflow still use master. No FPL account
 selections or transfers have been submitted.
+
+### Plain weekly instructions (6 September follow-up)
+
+The weekly page now leads with four actions: transfers, captain and vice,
+starting eleven, and deadline checks. The pitch shows player names and armbands;
+bench priority is stated separately. Detailed comparisons, future paths and news
+sources are folded below. Public picks are identified as the last published team,
+so an unpublished change is never claimed to be confirmed in FPL.
+
+The weekly exporter publishes selected moves and the lineup after those moves as
+structured data. A hold discards rejected moves; a recommended transfer cannot
+show the old squad as its resulting lineup. Transfer counts, point costs and the
+five-transfer cap are explicit. Vice-captain-only changes are now called out.
+Missing or mismatched data suppresses the weekly instruction; unavailable chip
+advice is disclosed instead of being guessed. This changes clarity, not the
+transfer threshold or forecast assumptions.
+
+Validation: 265 Python tests and 13 app checks, lint and production build pass.

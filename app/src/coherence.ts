@@ -12,6 +12,7 @@ export function recommendationState(D: Data, live: LiveState | null, ids: number
   const gw = live?.gw ?? D.meta.start_gw ?? 1
   const w = D.weekly
   const relevant = new Set(ids)
+  w?.decision?.moves?.forEach(move => relevant.add(move.in_))
   w?.transfers?.singles.forEach(r => relevant.add(r.in_))
   w?.transfers?.pairs.forEach(r => r.in_.forEach(id => relevant.add(id)))
   w?.plan?.weeks.forEach(r => r.in_.forEach(id => relevant.add(id)))

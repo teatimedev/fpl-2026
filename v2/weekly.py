@@ -289,6 +289,36 @@ def pick_xi(squad, gw):
     return lineup.xi, lineup.bench, key
 
 
+def weekly_action(kind, moves, instruction, squad, players, ft, gw):
+    """Publish only the chosen moves, with the lineup after those moves.
+
+    The alternatives and unconstrained future plan are not instructions.
+    Discard their moves when the final policy chooses to hold.
+    """
+    from planner import transfer_ledger
+    moves = [] if kind == 'hold' else list(moves)
+    outgoing = [o for o, _ in moves]
+    incoming = [i for _, i in moves]
+    ids = [p['id'] for p in squad]
+    if (len(set(outgoing)) != len(outgoing)
+            or len(set(incoming)) != len(incoming)
+            or not set(outgoing).issubset(ids)
+            or set(incoming).intersection(ids)
+            or any(players[o]['pos'] != players[i]['pos'] for o, i in moves)
+            or (kind != 'hold' and not moves)):
+        raise ValueError('The weekly action does not describe valid squad changes')
+    after = [players[i] for i in ids if i not in outgoing] + [players[i] for i in incoming]
+    xi, bench, key = pick_xi(after, gw)
+    ranked = sorted(xi, key=key, reverse=True)
+    ledger = transfer_ledger(ft, len(moves), gw)
+    return dict(kind=kind, instruction=instruction,
+                moves=[dict(out=o, in_=i) for o, i in moves],
+                lineup=dict(xi=[p['id'] for p in xi], bench=[p['id'] for p in bench],
+                            captain=ranked[0]['id'], vice=ranked[1]['id']),
+                hit_points=ledger['hits'] * 4, ft_next=ledger['ft_next'],
+                ft_lost=ledger['ft_lost'])
+
+
 def squad_score(squad, gw, horizon):
     """Expected XI, captain fallback and risk-sensitive autosub value."""
     return evaluate_squad(squad, gw, horizon).total
@@ -1025,6 +1055,7 @@ def main():
 
         # ---- transfers
         action_kind = 'hold'
+        action_moves = []
         L.append(f'## Transfers  (£{bank:.1f}m in the bank, '
                  f'{"unlimited" if ft >= 15 else ft} free)')
         L.append('')
@@ -1089,6 +1120,7 @@ def main():
             L.append('')
             if ft >= 15 and forced:
                 action_kind = 'transfer'
+                action_moves = [(forced['out']['id'], forced['in_']['id'])]
                 L.append(f'**Recommended:** {forced["out"]["name"]} → '
                          f'{forced["in_"]["name"]} ({forced["gain"]:+.1f}). '
                          f'The outgoing player is unavailable and transfers are free '
@@ -1098,6 +1130,7 @@ def main():
                          f'{forced["in_"]["name"]} {forced["gain"]:+.1f}')
             elif ft >= 15:
                 action_kind = ('transfer' if best['gain'] >= HOLD_THRESHOLD else 'hold')
+                action_moves = [(best['out']['id'], best['in_']['id'])]
                 L.append(f'**Recommended:** {best["out"]["name"]} → {best["in_"]["name"]} '
                          f'({best["gain"]:+.1f}); everything is free before Gameweek 1.'
                          if best['gain'] >= HOLD_THRESHOLD else
@@ -1108,6 +1141,7 @@ def main():
                          'Transfers: squad already optimal')
             elif ft >= MAX_FT:
                 action_kind = 'transfer'
+                action_moves = [(best['out']['id'], best['in_']['id'])]
                 L.append(f'**Recommended:** you have {MAX_FT} free transfers and cannot '
                          f'bank more — use one. {best["out"]["name"]} → '
                          f'{best["in_"]["name"]} ({best["gain"]:+.1f}).')
@@ -1132,6 +1166,7 @@ def main():
                 P.append(f'Transfers: HOLD (best is only {pitch["xi_gain"]:+.1f} on the pitch)')
             else:
                 action_kind = 'transfer'
+                action_moves = [(pitch['out']['id'], pitch['in_']['id'])]
                 L.append(f'**Recommended:** {pitch["out"]["name"]} → {pitch["in_"]["name"]}, '
                          f'{pitch["xi_gain"]:+.1f} on the pitch over the window with a free '
                          f'transfer ({pitch["gain"]:+.1f} with auto-sub cover).')
@@ -1171,6 +1206,7 @@ def main():
                              'authoritative pre-season decision.')
                 else:
                     action_kind = 'transfer'
+                    action_moves = [(o1['id'], n1['id']), (o2['id'], n2['id'])]
                     pair_names = (f'{o1["name"]}+{o2["name"]} → '
                                   f'{n1["name"]}+{n2["name"]}')
                     recommendation = (
@@ -1290,6 +1326,12 @@ def main():
                                 J['plan']['this_week_sim_error'] = str(ex)
                     if worth_it and unlimited and free_source == 'exact static build':
                         action_kind = 'rebuild'
+                        w = free['weeks'][0]
+                        action_moves = []
+                        for pos in POS_ORDER:
+                            action_moves.extend(zip(
+                                [o for o in w['out'] if players[o]['pos'] == pos],
+                                [i for i in w['in'] if players[i]['pos'] == pos]))
                         recommendation = (
                             '**Recommended:** use the free pre-GW1 rebuild shown in '
                             f'the plan below ({diff:+.1f} versus holding/re-planning). '
@@ -1308,6 +1350,7 @@ def main():
                             incoming = [i for i in w['in'] if players[i]['pos'] == pos]
                             outgoing = [o for o in w['out'] if players[o]['pos'] == pos]
                             paired.extend(zip(outgoing, incoming))
+                        action_moves = paired
                         plan_text = ', '.join(
                             f"{players[o]['name']}→{players[i]['name']}"
                             for o, i in paired
@@ -1426,10 +1469,8 @@ def main():
                 L.append(f'_Chips unavailable: {ex}_')
                 L.append('')
 
-        J['decision'] = {
-            'kind': action_kind,
-            'instruction': J['transfers']['advice'],
-        }
+        J['decision'] = weekly_action(action_kind, action_moves, J['transfers']['advice'],
+                                      squad, players, ft, gw)
 
     # ---- price watch
     rises, falls = price_watch(boot, players, set(ids))

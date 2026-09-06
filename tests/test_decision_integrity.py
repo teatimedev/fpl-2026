@@ -19,6 +19,37 @@ from test_planner_selling_prices import pool
 
 
 class IntegrityTests(unittest.TestCase):
+    def test_hold_action_discards_rejected_moves_and_keeps_its_actual_lineup(self):
+        players, ids = pool()
+        result = weekly.weekly_action('hold', [(8, 16)], 'Hold',
+                                     [players[i] for i in ids], players, 3, 4)
+        self.assertEqual(result['moves'], [])
+        self.assertEqual(set(result['lineup']['xi'] + result['lineup']['bench']), set(ids))
+        self.assertEqual(result['ft_next'], 4)
+        self.assertEqual(result['hit_points'], 0)
+
+    def test_transfer_action_lineup_contains_new_player_and_charges_real_hit(self):
+        players, ids = pool()
+        result = weekly.weekly_action('transfer', [(8, 16)], 'Move',
+                                     [players[i] for i in ids], players, 0, 4)
+        after = result['lineup']['xi'] + result['lineup']['bench']
+        self.assertNotIn(8, after)
+        self.assertIn(16, after)
+        self.assertEqual(len(set(after)), 15)
+        self.assertIn(result['lineup']['captain'], result['lineup']['xi'])
+        self.assertEqual(result['hit_points'], 4)
+        self.assertEqual(result['ft_next'], 1)
+
+    def test_weekly_action_cap_and_preseason_free_rebuild(self):
+        players, ids = pool()
+        squad = [players[i] for i in ids]
+        hold = weekly.weekly_action('hold', [], 'Hold', squad, players, 5, 4)
+        use = weekly.weekly_action('transfer', [(8, 16)], 'Move', squad, players, 5, 4)
+        rebuild = weekly.weekly_action('rebuild', [(8, 16)], 'Build', squad, players, 15, 1)
+        self.assertEqual((hold['ft_next'], hold['ft_lost']), (5, 1))
+        self.assertEqual((use['ft_next'], use['ft_lost']), (5, 0))
+        self.assertEqual((rebuild['ft_next'], rebuild['hit_points']), (1, 0))
+
     def test_sale_rounding_and_loss(self):
         self.assertEqual(selling_value(55, 57), 56)
         self.assertEqual(selling_value(55, 56), 55)
