@@ -183,7 +183,7 @@ This release does not validate the experimental transfer threshold, turn sourced
 observations into automatic forecast changes, or claim future FPL gains. The
 remaining items above are a research backlog, not unfinished release work.
 
-Production delivery was verified for the 6 September release. Initial live-account
-QA was blocked by an upstream FPL HTTP 403; the app withheld advice as designed.
-This unresolved service dependency is recorded in `RESUME.md` and is separate
-from successful code deployment, app build and unit checks.
+Production delivery and the live GW4 checklist were verified for the 6 September
+release. Initial live-account QA encountered an upstream FPL HTTP 403; the app
+withheld advice as designed, then successfully showed the checklist when the
+feed recovered. This intermittent external dependency is recorded in `RESUME.md`.

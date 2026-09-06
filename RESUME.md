@@ -59,9 +59,13 @@ Initial production verification found an external feed problem: the live
 `{"error":"upstream 403","path":"bootstrap-static/"}`. Production request logs
 confirmed the status. The app correctly showed “Your weekly advice needs updating”
 and withheld the current action. Loading the page again reproduced the failure.
-The new page is deployed; successful live-account verification remains blocked
-while FPL refuses this request. Do not equate Vercel Ready or passing unit tests
-with a working live feed, and do not relabel the bundled snapshot as live data.
+The feed subsequently recovered: at approximately 13:40 BST, production
+successfully verified the live account and displayed the GW4 checklist (hold,
+3→4 free transfers, Haaland captain, Saka vice, unchanged XI, Foden news check).
+No proxy or forecast change was needed for recovery. The initial failure is an
+intermittent upstream dependency to retain in the handover, not an unresolved
+deployment failure. Do not equate Vercel Ready or passing unit tests with a
+working live feed, and do not relabel the bundled snapshot as live data.
 No manually dispatched cloud refresh or FPL account action was used for release QA.
 
 ## Remaining research
