@@ -50,7 +50,7 @@ FPL account changes is a separate action.
 
 ## Status
 
-The September implementation is being released together on `master`; production
+The September implementation and workflow are committed on `master`; production
 is https://fpl-2026.vercel.app/. The current operating guide is `RESUME.md`.
 The milestones below preserve what was tested at each stage, including their
 point-in-time data coverage and test counts.
@@ -182,3 +182,8 @@ separates current operations from its historical preseason handover.
 This release does not validate the experimental transfer threshold, turn sourced
 observations into automatic forecast changes, or claim future FPL gains. The
 remaining items above are a research backlog, not unfinished release work.
+
+Production delivery was verified for the 6 September release. Initial live-account
+QA was blocked by an upstream FPL HTTP 403; the app withheld advice as designed.
+This unresolved service dependency is recorded in `RESUME.md` and is separate
+from successful code deployment, app build and unit checks.

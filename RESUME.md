@@ -48,6 +48,22 @@ covered 390×844 and 1240×900 layouts, player drawer, review selection and futu
 path disclosures. Existing PuLP deprecation and app bundle-size warnings remain.
 After shipping, inspect the production deployment and rendered account state.
 
+### Production verification
+
+The 6 September release was pushed to `master` at `8754405`. Vercel deployment
+`dpl_C4kYaSwj8joBMNp7C5oXEM3RfpZY` reached Ready in production, and
+https://fpl-2026.vercel.app/ served the new GW4 application bundle.
+
+Initial production verification found an external feed problem: the live
+`/api/fpl?path=bootstrap-static%2F` request returned HTTP 403 with body
+`{"error":"upstream 403","path":"bootstrap-static/"}`. Production request logs
+confirmed the status. The app correctly showed “Your weekly advice needs updating”
+and withheld the current action. Loading the page again reproduced the failure.
+The new page is deployed; successful live-account verification remains blocked
+while FPL refuses this request. Do not equate Vercel Ready or passing unit tests
+with a working live feed, and do not relabel the bundled snapshot as live data.
+No manually dispatched cloud refresh or FPL account action was used for release QA.
+
 ## Remaining research
 
 Improve reliable dated source coverage; collect deadline-frozen forecasts and
