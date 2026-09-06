@@ -1,4 +1,67 @@
-# Where this is up to — 16 Aug 2026 (evening)
+# Current handover — 6 September 2026
+
+The September release brings the audit fixes, sourced scouting, transfer-policy
+experiments, correct displayed transfer rollover and the plain weekly checklist
+together on `master`. The production entrypoint is https://fpl-2026.vercel.app/;
+Vercel builds from root directory `app`. The reviewed implementation before the
+release documentation is commit `39f8373` on `agent/scouting-policy-review`.
+
+## What is ready
+
+- This week leads with the chosen transfers or hold, captain/vice, starting
+  team, bench order and deadline checks. Analysis and future scenarios are optional.
+- Recommendations require matching live deadline, squad, account, bank, free
+  transfers, prices, news and forecast identity. Selected moves include a lineup
+  after those moves; rejected diagnostic moves never become an instruction.
+- The transfer ledger respects the five-transfer cap. A hold uses the path that
+  actually holds this week. Three FT in GW4 become four in GW5 and five in GW6
+  if no moves are made. Waiting through GW6 forfeits the next weekly allocation.
+- Scouting uses direct DeepSeek V4 Flash with maximum reasoning and response
+  allowance, constrained by call and cost budgets. The latest stored collection
+  has 34 accepted observations, seven owned players covered, and both named
+  replacements covered. Eleven source indexes still lack usable recent articles.
+- Submitted picks and deadline forecasts are separate archives. Haaland's GW3
+  Triple Captain is historical submitted state, not a recommendation to use it again.
+- Policy alternatives, P60 and attacking/minutes stress tests are measurable
+  experiments. No improved realised FPL points have yet been established.
+
+## Operations
+
+The Actions `Refresh` workflow runs from `master`; its hourly gate chooses full
+rebuilds and news scans. Full rebuilds include `--chips --scout`. Repository
+variable `FPL_ENTRY_ID` is 3415101. `DEEPSEEK_API_KEY` and `NTFY_TOPIC` are configured
+as Actions secrets. The local DeepSeek key is in ignored `.env.local`; update
+both places when rotating it. Never copy credentials into documentation or bundles.
+
+Use [README.md](README.md) for local refresh and test commands, and
+[SCOUTING.md](SCOUTING.md) for bounded extraction and policy experiments.
+Manual cloud dispatch can send the configured phone notification. Shipping code
+does not require dispatching that workflow or submitting any FPL account actions.
+
+The bundled GW4 digest was generated on 6 September using the morning numerical
+forecast. Its chip advice is explicitly unavailable because that local digest
+did not run `--chips`; the next full scheduled rebuild is configured to evaluate
+chips. Export time must not be used to imply fresh numerical forecasts.
+
+Release checks: 265 Python tests, 13 app tests, lint and app build. Preview QA
+covered 390×844 and 1240×900 layouts, player drawer, review selection and future
+path disclosures. Existing PuLP deprecation and app bundle-size warnings remain.
+After shipping, inspect the production deployment and rendered account state.
+
+## Remaining research
+
+Improve reliable dated source coverage; collect deadline-frozen forecasts and
+outcomes; test threshold and minutes/rate changes on unseen deadlines. Current
+two-point-per-move uncertainty buffers, scouting sensitivities and price timing
+are assumptions, not established advantages. See
+[IMPLEMENTATION-PLAN.md](IMPLEMENTATION-PLAN.md) for the research backlog.
+
+---
+
+# Historical handover — 16 August 2026
+
+The remaining text is the original preseason snapshot. Its dates, squad, scores,
+setup tasks and estimates are historical; use the current handover above.
 
 **Since the morning entry below:** chips are modelled (`v2/chips.py`, two copies
 per chip from the API's own windows, valued from a coarse full-season projection

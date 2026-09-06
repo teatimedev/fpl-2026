@@ -1,205 +1,106 @@
 # FPL 2026/27
 
-Research, projections and an interactive squad builder for the 2026/27 Fantasy
-Premier League season. **GW1 deadline: Fri 21 Aug 2026, 18:30 BST.**
+A weekly FPL decision app with player projections, legal squad and transfer
+planning, sourced scouting, and archived forecasts that can be checked against
+actual results.
 
-- **[RESEARCH.md](RESEARCH.md)** — the written brief: rule changes, ten new
-  managers, the transfer window, pre-season form, injuries, penalty takers,
-  opening fixtures and the traps.
-- **[SQUADS.md](SQUADS.md)** — three costed 15-player squads with reasoning.
-- **`app/`** — the interactive builder.
+**Production:** [fpl-2026.vercel.app](https://fpl-2026.vercel.app/)
 
-## Run the app
+## Using the app
 
-```bash
+Start with **This week**. It gives four plain instructions: transfer or hold,
+captain and vice, starting team, and checks before the deadline. The pitch and
+bench order show the recommended team. Transfer instructions include the chosen
+moves, any points cost and next week's free-transfer balance. A hold applies to
+this week; future plans are conditional scenarios.
+
+Expand **Why this recommendation?** for the numbers, **Review a player: keep or
+sell?** for replacements and evidence, or **Club news and sources** for the
+collection record. My squad, Season and Scorecard provide the other views.
+
+Public FPL data shows the last published lineup, not unpublished changes made
+since a deadline. Weekly instructions are withheld when the deadline, forecast,
+account, prices or squad news do not match. Missing chip advice is stated.
+
+## Run locally
+
+```sh
 cd app
-npm install
-npm run dev
+npm ci
+npm run dev -- --host 127.0.0.1
 ```
 
-## Rebuild the data
+Open http://127.0.0.1:5173/. The app uses the committed data bundle plus a live
+FPL proxy. Node 24 matches the production runtime. Python is only needed to
+rebuild projections or run model tests:
 
-Prices are locked by FPL until the GW1 deadline, so the dataset is stable. To
-refresh anyway (or after the deadline, when prices start moving daily):
-
-```bash
-python3 -m venv .venv && .venv/bin/pip install pulp highspy
-
-curl -s https://fantasy.premierleague.com/api/bootstrap-static/ -o data/bootstrap.json
-curl -s https://fantasy.premierleague.com/api/fixtures/         -o data/fixtures.json
-
-.venv/bin/python project.py          # projections  -> data/projections.{csv,json}
-.venv/bin/python optimise.py --json  # squads       -> data/squads.json
-.venv/bin/python validate.py         # independent rules check
-.venv/bin/python export_app_data.py  # bundle       -> app/src/data/fpl.json
+```sh
+python3 -m venv .venv
+.venv/bin/pip install numpy scipy pulp highspy pytest
+.venv/bin/python -m pytest tests/ -q
 ```
 
-## How the projection model works
+From `app/`, run `npm test`, `npm run lint` and `npm run build`. Use `tests/`
+explicitly for Python: the older `v2/predict/volume_test.py` research script
+requires ignored local artifacts and is not part of the unit suite.
 
-`project.py` estimates points per gameweek over GW1–6 for all 572 players. The
-core idea is that a player's scoring rate is not one number — it is three, and
-they respond to different things.
+## Refreshing advice
 
-1. **Decompose last season's rate** into clean-sheet points, DefCon points and
-   an attacking residual (goals, assists, bonus, saves, appearance).
-   - DefCon is modelled properly: the API's `defensive_contribution` is a raw
-     count of qualifying actions, so expected DefCon points are
-     `2 × P(Poisson(rate) ≥ threshold)`, with a threshold of 10 for defenders
-     and 12 for midfielders and forwards.
-2. **Re-project each component** against the new season:
-   - clean sheets scale with the opening fixtures and, for players who changed
-     club, the new club's actual clean-sheet rate;
-   - **DefCon scales inversely with team strength** — join a side that dominates
-     possession and the qualifying actions dry up. This is why Elliot Anderson's
-     move to Man City is a downgrade to his biggest scoring source;
-   - attacking output scales with the fixtures and the new club's attacking
-     strength.
-3. **Players who stayed put get no team-strength multiplier.** Their historical
-   rate already embeds their club's quality — applying it again would
-   double-count, which at one point had Gabriel projected at 8.6 points a game.
-4. **Players with no Premier League history** fall back to a price-implied
-   prior fitted per position, discounted 12% for adaptation risk.
-5. **Minutes** split into two questions, because they behave differently:
-   - *how long he plays when he starts* — stable, 85–93 minutes for nearly every
-     first-choice player;
-   - *how often he starts* — **not** stable, and copying last season's start
-     count forward serves an injury-hit season twice. The observed start rate is
-     shrunk towards a club/position pecking-order prior, weighted by how much of
-     it was actually observed. Availability flags and `overlay.py` apply on top.
+The production workflow is [.github/workflows/weekly.yml](.github/workflows/weekly.yml).
+It scans news, refreshes the numerical model when due, grades finished weeks,
+builds the weekly decision and chip advice, runs bounded scouting, freezes the
+deadline evidence, exports the app bundle and commits the results to `master`.
+The hourly gate selects useful deadline/news windows; it does not rebuild every
+hour. Existing notification steps run separately from the deployment.
 
-### Known limitation
+For a local full model and weekly refresh, with no phone notification:
 
-Individual player projections do not include an armband bonus. Squad scoring
-does: the optimiser, weekly evaluator and simulation select a captain in every
-gameweek, then fall back only to the vice-captain if the captain does not play.
-
-### Changelog
-
-- **25 Aug 2026** — in-season learning plan implemented
-  (`RESEARCH-INSEASON-LEARNING.md` §0): zero-minute non-appearances reach the
-  minutes model; per-gameweek rows persist (`gw_stat`); a recency-weighted,
-  availability-conditioned minutes rule runs as a graded shadow column; the
-  calibration multipliers are frozen in `v2/calibration.json`; a per-gameweek
-  retrospective (`v2/retro.py`) classifies why each player diverged and the
-  digest renders it without touching a transfer number; promoted / new-manager
-  adjustments decay with matches; scorecard grades level drift and FPL's
-  `ep_next`. Written but not yet executed in the authoring session.
-- **23 Aug 2026** — `calibrate()` now anchors outfield multipliers on the last
-  two completed seasons (keepers stay single-season), per the season-totals
-  hold-out: DEF levels −9%, MID −5%, FWD −2% vs the old single-season fit.
-- **6 Aug 2026** — fixed the minutes model (see point 5). Previously it used
-  `last season's minutes / 38`, which had Isak — Liverpool's first-choice striker
-  and No.1 penalty taker — projected at 19 minutes a game off the back of 8
-  starts at 86.8 minutes each. Isak's GW1–6 projection went 6.6 → 20.8, Estêvão
-  8.1 → 11.7, Doku 19.4 → 23.4. Durable players fell slightly as an old 1.05
-  inflation factor was removed (Bruno Fernandes 41.2 → 39.0).
-
-`overlay.py` holds durable role and rate changes. Short-lived deadline news is
-kept separately in `v2/availability.json`: every entry has an explicit
-gameweek range, source and confidence, plus separate start/cameo probabilities
-and minutes. This prevents a predicted lineup from silently affecting six
-weeks of projections.
-
-**These are estimates, not forecasts.** They are most useful for comparing
-players, least useful as absolute point predictions.
-
-## Optimiser
-
-`optimise.py` solves an integer program (HiGHS via PuLP) subject to the real
-constraints: £100.0m, 2/5/5/3, max 3 per club, and a legal XI. Its linear solver
-selects the XI and captain separately in every gameweek, and iteratively refits
-per-gameweek bench activation to the selected 15 instead of
-using the old flat 12% bench weight; final squads are then scored with
-formation- and bench-order-aware probabilities through the same
-`v2/squad_evaluator.py` used by weekly transfers and the simulator. A bounded
-same-position local search then rejects any legal one-swap improvement under
-that full score, covering interactions the linear bench proxy cannot encode.
-
-`validate.py` re-checks every squad against the rules using the raw API prices
-and positions, deliberately without importing the optimiser, so a bug in the
-solver cannot hide behind a bug in its own validation.
-
-## Transfer planning
-
-```bash
-.venv/bin/python plan.py
+```sh
+.venv/bin/python v2/weekly.py --full --plan --chips --scout --snapshot --json --team 3415101
+.venv/bin/python export_app_data.py
 ```
 
-Solves GW1–6 as a single multi-period integer program: which 15 to own in every
-gameweek, the XI, the captain, and when to transfer — subject to the squad rules
-holding *in every week* plus FPL's free-transfer accounting (one a week, bankable
-to five, −4 per extra). Uses the per-gameweek projections from `project_by_gw()`
-rather than a horizon average, since that week-to-week swing is the only thing a
-transfer plan can trade on.
+`--full` fetches player histories needed by a fresh database. Use `--no-refresh`
+instead only when the local database and numerical projections are already
+current. Exporting alone does not refresh a forecast. The full scoring and news
+pipeline, including `scorecard.py` and `retro.py`, is documented in the workflow
+and [v2/README.md](v2/README.md).
 
-Assumes static prices and ignores FPL's sell-price rule. Plans against expected
-values, so it cannot anticipate injuries — which is where most of a transfer's
-real value lies. Its auto-sub term is a selected-squad linear approximation;
-the chosen weeks are re-scored exactly, but the displayed path is not guaranteed
-to be the global optimum under that nonlinear score. Read its output as a floor.
+Scouting uses `DEEPSEEK_API_KEY` from an ignored root `.env.local` or the process
+environment. GitHub Actions uses the secret of the same name. The app bundle
+contains evidence, never the key. See [SCOUTING.md](SCOUTING.md) for configuration,
+bounded costs, source requirements and experiments. A manual cloud workflow run
+can send an existing ntfy notification; local commands above do not.
 
-## Simulation
+## How the pieces fit
 
-```bash
-.venv/bin/python simulate.py --sims 40000
-```
+| Area | Main files |
+|---|---|
+| Team and player forecasts | `v2/teams_model.py`, `v2/season_view.py`, `v2/player_model.py` |
+| Shared legal lineup scoring | `v2/squad_evaluator.py` |
+| Weekly action and transfer balance | `v2/weekly.py`, `v2/planner.py`, `v2/decision_state.py` |
+| Sourced observations | `v2/scouting.py`, `v2/scouting_collect.py` |
+| Transfer comparisons and experiments | `v2/transfer_review.py`, `v2/policy_lab.py` |
+| Frozen forecasts and actual picks | `data/history/forecasts/`, `data/history/submitted/` |
+| Outcome grading | `v2/scorecard.py`, `v2/decision_replay.py` |
+| Weekly interface and freshness checks | `app/src/WeeklyBrief.tsx`, `app/src/weeklyActions.ts`, `app/src/coherence.ts` |
 
-A projection gives one number; the decision needs the distribution. `simulate.py`
-runs 40,000 Monte Carlo seasons of GW1–6 and models three things a projected XI
-total cannot:
+The current system uses v2 forecasts. The [v1 overview](README-v1.md),
+[preseason research](RESEARCH.md) and [initial squads](SQUADS.md) are historical
+references, not current recommendations.
 
-- **Team-level correlation.** Goals for and against are drawn per club per
-  gameweek and shared by every player at that club, so three Arsenal defenders
-  blank together. Squads concentrated in a few clubs are correctly shown as
-  riskier than their projection implies.
-- **Auto-subs**, with FPL's real rules — formation constraints, bench order, a
-  separate reserve goalkeeper, and each bench player used once.
-- **Captaincy**, falling only to the vice-captain when the captain doesn't play.
+## Deployment and handover
 
-The XI, bench order, captain and vice are reselected for every gameweek rather
-than being frozen from a six-week average. Player outcomes are also shared
-between compared squads, so head-to-head probabilities are paired comparisons.
+Vercel deploys `master` to production with **root directory `app`**; other branches
+produce previews. The Python refresh runs on GitHub Actions, not Vercel. Run the
+tests and app build before pushing; verify the actual production page, linked
+team, disclosures and player drawer after deployment.
 
-The simulation's attacking rates are calibrated per player so its expected mean
-matches the projection model. Raw xG and xA run light on realised attacking
-returns while defenders come out roughly right — left uncorrected, that would
-have biased the whole comparison towards defensive squads. The projection model
-is anchored on last season's actual points, so it is the better estimate of the
-*mean*; the simulation's job is the *shape*.
+[RESUME.md](RESUME.md) records current operating state and remaining work.
+[IMPLEMENTATION-PLAN.md](IMPLEMENTATION-PLAN.md) records the September release,
+experiments and validation. [app/README.md](app/README.md) covers the frontend.
 
-Two bugs found and fixed while building it, both of which had inverted the
-result: auto-subs let one bench player cover every blank in the XI
-simultaneously, and the "template" benchmark was built greedily from the
-most-owned players without a budget constraint, producing a **£111.5m** squad
-that beat everything because it had 11.5% more money to spend.
-
-## Notes
-
-- PuLP ships an x86-only CBC binary that will not run on Apple Silicon, hence
-  HiGHS.
-- The FPL API needs no authentication.
-
----
-
-## v2 — the professional rebuild
-
-Everything above is v1. `v2/` replaces the hand-tuned heuristics with fitted
-models validated against outside benchmarks: a Dixon-Coles team strength model
-checked against Pinnacle's closing odds, shrinkage weights set by measured
-year-over-year stability, and a hold-out backtest. See **[v2/README.md](v2/README.md)**.
-
-Weekly use: `.venv/bin/python v2/weekly.py --team <your FPL entry id> --plan`
-
-The optimiser, validator and web app now run on v2 projections
-(`v2/to_csv.py` writes them into the v1 schema). v1's projections are kept at
-`data/projections_v1.csv` for comparison.
-
-**In season (from 16 Aug 2026):** the projection window rolls (next gameweek plus
-five, `v2/gwclock.py`); bookmaker odds are blended into the team layer when
-posted (`teams_model.market_view`); `weekly.py` grades transfers by the lift to
-your best XI, searches two-move combinations net of hits, tells you when to hold,
-diffs your set lineup against the model's, and with `--plan` solves the six-week
-transfer path (`v2/planner.py`). A GitHub Actions workflow refreshes at T-24h and
-T-2h before every deadline (plus Thursdays), pushes a summary to your phone via
-ntfy, archives each gameweek's projections and grades them afterwards
-(`v2/scorecard.py`, shown in the app's Scorecard tab). RESUME.md has the details.
+The model estimates outcomes. Sourced AI observations and more simulations do
+not establish better FPL performance. The current transfer threshold, price
+timing and scouting sensitivity assumptions still need independent deadline
+results; experimental P60 and policy variants remain in shadow.

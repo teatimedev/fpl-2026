@@ -50,6 +50,11 @@ FPL account changes is a separate action.
 
 ## Status
 
+The September implementation is being released together on `master`; production
+is https://fpl-2026.vercel.app/. The current operating guide is `RESUME.md`.
+The milestones below preserve what was tested at each stage, including their
+point-in-time data coverage and test counts.
+
 First implementation completed locally on 6 September 2026. Existing audit fixes
 and research artifacts are retained. The refreshed GW4 forecast, transfer review,
 scouting observations and deadline archive are connected to the app.
@@ -64,7 +69,8 @@ Implemented and exercised:
 - DeepSeek V4 Flash through the direct DeepSeek API, thinking enabled,
   `reasoning_effort=max`, `max_tokens=393216`. Live maximum-setting calls succeeded.
   The supplied key is stored locally outside version control and configured as
-  the repository Actions secret. The edited workflow has not been published.
+  the repository Actions secret. The workflow was initially preview-only and is
+  included in the production release.
 - Validated source quotations, date/identity checks, cache and cost limits,
   contradictions, explicit coverage gaps, and immutable scouting run records.
 - Shadow P60 predictions and frozen policy baselines for future scoring; actual
@@ -144,8 +150,8 @@ Follow-up validation: 262 Python tests, seven app tests, lint and build pass.
 
 The local preview is http://127.0.0.1:5173/. The hosted branch preview is
 https://fpl-2026-git-agent-scouting-p-a951e9-jordanrippon2020s-projects.vercel.app.
-The production site and its scheduled workflow still use master. No FPL account
-selections or transfers have been submitted.
+The production site and its scheduled workflow use `master`, including this
+release. No FPL account selections or transfers have been submitted.
 
 ### Plain weekly instructions (6 September follow-up)
 
@@ -164,3 +170,15 @@ advice is disclosed instead of being guessed. This changes clarity, not the
 transfer threshold or forecast assumptions.
 
 Validation: 265 Python tests and 13 app checks, lint and production build pass.
+
+## Release closeout
+
+All audit artifacts, reproducible experiments, source/scouting records, deadline
+archives, implementation and tests are committed. Credentials, caches, databases
+and regenerable build output remain ignored. The root and app READMEs now explain
+the live v2 app; the old overview is retained in `README-v1.md`, and `RESUME.md`
+separates current operations from its historical preseason handover.
+
+This release does not validate the experimental transfer threshold, turn sourced
+observations into automatic forecast changes, or claim future FPL gains. The
+remaining items above are a research backlog, not unfinished release work.
