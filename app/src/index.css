@@ -394,6 +394,13 @@ tbody tr:hover { background: rgba(255, 158, 27, 0.055); }
 tbody tr.picked { background: rgba(74, 222, 128, 0.07); }
 tbody tr.picked:hover { background: rgba(74, 222, 128, 0.11); }
 
+/* Small decision tables must keep the gain visible beside its assumption on
+   phones. Only the wider match-stat comparison needs horizontal scrolling. */
+.decision-review table { min-width: 0; }
+.decision-review th { position: static; white-space: normal; cursor: default; }
+.decision-review td.l { white-space: normal; }
+.decision-review .review-matches { min-width: 540px; }
+
 .pname { display: flex; align-items: center; gap: 8px; }
 .pname .bar { width: 3px; height: 21px; border-radius: 2px; flex: none; }
 .pname .txt { min-width: 0; }

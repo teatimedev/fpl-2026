@@ -83,7 +83,8 @@ visible in source health. The AI extracts written reports and has not watched vi
 
 ## Second milestone: sourced transfer review
 
-Completed locally on 6 September 2026 and prepared for a Vercel preview:
+Completed on 6 September 2026 and published on the preview branch
+`agent/scouting-policy-review`:
 
 - Expanded collection now produces 34 validated observations covering seven of
   the 15 holdings, plus both named replacements. Publication headers, embedded
@@ -111,7 +112,10 @@ commands are in `research/hold-sell-cases-2026-09-06.md` and `SCOUTING.md`.
 
 Final checks for this milestone: 260 Python tests and six app tests pass; app
 lint and production build pass. A credential scan found no supplied API key in
-the 91 review files. The existing PuLP deprecation and bundle-size warnings remain.
+the staged review files. Use `python -m pytest tests/ -q` in a fresh checkout:
+the older `v2/predict/volume_test.py` research script requires ignored local data
+and is not part of the unit suite. Existing PuLP deprecation and bundle-size
+warnings remain.
 
 ## Next milestones
 
@@ -129,6 +133,7 @@ the 91 review files. The existing PuLP deprecation and bundle-size warnings rema
    coherent team/player attacking shares, joint lineup probabilities and measured
    free-transfer option value.
 
-The local preview is http://127.0.0.1:5173/. The reviewed build is being published
-to a separate preview branch. No FPL account selections or transfers have been
-submitted.
+The local preview is http://127.0.0.1:5173/. The hosted branch preview is
+https://fpl-2026-git-agent-scouting-p-a951e9-jordanrippon2020s-projects.vercel.app.
+The production site and its scheduled workflow still use master. No FPL account
+selections or transfers have been submitted.

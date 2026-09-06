@@ -24,7 +24,7 @@ export function DecisionReview({ D, gw, ids, current, openPlayer }: {
     ? D.policy_lab : null
   const casePolicy = lab?.cases.find(c => c.outgoing === selected?.player_id && c.incoming === selected?.replacement)
 
-  return <section className="panel" style={{ marginTop: 14 }}>
+  return <section className="panel decision-review" style={{ marginTop: 14 }}>
     <div className="panel-hd"><h2>Hold or sell?</h2><span className="sub">Evidence + alternatives</span></div>
     <div style={{ padding: '0 14px 16px', lineHeight: 1.6 }}>
       <p style={{ marginTop: 0 }}>Every holding has to earn its place. Compare the strongest affordable replacement, then test the concern behind selling.</p>
@@ -63,7 +63,7 @@ export function DecisionReview({ D, gw, ids, current, openPlayer }: {
           </details>}
           {recent.length > 0 && <>
             <h3>Recent match evidence</h3>
-            <div className="tbl-scroll"><table><thead><tr><th className="l">Player</th><th>Games</th><th>Minutes</th><th>Goals</th><th>xG</th><th>xA</th><th>Points</th></tr></thead>
+            <div className="tbl-scroll"><table className="review-matches"><thead><tr><th className="l">Player</th><th>Games</th><th>Minutes</th><th>Goals</th><th>xG</th><th>xA</th><th>Points</th></tr></thead>
               <tbody>{recent.map(p => <tr key={p.id}><td className="l">{p.name}</td><td>{p.matches.length}</td><td>{p.totals.minutes}</td><td>{p.totals.goals}</td><td>{p.totals.xg.toFixed(2)}</td><td>{p.totals.xa.toFixed(2)}</td><td>{p.totals.points}</td></tr>)}</tbody>
             </table></div>
             <p className="hint">{cases?.note}</p>
