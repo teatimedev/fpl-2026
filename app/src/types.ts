@@ -189,6 +189,10 @@ export interface WeeklySquad {
   entry_id?: number
   changes?: string[]
   lineup?: WeeklyLineup | null
+  sell_prices?: Record<string, number>
+  selling_prices_unknown?: number[]
+  account_basis?: string
+  selling_price_basis?: string
 }
 
 export interface WeeklyModel {
@@ -300,6 +304,9 @@ export interface Weekly {
   deadline: string
   horizon: number
   generated: string
+  forecast_id?: string
+  transfer_review?: TransferReview
+  case_studies?: CaseStudies | null
   squad: WeeklySquad
   model: WeeklyModel
   /** markdown-ish lines with a **bold** lead */
@@ -433,7 +440,7 @@ export interface NewsData {
 
 export interface Data {
   /** The window rolls: start_gw is the next gameweek, horizon the last one modelled. */
-  meta: { horizon: number; start_gw?: number; deadline: string; budget: number; generated: string }
+  meta: { horizon: number; start_gw?: number; deadline: string; budget: number; generated: string; forecast_id?: string }
   teams: Record<string, Team>
   schedule: Record<string, (Fixture | null)[]>
   players: Player[]
@@ -445,6 +452,48 @@ export interface Data {
   movers?: Movers | null
   ticker?: Ticker | null
   news?: NewsData | null
+  scouting?: Scouting | null
+  policy_lab?: PolicyLab | null
+}
+
+export interface ScoutClaim {
+  id: string; player_id: number; player: string; mechanism: string; direction: string
+  observation: string; quote: string; scope: string; publisher: string; url: string
+  published_at: string; observed_at: string; expires_at: string; gw: number
+}
+export interface Scouting {
+  gw: number; generated: string; status: string; model: string; policy: string
+  claims: ScoutClaim[]
+  players: { player_id: number; claims: string[]; sources: number; conflicts: string[]; coverage: string }[]
+  calls: number; cached: number
+  sources?: {source_id: string; publisher?: string; status: string; articles: number}[]
+}
+export interface TransferReview {
+  gw: number; horizon: number; method: string; caveat: string; threshold_status: string
+  players: {
+    player_id: number; replacement: number | null; net?: number; now_net?: number
+    sell_price?: number | null; buy_price?: number
+    attack_flip_tested?: number | null
+    scenarios: { label: string; net: number; attack_drop: number; start_drop: number }[]
+    paired_scenarios?: { outgoing_drop: number; incoming_drop: number; net: number }[]
+  }[]
+}
+
+export interface CaseStudies {
+  gw: number; forecast_id: string; generated: string; note: string
+  players: { id: number; name: string; source: string
+    matches: {gw: number; minutes: number; starts: number; points: number; goals: number; assists: number; xg: number; xa: number; penalties_missed: number}[]
+    totals: {minutes: number; starts: number; points: number; goals: number; assists: number; xg: number; xa: number; penalties_missed: number}
+  }[]
+}
+export interface PolicyLab {
+  gw: number; horizon: number; forecast_id: string; generated: string; deadline: string
+  act_vs_wait: number; moves: number; extra_ft_value: number; note: string; limitation: string
+  account: {ids: number[]; bank: number; ft: number}
+  thresholds: {buffer: number; required: number; decision: string}[]
+  cases: {outgoing: number; incoming: number; act_vs_wait: number
+    replanned_scenarios?: {outgoing_drop: number; incoming_drop: number; status: string; act_vs_wait?: number}[]
+  }[]
 }
 
 export const SQUAD_SHAPE: Record<Pos, number> = { GKP: 2, DEF: 5, MID: 5, FWD: 3 }

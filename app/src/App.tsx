@@ -11,6 +11,10 @@ import { useLinkedTeam } from './useLinkedTeam'
 
 const D = raw as unknown as Data
 const byId = new Map(D.players.map(p => [p.id, p]))
+const builtAt = new Date(D.meta.generated.replace(' ', 'T').replace(/ UTC$/, 'Z'))
+const builtLabel = Number.isNaN(builtAt.getTime()) ? 'unknown' : builtAt.toLocaleString('en-GB', {
+  day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+})
 
 type Tab = 'week' | 'season' | 'squad' | 'score'
 
@@ -78,7 +82,7 @@ export default function App() {
   const openPlayer = useCallback((id: number) => setDrawerId(id), [])
   const closeDrawer = useCallback(() => setDrawerId(null), [])
   const drawerPlayer = drawerId != null ? byId.get(drawerId) ?? null : null
-  const drawerGw = D.weekly?.gw ?? D.meta.start_gw ?? 1
+  const drawerGw = linked.live?.gw ?? D.weekly?.gw ?? D.meta.start_gw ?? 1
 
   const add = (p: Player) => {
     if (!blockReason(p, state)) { setPresetXI(null); setPicks(s => [...s, p]) }
@@ -94,7 +98,7 @@ export default function App() {
   }
   const clear = () => { setPresetXI(null); setPicks([]) }
 
-  const deadline = new Date(D.meta.deadline).getTime()
+  const deadline = new Date(linked.live?.deadline ?? D.meta.deadline).getTime()
   const left = Math.max(0, deadline - now)
   const dd = Math.floor(left / 86400000)
   const hh = Math.floor(left / 3600000) % 24
@@ -109,7 +113,7 @@ export default function App() {
       <header className="topbar">
         <h1>FPL <em>26/27</em></h1>
         <span className="tag">
-          live prices · model rebuilt {D.meta.generated}
+          {linked.live ? 'live' : 'snapshot'} prices · model rebuilt {builtLabel}
         </span>
         <div className="seg tabs">
           <button aria-pressed={tab === 'week'} onClick={() => go('week')}>This week</button>
@@ -118,7 +122,7 @@ export default function App() {
           <button aria-pressed={tab === 'score'} onClick={() => go('score')}>Scorecard</button>
         </div>
         <div className="countdown">
-          <span className="k">Gameweek {D.meta.start_gw ?? 1} deadline</span>
+          <span className="k">Gameweek {linked.live?.gw ?? D.meta.start_gw ?? 1} deadline</span>
           <span className="v mono">
             {left > 0 ? `${dd}d ${String(hh).padStart(2, '0')}h ${String(mm).padStart(2, '0')}m ${String(ss).padStart(2, '0')}s` : 'Deadline passed'}
           </span>
@@ -149,7 +153,7 @@ export default function App() {
 
       <footer className="foot">
         <details>
-          <summary>How this works · model last built {D.meta.generated}</summary>
+          <summary>How this works · model last built {builtLabel}</summary>
           <p>
             Prices, injuries and your squad are read live from the official Fantasy
             Premier League API each time you open this. Projections are rebuilt about

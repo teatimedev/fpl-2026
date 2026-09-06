@@ -1,5 +1,6 @@
 """Bundle everything the web app needs into one JSON file."""
 import json, csv, os
+from pathlib import Path
 from datetime import datetime, timezone
 
 CLUB_COLOURS = {
@@ -104,7 +105,8 @@ elif news['run']:
 
 out = {
     'meta': {**proj['meta'],
-             'generated': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')},
+             'generated': proj['meta'].get('generated', ''),
+             'exported': datetime.now(timezone.utc).isoformat()},
     'teams': teams,
     'schedule': proj['schedule'],
     'players': players,
@@ -115,12 +117,17 @@ out = {
     'movers': movers,
     'ticker': ticker,
     'news': news,
+    'scouting': load_json('data/scouting/latest.json'),
+    'policy_lab': load_json('data/policy_lab.json'),
     # optimise.py reads its pool from CSV, so ids arrive as strings -- coerce them
     # back to int so they match the player ids the app indexes on.
     'squads': [{'label': s['label'], 'cost': s['cost'], 'xi_proj': s['xi_proj'],
                 'picks': [{'id': int(p['id']), 'starting': p['starting']}
                           for p in s['squad']]} for s in squads],
 }
-json.dump(out, open('app/src/data/fpl.json', 'w'), separators=(',', ':'))
+target = Path('app/src/data/fpl.json')
+temporary = target.with_suffix('.json.tmp')
+temporary.write_text(json.dumps(out, separators=(',', ':'), allow_nan=False))
+temporary.replace(target)
 print('players:', len(players), '| squads:', len(out['squads']),
       '| teams:', len(teams))

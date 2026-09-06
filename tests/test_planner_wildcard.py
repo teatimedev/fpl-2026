@@ -67,8 +67,8 @@ class WildcardPlannerTests(unittest.TestCase):
         self.assertEqual(wc['hits'], 0)
         # The seeded bank enters W untouched ...
         self.assertEqual(wc['ft'], 1)
-        # ... and leaves as preserved bank plus one, capped at MAX_BANK.
-        self.assertEqual(nxt['ft'], min(MAX_BANK, wc['ft'] + 1))
+        # ... and leaves unchanged: no extra FT is earned on a wildcard.
+        self.assertEqual(nxt['ft'], wc['ft'])
 
     def test_wildcard_mid_window_preserves_bank_into_next_week(self):
         players, owned = make_pool()
@@ -79,7 +79,7 @@ class WildcardPlannerTests(unittest.TestCase):
         self.assertEqual(wc['hits'], 0)
         self.assertGreater(len(wc['out']), 5)
         self.assertEqual(res['weeks'][i + 1]['ft'],
-                         min(MAX_BANK, wc['ft'] + 1))
+                         wc['ft'])
 
     def test_wildcard_conflicts_with_preseason_window(self):
         # GW1's unlimited-free pre-season rule and wildcard accounting would

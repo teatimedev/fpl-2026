@@ -195,7 +195,29 @@ def load_retro(gw):
 
 
 # ------------------------------------------------------------------ grade
-def grade(snap, act, prev_retro=None):
+def submitted_for(gw, entry_id, checked=False):
+    """Read the actual picks for THIS deadline, never last week's lineup."""
+    if not entry_id:
+        return None
+    path = HISTORY / 'submitted' / str(entry_id) / f'gw{gw}.json'
+    if path.exists():
+        cached = json.loads(path.read_text())
+        if cached.get('checked'):
+            return cached
+    try:
+        picks = api(f'entry/{entry_id}/event/{gw}/picks/')
+    except (OSError, ValueError):
+        return None
+    if len(picks.get('picks', [])) != 15:
+        return None
+    result = dict(picks, gw=gw, entry_id=entry_id, checked=checked,
+                  fetched=datetime.now(timezone.utc).isoformat())
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(result, separators=(',', ':')))
+    return result
+
+
+def grade(snap, act, prev_retro=None, submitted=None):
     pts = act['points']
     stats = act.get('stats') or {}
     name = {p['id']: p['name'] for p in snap['players']}
@@ -283,6 +305,12 @@ def grade(snap, act, prev_retro=None):
             minutes_mae=round(minute_abs / n_avail, 2),
             minutes_bias=round(minute_bias / n_avail, 2),
         )
+        p60_rows = [(p, a) for p, a in availability if p.get('p60_shadow') is not None
+                    and p.get('fixture_count') == 1]
+        if p60_rows:
+            g['availability']['p60_shadow_n'] = len(p60_rows)
+            g['availability']['p60_shadow_brier'] = brier([(p['p60_shadow'], int(a[1] >= 60)) for p, a in p60_rows])
+            g['availability']['p60_start_proxy_brier'] = brier([(p['p_start'], int(a[1] >= 60)) for p, a in p60_rows])
         baseline = [(player, actual) for player, actual in availability
                     if player.get('baseline_start') is not None]
         if baseline:
@@ -385,7 +413,20 @@ def grade(snap, act, prev_retro=None):
 
     # captaincy and XI, if a squad was known at snapshot time
     squad = snap.get('squad') or []
-    model, yours = snap.get('model') or {}, snap.get('yours') or {}
+    model = snap.get('model') or {}
+    # Legacy snapshots called an earlier public lineup 'yours'. Do not credit
+    # that as this deadline's submission when official picks cannot be fetched.
+    yours = {}
+    if submitted and submitted.get('gw') == snap['gw']:
+        ps = submitted['picks']
+        cap = next((p for p in ps if p.get('is_captain')), None)
+        yours = dict(xi=[p['element'] for p in ps if p['position'] <= 11],
+                     captain=cap['element'] if cap else None)
+        g['submitted'] = dict(entry_id=submitted['entry_id'], chip=submitted.get('active_chip'),
+                              points=submitted['entry_history']['points'],
+                              transfer_cost=submitted['entry_history'].get('event_transfers_cost', 0),
+                              credited_points=sum(pts.get(str(p['element']), [0])[0] * p['multiplier'] for p in ps),
+                              captain_multiplier=cap['multiplier'] if cap else None)
     if squad:
         sq_pts = {i: pts.get(str(i), [0, 0])[0] for i in squad}
         best_id = max(sq_pts, key=sq_pts.get)
@@ -393,16 +434,16 @@ def grade(snap, act, prev_retro=None):
         if model.get('captain') in sq_pts:
             cap['model'] = dict(id=model['captain'], name=name.get(model['captain']),
                                 pts=sq_pts[model['captain']])
-        if yours.get('captain') in sq_pts:
+        if yours.get('captain') is not None:
             cap['yours'] = dict(id=yours['captain'], name=name.get(yours['captain']),
-                                pts=sq_pts[yours['captain']])
+                                pts=pts.get(str(yours['captain']), [0])[0])
         cap['best'] = dict(id=best_id, name=name.get(best_id), pts=sq_pts[best_id])
         g['captain'] = cap
         xi = {}
         if model.get('xi'):
             xi['model'] = sum(sq_pts.get(i, 0) for i in model['xi'])
         if yours.get('xi'):
-            xi['yours'] = sum(sq_pts.get(i, 0) for i in yours['xi'])
+            xi['yours'] = sum(pts.get(str(i), [0])[0] for i in yours['xi'])
         # hindsight-best legal XI is a fair ceiling
         pos = {p['id']: p['pos'] for p in snap['players']}
         bypos = {}
@@ -438,6 +479,12 @@ def grade(snap, act, prev_retro=None):
         g['cs'] = dict(n=n, brier=round(brier_cs / n, 3),
                        predicted_rate=round(pred_sum / n, 3),
                        actual_rate=round(act_sum / n, 3))
+    if snap.get('policy_benchmarks'):
+        try:
+            from .decision_replay import grade_policies
+        except ImportError:
+            from decision_replay import grade_policies
+        g['policy_benchmarks'] = grade_policies(snap, act)
     return g
 
 
@@ -461,15 +508,14 @@ def main():
     done = {g['gw']: g for g in prior.get('gws', [])}
     graded = []
     for path in sorted(HISTORY.glob('gw*.json')):
-        if path.name.endswith('_actual.json') or path.name.endswith('_retro.json') \
-                or path.name.endswith('_props.json'):
+        if not __import__('re').fullmatch(r'gw\d+\.json', path.name):
             continue
         snap = json.loads(path.read_text())
         gw = snap['gw']
         # regrade only if we haven't, or if the earlier grade was provisional,
         # or if a retrospective for the previous week has since appeared
         prev_retro = load_retro(gw - 1)
-        if gw in done and done[gw].get('checked') and \
+        if gw in done and done[gw].get('checked') and done[gw].get('grading_version') == 2 and \
                 (prev_retro is None or done[gw].get('retro_gw') == gw - 1):
             graded.append(done[gw])
             continue
@@ -477,7 +523,18 @@ def main():
         if not act:
             print(f'  GW{gw}: not finished yet')
             continue
-        g = grade(snap, act, prev_retro)
+        entry_id = snap.get('entry_id')
+        # Old snapshots can be attributed only when the historical digest
+        # identifies an entry; never silently substitute a default account.
+        if not entry_id:
+            weekly_path = HISTORY.parent / 'weekly.json'
+            if weekly_path.exists():
+                current = json.loads(weekly_path.read_text())
+                if set(current.get('squad', {}).get('ids', [])) == set(snap.get('squad', [])):
+                    entry_id = current['squad'].get('entry_id')
+        submitted = submitted_for(gw, entry_id, act.get('checked', False))
+        g = grade(snap, act, prev_retro, submitted)
+        g['grading_version'] = 2
         g['checked'] = act.get('checked', False)
         graded.append(g)
         av = g.get('availability') or {}

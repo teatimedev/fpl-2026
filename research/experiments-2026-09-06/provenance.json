@@ -1,0 +1,47 @@
+{
+  "git_head": "4100aa568d195568a255e6415a0cd6424b7427b4",
+  "files": {
+    "v2/fpl.db": {
+      "sha256": "596457a0bd610634f30c26ac2ffdec63e2a7eda6dad0bacf36b8a6d4351783d3",
+      "bytes": 14888960
+    },
+    "/tmp/fpl-experiments-2026-09-06/fpl.db": {
+      "sha256": "b10068ad9e72a44d49125c26ca1be43bde5183ae62a990eca3bc418fc56f7af9",
+      "bytes": 14979072
+    },
+    "/tmp/fpl-experiments-2026-09-06/cache/bootstrap.json": {
+      "sha256": "3235c18e37d2d467c72dbb4b8e2ba0d05e0a307f6350a0b55d45cb4742c04376",
+      "bytes": 1895297
+    },
+    "/tmp/fpl-experiments-2026-09-06/cache/fixtures.json": {
+      "sha256": "8f0287263ccf5ddf77fbcc4092982685638d26b8929a1027e08d030157ac70ce",
+      "bytes": 203939
+    },
+    "/tmp/fpl-2026-audit/v2__season_view.json": {
+      "sha256": "076b248bfa74b199da9a602785424fe7e4c8a40fab5d83ecbf950d7c134d692d",
+      "bytes": 153849
+    }
+  },
+  "frozen_inputs": {
+    "research/experiments-2026-09-06/inputs/calibration.json.gz": {
+      "sha256": "8524a04df90908ae47f0b2b3a47215c8cae499497409e3ea146504403e8510dc",
+      "bytes": 348
+    },
+    "research/experiments-2026-09-06/inputs/fixtures.json.gz": {
+      "sha256": "7cafafa23ac7ba1648207227a45c733dd2033c7784ba743483585ce0e5be25b1",
+      "bytes": 12130
+    },
+    "research/experiments-2026-09-06/inputs/bootstrap.json.gz": {
+      "sha256": "4014694925ee8423fa8fd1785a4fdb300a56248c5106de3c5bf309a410d88e5b",
+      "bytes": 156751
+    },
+    "research/experiments-2026-09-06/inputs/team-view.json.gz": {
+      "sha256": "93e50cb1c0540619d5b228f8b6bc46fb344cfe211fb5a65b1bf7342fe0fa4042",
+      "bytes": 41195
+    },
+    "research/experiments-2026-09-06/inputs/current-gw-stats.csv.gz": {
+      "sha256": "df60fc0d7ea20488520b1056cb46975e1a1963526f7c9c3d0af0a580113e0000",
+      "bytes": 34576
+    }
+  }
+}

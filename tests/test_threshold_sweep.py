@@ -31,7 +31,7 @@ class ThresholdSweepTests(unittest.TestCase):
             threshold=2.0,
         )
         self.assertEqual(acts, [2])
-        self.assertEqual(boundaries, [1.0, 2.0, 3.0, 2.0])
+        self.assertEqual(boundaries, [1.0, 2.0, 3.0, 3.0])
         self.assertEqual(total, 8.0)
 
         total, acts, boundaries = sweep.play_season(
@@ -40,8 +40,16 @@ class ThresholdSweepTests(unittest.TestCase):
             threshold=1.0,
         )
         self.assertEqual(acts, [0, 1, 2])
-        self.assertEqual(boundaries, [1.0, 0.0, 0.0, 0.0])
-        self.assertEqual(total, 5.0 + (5.0 - 4.0) + (9.0 - 4.0))
+        self.assertEqual(boundaries, [1.0, 1.0, 1.0, 1.0])
+        self.assertEqual(total, 19.0)
+
+    def test_empty_bank_hit_is_followed_by_weekly_allowance(self):
+        total, acts, boundaries = sweep.play_season(
+            np.array([9.0, 5.0]), np.array([9.0, 5.0]), threshold=1.0, ft0=0
+        )
+        self.assertEqual(acts, [0, 1])
+        self.assertEqual(boundaries, [0.0, 1.0, 1.0])
+        self.assertEqual(total, 10.0)
 
     def test_bank_caps_at_five(self):
         _, acts, boundaries = sweep.play_season(
@@ -65,24 +73,20 @@ class ThresholdSweepTests(unittest.TestCase):
                 )[0]
         np.testing.assert_array_equal(actual, expected)
 
-    def test_zero_noise_optimum_is_the_small_banking_threshold(self):
+    def test_zero_noise_optimum_is_zero_with_one_free_move_every_week(self):
         gains, noise = self._draw()
         means = sweep.simulate_totals(gains, noise, sigma=0.0).mean(axis=1)
         optimum = sweep.THRESHOLDS[int(np.argmax(means))]
 
-        self.assertGreaterEqual(optimum, 1.0)
-        self.assertLessEqual(optimum, 1.5)
+        self.assertEqual(optimum, 0.0)
 
-    def test_more_noise_does_not_materially_lower_optimal_threshold(self):
-        gains, noise = self._draw()
-        optima = []
-        for sigma in (0.0, 1.5, 2.3, 3.5, 5.16):
-            means = sweep.simulate_totals(gains, noise, sigma).mean(axis=1)
-            optima.append(sweep.THRESHOLDS[int(np.argmax(means))])
-
-        for lower_noise, higher_noise in zip(optima, optima[1:]):
-            self.assertGreaterEqual(higher_noise, lower_noise - 0.25)
-        self.assertGreaterEqual(optima[-1], optima[0] + 0.5)
+    def test_single_candidate_never_pays_hits_with_one_initial_free_transfer(self):
+        gains, noise = self._draw(seasons=16)
+        for sigma in (0.0, 2.3, 5.16):
+            for tau in (0.0, 2.0, 6.0):
+                expected = np.where(gains+sigma*noise >= tau, gains, 0.0).sum(axis=1)
+                actual = sweep.simulate_totals(gains,noise,sigma,thresholds=[tau])[0]
+                np.testing.assert_allclose(actual,expected,rtol=1e-14)
 
 
 if __name__ == "__main__":

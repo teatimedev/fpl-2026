@@ -45,6 +45,7 @@ import argparse
 import csv
 import json
 import re
+import sqlite3
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -56,6 +57,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(HERE))
 from gwclock import next_gw          # noqa: E402
+from decision_state import forecast_id, public_selling_prices, atomic_json
 from squad_evaluator import (       # noqa: E402
     deadline_unavailable,
     evaluate_squad,
@@ -301,7 +303,7 @@ def legal(squad, budget):
     return sum(p['price'] for p in squad) <= budget + 1e-9
 
 
-def transfer_engine(squad, players, bank, ft, gw, horizon, pool_size=60):
+def transfer_engine(squad, players, bank, ft, gw, horizon, pool_size=60, sell_prices=None):
     """XI-aware single moves and the best two-move combinations, net of hits.
 
     A move's gain is squad_score(after) - squad_score(before): it counts only
@@ -309,6 +311,10 @@ def transfer_engine(squad, players, bank, ft, gw, horizon, pool_size=60):
     charged at 4 for every transfer beyond the free ones available.
     """
     budget = sum(p['price'] for p in squad) + bank
+    sell_prices = sell_prices or {}
+
+    def sale_loss(outgoing):
+        return sum(p['price'] - sell_prices.get(p['id'], p['price']) for p in outgoing)
     cache = {}
 
     def value(candidate):
@@ -334,7 +340,7 @@ def transfer_engine(squad, players, bank, ft, gw, horizon, pool_size=60):
     for o in squad:
         for n in pool[o['pos']]:
             new = [n if p is o else p for p in squad]
-            if not legal(new, budget):
+            if not legal(new, budget - sale_loss([o])):
                 continue
             after = value(new)
             g = after.total - base
@@ -362,7 +368,7 @@ def transfer_engine(squad, players, bank, ft, gw, horizon, pool_size=60):
                 if n1 is n2:
                     continue
                 new = [n1 if p is o1 else n2 if p is o2 else p for p in squad]
-                if not legal(new, budget):
+                if not legal(new, budget - sale_loss([o1, o2])):
                     continue
                 after = value(new)
                 g = after.total - base
@@ -425,7 +431,8 @@ def log_prices(boot):
     return path
 
 
-def snapshot(gw, deadline, players, squad, model, yours, elem=None, props=None):
+def snapshot(gw, deadline, players, squad, model, yours, elem=None, props=None,
+             entry_id=None, scouting=None, decision_context=None):
     """Archive what the model believed before this gameweek's deadline, so
     scorecard.py can grade it afterwards. Overwritten on every refresh; the
     last one before the deadline is the one that counts.
@@ -438,6 +445,12 @@ def snapshot(gw, deadline, players, squad, model, yours, elem=None, props=None):
     `elem` is the bootstrap's elements by id; `props` optional per-player
     market goal probabilities (player_props.py, P8.2).
     """
+    path = HISTORY / f'gw{gw}.json'
+    now = datetime.now(timezone.utc)
+    if now >= datetime.fromisoformat(deadline.replace('Z', '+00:00')):
+        if path.exists():
+            return path
+        raise ValueError('Cannot create a pre-deadline forecast after the deadline')
     HISTORY.mkdir(parents=True, exist_ok=True)
     view = json.loads(VIEW.read_text())['view'] if VIEW.exists() else {}
     team_cs = {}
@@ -458,6 +471,7 @@ def snapshot(gw, deadline, players, squad, model, yours, elem=None, props=None):
         idx = gw - 1
         forecast_by_gw = p.get('availability_by_gw') or []
         forecast = forecast_by_gw[idx] if idx < len(forecast_by_gw) else None
+        p60 = p.get('p60_shadow_by_gw') or []
         e = elem.get(p['id'], {})
         try:
             ep_next = float(e.get('ep_next')) if e.get('ep_next') not in (None, '') else None
@@ -470,6 +484,8 @@ def snapshot(gw, deadline, players, squad, model, yours, elem=None, props=None):
                          p_start=round(start_by_gw[idx], 4) if idx < len(start_by_gw) else p['start_rate'],
                          p_play=round(play_by_gw[idx], 4) if idx < len(play_by_gw) else p['start_rate'],
                          expected_minutes=round(mins_by_gw[idx], 2) if idx < len(mins_by_gw) else None,
+                         p60_shadow=p60[idx] if idx < len(p60) else None,
+                         fixture_count=len(team_cs.get(p['team'], [])),
                          # the minutes model's OWN rate, before the deadline
                          # flag/override layer. It used to copy p_start, which
                          # made the scorecard's start_brier_lift identically 0.
@@ -497,9 +513,20 @@ def snapshot(gw, deadline, players, squad, model, yours, elem=None, props=None):
                generated=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                players=rows, team_cs=team_cs,
                squad=[p['id'] for p in squad] if squad else [],
-               model=model or {}, yours=yours or {})
-    path = HISTORY / f'gw{gw}.json'
-    path.write_text(json.dumps(out, separators=(',', ':')))
+               model=model or {}, previous_public_lineup=yours or {}, entry_id=entry_id,
+               scouting=scouting, decision_context=decision_context,
+               forecast_id=forecast_id(PROJ))
+    if len(squad) == 15:
+        from decision_replay import freeze
+        context = decision_context or {}
+        out['policy_benchmarks'] = freeze(players, squad, gw, elem,
+                                         context.get('transfer_review'), context.get('squad', {}).get('ft', 1),
+                                         plan=context.get('plan'))
+    # Each revision is immutable. gwN.json remains the latest PRE-deadline
+    # pointer for existing consumers; a later refresh cannot rewrite a result.
+    revision = HISTORY / 'forecasts' / f'gw{gw}' / (now.strftime('%Y%m%dT%H%M%S%fZ') + '.json')
+    atomic_json(revision, out)
+    atomic_json(path, out)
     return path
 
 
@@ -759,6 +786,8 @@ def main():
     ap.add_argument('--bank', type=float, help='override money in the bank (£m)')
     ap.add_argument('--no-retro', action='store_true',
                     help='do not render last gameweek\'s retrospective (retro.py)')
+    ap.add_argument('--scout', action='store_true',
+                    help='extract sourced observations with DeepSeek V4 Flash (max reasoning, cached, <=8 calls)')
     args = ap.parse_args()
 
     if not args.no_refresh:
@@ -776,9 +805,8 @@ def main():
     gw, deadline = next_gw(boot['events'])
     played_gw = gw - 1               # the gameweek just played, before any clamp
     players, horizon, start_gw = load_projections()
-    if gw > horizon:
-        print(f'  projections end at GW{horizon}; rerun without --no-refresh')
-        gw = min(gw, horizon)
+    if gw != start_gw or gw > horizon:
+        raise SystemExit(f'Forecast starts at GW{start_gw}, live deadline is GW{gw}; refresh the model first')
 
     dl = datetime.fromisoformat(deadline.replace('Z', '+00:00'))
     left = dl - datetime.now(timezone.utc)
@@ -786,6 +814,7 @@ def main():
 
     L, P = [], []          # digest lines, push lines
     J = dict(gw=gw, deadline=deadline, horizon=horizon,
+             forecast_id=forecast_id(PROJ),
              generated=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'))
     L.append(f'# FPL weekly — Gameweek {gw}')
     L.append('')
@@ -800,7 +829,17 @@ def main():
     if args.bank is not None:
         st['bank'] = args.bank
     ids, bank, ft, lineup = st['ids'], st['bank'], st['ft'], st['lineup']
+    sell_prices, price_unknown = {}, list(ids)
+    if st.get('entry_id') and st.get('history'):
+        try:
+            sell_prices, price_unknown = public_selling_prices(
+                ids, elem, api(f"entry/{st['entry_id']}/transfers/"), st['history'], HERE / 'fpl.db')
+        except (OSError, ValueError, KeyError, sqlite3.Error) as ex:
+            print(f'  selling values unavailable ({type(ex).__name__})')
     J['squad'] = dict(ids=list(ids), bank=bank, ft=ft, source=st['source'],
+                      sell_prices=sell_prices, selling_prices_unknown=price_unknown,
+                      account_basis='Latest public deadline; unpublished transfers are not visible',
+                      selling_price_basis='Public transfer costs; GW1 deadline price assumed for initial holdings',
                       lineup={k: v for k, v in (lineup or {}).items() if v is not None})
     if st.get('confirmed_at'):
         J['squad']['confirmed_at'] = st['confirmed_at']
@@ -989,7 +1028,10 @@ def main():
         L.append(f'## Transfers  (£{bank:.1f}m in the bank, '
                  f'{"unlimited" if ft >= 15 else ft} free)')
         L.append('')
-        eng = transfer_engine(squad, players, bank, ft, gw, horizon)
+        eng = transfer_engine(squad, players, bank, ft, gw, horizon, sell_prices=sell_prices)
+        from transfer_review import review
+        J['transfer_review'] = review(squad, players, bank, ft, gw, horizon,
+                                     json.loads(VIEW.read_text())['view'], sell_prices)
         J['transfers'] = dict(
             base=round(eng['base'], 1),
             base_xi=round(eng['base_eval'].xi_captain_points, 1),
@@ -1152,8 +1194,9 @@ def main():
                 from planner import plan, describe
                 L.append('## The next six weeks, planned')
                 L.append('')
-                free = plan(players, ids, bank, ft, gw, horizon)
-                hold = plan(players, ids, bank, ft, gw, horizon, freeze_this_week=True)
+                free = plan(players, ids, bank, ft, gw, horizon, sell_prices=sell_prices)
+                hold = plan(players, ids, bank, ft, gw, horizon, freeze_this_week=True,
+                            sell_prices=sell_prices)
                 free_source = 'planner'
                 # Before GW1, compare the approximate transfer path with the
                 # exact-scored best static build produced by optimise.py. The
@@ -1199,7 +1242,7 @@ def main():
                     # solve is seeded with the REAL bank; seeding 15 would
                     # model five free transfers the week after the wildcard.
                     wc = plan(players, ids, bank, ft, gw, horizon,
-                              wildcard_week=gw)
+                              wildcard_week=gw, sell_prices=sell_prices)
                     if wc:
                         wc_now = round(wc['total'] - free['total'], 1)
                 if free and hold:
@@ -1213,7 +1256,10 @@ def main():
                     unlimited = ft >= 15
                     worth_it = worth_rebuilding(diff, n_now)
                     J['plan'] = dict(total=free['total'], hold_total=hold['total'],
+                                     solver=free.get('solver'), hold_solver=hold.get('solver'),
+                                     policy_status='Unvalidated 2-point-per-move heuristic',
                                      diff=round(diff, 1), hits=free['hits'],
+                                     diff_unrounded=free.get('total_unrounded', free['total'])-hold.get('total_unrounded', hold['total']),
                                      n_now=n_now, worth_it=worth_it,
                                      move_bar=round(HOLD_THRESHOLD * n_now, 1),
                                      weeks=[dict(gw=w['gw'], pts=w['pts'], hits=w['hits'],
@@ -1464,6 +1510,22 @@ def main():
              f'are estimates: hold-out rank correlation is about 0.46, so treat the '
              f'ordering as a strong hint and the point totals as rough._')
 
+    if args.scout and len(squad) == 15:
+        sys.path.insert(0, str(ROOT))
+        from v2.scouting import run as scout_run
+        targets = set(ids)
+        targets.update(r['replacement'] for r in J.get('transfer_review', {}).get('players', [])
+                       if r.get('replacement') is not None)
+        for pair in J.get('transfers', {}).get('pairs', []):
+            targets.update(pair['in_'])
+        print('· scouting squad and affordable targets (maximum 8 calls, $5 reserved ceiling)')
+        scout = scout_run({pid: players[pid] for pid in targets if pid in players}, gw, deadline, priority_ids=ids)
+        L.extend(['', '## Scouting', '', f"{len(scout['claims'])} sourced observations; "
+                  f"{scout['calls']} API calls. Review these alongside the transfer stress tests in the app."])
+    if len(squad) == 15:
+        sys.path.insert(0, str(ROOT))
+        from v2.case_studies import build as build_cases
+        J['case_studies'] = build_cases(J, players, elem, json.loads((HERE / 'cache/fixtures.json').read_text()))
     text = '\n'.join(L)
     DIGEST.write_text(text)
     print()
@@ -1486,7 +1548,13 @@ def main():
             props = load_props_for_snapshot(gw, players)
         except Exception as ex:          # shadow-only signal; never sink the snapshot
             print(f'  (player goal props unavailable: {ex})')
-        path = snapshot(gw, deadline, players, squad, model_out, yours_out, elem, props)
+        scout_path = ROOT / 'data/scouting/latest.json'
+        scouting = json.loads(scout_path.read_text()) if scout_path.exists() else None
+        if scouting and scouting.get('gw') != gw:
+            scouting = None
+        path = snapshot(gw, deadline, players, squad, model_out, yours_out, elem, props,
+                        entry_id=st.get('entry_id'), scouting=scouting,
+                        decision_context={k: J.get(k) for k in ('squad', 'decision', 'plan', 'transfer_review', 'case_studies')})
         print(f'(projections for GW{gw} archived to {path})')
     if args.price_log:
         path = log_prices(boot)

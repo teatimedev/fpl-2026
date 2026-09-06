@@ -4,7 +4,7 @@ Threshold sweep: what HOLD_THRESHOLD would have been optimal under noise.
 HOLD_THRESHOLD = 2.0 in v2/weekly.py:83 (and the 2.0-per-move churn bar in
 worth_rebuilding, weekly.py:90) is hand-set: "a free transfer worth less
 than this over the window is usually better banked". This harness replaces
-that guess with a measurement. It is a DECISION-RULE EXPERIMENT, not a
+that guess with a synthetic sensitivity check. It is a DECISION-RULE EXPERIMENT, not a
 pipeline replay: no squads, players, fixtures or prices are simulated, only
 the act-or-bank decision itself, so its numbers rank thresholds against
 each other and must not be read as forecasts of actual points.
@@ -15,33 +15,28 @@ at -2, capped at 12 (measured: mean 2.05, sd 3.12). The decision-maker
 sees g~ = g + N(0, sigma) and follows a single rule: act iff the NET
 observed gain clears the threshold -- g~ when a free transfer is in hand,
 g~ - 4 when the act would be a hit. Banking is modelled exactly as FPL
-does (weekly.py MAX_FT = 5): a skipped week banks +1 FT up to the cap of 5,
-acting spends one, and a skipped gain is gone for good -- but the banked FT
-makes a later week's act free where it would otherwise have cost 4.
+does (weekly.py MAX_FT = 5): every ordinary week adds one FT after transfers
+are spent, capped at five. With only one candidate per week and FT0 >= 1,
+this experiment NEVER needs a hit. It therefore cannot measure the option
+value of saving transfers for multi-transfer packages or injury shocks.
 
-Why the threshold applies to the NET, not the raw g~: comparing the raw
-observation (paying hits regardless of size) collapses at zero noise --
-tau=0 then earns 17.3 pts/season against 70.8 at tau=1.75 (4000 seasons,
-seed 99) because the policy pays 4 points to chase sub-4 gains, which no
-manager does. Gating the net isolates the question HOLD_THRESHOLD actually
-faces: is this transfer worth doing NOW rather than banking.
+The threshold applies to net gain after any real hit. With the default
+initial bank and at most one candidate per week there are no hits; tests
+also cover an explicitly empty initial bank, when the first move can cost 4.
 
-Noise calibration. --sigma auto (the default) solves numerically, by
+Synthetic noise sensitivity. --sigma auto (the default) solves numerically, by
 bisection on common random numbers (n=400k), for the sigma whose
 observed-vs-true Spearman correlation on this mixture hits 0.46 -- the
-model's measured rank correlation. That lands at sigma=5.16 (achieved
-rho 0.460). For reference, sigma=2.3 -- the order of magnitude the hand
-guess assumed -- implies Spearman 0.729 on this mixture: far less noise
-than the model's real forecast error.
+previously reported player rank correlation. That lands at sigma=5.16
+(achieved rho 0.460). Player rank error does not identify transfer-gain
+error: this mapping is hypothetical, not an empirical calibration.
 
-Measured with the shipped defaults (2000 seasons x 38 GW, seed 13):
-argmax tau=2.00 at sigma=5.16; the hand-set 2.0 is the sampled optimum and
-sits on the [1.50, 3.00] plateau (within 1 pt of the max). The optimum is
-non-decreasing with noise in the sensitivity sweep: sigma 0 -> 1.25,
-1.5 -> 1.50, 2.3 -> 1.75, 3.5 -> 2.00, 5.16 -> 2.00. At zero noise the
-residual optimum (~1.25) is banking, not noise-filtering: with perfect
-foresight the only reason to hold is saving FTs for bigger fish, so
-noise-filtering proper contributes the last ~0.75 of the threshold.
+Audit correction, 6 September 2026: the previous implementation omitted
+the following week's FT after acting, creating fictitious hits. Its claim
+that a 2-point threshold was validated is withdrawn. At zero noise, zero
+is optimal in this one-candidate toy. Production threshold changes require
+historical decision replay with real squads, multiple moves and forecast
+errors; this experiment alone cannot justify changing the live policy.
 
 What this does NOT capture: price moves between weeks (a rising target
 changes the gain distribution week to week), injury/news shocks that force
@@ -135,10 +130,8 @@ def play_season(g_true, g_obs, threshold, ft0=FT0):
         if g_obs[t] - (HIT_COST if hit else 0.0) >= threshold:
             total += g_true[t] - (HIT_COST if hit else 0.0)
             acts.append(t)
-            if not hit:
-                ft -= 1.0
-        else:
-            ft = min(BANK_CAP, ft + 1.0)
+            ft = max(0.0, ft - 1.0)
+        ft = min(BANK_CAP, ft + 1.0)
         fts.append(ft)
     return total, acts, fts
 
@@ -164,7 +157,7 @@ def simulate_totals(g, z, sigma, thresholds=None, ft0=FT0, cap=BANK_CAP):
             hit = ft < 1.0
             act = (obs[:, t] - np.where(hit, HIT_COST, 0.0)) >= tau
             total += np.where(act, g[:, t] - np.where(hit, HIT_COST, 0.0), 0.0)
-            ft = np.where(act, np.maximum(ft - 1.0, 0.0), np.minimum(ft + 1.0, cap))
+            ft = np.minimum(cap, np.maximum(ft - act, 0.0) + 1.0)
         out[k] = total
     return out
 
@@ -208,7 +201,7 @@ def main():
           f"(achieved {auto_rho:.3f})")
     print(f"  reference points on this mixture: sigma=2.3 -> Spearman "
           f"{spearman(*_calib_pair(2.3)):.3f}, 3.5 -> {spearman(*_calib_pair(3.5)):.3f} "
-          f"(the hand guess of ~2.3 assumes far less noise than the model's real error)")
+          f"(synthetic sensitivity, not measured transfer-gain error)")
     print()
 
     sigmas, labels = [], []

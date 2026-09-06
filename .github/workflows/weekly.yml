@@ -58,6 +58,13 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Restore article extraction cache
+        uses: actions/cache@v4
+        with:
+          path: data/scouting/cache
+          key: scouting-v2-max-${{ github.run_id }}
+          restore-keys: scouting-v2-max-
+
       - name: Scan public first-party team news
         id: news
         run: python3 -m v2.news_pipeline --summary /tmp/news-summary.json
@@ -115,12 +122,13 @@ jobs:
         # (P8.2, shadow-only): set the repository variable to 1 once the key's
         # plan is known to include player props.
         env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           ODDS_API_PLAYER_PROPS: ${{ vars.ODDS_API_PLAYER_PROPS }}
         run: |
           TEAM_ARG=""
           if [ -n "${{ vars.FPL_ENTRY_ID }}" ]; then TEAM_ARG="--team ${{ vars.FPL_ENTRY_ID }}"; fi
-          python v2/weekly.py --no-refresh --plan --chips --snapshot --price-log --push-file --json $TEAM_ARG
+          python v2/weekly.py --no-refresh --plan --chips --scout --snapshot --price-log --push-file --json $TEAM_ARG
           python v2/movers.py
 
       - name: Export for the app

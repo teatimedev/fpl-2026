@@ -1,0 +1,407 @@
+- banner:
+  - heading "FPL 26/27" [level=1]:
+    - text: FPL
+    - emphasis: 26/27
+  - generic: live prices · model rebuilt 2026-09-04 14:36 UTC
+  - button "This week" [active] [pressed]
+  - button "Season"
+  - button "My squad"
+  - button "Scorecard"
+  - generic: Gameweek 3 deadline
+  - text: Deadline passed
+- paragraph:
+  - text: Gameweek 4 · deadline Sat 12 Sept, 13:30 ·
+  - strong: 6d 12h
+  - text: to go · entry 3415101 · picks from GW3
+- paragraph: confirmed from official FPL 4 Sept, 15:29 · 2 free transfers · £0.0m banked · nobody flagged
+- heading "Your deadline plan" [level=2]
+- generic: one clear instruction
+- paragraph: Keep the team exactly as it is set in FPL.
+- paragraph:
+  - text: Start the 4-4-2 shown below. Captain
+  - strong: Haaland
+  - text: ", vice-captain"
+  - strong: Foden
+  - text: . Your official lineup and the model now match, including bench order.
+- paragraph:
+  - text: In 4,000 simulations, the proposed moves beat holding
+  - strong: 61% of the time
+  - text: and gained
+  - strong: +2.4 pts
+  - text: on average this gameweek. Spending 2 transfers now needs
+  - strong: "+4.0"
+  - text: ", so the model still prefers keeping the flexibility."
+- heading "Captain" [level=2]
+- generic: doubles this week
+- button "Haaland"
+- text: Man City · projected
+- strong: "9.3"
+- text: ", doubled to"
+- strong: "18.6"
+- text: · vice
+- strong: Foden
+- text: "7.3"
+- table:
+  - rowgroup:
+    - row "option fixture team xG starts owned pts":
+      - columnheader "option"
+      - columnheader "fixture"
+      - columnheader "team xG"
+      - columnheader "starts"
+      - columnheader "owned"
+      - columnheader "pts"
+  - rowgroup:
+    - row "C Haaland @MUN 1.7 94% 72% 9.3":
+      - cell "C Haaland":
+        - text: C
+        - button "Haaland"
+      - cell "@MUN":
+        - generic: "@MUN"
+      - cell "1.7"
+      - cell "94%"
+      - cell "72%"
+      - cell "9.3"
+    - row "V Foden @MUN 1.7 92% 6% 7.3":
+      - cell "V Foden":
+        - text: V
+        - button "Foden"
+      - cell "@MUN":
+        - generic: "@MUN"
+      - cell "1.7"
+      - cell "92%"
+      - cell "6%"
+      - cell "7.3"
+    - row "#3 Saka @SUN 1.5 91% 11% 6.3":
+      - cell "#3 Saka":
+        - text: "#3"
+        - button "Saka"
+      - cell "@SUN":
+        - generic: "@SUN"
+      - cell "1.5"
+      - cell "91%"
+      - cell "11%"
+      - cell "6.3"
+    - row "#4 Mbeumo MCI 1.3 94% 27% 5.8":
+      - cell "#4 Mbeumo":
+        - text: "#4"
+        - button "Mbeumo"
+      - cell "MCI"
+      - cell "1.3"
+      - cell "94%"
+      - cell "27%"
+      - cell "5.8"
+- paragraph:
+  - text: "Clear call:"
+  - strong: Haaland
+  - text: is 2.0 ahead (4.0 once doubled).
+- heading "Transfers" [level=2]
+- generic: GW4–8 window
+- paragraph: "Recommended: hold. Milenković → Maatsen, Sadiki → Barnes is the move queued — worth taking over the window, but taking it now rather than next week is worth only +2.2 (the plan scores 412.1 against 409.9 with the transfer banked); bank it — you would have 3."
+- generic "Price timing if you wait · experimental"
+- generic "Compare optional alternatives (not instructions)"
+- 'generic "See the six-week path · acting now vs banking: +2.2"'
+- heading "Last week, explained" [level=2]
+- generic: "GW2 · all 15, captain single: 93 scored vs 63 projected"
+- paragraph:
+  - text: Of the
+  - strong: "+29.7"
+  - text: ":"
+  - text: chances
+  - strong: "+8.2"
+  - text: ", bonus"
+  - strong: "+7.8"
+  - text: ", team"
+  - strong: "+5.3"
+  - text: . Finishing and bonus (+13.0) are a sample the model ignores by design; minutes, chances and team (+18.4) are the parts that carry information.
+- list:
+  - strong: "Hold — variance, no action:"
+  - button "Tarkowski"
+  - text: "90', 0.10 xG, 1 goal, 12 pts (proj 3.8). Finishing (+5.4). Projection next: 3.6."
+  - strong: "Hold — variance, no action:"
+  - button "Calafiori"
+  - text: "90', 0.11 xG, 0 goals, 1 assist, 11 pts (proj 4.2). Team (+2.7). Projection next: 4.4."
+  - strong: "Hold — variance, no action:"
+  - button "Saka"
+  - text: "90', 0.63 xG, 1 goal, 11 pts (proj 5.8). Bonus (+2.3). Projection next: 6.3."
+  - strong: "Hold — variance, no action:"
+  - button "Thiago"
+  - text: "90', 0.80 xG, 0 goals, 2 pts (proj 4.9). Finishing (-3.2). Projection next: 5.5."
+  - strong: "Hold — variance, no action:"
+  - button "O'Shea"
+  - text: "90', 0.07 xG, 0 goals, 0 pts (proj 2.5). Team (-1.7). Projection next: 2.5."
+  - strong: "Hold — variance, no action:"
+  - button "Thiaw"
+  - text: "90', 0.00 xG, 0 goals, 6 pts (proj 4.0). Team (+3.5). Projection next: 4.2."
+  - strong: "Hold — variance, no action:"
+  - button "Raya"
+  - text: "90', 0.00 xG, 0 goals, 6 pts (proj 4.2). Team (+2.5). Projection next: 4.1."
+- button "Thiago"
+- generic: variance
+- text: "2"
+- generic: / 4.9 · 90'
+- generic: "-2.9"
+- generic: finishing -3.2
+- button "O'Shea"
+- generic: variance
+- text: "0"
+- generic: / 2.5 · 90'
+- generic: "-2.5"
+- generic: team -1.7
+- button "Kluivert"
+- generic: on model
+- text: "3"
+- generic: / 4.6 · 80'
+- generic: "-1.6"
+- generic: finishing -3.2
+- button "Leno"
+- generic: on model
+- text: "3"
+- generic: / 3.9 · 90'
+- generic: "-0.9"
+- generic: team -1.0
+- button "Obi"
+- generic: on model
+- text: "0"
+- generic: / 0.8 · 0'
+- generic: "-0.8"
+- generic: minutes -0.8
+- button "Sadiki"
+- generic: on model
+- text: "3"
+- generic: / 3.0 · 90'
+- generic: "+0.0"
+- generic: team +0.6
+- button "Milenković"
+- generic: on model
+- text: "3"
+- generic: / 3.0 · 90'
+- generic: "+0.0"
+- generic: team -1.1
+- button "Raya"
+- generic: variance
+- text: "6"
+- generic: / 4.2 · 90'
+- generic: "+1.8"
+- generic: team +2.5
+- button "Thiaw"
+- generic: variance
+- text: "6"
+- generic: / 4.0 · 90'
+- generic: "+2.0"
+- generic: team +3.5
+- button "Foden"
+- generic: on model
+- text: "9"
+- generic: / 5.3 · 90'
+- generic: "+3.8"
+- generic: chances +3.0
+- button "Mbeumo"
+- generic: on model
+- text: "11"
+- generic: / 6.9 · 90'
+- generic: "+4.1"
+- generic: chances +5.1
+- button "Saka"
+- generic: variance
+- text: "11"
+- generic: / 5.8 · 90'
+- generic: "+5.2"
+- generic: bonus +2.3
+- button "Haaland"
+- generic: on model
+- text: "13"
+- generic: / 6.5 · 90'
+- generic: "+6.5"
+- generic: finishing +5.4
+- button "Calafiori"
+- generic: variance
+- text: "11"
+- generic: / 4.2 · 90'
+- generic: "+6.8"
+- generic: team +2.7
+- button "Tarkowski"
+- generic: variance
+- text: "12"
+- generic: / 3.8 · 90'
+- generic: "+8.2"
+- generic: finishing +5.4
+- paragraph:
+  - generic: minutes
+  - generic: chances
+  - generic: finishing
+  - generic: team
+  - generic: bonus
+- generic "Around the league — who changed, who didn't"
+- heading "Your recommended lineup" [level=2]
+- generic: 4-4-2
+- 'button "Raya £6.0 · 28 GW1: COV (H) · difficulty 2 GW2: AVL (A) · difficulty 4 GW3: CHE (H) · difficulty 4 GW4: SUN (A) · difficulty 3 GW5: BHA (A) · difficulty 3 GW6: LEE (H) · difficulty 2 GW7: NFO (A) · difficulty 3 GW8: EVE (H) · difficulty 3"':
+  - generic: Raya
+  - generic: £6.0 · 28
+  - 'generic "GW1: COV (H) · difficulty 2"'
+  - 'generic "GW2: AVL (A) · difficulty 4"'
+  - 'generic "GW3: CHE (H) · difficulty 4"'
+  - 'generic "GW4: SUN (A) · difficulty 3"'
+  - 'generic "GW5: BHA (A) · difficulty 3"'
+  - 'generic "GW6: LEE (H) · difficulty 2"'
+  - 'generic "GW7: NFO (A) · difficulty 3"'
+  - 'generic "GW8: EVE (H) · difficulty 3"'
+- 'button "Calafiori £5.7 · 29 GW1: COV (H) · difficulty 2 GW2: AVL (A) · difficulty 4 GW3: CHE (H) · difficulty 4 GW4: SUN (A) · difficulty 3 GW5: BHA (A) · difficulty 3 GW6: LEE (H) · difficulty 2 GW7: NFO (A) · difficulty 3 GW8: EVE (H) · difficulty 3"':
+  - generic: Calafiori
+  - generic: £5.7 · 29
+  - 'generic "GW1: COV (H) · difficulty 2"'
+  - 'generic "GW2: AVL (A) · difficulty 4"'
+  - 'generic "GW3: CHE (H) · difficulty 4"'
+  - 'generic "GW4: SUN (A) · difficulty 3"'
+  - 'generic "GW5: BHA (A) · difficulty 3"'
+  - 'generic "GW6: LEE (H) · difficulty 2"'
+  - 'generic "GW7: NFO (A) · difficulty 3"'
+  - 'generic "GW8: EVE (H) · difficulty 3"'
+- 'button "Thiaw £5.0 · 27 GW1: LIV (H) · difficulty 4 GW2: TOT (A) · difficulty 3 GW3: BOU (H) · difficulty 3 GW4: LEE (A) · difficulty 3 GW5: HUL (H) · difficulty 2 GW6: COV (A) · difficulty 2 GW7: AVL (H) · difficulty 3 GW8: CRY (A) · difficulty 3"':
+  - generic: Thiaw
+  - generic: £5.0 · 27
+  - 'generic "GW1: LIV (H) · difficulty 4"'
+  - 'generic "GW2: TOT (A) · difficulty 3"'
+  - 'generic "GW3: BOU (H) · difficulty 3"'
+  - 'generic "GW4: LEE (A) · difficulty 3"'
+  - 'generic "GW5: HUL (H) · difficulty 2"'
+  - 'generic "GW6: COV (A) · difficulty 2"'
+  - 'generic "GW7: AVL (H) · difficulty 3"'
+  - 'generic "GW8: CRY (A) · difficulty 3"'
+- 'button "Milenković £5.5 · 23 GW1: LEE (H) · difficulty 2 GW2: LIV (A) · difficulty 4 GW3: TOT (H) · difficulty 3 GW4: AVL (A) · difficulty 4 GW5: COV (H) · difficulty 2 GW6: CRY (A) · difficulty 3 GW7: ARS (H) · difficulty 4 GW8: IPS (A) · difficulty 2"':
+  - generic: Milenković
+  - generic: £5.5 · 23
+  - 'generic "GW1: LEE (H) · difficulty 2"'
+  - 'generic "GW2: LIV (A) · difficulty 4"'
+  - 'generic "GW3: TOT (H) · difficulty 3"'
+  - 'generic "GW4: AVL (A) · difficulty 4"'
+  - 'generic "GW5: COV (H) · difficulty 2"'
+  - 'generic "GW6: CRY (A) · difficulty 3"'
+  - 'generic "GW7: ARS (H) · difficulty 4"'
+  - 'generic "GW8: IPS (A) · difficulty 2"'
+- 'button "Tarkowski £6.0 · 25 GW1: CRY (H) · difficulty 3 GW2: BOU (A) · difficulty 3 GW3: MUN (H) · difficulty 4 GW4: TOT (A) · difficulty 3 GW5: IPS (H) · difficulty 2 GW6: HUL (A) · difficulty 2 GW7: CHE (H) · difficulty 4 GW8: ARS (A) · difficulty 5"':
+  - generic: Tarkowski
+  - generic: £6.0 · 25
+  - 'generic "GW1: CRY (H) · difficulty 3"'
+  - 'generic "GW2: BOU (A) · difficulty 3"'
+  - 'generic "GW3: MUN (H) · difficulty 4"'
+  - 'generic "GW4: TOT (A) · difficulty 3"'
+  - 'generic "GW5: IPS (H) · difficulty 2"'
+  - 'generic "GW6: HUL (A) · difficulty 2"'
+  - 'generic "GW7: CHE (H) · difficulty 4"'
+  - 'generic "GW8: ARS (A) · difficulty 5"'
+- 'button "Vice-captain Foden £7.0 · 36 GW1: BOU (H) · difficulty 3 GW2: CRY (A) · difficulty 3 GW3: COV (H) · difficulty 2 GW4: MUN (A) · difficulty 4 GW5: SUN (H) · difficulty 2 GW6: LIV (A) · difficulty 4 GW7: IPS (H) · difficulty 2 GW8: AVL (A) · difficulty 4"':
+  - generic "Vice-captain": V
+  - generic: Foden
+  - generic: £7.0 · 36
+  - 'generic "GW1: BOU (H) · difficulty 3"'
+  - 'generic "GW2: CRY (A) · difficulty 3"'
+  - 'generic "GW3: COV (H) · difficulty 2"'
+  - 'generic "GW4: MUN (A) · difficulty 4"'
+  - 'generic "GW5: SUN (H) · difficulty 2"'
+  - 'generic "GW6: LIV (A) · difficulty 4"'
+  - 'generic "GW7: IPS (H) · difficulty 2"'
+  - 'generic "GW8: AVL (A) · difficulty 4"'
+- 'button "Saka £9.5 · 37 GW1: COV (H) · difficulty 2 GW2: AVL (A) · difficulty 4 GW3: CHE (H) · difficulty 4 GW4: SUN (A) · difficulty 3 GW5: BHA (A) · difficulty 3 GW6: LEE (H) · difficulty 2 GW7: NFO (A) · difficulty 3 GW8: EVE (H) · difficulty 3"':
+  - generic: Saka
+  - generic: £9.5 · 37
+  - 'generic "GW1: COV (H) · difficulty 2"'
+  - 'generic "GW2: AVL (A) · difficulty 4"'
+  - 'generic "GW3: CHE (H) · difficulty 4"'
+  - 'generic "GW4: SUN (A) · difficulty 3"'
+  - 'generic "GW5: BHA (A) · difficulty 3"'
+  - 'generic "GW6: LEE (H) · difficulty 2"'
+  - 'generic "GW7: NFO (A) · difficulty 3"'
+  - 'generic "GW8: EVE (H) · difficulty 3"'
+- 'button "Mbeumo £7.9 · 35 GW1: HUL (A) · difficulty 2 GW2: IPS (H) · difficulty 2 GW3: EVE (A) · difficulty 3 GW4: MCI (H) · difficulty 4 GW5: FUL (A) · difficulty 3 GW6: TOT (H) · difficulty 3 GW7: LEE (A) · difficulty 3 GW8: BOU (H) · difficulty 3"':
+  - generic: Mbeumo
+  - generic: £7.9 · 35
+  - 'generic "GW1: HUL (A) · difficulty 2"'
+  - 'generic "GW2: IPS (H) · difficulty 2"'
+  - 'generic "GW3: EVE (A) · difficulty 3"'
+  - 'generic "GW4: MCI (H) · difficulty 4"'
+  - 'generic "GW5: FUL (A) · difficulty 3"'
+  - 'generic "GW6: TOT (H) · difficulty 3"'
+  - 'generic "GW7: LEE (A) · difficulty 3"'
+  - 'generic "GW8: BOU (H) · difficulty 3"'
+- 'button "Kluivert £6.0 · 27 GW1: MCI (A) · difficulty 5 GW2: EVE (H) · difficulty 3 GW3: NEW (A) · difficulty 3 GW4: BRE (H) · difficulty 3 GW5: LIV (H) · difficulty 4 GW6: CHE (A) · difficulty 4 GW7: SUN (H) · difficulty 2 GW8: MUN (A) · difficulty 4"':
+  - generic: Kluivert
+  - generic: £6.0 · 27
+  - 'generic "GW1: MCI (A) · difficulty 5"'
+  - 'generic "GW2: EVE (H) · difficulty 3"'
+  - 'generic "GW3: NEW (A) · difficulty 3"'
+  - 'generic "GW4: BRE (H) · difficulty 3"'
+  - 'generic "GW5: LIV (H) · difficulty 4"'
+  - 'generic "GW6: CHE (A) · difficulty 4"'
+  - 'generic "GW7: SUN (H) · difficulty 2"'
+  - 'generic "GW8: MUN (A) · difficulty 4"'
+- 'button "Captain Haaland £15.5 · 45 GW1: BOU (H) · difficulty 3 GW2: CRY (A) · difficulty 3 GW3: COV (H) · difficulty 2 GW4: MUN (A) · difficulty 4 GW5: SUN (H) · difficulty 2 GW6: LIV (A) · difficulty 4 GW7: IPS (H) · difficulty 2 GW8: AVL (A) · difficulty 4"':
+  - generic "Captain": C
+  - generic: Haaland
+  - generic: £15.5 · 45
+  - 'generic "GW1: BOU (H) · difficulty 3"'
+  - 'generic "GW2: CRY (A) · difficulty 3"'
+  - 'generic "GW3: COV (H) · difficulty 2"'
+  - 'generic "GW4: MUN (A) · difficulty 4"'
+  - 'generic "GW5: SUN (H) · difficulty 2"'
+  - 'generic "GW6: LIV (A) · difficulty 4"'
+  - 'generic "GW7: IPS (H) · difficulty 2"'
+  - 'generic "GW8: AVL (A) · difficulty 4"'
+- 'button "Thiago £8.0 · 30 GW1: TOT (H) · difficulty 3 GW2: LEE (A) · difficulty 3 GW3: SUN (H) · difficulty 2 GW4: BOU (A) · difficulty 3 GW5: CHE (H) · difficulty 4 GW6: AVL (A) · difficulty 4 GW7: LIV (H) · difficulty 4 GW8: HUL (A) · difficulty 2"':
+  - generic: Thiago
+  - generic: £8.0 · 30
+  - 'generic "GW1: TOT (H) · difficulty 3"'
+  - 'generic "GW2: LEE (A) · difficulty 3"'
+  - 'generic "GW3: SUN (H) · difficulty 2"'
+  - 'generic "GW4: BOU (A) · difficulty 3"'
+  - 'generic "GW5: CHE (H) · difficulty 4"'
+  - 'generic "GW6: AVL (A) · difficulty 4"'
+  - 'generic "GW7: LIV (H) · difficulty 4"'
+  - 'generic "GW8: HUL (A) · difficulty 2"'
+- generic: Bench — in order they come on
+- 'button "Leno £4.5 · 24 GW1: CHE (H) · difficulty 4 GW2: SUN (A) · difficulty 3 GW3: CRY (H) · difficulty 3 GW4: LIV (A) · difficulty 4 GW5: MUN (H) · difficulty 4 GW6: IPS (A) · difficulty 2 GW7: HUL (H) · difficulty 2 GW8: COV (A) · difficulty 2"':
+  - generic: Leno
+  - generic: £4.5 · 24
+  - 'generic "GW1: CHE (H) · difficulty 4"'
+  - 'generic "GW2: SUN (A) · difficulty 3"'
+  - 'generic "GW3: CRY (H) · difficulty 3"'
+  - 'generic "GW4: LIV (A) · difficulty 4"'
+  - 'generic "GW5: MUN (H) · difficulty 4"'
+  - 'generic "GW6: IPS (A) · difficulty 2"'
+  - 'generic "GW7: HUL (H) · difficulty 2"'
+  - 'generic "GW8: COV (A) · difficulty 2"'
+- 'button "Sadiki £5.0 · 17 GW1: IPS (A) · difficulty 2 GW2: FUL (H) · difficulty 2 GW3: BRE (A) · difficulty 3 GW4: ARS (H) · difficulty 4 GW5: MCI (A) · difficulty 5 GW6: BHA (H) · difficulty 2 GW7: BOU (A) · difficulty 3 GW8: LEE (H) · difficulty 2"':
+  - generic: Sadiki
+  - generic: £5.0 · 17
+  - 'generic "GW1: IPS (A) · difficulty 2"'
+  - 'generic "GW2: FUL (H) · difficulty 2"'
+  - 'generic "GW3: BRE (A) · difficulty 3"'
+  - 'generic "GW4: ARS (H) · difficulty 4"'
+  - 'generic "GW5: MCI (A) · difficulty 5"'
+  - 'generic "GW6: BHA (H) · difficulty 2"'
+  - 'generic "GW7: BOU (A) · difficulty 3"'
+  - 'generic "GW8: LEE (H) · difficulty 2"'
+- 'button "O''Shea £4.0 · 17 GW1: SUN (H) · difficulty 2 GW2: MUN (A) · difficulty 4 GW3: LIV (H) · difficulty 4 GW4: CRY (A) · difficulty 3 GW5: EVE (A) · difficulty 3 GW6: FUL (H) · difficulty 2 GW7: MCI (A) · difficulty 5 GW8: NFO (H) · difficulty 3"':
+  - generic: O'Shea
+  - generic: £4.0 · 17
+  - 'generic "GW1: SUN (H) · difficulty 2"'
+  - 'generic "GW2: MUN (A) · difficulty 4"'
+  - 'generic "GW3: LIV (H) · difficulty 4"'
+  - 'generic "GW4: CRY (A) · difficulty 3"'
+  - 'generic "GW5: EVE (A) · difficulty 3"'
+  - 'generic "GW6: FUL (H) · difficulty 2"'
+  - 'generic "GW7: MCI (A) · difficulty 5"'
+  - 'generic "GW8: NFO (H) · difficulty 3"'
+- 'button "Obi £4.5 · 4 GW1: HUL (A) · difficulty 2 GW2: IPS (H) · difficulty 2 GW3: EVE (A) · difficulty 3 GW4: MCI (H) · difficulty 4 GW5: FUL (A) · difficulty 3 GW6: TOT (H) · difficulty 3 GW7: LEE (A) · difficulty 3 GW8: BOU (H) · difficulty 3"':
+  - generic: Obi
+  - generic: £4.5 · 4
+  - 'generic "GW1: HUL (A) · difficulty 2"'
+  - 'generic "GW2: IPS (H) · difficulty 2"'
+  - 'generic "GW3: EVE (A) · difficulty 3"'
+  - 'generic "GW4: MCI (H) · difficulty 4"'
+  - 'generic "GW5: FUL (A) · difficulty 3"'
+  - 'generic "GW6: TOT (H) · difficulty 3"'
+  - 'generic "GW7: LEE (A) · difficulty 3"'
+  - 'generic "GW8: BOU (H) · difficulty 3"'
+- generic "▸ Club news scan · nothing new about your 15 · 19/20 sources · 4 Sept, 15:25"
+- contentinfo:
+  - generic "▸ How this works · model last built 2026-09-04 14:36 UTC"

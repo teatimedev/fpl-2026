@@ -1,0 +1,51 @@
+{
+  "indexes": [
+    {"id":"sky-football", "publisher":"Sky Sports", "url":"https://www.skysports.com/football/news", "enabled":true},
+    {"id":"cityxtra", "publisher":"City Xtra", "club":"MCI", "url":"https://cityxtra.co.uk/match-coverage/match-report-and-player-ratings-manchester-city-1-0-coventry-city-premier-league", "enabled":true}
+  ],
+  "articles": [
+    {
+      "source_id": "vavel-bre-sun-20260905", "origin_group": "www.vavel.com",
+      "publisher": "VAVEL · Rian Mullaley",
+      "url": "https://www.vavel.com/en/football/2026/09/05/premier-league/1270303-brentford-1-1-sunderland-post-match-brentford-player-ratings.html"
+    },
+    {
+      "source_id": "brentford-bre-sun-20260905", "origin_group": "www.brentfordfc.com",
+      "publisher": "Brentford FC",
+      "url": "https://www.brentfordfc.com/en/news/article/match-reports-brentford-1-sunderland-1-premier-league-vitaly-janelt-05-09-2026"
+    },
+    {
+      "source_id": "analyst-new-bou-20260905", "origin_group": "theanalyst.com",
+      "publisher": "Opta Analyst · Harry Carr",
+      "url": "https://theanalyst.com/articles/newcastle-vs-bournemouth-stats-premier-league-09-2026"
+    },
+    {
+      "source_id":"chelsea-pedro-20260903", "publisher":"Chelsea FC",
+      "url":"https://www.chelseafc.com/en/news/article/two-blues-shortlisted-premier-league-player-of-the-month-award"
+    },
+    {
+      "source_id":"sky-bre-sun-20260905", "publisher":"Sky Sports",
+      "url":"https://www.skysports.com/football/news/11095/13565671/brentford-1-1-sunderland-enzo-le-fee-penalty-cancels-out-vitaly-janelt-opener-but-bees-unbeaten-start-continues"
+    },
+    {
+      "source_id":"sky-new-bou-20260905", "publisher":"Sky Sports · Nick Wright",
+      "url":"https://www.skysports.com/football/news/11661/13565658/newcastle-2-2-bournemouth-jacob-ramsey-scores-late-equaliser-as-cherries-blow-another-lead"
+    },
+    {
+      "source_id":"vavel-andrews-20260905", "publisher":"VAVEL",
+      "url":"https://www.vavel.com/en/football/2026/09/05/sunderland/1270316-le-bris-and-andrews-assess-stalemate-at-the-gtech.html"
+    },
+    {
+      "source_id":"sky-ars-che-analysis-20260905", "publisher":"Sky Sports · Nick Wright",
+      "url":"https://www.skysports.com/football/news/11661/13581188/arsenals-defence-still-improving-even-without-william-saliba-but-morgan-rogers-and-chelsea-are-tougher-test-the-radar"
+    },
+    {
+      "source_id":"cityxtra-mci-cov-20260905", "publisher":"City Xtra",
+      "url":"https://cityxtra.co.uk/match-coverage/match-report-and-player-ratings-manchester-city-1-0-coventry-city-premier-league"
+    },
+    {
+      "source_id":"fourfourtwo-calafiori-20260902", "publisher":"FourFourTwo", "word_limit":100,
+      "url":"https://www.fourfourtwo.com/person/player/unlikely-arsenal-man-on-course-for-season-best-tally-after-mikel-artetas-latest-tactical-innovation"
+    }
+  ]
+}

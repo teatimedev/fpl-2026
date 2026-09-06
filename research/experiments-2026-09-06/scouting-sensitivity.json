@@ -1,0 +1,199 @@
+{
+  "method": "Hypothetical scouting stress test, NOT fitted downgrades or recommendations.\n\nReconstruct the attacking component from frozen rounded model outputs;\nreduce chance-creation rates only. All other players, minutes and components\nstay fixed. This identifies sensitivity, not the probability of deterioration.\n",
+  "snapshot": "2026-09-06T00:31:28.717470+00:00",
+  "hypothetical": true,
+  "results": [
+    {
+      "out": "Thiago",
+      "incoming": "Jo\u00e3o Pedro",
+      "chance_creation_reduction": 0,
+      "through_gw": 6,
+      "six_week_gain": 0.10967276215649235,
+      "gw4_gain": 0.28806740616259674
+    },
+    {
+      "out": "Thiago",
+      "incoming": "Jo\u00e3o Pedro",
+      "chance_creation_reduction": 0.1,
+      "through_gw": 6,
+      "six_week_gain": 0.8508185814907847,
+      "gw4_gain": 0.5134619774240363
+    },
+    {
+      "out": "Thiago",
+      "incoming": "Jo\u00e3o Pedro",
+      "chance_creation_reduction": 0.2,
+      "through_gw": 6,
+      "six_week_gain": 1.591964400825077,
+      "gw4_gain": 0.7388565486854759
+    },
+    {
+      "out": "Thiago",
+      "incoming": "Jo\u00e3o Pedro",
+      "chance_creation_reduction": 0.3,
+      "through_gw": 6,
+      "six_week_gain": 2.3331102201593126,
+      "gw4_gain": 0.9642511199469155
+    },
+    {
+      "out": "Thiago",
+      "incoming": "Jo\u00e3o Pedro",
+      "chance_creation_reduction": 0,
+      "through_gw": 9,
+      "six_week_gain": 0.10967276215649235,
+      "gw4_gain": 0.28806740616259674
+    },
+    {
+      "out": "Thiago",
+      "incoming": "Jo\u00e3o Pedro",
+      "chance_creation_reduction": 0.1,
+      "through_gw": 9,
+      "six_week_gain": 1.6070159279412906,
+      "gw4_gain": 0.5134619774240363
+    },
+    {
+      "out": "Thiago",
+      "incoming": "Jo\u00e3o Pedro",
+      "chance_creation_reduction": 0.2,
+      "through_gw": 9,
+      "six_week_gain": 3.1043590937261456,
+      "gw4_gain": 0.7388565486854759
+    },
+    {
+      "out": "Thiago",
+      "incoming": "Jo\u00e3o Pedro",
+      "chance_creation_reduction": 0.3,
+      "through_gw": 9,
+      "six_week_gain": 4.601702259510944,
+      "gw4_gain": 0.9642511199469155
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Barnes",
+      "chance_creation_reduction": 0,
+      "through_gw": 6,
+      "six_week_gain": 0.6607452758744898,
+      "gw4_gain": -0.338168602722007
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Barnes",
+      "chance_creation_reduction": 0.1,
+      "through_gw": 6,
+      "six_week_gain": 1.282113375504025,
+      "gw4_gain": -0.1163114639174978
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Barnes",
+      "chance_creation_reduction": 0.2,
+      "through_gw": 6,
+      "six_week_gain": 1.9034814751335603,
+      "gw4_gain": 0.10554567488701849
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Barnes",
+      "chance_creation_reduction": 0.3,
+      "through_gw": 6,
+      "six_week_gain": 2.5248495747631523,
+      "gw4_gain": 0.3274028136915277
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Barnes",
+      "chance_creation_reduction": 0,
+      "through_gw": 9,
+      "six_week_gain": 0.6607452758744898,
+      "gw4_gain": -0.338168602722007
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Barnes",
+      "chance_creation_reduction": 0.1,
+      "through_gw": 9,
+      "six_week_gain": 1.8943827221095262,
+      "gw4_gain": -0.1163114639174978
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Barnes",
+      "chance_creation_reduction": 0.2,
+      "through_gw": 9,
+      "six_week_gain": 3.1280201683446194,
+      "gw4_gain": 0.10554567488701849
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Barnes",
+      "chance_creation_reduction": 0.3,
+      "through_gw": 9,
+      "six_week_gain": 4.361657614579713,
+      "gw4_gain": 0.3274028136915277
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Tavernier",
+      "chance_creation_reduction": 0,
+      "through_gw": 6,
+      "six_week_gain": -0.07795062801636732,
+      "gw4_gain": -0.04583844475396148
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Tavernier",
+      "chance_creation_reduction": 0.1,
+      "through_gw": 6,
+      "six_week_gain": 0.5434174716131679,
+      "gw4_gain": 0.1760186940505477
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Tavernier",
+      "chance_creation_reduction": 0.2,
+      "through_gw": 6,
+      "six_week_gain": 1.164785571242703,
+      "gw4_gain": 0.397875832855064
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Tavernier",
+      "chance_creation_reduction": 0.3,
+      "through_gw": 6,
+      "six_week_gain": 1.7861536708722952,
+      "gw4_gain": 0.6197329716595732
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Tavernier",
+      "chance_creation_reduction": 0,
+      "through_gw": 9,
+      "six_week_gain": -0.07795062801636732,
+      "gw4_gain": -0.04583844475396148
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Tavernier",
+      "chance_creation_reduction": 0.1,
+      "through_gw": 9,
+      "six_week_gain": 1.155686818218669,
+      "gw4_gain": 0.1760186940505477
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Tavernier",
+      "chance_creation_reduction": 0.2,
+      "through_gw": 9,
+      "six_week_gain": 2.3893242644537622,
+      "gw4_gain": 0.397875832855064
+    },
+    {
+      "out": "Kluivert",
+      "incoming": "Tavernier",
+      "chance_creation_reduction": 0.3,
+      "through_gw": 9,
+      "six_week_gain": 3.6229617106888554,
+      "gw4_gain": 0.6197329716595732
+    }
+  ]
+}

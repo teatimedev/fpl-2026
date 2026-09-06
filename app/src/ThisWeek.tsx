@@ -2,13 +2,15 @@ import { useMemo, type ReactNode } from 'react'
 import type { Data, NewsClaim, Player, Pos, Weekly } from './types'
 import { withLive, priceMovers } from './weekly'
 import {
-  xiForGw, thisGw, rankTransfers, lineupIssues, HIT_COST,
+  xiForGw, thisGw, lineupIssues, HIT_COST,
   type TransferOption,
 } from './model'
 import { signed } from './squad'
 import { Pitch } from './components'
 import { LastWeek } from './LastWeek'
 import type { LinkedTeam } from './useLinkedTeam'
+import { recommendationState } from './coherence'
+import { DecisionReview } from './DecisionReview'
 
 /**
  * The weekly view: what to actually do before this deadline.
@@ -21,10 +23,6 @@ import type { LinkedTeam } from './useLinkedTeam'
  * the deep digest — two-move combos, six-week plan, availability checks — is
  * rendered instead of the browser's own quick pass.
  */
-
-const sameSet = (a: number[], b: number[]) =>
-  a.length === b.length && a.length > 0 && new Set(a).size === a.length
-  && a.every(x => b.includes(x))
 
 /** Render `**bold lead** rest` lines the digest emits. */
 function Md({ line }: { line: string }) {
@@ -44,7 +42,7 @@ function splitRiskEvidence(line: string): { message: string; evidence: string | 
 }
 
 export default function ThisWeek(
-  { D, linked, builtSquad, openPlayer, loadSquad }: {
+  { D, linked, builtSquad, openPlayer }: {
     D: Data; linked: LinkedTeam; builtSquad: Player[]; openPlayer: (id: number) => void
     loadSquad?: (ids: number[]) => void
   },
@@ -70,8 +68,9 @@ export default function ThisWeek(
 
   // The digest applies only to the exact 15 the refresh saw.
   const weekly: Weekly | null = D.weekly ?? null
-  const digest = !!weekly && ready && sameSet(squad.map(p => p.id), weekly.squad.ids)
-  const ft = digest && weekly ? weekly.squad.ft : linked.ft
+  const ft = linked.ft
+  const state = recommendationState(D, live, squad.map(p => p.id), bank, ft, entryId)
+  const digest = ready && state.digestReady
 
   const { xi, bench } = ready ? xiForGw(squad, gw) : { xi: [], bench: [] }
   const ranked = [...xi].sort((a, b) => thisGw(b, gw) - thisGw(a, gw))
@@ -81,9 +80,8 @@ export default function ThisWeek(
   // Only meaningful for a real team: the lineup you have set, against the model's.
   const issues = ready && usingReal && lineup
     ? lineupIssues(lineup, squad, xi, bench, gw) : null
-  const options: TransferOption[] = useMemo(() => ready && !digest
-    ? rankTransfers(squad, pool, bank, ft, gw, horizon) : [],
-    [ready, digest, squad, pool, bank, ft, gw, horizon])
+  // A client price merge cannot reconstruct purchase lots or a new forecast.
+  const options: TransferOption[] = []
   const movers = priceMovers(live, pool)
 
   const dl = live ? new Date(live.deadline) : new Date(D.meta.deadline)
@@ -147,18 +145,17 @@ export default function ThisWeek(
         </section>
       )}
 
-      {ready && !digest && weekly && (
-        <p className="hint" style={{ margin: '12px 2px 0' }}>
-          Deep analysis (two-move combos, six-week plan, chips) is computed for
-          the squad the refresh saw; link your team id, or{' '}
-          {loadSquad ? (
-            <button className="plink" onClick={() => loadSquad(weekly.squad.ids)}>
-              load that squad
-            </button>
-          ) : 'load that squad'}{' '}
-          to see it.
-        </p>
+      {ready && !digest && !busy && (
+        <section className="panel" role="status" style={{ marginTop: 12 }}>
+          <div className="panel-hd"><h2>Recommendation needs a refresh</h2></div>
+          <ul className="problems soft" style={{ margin: 14 }}>
+            {state.reasons.map(reason => <li key={reason}>{reason}</li>)}
+          </ul>
+          <p className="hint" style={{ padding: '0 14px 14px' }}>The last published analysis remains available as a dated comparison below. It is not a current transfer instruction.</p>
+        </section>
       )}
+
+      {ready && <DecisionReview D={D} gw={gw} ids={squad.map(p => p.id)} current={digest} openPlayer={openPlayer} />}
 
       {ready && digest && weekly && (
         <Digest D={D} W={weekly} gw={gw} horizon={horizon} poolById={poolById}
@@ -166,7 +163,7 @@ export default function ThisWeek(
           liveIssues={issues} openPlayer={openPlayer} />
       )}
 
-      {ready && !digest && (
+      {ready && !digest && state.projectionsReady && captain && (
         <>
           <section className="panel accent" style={{ marginTop: 16 }}>
             <div className="panel-hd">
@@ -254,7 +251,7 @@ export default function ThisWeek(
             </div>
             {options.length === 0 ? (
               <div className="empty-state">
-                Nothing improves this squad over the remaining gameweeks. Bank it.
+                Transfer analysis needs a refresh for this account and current prices.
               </div>
             ) : (
               <>
@@ -328,13 +325,13 @@ export default function ThisWeek(
         </>
       )}
 
-      <NewsStatus D={D} squadIds={squad.map(p => p.id)} openPlayer={openPlayer} />
+      <NewsStatus D={D} gw={gw} squadIds={squad.map(p => p.id)} openPlayer={openPlayer} />
     </div>
   )
 }
 
-function NewsStatus({ D, squadIds, openPlayer }: {
-  D: Data; squadIds: number[]; openPlayer: (id: number) => void
+function NewsStatus({ D, gw, squadIds, openPlayer }: {
+  D: Data; gw: number; squadIds: number[]; openPlayer: (id: number) => void
 }) {
   const news = D.news
   if (!news?.run || !news.health) {
@@ -347,6 +344,10 @@ function NewsStatus({ D, squadIds, openPlayer }: {
       </details>
     )
   }
+  if (news.run.gw !== gw) return <details className="panel news-health" style={{ marginTop: 16 }}>
+    <summary>Club news archive · GW{news.run.gw} · awaiting a GW{gw} scan</summary>
+    <div className="news-health-body"><p>This club-news scan belongs to an earlier deadline. Current scouting coverage is shown in the evidence review above.</p></div>
+  </details>
   const squad = new Set(squadIds)
   const allClaims = news.evidence?.claims ?? []
   const owned = allClaims.filter(claim => squad.has(claim.player_id))
@@ -481,7 +482,7 @@ function Digest({
   return (
     <>
       <p className="stamp mono">
-        confirmed from official FPL {W.squad.confirmed_at
+        latest public FPL picks · analysed {W.squad.confirmed_at
           ? new Date(W.squad.confirmed_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
           : stampStr}
         {W.squad.ft > 0 && ` · ${W.squad.ft >= 15 ? 'unlimited' : W.squad.ft} free transfer${W.squad.ft === 1 ? '' : 's'}`}
@@ -497,20 +498,20 @@ function Digest({
         <div className="decision-body">
           <p className="decision-title">
             {keepTeam
-              ? 'Keep the team exactly as it is set in FPL.'
+              ? 'The recommended lineup matches your latest public picks.'
               : noTransfer
-                ? 'Keep the same 15, but update your lineup to match the pitch.'
+                ? 'The current transfer policy favours holding. Review the alternatives above.'
                 : transferInstruction}
           </p>
           {keepTeam ? (
             <p>
               Start the {shape} shown below. Captain <strong>{nameOf(m.captain)}</strong>,
               vice-captain <strong>{nameOf(m.vice)}</strong>. Your official lineup and
-              the model now match, including bench order.
+              the model match, including bench order. Changes made since the last deadline are not public yet.
             </p>
           ) : noTransfer ? (
             <>
-              <p>Do not make a transfer. Fix these in the FPL app:</p>
+              <p>The current policy favours holding. Compare this lineup with what you have set in FPL:</p>
               {liveIssues !== null ? (
                 <ul className="problems" style={{ margin: '10px 0 0' }}>
                   {liveIssues.map((it, i) => (
@@ -535,11 +536,12 @@ function Digest({
               beat holding <strong>{Math.round(sim.p_b_wins * 100)}% of the time</strong>
               {' '}and gained <strong className="mono">{signed(sim.mean_delta)} pts</strong>
               {' '}on average this gameweek. {noTransfer && moveCount > 0 ? (
-                <>Spending {moveCount} transfer{moveCount === 1 ? '' : 's'} now needs
-                  {' '}<strong className="mono">+{moveBar.toFixed(1)}</strong>, so the model
-                  still prefers keeping the flexibility.</>
+                <>Over the full planning window, acting now instead of waiting gains
+                  {' '}<strong className="mono">{signed(plan?.diff ?? 0)}</strong>.
+                  The legacy policy requires <strong className="mono">+{moveBar.toFixed(1)}</strong> for {moveCount} moves.
+                  This threshold has not been validated; it is shown as an assumption.</>
               ) : (
-                <>That supports acting now.</>
+                <>This measures match-outcome uncertainty under fixed forecasts; it does not prove a transfer is the right decision.</>
               )}
             </p>
           )}

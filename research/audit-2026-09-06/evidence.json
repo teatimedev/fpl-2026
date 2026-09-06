@@ -1,0 +1,2320 @@
+{
+  "retrieved_at_utc": "2026-09-06T00:04:17Z",
+  "entry_id": 3415101,
+  "team_name": "ripper",
+  "entry_summary": {
+    "summary_overall_points": 178,
+    "summary_overall_rank": 3132102,
+    "summary_event_points": 37,
+    "summary_event_rank": 5055265,
+    "current_event": 3
+  },
+  "total_players": 10500765,
+  "events": [
+    {
+      "id": 1,
+      "deadline_time": "2026-08-21T17:30:00Z",
+      "finished": true,
+      "data_checked": true,
+      "average_entry_score": 50
+    },
+    {
+      "id": 2,
+      "deadline_time": "2026-08-28T17:30:00Z",
+      "finished": true,
+      "data_checked": true,
+      "average_entry_score": 81
+    },
+    {
+      "id": 3,
+      "deadline_time": "2026-09-04T17:30:00Z",
+      "finished": false,
+      "data_checked": false,
+      "average_entry_score": 36
+    },
+    {
+      "id": 4,
+      "deadline_time": "2026-09-12T12:30:00Z",
+      "finished": false,
+      "data_checked": false,
+      "average_entry_score": 0
+    }
+  ],
+  "history": {
+    "current": [
+      {
+        "event": 1,
+        "points": 46,
+        "total_points": 46,
+        "rank": 5572591,
+        "rank_sort": 5679307,
+        "overall_rank": 5572584,
+        "percentile_rank": 65,
+        "overall_rank_percentage": "63",
+        "bank": 0,
+        "value": 1000,
+        "event_transfers": 0,
+        "event_transfers_cost": 0,
+        "points_on_bench": 7
+      },
+      {
+        "event": 2,
+        "points": 95,
+        "total_points": 141,
+        "rank": 2282526,
+        "rank_sort": 2312006,
+        "overall_rank": 3075903,
+        "percentile_rank": 25,
+        "overall_rank_percentage": "31",
+        "bank": 0,
+        "value": 1001,
+        "event_transfers": 0,
+        "event_transfers_cost": 0,
+        "points_on_bench": 9
+      },
+      {
+        "event": 3,
+        "points": 37,
+        "total_points": 178,
+        "rank": 5064243,
+        "rank_sort": 5116746,
+        "overall_rank": 3137236,
+        "percentile_rank": 50,
+        "overall_rank_percentage": "30",
+        "bank": 0,
+        "value": 1002,
+        "event_transfers": 0,
+        "event_transfers_cost": 0,
+        "points_on_bench": 5
+      }
+    ],
+    "past": [
+      {
+        "season_name": "2019/20",
+        "total_points": 1827,
+        "rank": 3966199,
+        "rank_percentage": "52"
+      },
+      {
+        "season_name": "2020/21",
+        "total_points": 1801,
+        "rank": 4481524,
+        "rank_percentage": "54"
+      },
+      {
+        "season_name": "2021/22",
+        "total_points": 1503,
+        "rank": 7386778,
+        "rank_percentage": "81"
+      },
+      {
+        "season_name": "2025/26",
+        "total_points": 2068,
+        "rank": 2804979,
+        "rank_percentage": "22"
+      }
+    ],
+    "chips": [
+      {
+        "name": "3xc",
+        "time": "2026-09-02T14:44:56.035628Z",
+        "event": 3
+      }
+    ]
+  },
+  "transfers": [],
+  "reconciled_gameweeks": [
+    {
+      "gw": 1,
+      "total": 46,
+      "rows": [
+        {
+          "name": "Raya",
+          "pos": 1,
+          "minutes": 90,
+          "points": 6,
+          "multiplier": 1,
+          "contribution": 6,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "ARS-COV",
+              "2026-08-21T19:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Calafiori",
+          "pos": 2,
+          "minutes": 80,
+          "points": 9,
+          "multiplier": 1,
+          "contribution": 9,
+          "goals": 0,
+          "assists": 1,
+          "bonus": 0,
+          "xG": "0.04",
+          "xA": "0.09",
+          "defcon": 5,
+          "fixture": [
+            [
+              "ARS-COV",
+              "2026-08-21T19:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Thiaw",
+          "pos": 3,
+          "minutes": 90,
+          "points": 3,
+          "multiplier": 1,
+          "contribution": 3,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 15,
+          "fixture": [
+            [
+              "NEW-LIV",
+              "2026-08-23T15:30:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Milenković",
+          "pos": 4,
+          "minutes": 90,
+          "points": 2,
+          "multiplier": 1,
+          "contribution": 2,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.11",
+          "xA": "0.02",
+          "defcon": 7,
+          "fixture": [
+            [
+              "NFO-LEE",
+              "2026-08-22T14:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Tarkowski",
+          "pos": 5,
+          "minutes": 90,
+          "points": 6,
+          "multiplier": 1,
+          "contribution": 6,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.05",
+          "xA": "0.00",
+          "defcon": 9,
+          "fixture": [
+            [
+              "EVE-CRY",
+              "2026-08-22T14:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "O'Shea",
+          "pos": 6,
+          "minutes": 90,
+          "points": 4,
+          "multiplier": 1,
+          "contribution": 4,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.16",
+          "defcon": 18,
+          "fixture": [
+            [
+              "IPS-SUN",
+              "2026-08-22T14:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Saka",
+          "pos": 7,
+          "minutes": 67,
+          "points": 9,
+          "multiplier": 1,
+          "contribution": 9,
+          "goals": 1,
+          "assists": 0,
+          "bonus": 1,
+          "xG": "0.64",
+          "xA": "0.08",
+          "defcon": 7,
+          "fixture": [
+            [
+              "ARS-COV",
+              "2026-08-21T19:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Mbeumo",
+          "pos": 8,
+          "minutes": 90,
+          "points": 2,
+          "multiplier": 1,
+          "contribution": 2,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.50",
+          "xA": "0.23",
+          "defcon": 4,
+          "fixture": [
+            [
+              "HUL-MUN",
+              "2026-08-22T11:30:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Foden",
+          "pos": 9,
+          "minutes": 81,
+          "points": 1,
+          "multiplier": 1,
+          "contribution": 1,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.12",
+          "xA": "0.40",
+          "defcon": 6,
+          "fixture": [
+            [
+              "MCI-BOU",
+              "2026-08-23T13:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Haaland",
+          "pos": 10,
+          "minutes": 90,
+          "points": 2,
+          "multiplier": 2,
+          "contribution": 4,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.74",
+          "xA": "0.02",
+          "defcon": 3,
+          "fixture": [
+            [
+              "MCI-BOU",
+              "2026-08-23T13:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Thiago",
+          "pos": 11,
+          "minutes": 82,
+          "points": 0,
+          "multiplier": 1,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "1.00",
+          "xA": "0.08",
+          "defcon": 5,
+          "fixture": [
+            [
+              "BRE-TOT",
+              "2026-08-22T16:30:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Leno",
+          "pos": 12,
+          "minutes": 90,
+          "points": 2,
+          "multiplier": 0,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "FUL-CHE",
+              "2026-08-24T19:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Kluivert",
+          "pos": 13,
+          "minutes": 74,
+          "points": 3,
+          "multiplier": 0,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.11",
+          "xA": "0.00",
+          "defcon": 9,
+          "fixture": [
+            [
+              "MCI-BOU",
+              "2026-08-23T13:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Sadiki",
+          "pos": 14,
+          "minutes": 90,
+          "points": 2,
+          "multiplier": 0,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.06",
+          "xA": "0.03",
+          "defcon": 2,
+          "fixture": [
+            [
+              "IPS-SUN",
+              "2026-08-22T14:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Obi",
+          "pos": 15,
+          "minutes": 0,
+          "points": 0,
+          "multiplier": 0,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "HUL-MUN",
+              "2026-08-22T11:30:00Z",
+              true,
+              true
+            ]
+          ]
+        }
+      ],
+      "entry_history": {
+        "event": 1,
+        "points": 46,
+        "total_points": 46,
+        "rank": 5572591,
+        "rank_sort": 5679307,
+        "overall_rank": 5572584,
+        "percentile_rank": 65,
+        "overall_rank_percentage": "63",
+        "bank": 0,
+        "value": 1000,
+        "event_transfers": 0,
+        "event_transfers_cost": 0,
+        "points_on_bench": 7
+      }
+    },
+    {
+      "gw": 2,
+      "total": 95,
+      "rows": [
+        {
+          "name": "Raya",
+          "pos": 1,
+          "minutes": 90,
+          "points": 6,
+          "multiplier": 1,
+          "contribution": 6,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "AVL-ARS",
+              "2026-08-31T19:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Calafiori",
+          "pos": 2,
+          "minutes": 90,
+          "points": 11,
+          "multiplier": 1,
+          "contribution": 11,
+          "goals": 0,
+          "assists": 1,
+          "bonus": 2,
+          "xG": "0.11",
+          "xA": "0.46",
+          "defcon": 3,
+          "fixture": [
+            [
+              "AVL-ARS",
+              "2026-08-31T19:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Thiaw",
+          "pos": 3,
+          "minutes": 90,
+          "points": 6,
+          "multiplier": 1,
+          "contribution": 6,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.02",
+          "defcon": 3,
+          "fixture": [
+            [
+              "TOT-NEW",
+              "2026-08-29T16:30:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Tarkowski",
+          "pos": 4,
+          "minutes": 90,
+          "points": 12,
+          "multiplier": 1,
+          "contribution": 12,
+          "goals": 1,
+          "assists": 0,
+          "bonus": 2,
+          "xG": "0.10",
+          "xA": "0.01",
+          "defcon": 10,
+          "fixture": [
+            [
+              "BOU-EVE",
+              "2026-08-29T14:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "O'Shea",
+          "pos": 5,
+          "minutes": 90,
+          "points": 0,
+          "multiplier": 1,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.07",
+          "xA": "0.01",
+          "defcon": 1,
+          "fixture": [
+            [
+              "MUN-IPS",
+              "2026-08-30T15:30:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Saka",
+          "pos": 6,
+          "minutes": 90,
+          "points": 11,
+          "multiplier": 1,
+          "contribution": 11,
+          "goals": 1,
+          "assists": 0,
+          "bonus": 3,
+          "xG": "0.63",
+          "xA": "0.04",
+          "defcon": 11,
+          "fixture": [
+            [
+              "AVL-ARS",
+              "2026-08-31T19:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Mbeumo",
+          "pos": 7,
+          "minutes": 90,
+          "points": 11,
+          "multiplier": 2,
+          "contribution": 22,
+          "goals": 1,
+          "assists": 1,
+          "bonus": 2,
+          "xG": "1.76",
+          "xA": "0.21",
+          "defcon": 5,
+          "fixture": [
+            [
+              "MUN-IPS",
+              "2026-08-30T15:30:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Foden",
+          "pos": 8,
+          "minutes": 90,
+          "points": 9,
+          "multiplier": 1,
+          "contribution": 9,
+          "goals": 0,
+          "assists": 2,
+          "bonus": 1,
+          "xG": "0.87",
+          "xA": "0.45",
+          "defcon": 7,
+          "fixture": [
+            [
+              "CRY-MCI",
+              "2026-08-28T19:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Kluivert",
+          "pos": 9,
+          "minutes": 80,
+          "points": 3,
+          "multiplier": 1,
+          "contribution": 3,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.61",
+          "xA": "0.05",
+          "defcon": 5,
+          "fixture": [
+            [
+              "BOU-EVE",
+              "2026-08-29T14:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Haaland",
+          "pos": 10,
+          "minutes": 90,
+          "points": 13,
+          "multiplier": 1,
+          "contribution": 13,
+          "goals": 2,
+          "assists": 0,
+          "bonus": 3,
+          "xG": "0.66",
+          "xA": "0.00",
+          "defcon": 5,
+          "fixture": [
+            [
+              "CRY-MCI",
+              "2026-08-28T19:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Thiago",
+          "pos": 11,
+          "minutes": 90,
+          "points": 2,
+          "multiplier": 1,
+          "contribution": 2,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.80",
+          "xA": "0.01",
+          "defcon": 4,
+          "fixture": [
+            [
+              "LEE-BRE",
+              "2026-08-30T13:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Leno",
+          "pos": 12,
+          "minutes": 90,
+          "points": 3,
+          "multiplier": 0,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "SUN-FUL",
+              "2026-08-30T13:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Milenković",
+          "pos": 13,
+          "minutes": 90,
+          "points": 3,
+          "multiplier": 0,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 13,
+          "fixture": [
+            [
+              "LIV-NFO",
+              "2026-08-29T11:30:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Sadiki",
+          "pos": 14,
+          "minutes": 90,
+          "points": 3,
+          "multiplier": 0,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.02",
+          "xA": "0.02",
+          "defcon": 11,
+          "fixture": [
+            [
+              "SUN-FUL",
+              "2026-08-30T13:00:00Z",
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Obi",
+          "pos": 15,
+          "minutes": 0,
+          "points": 0,
+          "multiplier": 0,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "MUN-IPS",
+              "2026-08-30T15:30:00Z",
+              true,
+              true
+            ]
+          ]
+        }
+      ],
+      "entry_history": {
+        "event": 2,
+        "points": 95,
+        "total_points": 141,
+        "rank": 2282526,
+        "rank_sort": 2312006,
+        "overall_rank": 3075903,
+        "percentile_rank": 25,
+        "overall_rank_percentage": "31",
+        "bank": 0,
+        "value": 1001,
+        "event_transfers": 0,
+        "event_transfers_cost": 0,
+        "points_on_bench": 9
+      }
+    },
+    {
+      "gw": 3,
+      "total": 37,
+      "rows": [
+        {
+          "name": "Raya",
+          "pos": 1,
+          "minutes": 0,
+          "points": 0,
+          "multiplier": 1,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "ARS-CHE",
+              "2026-09-06T15:30:00Z",
+              false,
+              false
+            ]
+          ]
+        },
+        {
+          "name": "Calafiori",
+          "pos": 2,
+          "minutes": 0,
+          "points": 0,
+          "multiplier": 1,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "ARS-CHE",
+              "2026-09-06T15:30:00Z",
+              false,
+              false
+            ]
+          ]
+        },
+        {
+          "name": "Thiaw",
+          "pos": 3,
+          "minutes": 90,
+          "points": -1,
+          "multiplier": 1,
+          "contribution": -1,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.05",
+          "defcon": 3,
+          "fixture": [
+            [
+              "NEW-BOU",
+              "2026-09-05T11:30:00Z",
+              false,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Tarkowski",
+          "pos": 4,
+          "minutes": 0,
+          "points": 0,
+          "multiplier": 1,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "EVE-MUN",
+              "2026-09-06T13:00:00Z",
+              false,
+              false
+            ]
+          ]
+        },
+        {
+          "name": "Milenković",
+          "pos": 5,
+          "minutes": 90,
+          "points": 7,
+          "multiplier": 1,
+          "contribution": 7,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.01",
+          "defcon": 11,
+          "fixture": [
+            [
+              "NFO-TOT",
+              "2026-09-05T14:00:00Z",
+              false,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Saka",
+          "pos": 6,
+          "minutes": 0,
+          "points": 0,
+          "multiplier": 1,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "ARS-CHE",
+              "2026-09-06T15:30:00Z",
+              false,
+              false
+            ]
+          ]
+        },
+        {
+          "name": "Mbeumo",
+          "pos": 7,
+          "minutes": 0,
+          "points": 0,
+          "multiplier": 1,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "EVE-MUN",
+              "2026-09-06T13:00:00Z",
+              false,
+              false
+            ]
+          ]
+        },
+        {
+          "name": "Foden",
+          "pos": 8,
+          "minutes": 24,
+          "points": 1,
+          "multiplier": 1,
+          "contribution": 1,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.62",
+          "xA": "0.01",
+          "defcon": 1,
+          "fixture": [
+            [
+              "MCI-COV",
+              "2026-09-05T14:00:00Z",
+              false,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Kluivert",
+          "pos": 9,
+          "minutes": 75,
+          "points": 1,
+          "multiplier": 1,
+          "contribution": 1,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.06",
+          "xA": "0.01",
+          "defcon": 4,
+          "fixture": [
+            [
+              "NEW-BOU",
+              "2026-09-05T11:30:00Z",
+              false,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Haaland",
+          "pos": 10,
+          "minutes": 90,
+          "points": 9,
+          "multiplier": 3,
+          "contribution": 27,
+          "goals": 1,
+          "assists": 0,
+          "bonus": 3,
+          "xG": "1.06",
+          "xA": "0.48",
+          "defcon": 7,
+          "fixture": [
+            [
+              "MCI-COV",
+              "2026-09-05T14:00:00Z",
+              false,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Thiago",
+          "pos": 11,
+          "minutes": 90,
+          "points": 2,
+          "multiplier": 1,
+          "contribution": 2,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.50",
+          "xA": "0.01",
+          "defcon": 6,
+          "fixture": [
+            [
+              "BRE-SUN",
+              "2026-09-05T14:00:00Z",
+              false,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Leno",
+          "pos": 12,
+          "minutes": 90,
+          "points": 1,
+          "multiplier": 0,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "FUL-CRY",
+              "2026-09-05T14:00:00Z",
+              false,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "O'Shea",
+          "pos": 13,
+          "minutes": 90,
+          "points": 3,
+          "multiplier": 0,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.01",
+          "defcon": 11,
+          "fixture": [
+            [
+              "IPS-LIV",
+              "2026-09-04T19:00:00Z",
+              false,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Sadiki",
+          "pos": 14,
+          "minutes": 73,
+          "points": 1,
+          "multiplier": 0,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.28",
+          "xA": "0.18",
+          "defcon": 3,
+          "fixture": [
+            [
+              "BRE-SUN",
+              "2026-09-05T14:00:00Z",
+              false,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "Obi",
+          "pos": 15,
+          "minutes": 0,
+          "points": 0,
+          "multiplier": 0,
+          "contribution": 0,
+          "goals": 0,
+          "assists": 0,
+          "bonus": 0,
+          "xG": "0.00",
+          "xA": "0.00",
+          "defcon": 0,
+          "fixture": [
+            [
+              "EVE-MUN",
+              "2026-09-06T13:00:00Z",
+              false,
+              false
+            ]
+          ]
+        }
+      ],
+      "entry_history": {
+        "event": 3,
+        "points": 37,
+        "total_points": 178,
+        "rank": 5064243,
+        "rank_sort": 5116746,
+        "overall_rank": 3137236,
+        "percentile_rank": 50,
+        "overall_rank_percentage": "30",
+        "bank": 0,
+        "value": 1002,
+        "event_transfers": 0,
+        "event_transfers_cost": 0,
+        "points_on_bench": 5
+      }
+    }
+  ],
+  "current_squad_prices_and_status": [
+    {
+      "id": 1,
+      "web_name": "Raya",
+      "now_cost": 60,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 8,
+      "web_name": "Calafiori",
+      "now_cost": 57,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 12,
+      "web_name": "Saka",
+      "now_cost": 95,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 70,
+      "web_name": "Kluivert",
+      "now_cost": 60,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 106,
+      "web_name": "Thiago",
+      "now_cost": 80,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 229,
+      "web_name": "Tarkowski",
+      "now_cost": 60,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 250,
+      "web_name": "Leno",
+      "now_cost": 45,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 304,
+      "web_name": "O'Shea",
+      "now_cost": 40,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 398,
+      "web_name": "Foden",
+      "now_cost": 70,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 411,
+      "web_name": "Haaland",
+      "now_cost": 155,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 427,
+      "web_name": "Mbeumo",
+      "now_cost": 79,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 441,
+      "web_name": "Obi",
+      "now_cost": 45,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 445,
+      "web_name": "Thiaw",
+      "now_cost": 50,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 471,
+      "web_name": "Milenković",
+      "now_cost": 55,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    },
+    {
+      "id": 545,
+      "web_name": "Sadiki",
+      "now_cost": 50,
+      "status": "a",
+      "news": "",
+      "chance_of_playing_next_round": null
+    }
+  ],
+  "official_sources": {
+    "entry": "https://fantasy.premierleague.com/api/entry/3415101/",
+    "history": "https://fantasy.premierleague.com/api/entry/3415101/history/",
+    "picks": "https://fantasy.premierleague.com/api/entry/3415101/event/3/picks/",
+    "bootstrap": "https://fantasy.premierleague.com/api/bootstrap-static/"
+  },
+  "production": {
+    "commit": "a1716b15",
+    "built_at": "2026-09-04T14:36:51Z",
+    "weekly_generated": "2026-09-04T14:29:09Z",
+    "weekly_gw": 3,
+    "weekly_free_transfers": 2,
+    "triple_captain": {
+      "name": "Triple Captain",
+      "weeks": [
+        [
+          3,
+          9.3,
+          "Haaland"
+        ],
+        [
+          4,
+          6.7,
+          "Haaland"
+        ],
+        [
+          5,
+          7.1,
+          "Haaland"
+        ],
+        [
+          6,
+          6.7,
+          "Mbeumo"
+        ],
+        [
+          7,
+          8.7,
+          "Haaland"
+        ],
+        [
+          8,
+          6.7,
+          "Haaland"
+        ],
+        [
+          9,
+          7.5,
+          "Haaland"
+        ],
+        [
+          10,
+          6.6,
+          "Saka"
+        ],
+        [
+          11,
+          7.4,
+          "Haaland"
+        ],
+        [
+          12,
+          6.2,
+          "Mbeumo"
+        ],
+        [
+          13,
+          7.5,
+          "Haaland"
+        ],
+        [
+          14,
+          7.0,
+          "Mbeumo"
+        ],
+        [
+          15,
+          7.5,
+          "Haaland"
+        ],
+        [
+          16,
+          7.2,
+          "Haaland"
+        ],
+        [
+          17,
+          6.6,
+          "Haaland"
+        ],
+        [
+          18,
+          6.3,
+          "Haaland"
+        ],
+        [
+          19,
+          8.1,
+          "Haaland"
+        ]
+      ],
+      "best_gw": 3,
+      "best": 9.3,
+      "best_name": "Haaland",
+      "now": 9.3,
+      "now_name": "Haaland",
+      "play": true,
+      "advice": "Play it on Haaland this week (9.3 extra expected) — no better week left in the half. Second copy (GW20–38): best week GW36, Haaland (7.7).",
+      "anyone": [
+        3,
+        9.3,
+        "Haaland"
+      ],
+      "last_eligible": 19,
+      "later": [
+        {
+          "lo": 20,
+          "hi": 38,
+          "best_gw": 36,
+          "best": 7.7,
+          "best_name": "Haaland"
+        }
+      ]
+    },
+    "scorecard": {
+      "generated": "2026-09-04T14:29:08Z",
+      "summary": {
+        "n_gws": 2,
+        "spearman_starters": 0.341,
+        "spearman_pool": 0.473,
+        "mae_starters": 2.48,
+        "bias_starters": -0.335,
+        "captain_model": 6.5,
+        "captain_yours": 7.5,
+        "captain_best": 11.0,
+        "xi_model": 65.5,
+        "xi_yours": 64.0,
+        "xi_best": 68.0,
+        "cs_brier": 0.177,
+        "cs_predicted_rate": 0.27,
+        "cs_actual_rate": 0.25,
+        "start_brier": 0.136,
+        "appearance_brier": 0.142,
+        "minutes_mae": 20.325,
+        "minutes_bias": -3.78,
+        "baseline_start_brier": 0.154,
+        "start_brier_lift": 0.018,
+        "recency_start_brier": 0.093,
+        "aggregate_start_brier": 0.118,
+        "recency_vs_aggregate_lift": 0.025,
+        "n_rule_gws": 1,
+        "recency_wins": 1,
+        "level_ratio_cum": {
+          "FWD": 0.841,
+          "ALL": 0.895,
+          "MID": 0.966,
+          "DEF": 0.86,
+          "GKP": 0.818
+        },
+        "spearman_ep_next_starters": 0.226,
+        "spearman_ep_next_pool": 0.293,
+        "mae_ep_next_starters": 2.25,
+        "n_retro_gws": 1,
+        "goal_logloss_model": null,
+        "goal_logloss_market": null
+      },
+      "gws": [
+        {
+          "gw": 1,
+          "generated": "2026-08-21T16:36:16Z",
+          "n_pool": 457,
+          "n_starters": 242,
+          "spearman_pool": 0.39,
+          "spearman_starters": 0.257,
+          "spearman_played": 0.263,
+          "mae_starters": 2.68,
+          "bias_starters": -0.46,
+          "top20_mean_actual": 4.0,
+          "top20_in_actual_top50": 7,
+          "deciles": [
+            {
+              "lo": 1.37,
+              "hi": 1.93,
+              "proj": 1.6,
+              "actual": 3.0,
+              "n": 24
+            },
+            {
+              "lo": 2.26,
+              "hi": 2.47,
+              "proj": 2.4,
+              "actual": 0.79,
+              "n": 24
+            },
+            {
+              "lo": 2.48,
+              "hi": 2.76,
+              "proj": 2.64,
+              "actual": 2.71,
+              "n": 24
+            },
+            {
+              "lo": 2.76,
+              "hi": 2.92,
+              "proj": 2.85,
+              "actual": 2.29,
+              "n": 24
+            },
+            {
+              "lo": 2.93,
+              "hi": 3.08,
+              "proj": 3.02,
+              "actual": 2.6,
+              "n": 25
+            },
+            {
+              "lo": 3.09,
+              "hi": 3.26,
+              "proj": 3.17,
+              "actual": 2.92,
+              "n": 24
+            },
+            {
+              "lo": 3.28,
+              "hi": 3.5,
+              "proj": 3.4,
+              "actual": 3.0,
+              "n": 24
+            },
+            {
+              "lo": 3.52,
+              "hi": 3.9,
+              "proj": 3.72,
+              "actual": 2.83,
+              "n": 24
+            },
+            {
+              "lo": 3.91,
+              "hi": 4.5,
+              "proj": 4.19,
+              "actual": 3.5,
+              "n": 24
+            },
+            {
+              "lo": 4.55,
+              "hi": 7.38,
+              "proj": 5.35,
+              "actual": 4.12,
+              "n": 25
+            }
+          ],
+          "level_sums": {
+            "FWD": [
+              75.0,
+              95.456,
+              27
+            ],
+            "ALL": [
+              673.0,
+              784.589,
+              242
+            ],
+            "MID": [
+              265.0,
+              295.496,
+              83
+            ],
+            "DEF": [
+              265.0,
+              316.405,
+              107
+            ],
+            "GKP": [
+              68.0,
+              77.232,
+              25
+            ]
+          },
+          "level_ratio": {
+            "FWD": 0.786,
+            "ALL": 0.858,
+            "MID": 0.897,
+            "DEF": 0.838,
+            "GKP": 0.88
+          },
+          "availability": {
+            "n": 600,
+            "start_brier": 0.179,
+            "appearance_brier": 0.161,
+            "minutes_mae": 24.21,
+            "minutes_bias": -4.59,
+            "baseline_start_brier": 0.179,
+            "start_brier_lift": 0.0
+          },
+          "availability_groups": {
+            "confidence": {
+              "medium": {
+                "n": 3,
+                "start_brier": 0.069
+              },
+              "model": {
+                "n": 552,
+                "start_brier": 0.194
+              },
+              "low": {
+                "n": 2,
+                "start_brier": 0.202
+              },
+              "high": {
+                "n": 43,
+                "start_brier": 0.0
+              }
+            },
+            "source_tier": {
+              "deadline_override": {
+                "n": 6,
+                "start_brier": 0.102
+              },
+              "baseline": {
+                "n": 552,
+                "start_brier": 0.194
+              },
+              "official_fpl": {
+                "n": 42,
+                "start_brier": 0.0
+              }
+            },
+            "claim_type": {
+              "baseline": {
+                "n": 600,
+                "start_brier": 0.179
+              }
+            }
+          },
+          "captain": {
+            "model": {
+              "id": 411,
+              "name": "Haaland",
+              "pts": 2
+            },
+            "yours": {
+              "id": 411,
+              "name": "Haaland",
+              "pts": 2
+            },
+            "best": {
+              "id": 8,
+              "name": "Calafiori",
+              "pts": 9
+            }
+          },
+          "xi": {
+            "model": 44,
+            "yours": 44,
+            "best": 48
+          },
+          "cs": {
+            "n": 20,
+            "brier": 0.203,
+            "predicted_rate": 0.255,
+            "actual_rate": 0.3
+          },
+          "checked": true
+        },
+        {
+          "gw": 2,
+          "generated": "2026-08-27T20:45:30Z",
+          "n_pool": 420,
+          "n_starters": 205,
+          "spearman_pool": 0.556,
+          "spearman_starters": 0.425,
+          "spearman_played": 0.419,
+          "mae_starters": 2.28,
+          "bias_starters": -0.21,
+          "top20_mean_actual": 7.15,
+          "top20_in_actual_top50": 10,
+          "deciles": [
+            {
+              "lo": 1.9,
+              "hi": 2.38,
+              "proj": 2.19,
+              "actual": 1.45,
+              "n": 20
+            },
+            {
+              "lo": 2.42,
+              "hi": 2.72,
+              "proj": 2.61,
+              "actual": 1.43,
+              "n": 21
+            },
+            {
+              "lo": 2.72,
+              "hi": 2.94,
+              "proj": 2.83,
+              "actual": 2.3,
+              "n": 20
+            },
+            {
+              "lo": 2.95,
+              "hi": 3.08,
+              "proj": 3.0,
+              "actual": 3.48,
+              "n": 21
+            },
+            {
+              "lo": 3.1,
+              "hi": 3.21,
+              "proj": 3.16,
+              "actual": 1.75,
+              "n": 20
+            },
+            {
+              "lo": 3.21,
+              "hi": 3.36,
+              "proj": 3.29,
+              "actual": 2.71,
+              "n": 21
+            },
+            {
+              "lo": 3.38,
+              "hi": 3.65,
+              "proj": 3.51,
+              "actual": 2.45,
+              "n": 20
+            },
+            {
+              "lo": 3.66,
+              "hi": 3.96,
+              "proj": 3.82,
+              "actual": 4.67,
+              "n": 21
+            },
+            {
+              "lo": 3.96,
+              "hi": 4.33,
+              "proj": 4.14,
+              "actual": 4.4,
+              "n": 20
+            },
+            {
+              "lo": 4.34,
+              "hi": 7.17,
+              "proj": 5.15,
+              "actual": 6.86,
+              "n": 21
+            }
+          ],
+          "level_sums": {
+            "FWD": [
+              68.0,
+              74.596,
+              20
+            ],
+            "ALL": [
+              649.0,
+              692.003,
+              205
+            ],
+            "MID": [
+              294.0,
+              283.312,
+              80
+            ],
+            "DEF": [
+              235.0,
+              264.689,
+              85
+            ],
+            "GKP": [
+              52.0,
+              69.406,
+              20
+            ]
+          },
+          "level_ratio": {
+            "FWD": 0.912,
+            "ALL": 0.938,
+            "MID": 1.038,
+            "DEF": 0.888,
+            "GKP": 0.749
+          },
+          "ep_next": {
+            "n": 420,
+            "spearman_pool": 0.293,
+            "spearman_starters": 0.226,
+            "mae_starters": 2.25
+          },
+          "availability": {
+            "n": 616,
+            "start_brier": 0.093,
+            "appearance_brier": 0.123,
+            "minutes_mae": 16.44,
+            "minutes_bias": -2.97,
+            "baseline_start_brier": 0.129,
+            "start_brier_lift": 0.036,
+            "minutes_rule": "recency",
+            "n_rules": 616,
+            "recency_start_brier": 0.093,
+            "aggregate_start_brier": 0.118,
+            "recency_vs_aggregate_lift": 0.025,
+            "recency_start_brier_regulars": 0.097,
+            "aggregate_start_brier_regulars": 0.112
+          },
+          "availability_groups": {
+            "confidence": {
+              "model": {
+                "n": 570,
+                "start_brier": 0.1
+              },
+              "high": {
+                "n": 46,
+                "start_brier": 0.0
+              }
+            },
+            "source_tier": {
+              "baseline": {
+                "n": 570,
+                "start_brier": 0.1
+              },
+              "official_fpl": {
+                "n": 46,
+                "start_brier": 0.0
+              }
+            },
+            "claim_type": {
+              "baseline": {
+                "n": 616,
+                "start_brier": 0.093
+              }
+            }
+          },
+          "retro_class": {
+            "on_model": {
+              "n": 188,
+              "next_start_rate": 0.516,
+              "next_play_rate": 0.644,
+              "next_residual_mean": -0.11
+            },
+            "variance/finishing": {
+              "n": 21,
+              "next_start_rate": 1.0,
+              "next_play_rate": 1.0,
+              "next_residual_mean": 1.27
+            },
+            "minutes_loss/cameo": {
+              "n": 41,
+              "next_start_rate": 0.268,
+              "next_play_rate": 0.732,
+              "next_residual_mean": 0.08
+            },
+            "unavailable": {
+              "n": 38,
+              "next_start_rate": 0.105,
+              "next_play_rate": 0.342,
+              "next_residual_mean": -0.52
+            },
+            "minutes_loss/dnp": {
+              "n": 41,
+              "next_start_rate": 0.146,
+              "next_play_rate": 0.39,
+              "next_residual_mean": -0.69
+            },
+            "variance/team": {
+              "n": 45,
+              "next_start_rate": 0.956,
+              "next_play_rate": 0.978,
+              "next_residual_mean": -0.59
+            },
+            "variance/defcon": {
+              "n": 1,
+              "next_start_rate": 1.0,
+              "next_play_rate": 1.0,
+              "next_residual_mean": 0.0
+            },
+            "minutes_watch/fringe": {
+              "n": 44,
+              "next_start_rate": 0.182,
+              "next_play_rate": 0.5,
+              "next_residual_mean": -0.03
+            },
+            "minutes_watch/hooked": {
+              "n": 8,
+              "next_start_rate": 0.25,
+              "next_play_rate": 0.5,
+              "next_residual_mean": -1.69
+            },
+            "minutes_gain": {
+              "n": 30,
+              "next_start_rate": 0.667,
+              "next_play_rate": 0.833,
+              "next_residual_mean": -0.23
+            }
+          },
+          "retro_tags": {
+            "large_residual": {
+              "n": 32,
+              "next_start_rate": 0.906,
+              "next_play_rate": 0.938,
+              "next_residual_mean": 0.52
+            },
+            "haul": {
+              "n": 27,
+              "next_start_rate": 1.0,
+              "next_play_rate": 1.0,
+              "next_residual_mean": -0.19
+            },
+            "blank": {
+              "n": 29,
+              "next_start_rate": 0.931,
+              "next_play_rate": 0.966,
+              "next_residual_mean": -0.57
+            },
+            "blanked_good_xg": {
+              "n": 2,
+              "next_start_rate": 1.0,
+              "next_play_rate": 1.0,
+              "next_residual_mean": 4.25
+            },
+            "hauled_low_xg": {
+              "n": 9,
+              "next_start_rate": 1.0,
+              "next_play_rate": 1.0,
+              "next_residual_mean": 1.47
+            },
+            "breakout_minutes": {
+              "n": 30,
+              "next_start_rate": 0.667,
+              "next_play_rate": 0.833,
+              "next_residual_mean": -0.23
+            }
+          },
+          "retro_gw": 1,
+          "captain": {
+            "model": {
+              "id": 427,
+              "name": "Mbeumo",
+              "pts": 11
+            },
+            "yours": {
+              "id": 411,
+              "name": "Haaland",
+              "pts": 13
+            },
+            "best": {
+              "id": 411,
+              "name": "Haaland",
+              "pts": 13
+            }
+          },
+          "xi": {
+            "model": 87,
+            "yours": 84,
+            "best": 88
+          },
+          "cs": {
+            "n": 20,
+            "brier": 0.152,
+            "predicted_rate": 0.286,
+            "actual_rate": 0.2
+          },
+          "checked": true
+        }
+      ],
+      "notes": [
+        "Before the season, the hold-out backtest gave a rank correlation of about 0.46 on points per 90 among established players — one gameweek is far noisier than that.",
+        "\"Starters\" are players the model gave a 60%+ chance of starting; \"pool\" is everyone projected 0.5+.",
+        "Captain and XI compare the model's pick, yours, and the hindsight-best pick from the same squad.",
+        "Level: actual points as a share of projected, cumulative over likely starters. The calibration is frozen, so this measures drift; it is not fed back into the model before GW8.",
+        "Start lift: how much better the in-season minutes rule (recency-weighted, in production since GW2) predicts starts than the pre-season prior; positive is better."
+      ]
+    },
+    "news_health": {
+      "checked_at": "2026-09-04T14:25:14Z",
+      "coverage": 0.95,
+      "enabled": 20,
+      "gw": 3,
+      "healthy": 19,
+      "official_fpl_ok": true,
+      "sources": [
+        {
+          "article_errors": 0,
+          "article_validators": {
+            "https://www.arsenal.com/meetings-and-events/conferences": {
+              "etag": "\"hocseh027c2fsw\""
+            }
+          },
+          "club": "ARS",
+          "content_hash": "1983d6c3fc9d5ee65b3bf863a37127497f4edc77fa17f3b54486875806abd957",
+          "documents": 2,
+          "etag": "\"bfjaksnuzy2emu\"",
+          "id": "ars-news",
+          "publisher": "Arsenal",
+          "status": "ok",
+          "url": "https://www.arsenal.com/news"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {},
+          "club": "AVL",
+          "content_hash": "54a857ed7e41f6d3ba6e05a20075b1b0dcc4bdfa5f28d8a5df97642d39d3e33c",
+          "documents": 1,
+          "etag": "\"1261c0a4807e18cde33fe826d0b5dd99\"",
+          "id": "avl-news",
+          "last_modified": "Fri, 04 Sep 2026 02:10:14 GMT",
+          "publisher": "Aston Villa",
+          "status": "ok",
+          "url": "https://www.avfc.co.uk/news/"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {
+            "https://www.brightonandhovealbion.com/first-team-men-squad": {
+              "etag": "\"nudh9\""
+            }
+          },
+          "club": "BHA",
+          "content_hash": "1707450c057db10c3465b0248e2167c608b437f115d281de18eeca7f89e8a961",
+          "documents": 2,
+          "etag": "\"6ohn5g\"",
+          "id": "bha-news",
+          "publisher": "Brighton & Hove Albion",
+          "status": "ok",
+          "url": "https://www.brightonandhovealbion.com/pages/en/media-article-listing"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {},
+          "club": "BOU",
+          "content_hash": "cf7847b631790ecb60148b1cc18063c9ca752ff090b703899564ce12f4ab429e",
+          "documents": 1,
+          "id": "bou-news",
+          "last_modified": "Thu, 03 Sep 2026 14:27:58 GMT",
+          "publisher": "AFC Bournemouth",
+          "status": "ok",
+          "url": "https://www.afcb.co.uk/news/"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {},
+          "club": "BRE",
+          "content_hash": "511e5b401574ae56a77d5b61b461ef089e1aeda57ab4774e66f11e779e7743d8",
+          "documents": 1,
+          "id": "bre-news",
+          "last_modified": "Fri, 04 Sep 2026 14:25:14 GMT",
+          "publisher": "Brentford",
+          "status": "ok",
+          "url": "https://www.brentfordfc.com/en/news"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {},
+          "club": "CHE",
+          "content_hash": "b61979eb5d84aea6da30811bd26cc4492be453c08e8d767845d335a66edebdf9",
+          "documents": 1,
+          "id": "che-news",
+          "publisher": "Chelsea",
+          "status": "ok",
+          "url": "https://www.chelseafc.com/en/news"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {},
+          "club": "COV",
+          "content_hash": "3554129e1f24d0567ef56591d5bc9d490f2922a1a7e34bbf4e5ac2fd9588fb95",
+          "documents": 1,
+          "etag": "\"823132bbe7f17562c5776ab730b9a2fa\"",
+          "id": "cov-news",
+          "last_modified": "Fri, 04 Sep 2026 02:11:36 GMT",
+          "publisher": "Coventry City",
+          "status": "ok",
+          "url": "https://www.ccfc.co.uk/news/"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {},
+          "club": "CRY",
+          "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
+          "documents": 1,
+          "etag": "\"szit076ahxta2z\"",
+          "id": "cry-news",
+          "publisher": "Crystal Palace",
+          "status": "ok",
+          "url": "https://www.cpfc.co.uk/news/"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {},
+          "club": "EVE",
+          "content_hash": "7f2844b9f692f7f412b6ea5afd5433414d12302a05c9a406d86bec4a1c5a81d8",
+          "documents": 1,
+          "etag": "\"66211c76651fae31422cfff3b0144e3c\"",
+          "id": "eve-news",
+          "last_modified": "Fri, 04 Sep 2026 02:13:18 GMT",
+          "publisher": "Everton",
+          "status": "ok",
+          "url": "https://www.evertonfc.com/news"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {
+            "https://www.fulhamfc.com/meetings-and-events/meetings-and-conferences": {
+              "etag": "\"0d74d89bda05ca20c6e794aefacff01d\"",
+              "last_modified": "Wed, 26 Aug 2026 10:13:52 GMT"
+            },
+            "https://www.fulhamfc.com/news/2026/september/04/pre-crystal-palace-press-conference/": {
+              "etag": "\"5dcea00beb4795149636267d204baa85\"",
+              "last_modified": "Fri, 04 Sep 2026 12:46:53 GMT"
+            },
+            "https://www.fulhamfc.com/news/2026/september/04/team-news-will-new-boys-feature-versus-palace/": {
+              "etag": "\"d21f072550616d31f1ab8f8050a8b7c9\"",
+              "last_modified": "Fri, 04 Sep 2026 10:46:09 GMT"
+            },
+            "https://www.fulhamfc.com/riverside-development/artists-impression": {
+              "etag": "\"f3cd60e1c9e8b522244c2ab6cea97389\"",
+              "last_modified": "Wed, 26 Aug 2026 10:14:54 GMT"
+            },
+            "https://www.fulhamfc.com/women/expression-of-interest": {
+              "etag": "\"adc7a8246ddc0ac514ce9a6f3a7587c1\"",
+              "last_modified": "Wed, 26 Aug 2026 10:14:55 GMT"
+            }
+          },
+          "club": "FUL",
+          "content_hash": "6b02ed56d1d39a4fc730cb48c56ca5a4e67fb60c56f8466a246740c3bc10bcb3",
+          "documents": 3,
+          "etag": "\"313a6d46a926d01901c4b82e0c7aec77\"",
+          "id": "ful-news",
+          "last_modified": "Fri, 04 Sep 2026 14:16:36 GMT",
+          "publisher": "Fulham",
+          "status": "ok",
+          "url": "https://www.fulhamfc.com/news/"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {},
+          "club": "HUL",
+          "content_hash": "ea6460d922a745cff521f5005b7d44149337d52b5fa04f089301403474385771",
+          "documents": 1,
+          "etag": "\"3e5ba4d4715c4f6f1dd726933b70af1f\"",
+          "id": "hul-news",
+          "last_modified": "Fri, 04 Sep 2026 13:27:50 GMT",
+          "publisher": "Hull City",
+          "status": "ok",
+          "url": "https://www.wearehullcity.co.uk/news/"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {
+            "https://www.itfc.co.uk/hospitality/conferences-meetings": {
+              "etag": "\"7e775bd3b90b2f03c606a6a51ce4429f\"",
+              "last_modified": "Fri, 04 Sep 2026 02:15:15 GMT"
+            },
+            "https://www.itfc.co.uk/news/2026/september/03/early-team-news-Ipswich-Town-Liverpool-Premier-League/": {
+              "etag": "\"86f7bf19045477dd2eecb9675bb1b8da\"",
+              "last_modified": "Fri, 04 Sep 2026 14:22:26 GMT"
+            },
+            "https://www.itfc.co.uk/news/2026/september/03/matchday-guide---liverpool--h-/": {
+              "etag": "\"833a333d66e05c8ebf812845962b21f6\"",
+              "last_modified": "Fri, 04 Sep 2026 08:41:28 GMT"
+            }
+          },
+          "club": "IPS",
+          "content_hash": "9dc17d0468f8f04e15a4fcba9187181d5b78d99f197fc542bec6a55505c0a6ec",
+          "documents": 2,
+          "etag": "\"a0909e42edaf1406a7532042f8125f2b\"",
+          "id": "ips-news",
+          "last_modified": "Fri, 04 Sep 2026 14:22:26 GMT",
+          "publisher": "Ipswich Town",
+          "status": "ok",
+          "url": "https://www.itfc.co.uk/news/"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {
+            "https://www.leedsunited.com/en/news/daniel-farke-provides-fitness-update-ahead-of-brighton-clash-a": {},
+            "https://www.leedsunited.com/en/news/outstanding-job-daniel-discusses-deadline-day-rodon-injury-and-more": {},
+            "https://www.leedsunited.com/en/news/preview-leeds-united-women-vs-huddersfield-town-women-sep-03": {}
+          },
+          "club": "LEE",
+          "content_hash": "bcb9e808dca233578c00446d30003ab33db2803b211ea0562b193863553a449d",
+          "documents": 4,
+          "id": "lee-news",
+          "last_modified": "Fri, 04 Sep 2026 14:12:12 GMT",
+          "publisher": "Leeds United",
+          "status": "ok",
+          "url": "https://www.leedsunited.com/en/news"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {
+            "https://www.liverpoolfc.com/news/fantasy-premier-league-bradley-barcola-focus-top-liverpool-picks-and-more": {
+              "etag": "\"24da4-Dp76CEOvlxuMC3Vq1g/3LIu+Ots\""
+            },
+            "https://www.liverpoolfc.com/news/ipswich-town-v-liverpool-team-news": {
+              "etag": "\"21d27-BQwkjbGCcr2Fe3QyRLpJLAAKgj0\""
+            },
+            "https://www.liverpoolfc.com/news/lfc-women-team-news-updates-josendal-itamura-ward-parry-and-roman-haug": {
+              "etag": "\"2123f-WO3x2AEQwIh1RslTYYg2Fs+dSr4\""
+            },
+            "https://www.liverpoolfc.com/news/liverpool-submit-premier-league-squad-list-2026-27": {
+              "etag": "\"1c7e0-P/FGTO1diCe7lr2IXFgORbneDVM\""
+            },
+            "https://www.liverpoolfc.com/news/press-conference-watch-gareth-taylor-preview-liverpools-wsl-opener-charlton": {
+              "etag": "\"1a6b7-KDEDR8+QfMKOABq4xsKFdc1XPpE\""
+            }
+          },
+          "club": "LIV",
+          "content_hash": "a5010e25ed006ab40989fc1e51a7f32dee283e567776bbffb40fa502a2ec4981",
+          "documents": 6,
+          "etag": "\"33cfa-3DQxSBJLI203z0dkErD2UCeVR+0\"",
+          "id": "liv-news",
+          "publisher": "Liverpool",
+          "status": "ok",
+          "url": "https://www.liverpoolfc.com/news"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {
+            "https://www.mancity.com/citytv/mens/enzo-maresca-manchester-city-coventry-city-press-briefing-63924115": {
+              "last_modified": "Fri, 04 Sep 2026 14:12:08 GMT"
+            },
+            "https://www.mancity.com/citytv/womens/andree-jeglertz-city-v-birmingham-press-conference-video-63924116": {
+              "last_modified": "Fri, 04 Sep 2026 14:24:12 GMT"
+            },
+            "https://www.mancity.com/news/mens/enzo-maresca-coventry-team-news-63924115": {},
+            "https://www.mancity.com/news/mens/manchester-city-v-coventry-enzo-maresca-written-preview-63924116": {},
+            "https://www.mancity.com/news/womens/andree-jeglertz-birmingham-city-press-conference-written-63924106": {}
+          },
+          "club": "MCI",
+          "content_hash": "7572c611045204d25af92d0a8312c02e5ae8c0470fc82446e84bed8ac6e98cc1",
+          "documents": 6,
+          "id": "mci-news",
+          "publisher": "Manchester City",
+          "status": "ok",
+          "url": "https://www.mancity.com/news"
+        },
+        {
+          "club": "MUN",
+          "error": "HTTP Error 403: Forbidden",
+          "id": "mun-news",
+          "publisher": "Manchester United",
+          "status": "error",
+          "url": "https://www.manutd.com/en/news"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {
+            "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-fernandez-pardo-latest-ahead-of-bournemouth-clash": {}
+          },
+          "club": "NEW",
+          "content_hash": "fed6622254a9814d50b80d4cfb1cb95818a3ae7362a5b3e71ea9918cd876bf05",
+          "documents": 2,
+          "id": "new-news",
+          "publisher": "Newcastle United",
+          "status": "ok",
+          "url": "https://www.newcastleunited.com/en/news"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {},
+          "club": "NFO",
+          "content_hash": "135299ec2a5dde67198ce61c0c2220511057525416bc2f31889bdc7235c9b4a7",
+          "documents": 1,
+          "etag": "\"4f1f77e034328cad0d1c82595604635b\"",
+          "id": "nfo-news",
+          "last_modified": "Fri, 04 Sep 2026 09:15:20 GMT",
+          "publisher": "Nottingham Forest",
+          "status": "ok",
+          "url": "https://www.nottinghamforest.co.uk/news"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {},
+          "club": "SUN",
+          "content_hash": "7a3cebfb60e6adae923252da91d99a1aaa75361948a69ec70326b273404ccac3",
+          "documents": 1,
+          "etag": "\"26f8ec9176da8229c48a5c46c1545144\"",
+          "id": "sun-news",
+          "last_modified": "Fri, 04 Sep 2026 13:51:16 GMT",
+          "publisher": "Sunderland",
+          "status": "ok",
+          "url": "https://www.safc.com/news"
+        },
+        {
+          "article_errors": 0,
+          "article_validators": {
+            "https://www.tottenhamhotspur.com/teams/mens/squad": {},
+            "https://www.tottenhamhotspur.com/teams/u18s-mens/squad": {},
+            "https://www.tottenhamhotspur.com/teams/u19s-womens/squad": {},
+            "https://www.tottenhamhotspur.com/teams/u21s-mens/squad": {},
+            "https://www.tottenhamhotspur.com/teams/womens/squad": {}
+          },
+          "club": "TOT",
+          "content_hash": "0dad573671e278d6fe42dbc22ee3afd6d52feb5323a34a5076e24f18e7dca0b1",
+          "documents": 6,
+          "id": "tot-news",
+          "publisher": "Tottenham Hotspur",
+          "status": "ok",
+          "url": "https://www.tottenhamhotspur.com/news/"
+        }
+      ],
+      "status": "amber",
+      "version": 1
+    },
+    "news_claims": 0
+  },
+  "validation": {
+    "unit_tests_passed": 224,
+    "app_build": "passed",
+    "app_lint": "passed",
+    "source_files_changed": false
+  },
+  "notes": [
+    "GW3 provisional; public endpoints can differ slightly during rank updates.",
+    "Four GW4 free transfers inferred from no transfers and TC use; unsubmitted upcoming transfers are not visible publicly.",
+    "Model audit sensitivities change data only in memory; no production parameter changes made."
+  ]
+}

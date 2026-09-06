@@ -20,6 +20,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from gwclock import next_gw          # noqa: E402
+from decision_state import forecast_id
 ROOT = HERE.parent
 SRC = HERE / 'projections_v2.json'
 VIEW = HERE / 'season_view.json'
@@ -118,6 +119,8 @@ def main():
             for g in range(1, horizon + 1)]
     json.dump({'players': rows, 'schedule': schedule,
                'meta': {'horizon': horizon, 'start_gw': start_gw,
+                        'forecast_id': forecast_id(SRC),
+                        'generated': data.get('generated', ''),
                         'budget': 100.0, 'deadline': deadline}},
               open(DST_JSON, 'w'))
 

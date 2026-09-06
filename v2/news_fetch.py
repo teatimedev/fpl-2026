@@ -109,7 +109,7 @@ def _same_site(base: str, target: str) -> bool:
 
 
 def fetch_source(source: dict, *, article_limit: int = 5,
-                 prior: dict | None = None) -> tuple[list[dict], dict]:
+                 prior: dict | None = None, relevant=RELEVANT) -> tuple[list[dict], dict]:
     if not source["enabled"]:
         return [], {"id": source["id"], "club": source["club"], "status": "unsupported",
                     "error": source.get("unsupported_reason")}
@@ -129,7 +129,7 @@ def fetch_source(source: dict, *, article_limit: int = 5,
             urls = []
             for href, label in parser.links:
                 absolute = urllib.parse.urljoin(source["url"], href).split("#", 1)[0]
-                if _same_site(source["url"], absolute) and RELEVANT.search(label + " " + absolute):
+                if _same_site(source["url"], absolute) and relevant.search(label + " " + absolute):
                     if absolute not in urls:
                         urls.append(absolute)
                 if len(urls) >= article_limit:

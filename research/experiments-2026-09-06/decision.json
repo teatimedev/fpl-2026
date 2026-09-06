@@ -1,0 +1,62 @@
+{
+  "method": "Synthetic multi-transfer control experiment, not a football backtest.\n\nThree independent opportunities each week; true gains use the existing\nstylised mixture. Compare fixed barriers to posterior mean decisions and\na finite-horizon Bellman policy that prices the free-transfer bank once.\nThe Bayesian policies know the synthetic data-generating distribution.\n",
+  "sigma": 5.16,
+  "seasons": 20000,
+  "weeks": 38,
+  "results": {
+    "fixed_2": {
+      "mean_gain": 137.08657880556717,
+      "transfers": 42.6475,
+      "paid_transfers": 4.9992,
+      "p10": 106.00479334129736,
+      "gain_vs_fixed_2_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "no_bar": {
+      "mean_gain": 123.1262673807777,
+      "transfers": 50.14915,
+      "paid_transfers": 12.2311,
+      "p10": 90.84520829416218,
+      "gain_vs_fixed_2_ci95": [
+        -14.096047349961925,
+        -13.824575499617072
+      ]
+    },
+    "posterior_myopic": {
+      "mean_gain": 134.79681283641168,
+      "transfers": 39.5948,
+      "paid_transfers": 1.5948,
+      "p10": 104.70102459651525,
+      "gain_vs_fixed_2_ci95": [
+        -2.4388739675101117,
+        -2.140657970800959
+      ]
+    },
+    "posterior_dynamic": {
+      "mean_gain": 145.87775307887216,
+      "transfers": 38.3371,
+      "paid_transfers": 0.34135,
+      "p10": 115.042585477968,
+      "gain_vs_fixed_2_ci95": [
+        8.65559180544013,
+        8.926756741169791
+      ]
+    }
+  },
+  "ft_marginal_value_6_weeks": [
+    3.1465897565386847,
+    2.4297619529842116,
+    2.039248486379197,
+    1.7844052150264282,
+    1.563680589674476
+  ],
+  "ft_marginal_value_1_week": [
+    2.915865787458564,
+    1.751663952726029,
+    0.8617590808835836,
+    0.0,
+    0.0
+  ]
+}

@@ -239,7 +239,7 @@ def check_gw_stats(cx, boot, fixtures=None, season=None):
         return problems
     played = {}
     for x in fixtures or []:
-        if x.get('finished') and x.get('team_h_score') is not None:
+        if (x.get('finished') or x.get('finished_provisional')) and x.get('team_h_score') is not None:
             played[x['team_h']] = played.get(x['team_h'], 0) + 1
             played[x['team_a']] = played.get(x['team_a'], 0) + 1
     for p in boot['elements']:
@@ -253,8 +253,13 @@ def check_gw_stats(cx, boot, fixtures=None, season=None):
         if got[:3] != want:
             problems.append(f"{p['web_name']}: gw_stat sums {got[:3]} vs bootstrap "
                             f"(minutes, points, starts) {want}")
-        if fixtures is not None and got[3] > played.get(p['team'], 0):
-            problems.append(f"{p['web_name']}: {got[3]} gw_stat rows but his club "
+        fixture_lookup = {x['id']: x for x in fixtures or []}
+        completed_rows = sum(1 for (fid,) in cx.execute(
+            'SELECT fixture_id FROM gw_stat WHERE season=? AND code=?', (season, p['code']))
+            if fid not in fixture_lookup or fixture_lookup[fid].get('finished')
+            or fixture_lookup[fid].get('finished_provisional'))
+        if fixtures is not None and completed_rows > played.get(p['team'], 0):
+            problems.append(f"{p['web_name']}: {completed_rows} gw_stat rows but his club "
                             f"has played {played.get(p['team'], 0)} fixture(s)")
     return problems
 
@@ -422,7 +427,7 @@ def load_current_season(cx, boot, fixtures):
 
     results = []
     for x in fixtures:
-        if not x.get('finished') or x.get('team_h_score') is None:
+        if not (x.get('finished') or x.get('finished_provisional')) or x.get('team_h_score') is None:
             continue
         # match.date is football-data's dd/mm/yyyy; teams_model parses that
         d = (x.get('kickoff_time') or '')[:10]

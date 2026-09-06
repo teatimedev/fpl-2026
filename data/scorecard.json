@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-04T14:29:08Z",
+ "generated": "2026-09-06T09:01:56Z",
  "summary": {
   "n_gws": 2,
   "spearman_starters": 0.341,
@@ -7,7 +7,7 @@
   "mae_starters": 2.48,
   "bias_starters": -0.335,
   "captain_model": 6.5,
-  "captain_yours": 7.5,
+  "captain_yours": 6.5,
   "captain_best": 11.0,
   "xi_model": 65.5,
   "xi_yours": 64.0,
@@ -208,6 +208,14 @@
      }
     }
    },
+   "submitted": {
+    "entry_id": 3415101,
+    "chip": null,
+    "points": 46,
+    "transfer_cost": 0,
+    "credited_points": 46,
+    "captain_multiplier": 2
+   },
    "captain": {
     "model": {
      "id": 411,
@@ -236,6 +244,7 @@
     "predicted_rate": 0.255,
     "actual_rate": 0.3
    },
+   "grading_version": 2,
    "checked": true
   },
   {
@@ -507,6 +516,14 @@
     }
    },
    "retro_gw": 1,
+   "submitted": {
+    "entry_id": 3415101,
+    "chip": null,
+    "points": 95,
+    "transfer_cost": 0,
+    "credited_points": 95,
+    "captain_multiplier": 2
+   },
    "captain": {
     "model": {
      "id": 427,
@@ -514,9 +531,9 @@
      "pts": 11
     },
     "yours": {
-     "id": 411,
-     "name": "Haaland",
-     "pts": 13
+     "id": 427,
+     "name": "Mbeumo",
+     "pts": 11
     },
     "best": {
      "id": 411,
@@ -535,6 +552,7 @@
     "predicted_rate": 0.286,
     "actual_rate": 0.2
    },
+   "grading_version": 2,
    "checked": true
   }
  ],

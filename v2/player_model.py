@@ -35,6 +35,7 @@ import re
 import sqlite3
 import sys
 from collections import defaultdict
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -242,6 +243,15 @@ def load():
     return players
 
 
+def fixture_completed(fixture):
+    # The API can leave `finished` false after the final whistle while the
+    # provisional result and minutes are already available. Live/unplayed
+    # rows (including scheduled zero-minute player histories) are not evidence.
+    return bool((fixture.get('finished') or fixture.get('finished_provisional'))
+                and fixture.get('team_h_score') is not None
+                and fixture.get('team_a_score') is not None)
+
+
 def games_played():
     """{team short: matches finished this season} from the cached fixture list."""
     path = ROOT / 'v2' / 'cache' / 'fixtures.json'
@@ -251,7 +261,7 @@ def games_played():
     short = {t['id']: t['short_name'] for t in json.loads(boot.read_text())['teams']}
     out = defaultdict(int)
     for x in json.loads(path.read_text()):
-        if x.get('finished') and x.get('team_h_score') is not None:
+        if fixture_completed(x):
             out[short[x['team_h']]] += 1
             out[short[x['team_a']]] += 1
     return dict(out)
@@ -271,7 +281,7 @@ def team_fixtures():
     short = {t['id']: t['short_name'] for t in json.loads(boot.read_text())['teams']}
     out = defaultdict(list)
     for x in json.loads(path.read_text()):
-        if x.get('finished') and x.get('team_h_score') is not None:
+        if fixture_completed(x):
             row = dict(fixture_id=x['id'], event=x.get('event'),
                        kickoff=x.get('kickoff_time') or '')
             out[short[x['team_h']]].append(row)
@@ -676,6 +686,9 @@ def defcon_hit_prob(mean, k, evidence):
 
 # ------------------------------------------------------------ projection
 def project(players, view, priors, refit_calibration=False, feedback=False):
+    from minutes_survival import fit as survival_fit, probability as p60_probability
+    survival = survival_fit({pid: match_evidence(p) for pid, p in players.items()},
+                            {pid: p['pos'] for pid, p in players.items()})
     # median price per position, used to temper the prior for unknown players
     for pos in ('GKP', 'DEF', 'MID', 'FWD'):
         prices = sorted(q['price'] for q in players.values() if q['pos'] == pos)
@@ -714,6 +727,7 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
         by_gw, total = [0.0] * (START_GW - 1), 0.0
         season_by_gw = [0.0] * (START_GW - 1)
         start_by_gw = [0.0] * (START_GW - 1)
+        p60_shadow_by_gw = [0.0] * (START_GW - 1)
         play_by_gw = [0.0] * (START_GW - 1)
         mins_by_gw = [0.0] * (START_GW - 1)
         availability_by_gw = [None] * (START_GW - 1)
@@ -744,6 +758,8 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
             start_share = av.start_minutes / 90.0
             cameo_share = av.cameo_minutes / 90.0
             if gw <= HORIZON:
+                p60_shadow_by_gw.append(round(p60_probability(survival[p['id']], p_start, p_cameo), 4)
+                                       if av.source == 'model baseline' else None)
                 start_by_gw.append(round(p_start, 3))
                 play_by_gw.append(round(p_play, 3))
                 mins_by_gw.append(round(av.expected_minutes, 1))
@@ -817,6 +833,8 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
             value=round(total / p['price'], 4) if p['price'] else 0,
             start_rate=start_by_gw[first], mins_proj=round(mins_by_gw[first]),
             start_by_gw=start_by_gw, play_by_gw=play_by_gw,
+            p60_shadow_by_gw=p60_shadow_by_gw,
+            p60_shadow_method='Positional prior + 4 starts; experimental; one fixture; excludes manual availability overrides',
             mins_by_gw=mins_by_gw, availability_by_gw=availability_by_gw,
             availability_source=current_availability['source'],
             availability_confidence=current_availability['confidence'],
@@ -1098,6 +1116,7 @@ if __name__ == '__main__':
     rows = project(players, view, priors, refit_calibration=args.refit_calibration,
                    feedback=args.feedback)
     json.dump({'players': rows, 'horizon': HORIZON, 'start_gw': START_GW,
+               'generated': datetime.now(timezone.utc).isoformat(),
                'window': WINDOW, 'minutes_rule': MINUTES_RULE,
                'manager_mps_weight': (MANAGER_MPS_WEIGHT
                                       if MANAGER_MPS_TABLE else 0.0),

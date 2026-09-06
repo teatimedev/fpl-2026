@@ -19,16 +19,18 @@ next deadline, and solves the whole modelled window as one integer program:
   subject to  budget, 2/5/5/3, max 3 per club, a legal XI, and FPL's
               free-transfer accounting (one a week, bank up to five)
 
-Assumptions worth knowing: prices are held static across the window, and FPL's
-sell-price rule (you bank only half of any rise) is not modelled — the budget is
-today's prices plus your bank. Both are minor over six weeks; both make the
-plan slightly optimistic. wildcard_week models one wildcard gameweek:
-unlimited free transfers that week, bank preserved (+1 accrues at the next
-deadline as usual). Other chips are not modelled.
+Assumptions worth knowing: prices are held static across the window. Supply
+sell_prices for initially owned players to account for the profit lost on
+their first sale; later repurchases cost the full current price. Without
+sell_prices, the legacy current-price budget is used. wildcard_week models one wildcard gameweek:
+unlimited free transfers that week, with the free-transfer bank preserved
+unchanged at the next deadline. Other chips are not modelled.
 
     from planner import plan
     res = plan(players, squad_ids, bank=0.5, ft=1, gw=7, horizon=12)
 """
+import math
+
 import pulp
 
 from squad_evaluator import evaluate_squad, modelled_bench_weights
@@ -59,6 +61,25 @@ def _valid_incumbent(prob, tolerance=1e-5):
         return False
 
 
+def _solver_diagnostics(prob):
+    """Expose the actual HiGHS termination/gap, including feasible timeouts.
+
+    PuLP's broad status alone is insufficient for small act-versus-hold
+    differences. Bounds refer to the linear bench approximation, not the
+    exact squad evaluation returned in total.
+    """
+    model = getattr(prob, 'solverModel', None)
+    if model is None:
+        return {'status': pulp.LpStatus[prob.status]}
+    info = model.getInfo()
+    def finite(value):
+        return float(value) if value is not None and math.isfinite(value) else None
+    return dict(status=str(model.getModelStatus()).split('.')[-1],
+                mip_gap=finite(info.mip_gap),
+                objective=finite(pulp.value(prob.objective)),
+                upper_bound=finite(-info.mip_dual_bound))
+
+
 def _pool(players, owned, gw, horizon):
     def rem(p):
         v = p['proj_by_gw']
@@ -70,7 +91,8 @@ def _pool(players, owned, gw, horizon):
 
 
 def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
-         freeze_this_week=False, time_limit=30, wildcard_week=None):
+         freeze_this_week=False, time_limit=30, wildcard_week=None, sell_prices=None,
+         first_week_squad=None):
     """Optimal transfer path from `owned` over GW gw..horizon.
 
     `ft` is the number of free transfers available at the coming deadline
@@ -80,9 +102,14 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
     Set `wildcard_week` to a gameweek inside the window to model playing the
     wildcard chip that week: unlimited free transfers at no point cost, and
     per FPL's chip rules the free-transfer bank is neither spent nor gained
-    that week (it rolls over plus one as usual into the following deadline).
+    that week (it rolls over unchanged into the following deadline).
     """
-    pool = _pool(players, owned, gw, horizon)
+    if first_week_squad is not None:
+        if len(set(first_week_squad)) != 15 or any(i not in players for i in first_week_squad):
+            raise ValueError('first_week_squad must contain 15 distinct known players')
+        if freeze_this_week and set(first_week_squad) != set(owned):
+            raise ValueError('first_week_squad conflicts with freeze_this_week')
+    pool = _pool(players, list(set(owned) | set(first_week_squad or [])), gw, horizon)
     ids = [p['id'] for p in pool]
     P = {p['id']: p for p in pool}
     GW = list(range(gw, horizon + 1))
@@ -103,6 +130,15 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
            for i in ids for g in GW}
     price = {i: int(round(P[i]['price'] * 10)) for i in ids}
     budget = sum(price[i] for i in owned if i in price) + int(round(bank * 10))
+    discounts = {}
+    for i, sell in (sell_prices or {}).items():
+        if i not in owned or i not in price:
+            raise ValueError('sell_prices must refer to owned players in the pool')
+        sale = int(round(sell * 10))
+        if not 0 <= sale <= price[i]:
+            raise ValueError('selling price must be between zero and current price')
+        if sale < price[i]:
+            discounts[i] = price[i] - sale
     seed = [P[i] for i in owned if i in P]
     bench_weights = {g: modelled_bench_weights(seed or pool, g) for g in GW}
 
@@ -112,6 +148,10 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
     c = {(i, g): pulp.LpVariable(f'c{i}_{g}', cat='Binary') for i in ids for g in GW}
     tin = {(i, g): pulp.LpVariable(f'i{i}_{g}', cat='Binary') for i in ids for g in GW}
     tout = {(i, g): pulp.LpVariable(f'o{i}_{g}', cat='Binary') for i in ids for g in GW}
+    # Whether the original acquisition lot has been retained continuously.
+    # Once sold it stays zero, including after a later full-price repurchase.
+    retained = {(i, g): pulp.LpVariable(f'r{i}_{g}', cat='Binary')
+                for i in discounts for g in GW}
     hits = {g: pulp.LpVariable(f'h{g}', lowBound=0, cat='Integer') for g in GW}
     # free transfers available at each deadline; the first is given
     ftv = {g: pulp.LpVariable(f'f{g}', lowBound=0, upBound=max(MAX_BANK, ft), cat='Integer')
@@ -130,11 +170,17 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
 
     prob += objective(bench_weights)
 
+    if first_week_squad is not None:
+        for i in ids:
+            prob += x[(i, gw)] == int(i in first_week_squad)
+
     for g in GW:
         prob += pulp.lpSum(x[(i, g)] for i in ids) == 15
         for pos, n in SQUAD.items():
             prob += pulp.lpSum(x[(i, g)] for i in ids if P[i]['pos'] == pos) == n
-        prob += pulp.lpSum(x[(i, g)] * price[i] for i in ids) <= budget
+        prob += (pulp.lpSum(x[(i, g)] * price[i] for i in ids)
+                 + pulp.lpSum(discounts[i] * (1-retained[(i, g)]) for i in discounts)
+                 <= budget)
         for club in {p['team'] for p in pool}:
             prob += pulp.lpSum(x[(i, g)] for i in ids if P[i]['team'] == club) <= 3
         prob += pulp.lpSum(y[(i, g)] for i in ids) == 11
@@ -154,6 +200,11 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
             prev_x = (1 if i in owned else 0) if k == 0 else x[(i, GW[k - 1])]
             prob += x[(i, g)] - prev_x == tin[(i, g)] - tout[(i, g)]
             prob += tin[(i, g)] + tout[(i, g)] <= 1
+        for i in discounts:
+            prev = 1 if k == 0 else retained[(i, GW[k - 1])]
+            prob += retained[(i, g)] <= prev
+            prob += retained[(i, g)] <= x[(i, g)]
+            prob += retained[(i, g)] >= prev - tout[(i, g)]
         n_out = pulp.lpSum(tout[(i, g)] for i in ids)
         if k == 0:
             prob += ftv[g] == ft
@@ -173,8 +224,8 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
                 # Wildcard week (FPL chip rules): FTs are neither spent nor
                 # gained — unlimited outs must not drain the bank, so the
                 # standard rollover inequality is dropped for this single
-                # transition and only the preserved bank (+1, capped) carries.
-                prob += ftv[nxt] <= ftv[g] + 1
+                # transition and only the unchanged bank carries.
+                prob += ftv[nxt] <= ftv[g]
             else:
                 # what is left rolls over, plus one, capped at five
                 prob += ftv[nxt] <= ftv[g] - n_out + hits[g] + 1
@@ -192,6 +243,7 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
             or not _valid_incumbent(prob)):
         return None
     first_incumbent = {variable.name: variable.value() for variable in prob.variables()}
+    first_diagnostics = _solver_diagnostics(prob)
     selected = tuple(
         tuple(sorted(i for i in ids if (x[(i, g)].value() or 0) > 0.5))
         for g in GW
@@ -202,6 +254,7 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
     }
     prob.setObjective(objective(bench_weights))
     prob.solve(pulp.HiGHS(msg=False, timeLimit=time_limit))
+    diagnostics = _solver_diagnostics(prob)
     if (pulp.LpStatus[prob.status] not in ('Optimal', 'Not Solved')
             or not _valid_incumbent(prob)):
         # A timeout may leave no second incumbent. The first pass was checked
@@ -209,8 +262,10 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
         # variable values as a squad.
         for variable in prob.variables():
             variable.varValue = first_incumbent[variable.name]
+        diagnostics = dict(first_diagnostics, used_first_pass=True)
 
-    out = {'weeks': [], 'total': 0.0, 'hits': 0, 'gw': gw, 'horizon': horizon}
+    out = {'weeks': [], 'total': 0.0, 'hits': 0, 'gw': gw, 'horizon': horizon,
+           'solver': diagnostics}
     for g in GW:
         squad = [i for i in ids if (x[(i, g)].value() or 0) > 0.5]
         evaluation = evaluate_squad([P[i] for i in squad], g, g)
@@ -230,6 +285,7 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
             'ft': int(round(ftv[g].value() or 0)),
             'cost': sum(price[i] for i in squad) / 10,
         })
+    out['total_unrounded'] = out['total']
     out['total'] = round(out['total'], 1)
     return out
 
