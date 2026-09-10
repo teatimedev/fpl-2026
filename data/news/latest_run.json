@@ -1,12 +1,12 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-09-04T14:25:14Z",
+  "checked_at": "2026-09-10T09:51:41Z",
   "claims": 0,
   "coverage": 0.95,
-  "deadline": "2026-09-04T17:30:00Z",
-  "gw": 3,
-  "notification_key": "b7e947d2ea213273e751",
+  "deadline": "2026-09-12T12:30:00Z",
+  "gw": 4,
+  "notification_key": "cf689c5a14407f712ebe",
   "notify_required": false,
   "official_fpl": {
     "1": {
@@ -71,7 +71,7 @@
     },
     "11": {
       "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
+      "news": "Muscular injury - 75% chance of playing",
       "status": "d"
     },
     "110": {
@@ -175,9 +175,9 @@
       "status": "u"
     },
     "129": {
-      "chance": 75,
-      "news": "Ankle injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "13": {
       "chance": null,
@@ -341,7 +341,7 @@
     },
     "159": {
       "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
+      "news": "Calf injury - 75% chance of playing",
       "status": "d"
     },
     "16": {
@@ -405,9 +405,9 @@
       "status": "a"
     },
     "170": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Hamstring injury - 75% chance of playing",
+      "status": "d"
     },
     "171": {
       "chance": 0,
@@ -675,9 +675,9 @@
       "status": "a"
     },
     "219": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "has joined  Kasimpasa on loan for the rest of the seaon.",
+      "status": "u"
     },
     "22": {
       "chance": 0,
@@ -785,9 +785,9 @@
       "status": "a"
     },
     "239": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "24": {
       "chance": 0,
@@ -1015,9 +1015,9 @@
       "status": "a"
     },
     "280": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "281": {
       "chance": 0,
@@ -1040,9 +1040,9 @@
       "status": "a"
     },
     "285": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Foot injury - 75% chance of playing",
+      "status": "d"
     },
     "286": {
       "chance": null,
@@ -1060,9 +1060,9 @@
       "status": "a"
     },
     "289": {
-      "chance": 75,
-      "news": "Thigh injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "29": {
       "chance": null,
@@ -1090,9 +1090,9 @@
       "status": "u"
     },
     "294": {
-      "chance": 0,
-      "news": "Thigh injury - Unknown return date",
-      "status": "i"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "295": {
       "chance": null,
@@ -1235,9 +1235,9 @@
       "status": "u"
     },
     "32": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Muscular injury - 75% chance of playing",
+      "status": "d"
     },
     "320": {
       "chance": null,
@@ -1495,9 +1495,9 @@
       "status": "a"
     },
     "367": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Thigh injury - 75% chance of playing",
+      "status": "d"
     },
     "368": {
       "chance": null,
@@ -1605,9 +1605,9 @@
       "status": "a"
     },
     "387": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Back injury - 75% chance of playing",
+      "status": "d"
     },
     "388": {
       "chance": null,
@@ -1686,7 +1686,7 @@
     },
     "400": {
       "chance": 0,
-      "news": "Calf injury - Expected back 5 Sep",
+      "news": "Calf injury - Expected back 13 Sep",
       "status": "i"
     },
     "401": {
@@ -1850,9 +1850,9 @@
       "status": "a"
     },
     "430": {
-      "chance": 75,
-      "news": "Foot injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "431": {
       "chance": 0,
@@ -1960,9 +1960,9 @@
       "status": "a"
     },
     "450": {
-      "chance": 0,
-      "news": "Calf injury - Unknown return date",
-      "status": "i"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "451": {
       "chance": 0,
@@ -1970,9 +1970,9 @@
       "status": "u"
     },
     "452": {
-      "chance": 75,
-      "news": "Knock - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "453": {
       "chance": null,
@@ -2230,9 +2230,9 @@
       "status": "a"
     },
     "5": {
-      "chance": 0,
-      "news": "Groin injury - Unknown return date",
-      "status": "i"
+      "chance": 25,
+      "news": "Groin injury - 25% chance of playing",
+      "status": "d"
     },
     "50": {
       "chance": null,
@@ -2401,7 +2401,7 @@
     },
     "53": {
       "chance": 0,
-      "news": "Knee injury - Unknown return date",
+      "news": "Knee injury - Expected back 12 Sep",
       "status": "i"
     },
     "530": {
@@ -2495,9 +2495,9 @@
       "status": "u"
     },
     "547": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Knee injury - Unknown return date",
+      "status": "i"
     },
     "548": {
       "chance": null,
@@ -2585,9 +2585,9 @@
       "status": "a"
     },
     "563": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Calf injury - Expected back 11 Oct",
+      "status": "i"
     },
     "564": {
       "chance": null,
@@ -2750,9 +2750,9 @@
       "status": "a"
     },
     "593": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Hamstring injury - 75% chance of playing",
+      "status": "d"
     },
     "594": {
       "chance": null,
@@ -2890,9 +2890,9 @@
       "status": "a"
     },
     "618": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Knee injury - Expected back 10 Oct",
+      "status": "i"
     },
     "619": {
       "chance": null,
@@ -2970,9 +2970,9 @@
       "status": "a"
     },
     "632": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Back injury - Unknown return date",
+      "status": "i"
     },
     "633": {
       "chance": null,
@@ -3084,6 +3084,16 @@
       "news": "Unspecified injury - Expected back 13 Sep",
       "status": "i"
     },
+    "653": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "654": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
     "66": {
       "chance": 100,
       "news": "",
@@ -3185,9 +3195,9 @@
       "status": "a"
     },
     "84": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 25,
+      "news": "Calf injury - 25% chance of playing",
+      "status": "d"
     },
     "85": {
       "chance": 0,

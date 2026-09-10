@@ -5763,9 +5763,9 @@
     {
       "aliases": [
         "Zepa",
-        "Macauley Zepa"
+        "Macaulay Zepa"
       ],
-      "canonical": "Macauley Zepa",
+      "canonical": "Macaulay Zepa",
       "club": "FUL",
       "player_id": 626
     },
@@ -6007,6 +6007,24 @@
       "canonical": "Femi Azeez",
       "club": "BHA",
       "player_id": 652
+    },
+    {
+      "aliases": [
+        "Samba",
+        "Floyd Samba"
+      ],
+      "canonical": "Floyd Samba",
+      "club": "MCI",
+      "player_id": 653
+    },
+    {
+      "aliases": [
+        "Graham",
+        "Braiden Graham"
+      ],
+      "canonical": "Braiden Graham",
+      "club": "EVE",
+      "player_id": 654
     }
   ],
   "version": 1
