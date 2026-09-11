@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 4
 
-Deadline **Sat 12 Sep, 12:30 UTC** — 0d 17h away.
+Deadline **Sat 12 Sep, 12:30 UTC** — 0d 14h away.
 Projections cover GW4–9.
 
 ## GW3 in review — what happened, and what it does and does not change
 
-_400 players classified: 27 unavailable, 33 minutes loss, 38 minutes watch, 16 minutes gain, 13 role change, 56 variance, 217 on model. Retrospective classes graded: 2 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_400 players classified: 26 unavailable, 33 minutes loss, 38 minutes watch, 16 minutes gain, 13 role change, 56 variance, 218 on model. Retrospective classes graded: 2 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -102,7 +102,7 @@ _Last week, for the names above:_
 - Giles — role change (setpiece): now not first on corners (was first)
 - Barnes — role change (xgi): last 3 starts: 0.28 xGI vs 1.34 expected, below the 80% band (+-0.89) — reassess
 
-**Recommended: hold.** Raya → Verbruggen, Tarkowski → De Cuyper, Foden → Palmer is the move queued — worth taking over the window, but taking it now rather than next week is worth only +0.4 (the plan scores 406.0 against 405.6 with this week held). You would have 4 free transfers next week.
+**Recommended: hold.** Foden → Palmer, Haaland → João Pedro, Obi → Isak is the move queued — worth taking over the window, but taking it now rather than next week is worth only -2.0 (the plan scores 403.6 against 405.6 with this week held). You would have 4 free transfers next week.
 
 _Minutes check:_ the verdict above is on the numbers; Foden is a check-first case (see the review).
 
@@ -120,15 +120,15 @@ _Minutes check:_ the verdict above is on the numbers; Foden is a check-first cas
 ## The next six weeks, planned
 
 
-**This Friday under uncertainty:** the planner's proposed GW4 squad beats holding in 58% of 4,000 simulations (average +4.7 points). The proposed change does not have a reliable points edge this week.
-Best path from here: **406.0** pts (0 hits). Making no move this week and re-planning: 405.6. Acting now is worth **+0.4** across 3 moves — not enough; hold.
+**This Friday under uncertainty:** the planner's proposed GW4 squad beats holding in 65% of 4,000 simulations (average +7.5 points). The advantage is both likely and large enough to clear the 6.0-point bar for 3 moves.
+Best path from here: **403.6** pts (0 hits). Making no move this week and re-planning: 405.6. Acting now is worth **-2.0** across 3 moves — not enough; hold.
 
-- **GW4** 67.4 pts, C Palmer, 3 FT  Raya → Verbruggen, Tarkowski → De Cuyper, Foden → Palmer
-- **GW5** 64.5 pts, C Haaland, 1 FT  hold
-- **GW6** 68.1 pts, C Mbeumo, 2 FT  Milenković → Ajayi, Sadiki → Barnes
-- **GW7** 69.4 pts, C Haaland, 1 FT  De Cuyper → Andersen
-- **GW8** 68.5 pts, C Haaland, 1 FT  Thiago → João Pedro
-- **GW9** 68.1 pts, C Haaland, 1 FT  Verbruggen → Tzolakis
+- **GW4** 70.0 pts, C Palmer, 3 FT  Foden → Palmer, Haaland → João Pedro, Obi → Isak
+- **GW5** 65.6 pts, C Saka, 1 FT  hold
+- **GW6** 68.1 pts, C Mbeumo, 2 FT  hold
+- **GW7** 67.3 pts, C Haaland, 3 FT  Tarkowski → Ajayi, Palmer → Groß, Isak → Haaland
+- **GW8** 65.3 pts, C Haaland, 1 FT  hold
+- **GW9** 67.3 pts, C Haaland, 2 FT  Leno → Roefs, Milenković → Ballard
 
 _The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
 
@@ -141,7 +141,7 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 | Bench Boost | 8.8 | GW8: 11.6 | Hold. Best-looking week for this one is GW8 (11.6 from the bench); this week is 8.8. Second copy (GW20–38): best week GW37 (11.1). |
 | Triple Captain | — | GW36: 7.8 (Haaland) | Hold. Best week for this one is GW36: Haaland (7.8 extra). |
 | Free Hit | 10.6 | GW4: 10.6 | Hold. Widest gap left is GW4 (10.6 behind the best possible XI); this week 10.6. |
-| Wildcard | +8.1 over the window | — | Hold. Unlimited transfers now are worth 8.1 over the window. The squad is holding up (gap to the best possible XI 10.6–10.6 over the next weeks). |
+| Wildcard | +10.5 over the window | — | Hold. Unlimited transfers now are worth 10.5 over the window. The squad is holding up (gap to the best possible XI 10.6–10.6 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 
@@ -151,29 +151,30 @@ Net transfers this gameweek as a share of current owners. Top of the left column
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Vaz £5.0 | +205700.0% | +2,057 | Millar £5.0 | -217400.0% | -2,174 |
-| Samba £4.5 | +197000.0% | +1,970 | Elliott £5.4 | -149600.0% | -1,496 |
-| Flemming £5.5 | +143900.0% | +1,439 | Diarra £5.4 | -123000.0% | -1,230 |
-| Ansah £5.0 | +141600.0% | +1,416 | Morato £5.0 | -98200.0% | -982 |
-| Palacios £5.0 | +120400.0% | +1,204 | M.Sarr £4.5 | -89300.0% | -893 |
-| Elvedi £4.5 | +111700.0% | +1,117 | Goretzka £6.0 | -88900.0% | -889 |
+| Vaz £5.0 | +212200.0% | +2,122 | Millar £5.0 | -221800.0% | -2,218 |
+| Samba £4.5 | +202300.0% | +2,023 | Igor £4.5 | -180800.0% | -1,808 |
+| Flemming £5.5 | +148300.0% | +1,483 | Elliott £5.4 | -153900.0% | -1,539 |
+| Ansah £5.0 | +136700.0% | +1,367 | Diarra £5.4 | -127800.0% | -1,278 |
+| Palacios £5.0 | +124800.0% | +1,248 | Morato £5.0 | -101500.0% | -1,015 |
+| Elvedi £4.5 | +118400.0% | +1,184 | Goretzka £6.0 | -95000.0% | -950 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Target De Cuyper (net +339k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +339k this event (in 431k / out 93k), sel 21.1% = Q3 (~150k to move), price 4.8 over 9 snaps (+0.3m in window), already +1x0.1m this event]
-- Target Palmer (net +528k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +528k this event (in 615k / out 86k), sel 25.0% = Q3 (~150k to move), price 9.7 over 9 snaps (+0.2m in window), already +1x0.1m this event]
-- Squad player Mbeumo (net -232k this event) at fall risk (-0.1m hurts the bank) [net -232k this event (in 117k / out 349k), sel 24.5% = Q3 (~150k to move), price 7.9 over 9 snaps (-0.1m in window), already -1x0.1m this event]
-- Squad player Foden (net -137k this event) at fall risk (-0.1m hurts the bank) [net -137k this event (in 15k / out 152k), sel 4.3% = Q2 (~113k to move), price 7.0 over 9 snaps (+0.0m in window)]
-- Squad player Thiago (net -219k this event) at fall risk (-0.1m hurts the bank) [net -219k this event (in 18k / out 237k), sel 11.4% = Q3 (~150k to move), price 7.9 over 9 snaps (-0.1m in window), already -1x0.1m this event]
+- Target Palmer (net +576k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +576k this event (in 665k / out 90k), sel 25.6% = Q3 (~150k to move), price 9.7 over 9 snaps (+0.2m in window), already +1x0.1m this event]
+- Target João Pedro (net +216k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +216k this event (in 306k / out 91k), sel 73.2% = Q3 (~150k to move), price 7.7 over 9 snaps (+0.2m in window)]
+- Target Isak (net +489k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +489k this event (in 570k / out 82k), sel 22.6% = Q3 (~150k to move), price 9.1 over 9 snaps (+0.1m in window), already +1x0.1m this event]
+- Squad player Mbeumo (net -251k this event) at fall risk (-0.1m hurts the bank) [net -251k this event (in 124k / out 375k), sel 24.3% = Q3 (~150k to move), price 7.9 over 9 snaps (-0.1m in window), already -1x0.1m this event]
+- Squad player Foden (net -145k this event) at fall risk (-0.1m hurts the bank) [net -145k this event (in 15k / out 161k), sel 4.2% = Q2 (~113k to move), price 7.0 over 9 snaps (+0.0m in window)]
+- Squad player Thiago (net -233k this event) at fall risk (-0.1m hurts the bank) [net -233k this event (in 19k / out 252k), sel 11.2% = Q3 (~150k to move), price 7.9 over 9 snaps (-0.1m in window), already -1x0.1m this event]
 
 _Based on 9 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-09-11 18:54 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-09-11 22:02 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
 
 ## Scouting
 
-28 sourced observations; 4 API calls. Review these alongside the transfer stress tests in the app.
+29 sourced observations; 6 API calls. Review these alongside the transfer stress tests in the app.
