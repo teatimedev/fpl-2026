@@ -8,7 +8,7 @@
       "excerpt": "City boss Enzo Maresca says Nico O\u2019Reilly is fit and available for selection for Sunday\u2019s Manchester derby at Old Trafford.",
       "gw": 4,
       "id": "ev-d7c54c56ffdba8a8",
-      "observed_at": "2026-09-11T09:50:30Z",
+      "observed_at": "2026-09-11T14:30:08Z",
       "player": "Enzo Fern\u00e1ndez",
       "player_id": 155,
       "published_at": "2026-09-13T15:30:00.0000000+00:00",
@@ -17,6 +17,24 @@
       "source_id": "mci-news",
       "title": "Manchester United v City: Kick-off time and TV information",
       "url": "https://www.mancity.com/news/mens/man-utd-v-city-match-preview-pl-13-sep-63924475"
+    },
+    {
+      "claim_type": "late_test",
+      "club": "LIV",
+      "confidence": "review",
+      "decision": "candidate",
+      "excerpt": "Gakpo was forced to miss the victory over Atletico and will be assessed ahead of the meeting with Fulham.",
+      "gw": 4,
+      "id": "ev-d8e5c2a983e4b448",
+      "observed_at": "2026-09-11T14:30:08Z",
+      "player": "Cody Gakpo",
+      "player_id": 367,
+      "published_at": "2026-09-11",
+      "publisher": "Liverpool",
+      "reason": "observation_only",
+      "source_id": "liv-news",
+      "title": "Liverpool's injury list, suspensions and availability - Liverpool FC",
+      "url": "https://www.liverpoolfc.com/news/liverpools-injury-list-suspensions-and-availability"
     }
   ],
   "deadline": "2026-09-12T12:30:00Z",
