@@ -1,8 +1,8 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-09-10T09:51:41Z",
-  "claims": 0,
+  "checked_at": "2026-09-11T09:50:30Z",
+  "claims": 1,
   "coverage": 0.95,
   "deadline": "2026-09-12T12:30:00Z",
   "gw": 4,
@@ -70,8 +70,8 @@
       "status": "a"
     },
     "11": {
-      "chance": 75,
-      "news": "Muscular injury - 75% chance of playing",
+      "chance": 50,
+      "news": "Muscular injury - 50% chance of playing",
       "status": "d"
     },
     "110": {
@@ -136,7 +136,7 @@
     },
     "121": {
       "chance": 0,
-      "news": "Hamstring injury - Unknown return date",
+      "news": "Hamstring injury - Expected back 10 Oct",
       "status": "i"
     },
     "122": {
@@ -210,9 +210,9 @@
       "status": "a"
     },
     "135": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Unspecified injury - Expected back 10 Oct",
+      "status": "i"
     },
     "136": {
       "chance": 100,
@@ -495,9 +495,9 @@
       "status": "a"
     },
     "187": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Unspecified injury - Expected back 12 Oct",
+      "status": "i"
     },
     "188": {
       "chance": null,
@@ -1040,9 +1040,9 @@
       "status": "a"
     },
     "285": {
-      "chance": 75,
-      "news": "Foot injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "286": {
       "chance": null,
@@ -1925,9 +1925,9 @@
       "status": "a"
     },
     "444": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 50,
+      "news": "Ankle injury - 50% chance of playing",
+      "status": "d"
     },
     "445": {
       "chance": null,
@@ -3080,9 +3080,9 @@
       "status": "a"
     },
     "652": {
-      "chance": 0,
-      "news": "Unspecified injury - Expected back 13 Sep",
-      "status": "i"
+      "chance": 50,
+      "news": "Hamstring injury - 50% chance of playing",
+      "status": "d"
     },
     "653": {
       "chance": null,
@@ -3090,6 +3090,11 @@
       "status": "a"
     },
     "654": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "655": {
       "chance": null,
       "news": "",
       "status": "a"
@@ -3161,7 +3166,7 @@
     },
     "78": {
       "chance": 0,
-      "news": "Foot injury - Unknown return date",
+      "news": "Foot injury - Expected back 7 Nov",
       "status": "i"
     },
     "79": {

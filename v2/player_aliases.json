@@ -6025,6 +6025,15 @@
       "canonical": "Braiden Graham",
       "club": "EVE",
       "player_id": 654
+    },
+    {
+      "aliases": [
+        "Gboho",
+        "Yann Gboho"
+      ],
+      "canonical": "Yann Gboho",
+      "club": "COV",
+      "player_id": 655
     }
   ],
   "version": 1

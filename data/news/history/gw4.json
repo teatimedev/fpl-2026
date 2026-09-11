@@ -1,5 +1,24 @@
 {
-  "claims": [],
+  "claims": [
+    {
+      "claim_type": "available",
+      "club": "MCI",
+      "confidence": "review",
+      "decision": "candidate",
+      "excerpt": "City boss Enzo Maresca says Nico O\u2019Reilly is fit and available for selection for Sunday\u2019s Manchester derby at Old Trafford.",
+      "gw": 4,
+      "id": "ev-d7c54c56ffdba8a8",
+      "observed_at": "2026-09-11T09:50:30Z",
+      "player": "Enzo Fern\u00e1ndez",
+      "player_id": 155,
+      "published_at": "2026-09-13T15:30:00.0000000+00:00",
+      "publisher": "Manchester City",
+      "reason": "missing_or_stale_publication_time",
+      "source_id": "mci-news",
+      "title": "Manchester United v City: Kick-off time and TV information",
+      "url": "https://www.mancity.com/news/mens/man-utd-v-city-match-preview-pl-13-sep-63924475"
+    }
+  ],
   "deadline": "2026-09-12T12:30:00Z",
   "gw": 4,
   "policy": "explicit absences auto-apply; nuanced claims are review candidates",
