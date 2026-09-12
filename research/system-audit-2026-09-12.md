@@ -7,8 +7,9 @@ was not completed. This log preserves verified repairs and the remaining work.
 ## Wrap-up status
 
 Five repair batches through `90886b2` were deployed and verified in production.
-The sixth chip/account batch passes 375 Python tests and 58 browser-model tests,
-plus lint and the application build; publication verification follows below.
+The sixth chip/account batch, committed and pushed as `1fdad5d`, passes 375 Python
+tests and 58 browser-model tests, plus lint and the application build. Local
+browser checks confirm that mismatched weekly and chip advice is withheld.
 No FPL transfers, captain changes or chip submissions were made.
 
 The remaining issues that most affect confidence are:
@@ -29,6 +30,10 @@ personalised report could not be produced. The app withholds current advice
 when that report/account state is unavailable or mismatched. GW1–4 historical
 archives were preserved. The existing refresh workflow remains configured;
 no additional background audit, automation or notification was created.
+
+Final account check at 13:28 UTC returned HTTP 200 with all 15 GW4 picks: FPL's
+maintenance has cleared. The personalised GW5 report still requires a new solve;
+one was not started after the user's request to stop further usage.
 
 The coverage table below records where the audit stopped. Pending/in-progress
 items are deferred work, not work continuing after this user-requested wrap-up.
