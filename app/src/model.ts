@@ -255,19 +255,16 @@ export interface TransferOption {
   worthAHit: boolean
 }
 
-const POOL_SIZE = 40
-
 /**
- * XI-aware single transfers: a move's gain is the lift to squadScore, so it
- * counts only if the newcomer actually starts and it credits a new captain.
- * Best replacement per outgoing player, sorted by gain. To stay fast, each
- * outgoing player considers only the top 40 candidates by remaining().
+ * Best legal single replacement per holding, including auto-sub cover and hits.
+ * All supplied candidates are considered; the UI runs this in a worker.
  */
 export function rankTransfers(
   squad: Player[], pool: Player[], bank: number, ft: number,
-  gw: number, horizon: number, limit = 8,
+  gw: number, horizon: number, limit = 8, sellPrices: Record<number, number> | null = null,
 ): TransferOption[] {
-  const budget = squad.reduce((s, p) => s + p.price, 0) + bank
+  if (!sellPrices || !Number.isFinite(bank) || bank < 0
+    || squad.some(p => !Number.isFinite(sellPrices[p.id]))) return []
   const baseB = squadBreakdown(squad, gw, horizon)
   const base = baseB.total
   const basePitch = baseB.xi + baseB.captain
@@ -278,35 +275,32 @@ export function rankTransfers(
       .filter(p => p.pos === pos && !owned.has(p.id) && p.status !== 'u'
         && remaining(p, gw, horizon) > 0)
       .sort((a, b) => remaining(b, gw, horizon) - remaining(a, gw, horizon))
-      .slice(0, POOL_SIZE)
   }
   const hit = HIT_COST * Math.max(0, 1 - ft)
 
   const out: TransferOption[] = []
   for (const o of squad) {
-    const cash = bank + o.price
+    const cash = bank + sellPrices[o.id]
     let best: TransferOption | null = null
     for (const n of cands[o.pos]) {
       if (n.price > cash + 1e-9) continue
       const after = applyMoves(squad, [{ out: o, in: n }])
-      if (!isLegal(after, budget)) continue
+      if (!isLegal(after, Infinity)) continue
       const ab = squadBreakdown(after, gw, horizon)
       const gain = ab.total - base
       const xiGain = (ab.xi + ab.captain) - basePitch
-      // judged on the pitch, like the digest: a move that only "gains" because
-      // the bench would play more is not a best move
-      if (xiGain <= 0.05) continue
-      if (!best || xiGain > best.xiGain) {
+      if (gain <= 0.05) continue
+      if (!best || gain > best.gain) {
         best = {
           out: o, in: n, gain, xiGain, net: gain - hit,
-          costChange: Math.round((n.price - o.price) * 10) / 10,
+          costChange: Math.round((n.price - sellPrices[o.id]) * 10) / 10,
           worthAHit: gain > HIT_COST,
         }
       }
     }
     if (best) out.push(best)
   }
-  return out.sort((a, b) => b.xiGain - a.xiGain).slice(0, limit)
+  return out.sort((a, b) => b.net - a.net).slice(0, limit)
 }
 
 /**

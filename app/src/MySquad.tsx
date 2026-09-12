@@ -5,12 +5,15 @@ import { round1, signed, type SquadState } from './squad'
 import { Pitch, ContextPanels, LinkTeamForm, type ShirtMarks } from './components'
 import { withLive, type LiveState } from './weekly'
 import {
-  xiForGw, remaining, applyMoves, isLegal, sandboxGain, rankTransfers, captainOptions,
+  xiForGw, remaining, applyMoves, isLegal, sandboxGain, captainOptions,
   lineupIssues, lineupDiff, HIT_COST, type Lineup, type Move, type TransferOption,
 } from './model'
 import MarketTable from './MarketTable'
 import SquadBuilder from './SquadBuilder'
 import type { LinkedTeam } from './useLinkedTeam'
+import { recommendationState } from './coherence'
+import { accountSellingValues, bankAfterMoves, type SellingValues } from './transferBudget'
+import { useTransferSuggestions } from './useTransferSuggestions'
 
 /**
  * My squad: the squad you actually have, with the model's opinion overlaid.
@@ -80,18 +83,30 @@ export default function MySquad({
       return { kind: 'linked', ids: linked.team.ids, lineup: linked.team.lineup,
         bank: linked.team.bank, ft: linked.ft }
     }
-    if (weekly && weekly.squad.ids.length === 15) {
+    if (weekly && weekly.squad.ids.length === 15 && String(weekly.squad.entry_id) === entryId) {
       return { kind: 'digest', ids: weekly.squad.ids, lineup: toLineup(weekly.squad.lineup),
         bank: weekly.squad.bank, ft: weekly.squad.ft }
     }
     return null
-  }, [linked.team, linked.ft, weekly])
+  }, [linked.team, linked.ft, weekly, entryId])
 
   const squad = useMemo(() => source
     ? source.ids.map(id => poolById.get(id)).filter((p): p is Player => !!p)
     : [], [source, poolById])
-  const ready = squad.length === 15
-  const squadKey = squad.map(p => p.id).join(',')
+  const coherence = recommendationState(D, linked.live, source?.ids ?? [],
+    source?.bank ?? NaN, source?.ft ?? NaN, entryId)
+  const ready = squad.length === 15 && coherence.projectionsReady
+  const sellingValues = useMemo(() => accountSellingValues(D, linked.live,
+    source?.ids ?? [], source?.bank ?? NaN, source?.ft ?? NaN, entryId),
+    [D, linked.live, source, entryId])
+  const validPool = useMemo(() => pool.filter(p => {
+    const original = D.players.find(row => row.id === p.id)
+    const current = linked.live?.elements.get(p.id)
+    return original && current && original.status === current.status
+      && (original.news || '') === (current.news || '')
+      && (original.chance ?? null) === (current.chance_of_playing_next_round ?? null)
+  }), [D.players, pool, linked.live])
+  const squadKey = `${gw}:${squad.map(p => p.id).join(',')}`
 
   // last_deadline_value/bank are 0 until a deadline has passed, so only trust
   // the summary's money once the picks themselves are public.
@@ -143,7 +158,7 @@ export default function MySquad({
               />
               {source?.kind === 'digest' && (
                 <p className="source-line">
-                  Showing the squad confirmed from official FPL on <strong>{genStr}</strong>
+                  Showing the saved squad analysis from <strong>{genStr}</strong>
                   {' '}({weekly?.squad.source})
                   {!summary && bankShown != null && <> · £{bankShown.toFixed(1)}m in the bank</>}
                   .
@@ -166,11 +181,14 @@ export default function MySquad({
       ) : ready && source ? (
         <SquadView key={squadKey} D={D} squad={squad} lineup={source.lineup}
           bank={source.bank} ft={source.ft} gw={gw} horizon={horizon}
-          pool={pool} live={linked.live} openPlayer={openPlayer} />
+          pool={validPool} live={linked.live} openPlayer={openPlayer}
+          sellingValues={sellingValues} />
       ) : (
         <section className="panel" style={{ marginTop: 16 }}>
           <div className="empty-state">
-            {busy ? 'Loading live data…' : (
+            {busy ? 'Loading live data…' : source ? (
+              <>Current squad forecasts are unavailable. {coherence.reasons[0]}</>
+            ) : (
               <>
                 Nothing to show yet. Link your FPL team id above once the first
                 deadline has passed — until then,{' '}
@@ -190,7 +208,7 @@ export default function MySquad({
    Pitch, sandbox, health and context for one resolved squad. Keyed by the
    squad ids from the parent so the sandbox resets when the squad changes. */
 function SquadView({
-  D, squad, lineup, bank, ft, gw, horizon, pool, live, openPlayer,
+  D, squad, lineup, bank, ft, gw, horizon, pool, live, openPlayer, sellingValues,
 }: {
   D: Data
   squad: Player[]
@@ -202,6 +220,7 @@ function SquadView({
   pool: Player[]
   live: LiveState | null
   openPlayer: (id: number) => void
+  sellingValues: SellingValues | null
 }) {
   const [pending, setPending] = useState<Move[]>([])
   const [selling, setSelling] = useState<Player | null>(null)
@@ -249,22 +268,23 @@ function SquadView({
   }
 
   /* --------------------------------------------------------- sandbox */
-  const budget = squad.reduce((s, p) => s + p.price, 0) + bank
-  const bankAfter = round1(bank + pending.reduce((s, m) => s + m.out.price - m.in.price, 0))
-  const legal = isLegal(after, budget)
+  const bankAfter = bankAfterMoves(bank, pending, sellingValues)
+  const legal = bankAfter != null && bankAfter >= 0 && isLegal(after, Infinity)
   const ftLeft = Math.max(0, ft - pending.length)
   const full = pending.length >= MAX_MOVES
-  const suggestions = useMemo(
-    () => rankTransfers(after, pool, bankAfter, ftLeft, gw, horizon, 8)
-      .filter(o => !incoming.has(o.out.id)).slice(0, 5),
-    [after, pool, bankAfter, ftLeft, gw, horizon, incoming])
+  const sandboxValues = useMemo(() => sellingValues ? { ...sellingValues,
+    ...Object.fromEntries(pending.map(m => [m.in.id, m.in.price])) } : null, [sellingValues, pending])
+  const suggestionPool = useMemo(() => pool.filter(p => !pendingOut.has(p.id)), [pool, pendingOut])
+  const suggestionState = useTransferSuggestions(after, suggestionPool, bankAfter, ftLeft, gw, horizon, sandboxValues)
+  const suggestions = suggestionState.options.filter(o => !incoming.has(o.out.id)).slice(0, 5)
   const gain = useMemo(
     () => sandboxGain(squad, pending, ft, gw, horizon), [squad, pending, ft, gw, horizon])
   // gain is independent of free transfers; only net moves with them
   const singleGain = (m: Move) => sandboxGain(squad, [m], 0, gw, horizon).gain
 
   const trySuggestion = (o: TransferOption) => {
-    if (full) return
+    if (full || !sellingValues || squad.some(p => p.id === o.in.id)
+      || pending.some(m => m.out.id === o.out.id || m.in.id === o.in.id)) return
     setPending(ps => [...ps, { out: o.out, in: o.in }])
     setSelling(null)
   }
@@ -275,7 +295,8 @@ function SquadView({
   const owned = useMemo(
     () => new Set([...squad.map(p => p.id), ...pending.map(m => m.in.id)]), [squad, pending])
   const candidates = useMemo(() => pool.filter(p => !owned.has(p.id)), [pool, owned])
-  const maxPrice = selling ? round1(bankAfter + selling.price) : 0
+  const maxPrice = selling && sellingValues && bankAfter != null
+    ? round1(bankAfter + sellingValues[selling.id]) : 0
   const clubsAfterSale = useMemo(() => {
     const c: Record<string, number> = {}
     for (const p of after) if (p.id !== selling?.id) c[p.team] = (c[p.team] ?? 0) + 1
@@ -288,7 +309,7 @@ function SquadView({
     return null
   }
   const chooseReplacement = (p: Player) => {
-    if (!selling) return
+    if (!selling || !sellingValues || blockOf(p)) return
     const out = selling
     setPending(ps => [...ps, { out, in: p }])
     setSelling(null)
@@ -387,9 +408,13 @@ function SquadView({
             <p className="lede-sm">
               <strong>{ft >= 15 ? 'Unlimited' : ft} free transfer{ft === 1 ? '' : 's'}</strong>
               {' '}and <strong>£{bank.toFixed(1)}m</strong> in the bank
-              {inSandbox && <> · <strong>£{bankAfter.toFixed(1)}m</strong> after your moves</>}.
+              {inSandbox && bankAfter != null && <> · <strong>£{bankAfter.toFixed(1)}m</strong> after your moves</>}.
               {' '}Sell a player to find a replacement.
             </p>
+            {!sellingValues && <p className="hint">Selling values are not available for this account and forecast. Transfer comparisons will resume when the account analysis is refreshed.</p>}
+            {sellingValues && <p className="hint">Sale proceeds use the weekly report's public purchase-price reconstruction, including FPL's price-gain rule. Your authenticated FPL account is the final check.</p>}
+            {suggestionState.loading && <p role="status">Comparing affordable single transfers…</p>}
+            {suggestionState.error && <p role="status">{suggestionState.error}</p>}
 
             {suggestions.length > 0 && (
               <>
@@ -431,7 +456,7 @@ function SquadView({
                       <span className="act">→ {inn.name}</span>
                     ) : (
                       <button className="toggle sell" aria-pressed={active}
-                        disabled={!active && full}
+                        disabled={!sellingValues || (!active && full)}
                         onClick={() => setSelling(active ? null : p)}>
                         {active ? 'Cancel' : 'Sell'}
                       </button>
@@ -453,7 +478,7 @@ function SquadView({
                         <button className="plink" onClick={() => openPlayer(m.in.id)}>{m.in.name}</button>
                       </span>
                       <span className="mono s">
-                        £{signed(m.in.price - m.out.price)} · {signed(singleGain(m))} pts
+                        £{signed(m.in.price - (sellingValues?.[m.out.id] ?? m.out.price))} · {signed(singleGain(m))} pts
                       </span>
                       <button className="x" onClick={() => removeMove(i)} aria-label="Remove this move">✕</button>
                     </li>
@@ -478,15 +503,16 @@ function SquadView({
                 </div>
               </>
             )}
-            {!inSandbox && suggestions.length === 0 && (
+            {!inSandbox && sellingValues && !suggestionState.loading && !suggestionState.error
+              && suggestions.length === 0 && (
               <p className="hint" style={{ padding: '0 14px 14px', margin: 0 }}>
-                Nothing improves this squad over GW{gw}–{horizon}. Bank the transfer.
+                No affordable single transfer improves the current projected total over GW{gw}–{horizon}.
               </p>
             )}
             <p className="hint" style={{ padding: '0 14px 14px', margin: 0 }}>
-              On pitch is the lift to your best XI and captain over GW{gw}–{horizon};
-              "with cover" adds the bench playing when a starter sits — real expectation,
-              not a reason to buy a rotation risk. Hits cost {HIT_COST} each beyond your
+              On pitch is the change to the selected XI and captain over GW{gw}–{horizon};
+              "with cover" includes expected autosubs. Moves are ranked by their total
+              gain after hits. Hits cost {HIT_COST} each beyond your
               free transfers.
             </p>
           </section>

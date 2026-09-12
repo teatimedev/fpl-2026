@@ -146,6 +146,32 @@ width, document width is also 390px; temporary emulation was cleared.
 
 The fast exhaustive lineup search remains experimental in this batch; existing
 production selection is unchanged. Deployment verification is pending.
+
+Batch 3 was pushed as `b5a81e2`; Vercel and the Python 3.12/Node 24 GitHub check
+both succeeded. The production browser displays the rebuilt GW4 report.
+
+### Transfer sandbox account and runtime repairs
+
+The browser sandbox used current market price as sale proceeds, even though
+the weekly backend had reconstructed selling values. It now requires a complete
+selling-value map from the matching account/forecast and uses it for budgets,
+candidate eligibility and pending-move cash. In the real GW4 fixture, Calafiori
+has market value 5.8 but reconstructed sale proceeds 5.6: with .2 bank, the
+replacement limit is 5.8 rather than 6.0. A temporary Calafiori-to-Gvardiol
+scenario correctly leaves .2 bank and was reset after verification.
+
+My Squad no longer adopts another entry's saved digest on an API failure or
+shows current model advice while projection checks fail. Unreconciled selling
+values disable transfer actions. Candidate forecasts with changed news are
+excluded pending refresh. Singleton searches now inspect every supplied eligible
+candidate and rank total expectation after hits, consistently with Python.
+
+Transfer comparison runs in a worker so the page remains usable. Changed
+scenarios cancel old work; structurally identical account objects on countdown
+ticks do not repeatedly restart it. Pending-sale players cannot be suggested
+for immediate repurchase. An empty loading/error state no longer says to bank
+the transfer. Browser totals for Gvardiol/Gomez/Barnes matched Python, and the
+390px layout has no horizontal overflow. App tests: 37 passing.
 Commit `539262c` passed the new GitHub code-check job on Python 3.12 / Node 24
 (run `34691242390`) and completed its Vercel deployment. Production browser
 verification of this second deployment remains to be recorded.
