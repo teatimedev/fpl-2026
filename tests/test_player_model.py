@@ -379,7 +379,7 @@ class CalibrationTests(unittest.TestCase):
         self.assertAlmostEqual(fit["FWD"]["ratio"], 2.0 / 4.0, places=4)
         self.assertAlmostEqual(fit["FWD"]["k"], 1.45, places=4)   # clipped
 
-    def _project(self, xg_scale, calibration_dir):
+    def _project(self, xg_scale, calibration_dir, overlay=None):
         p = make_player(pid=999_101, hist=[season_row("2025/26", 3000, 34, pts=200,
                                                        xg=20.0, xa=5.0)])
         players = {p["id"]: p}
@@ -392,7 +392,7 @@ class CalibrationTests(unittest.TestCase):
         cal.write_text(json.dumps({"fitted_at": "test", "k": {"FWD": {"k": 1.0}}}))
         with patch.multiple(PM, START_GW=1, HORIZON=6, LAST_GW=6, WINDOW=6,
                             CALIBRATION=cal, GW_DEADLINES={}, AVAILABILITY_OVERRIDES=[],
-                            OVERLAY={}, PRESEASON_FORM={}, MINUTES_RULE="aggregate",
+                            OVERLAY=overlay or {}, PRESEASON_FORM={}, MINUTES_RULE="aggregate",
                             GW_ROWS_LOADED=False), \
                 patch.dict(PM.SEASON, {}, clear=True), \
                 patch.dict(PM.GAMES_PLAYED, {}, clear=True), \
@@ -400,6 +400,20 @@ class CalibrationTests(unittest.TestCase):
                 patch.dict(PM.SNAPSHOT_STATUS, {}, clear=True):
             rows = PM.project(players, view, priors)
         return rows[0]
+
+    def test_archived_role_boost_cannot_change_live_attack_rates(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = self._project(1.0, tmp)
+            stale = self._project(1.0, tmp, {999_101: {'rate_mult': 1.18,
+                                                    'note': 'First choice on penalties'}})
+        self.assertEqual(base['proj_by_gw'], stale['proj_by_gw'])
+        self.assertEqual(base['xg90'], stale['xg90'])
+        self.assertNotIn('First choice', stale['note'])
+
+    def test_role_note_uses_current_official_order(self):
+        note = PM.current_role_note(dict(id=70, pens=2, corners=None, fk=None))
+        self.assertIn('penalties: order 2', note)
+        self.assertNotIn('Genoa', note)
 
     def test_frozen_calibration_lets_fixture_xg_move_the_level(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -65,10 +65,11 @@ export function LastWeek({ retro, poolById, openPlayer }: {
   return (
     <section className="panel" style={{ marginTop: 16 }}>
       <div className="panel-hd">
-        <h2>Last week, explained</h2>
-        <span className="sub">GW{retro.gw} · all 15, captain single: {total.toFixed(0)} scored vs {proj.toFixed(0)} projected</span>
+        <h2>How these players did last week</h2>
+        <span className="sub">GW{retro.gw} · current 15, each counted once: {total.toFixed(0)} scored vs {proj.toFixed(0)} projected</span>
       </div>
       <div className="retro-body">
+        <p className="hint">This reviews your current players, including any bought since that deadline. Your submitted team's result is on the Scorecard.</p>
         <p className="lede-sm" style={{ padding: 0, margin: '0 0 8px' }}>
           Of the <strong className="mono">{signed(total - proj)}</strong>:{' '}
           {ranked.slice(0, 3).map((k, i) => (

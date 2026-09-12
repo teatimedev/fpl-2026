@@ -90,7 +90,10 @@ def run():
     extra = solve('hold_with_one_extra_ft', freeze_this_week=True, ft=min(5, state['ft']+1)) if state['ft'] < 5 else hold
     cases = []
     for name in ('Thiago', 'Kluivert'):
-        outgoing = next(p['id'] for p in players.values() if p['name'] == name and p['id'] in owned)
+        outgoing = next((p['id'] for p in players.values()
+                         if p['name'] == name and p['id'] in owned), None)
+        if outgoing is None:
+            continue
         row = next(r for r in weekly['transfer_review']['players'] if r['player_id'] == outgoing)
         target = row['replacement']
         if target is None: continue

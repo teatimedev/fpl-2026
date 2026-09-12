@@ -476,7 +476,7 @@ function Digest({
   return (
     <>
       <p className="stamp mono">
-        latest public FPL picks · analysed {W.squad.confirmed_at
+        {W.squad.source.includes('user-confirmed') ? 'public picks + your confirmed transfers' : 'latest public FPL picks'} · analysed {W.squad.confirmed_at
           ? new Date(W.squad.confirmed_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
           : stampStr}
         {W.squad.ft > 0 && ` · ${W.squad.ft >= 15 ? 'unlimited' : W.squad.ft} free transfer${W.squad.ft === 1 ? '' : 's'}`}
@@ -490,12 +490,30 @@ function Digest({
         </div>
         <div className="decision-body">
           <p>{decisionInstruction}</p>
+          {W.squad.account_basis && <p className="hint">{W.squad.account_basis}</p>}
+          {!!plan?.candidates?.length && (
+            <details className="sync-details">
+              <summary>Transfers compared with holding</summary>
+              <p className="hint">Each option includes future transfers and hit costs over GW{gw}–{horizon}. The two-point buffer per move is an unvalidated policy rule.</p>
+              <div className="tbl-scroll"><table>
+                <thead><tr><th className="l">Out → In</th><th>Gain vs hold</th><th>Buffer</th><th>Clears it?</th></tr></thead>
+                <tbody>{plan.candidates.filter(row => row.status === 'scored').map((row, index) => (
+                  <tr key={index}>
+                    <td className="l">{names(row.out ?? [])} → {names(row.in_ ?? [])}</td>
+                    <td>{signed(row.gain ?? 0)}</td><td>{(row.move_bar ?? 0).toFixed(1)}</td>
+                    <td>{row.qualifies ? 'Yes' : 'No'}</td>
+                  </tr>
+                ))}</tbody>
+              </table></div>
+              {plan.candidates.some(row => row.status !== 'scored') && <p className="hint">Some candidate plans did not return a feasible result.</p>}
+            </details>
+          )}
           {sim && (
             <p className="decision-evidence">
               In {sim.n_sims.toLocaleString('en-GB')} simulations, the proposed moves
               beat holding <strong>{Math.round(sim.p_b_wins * 100)}% of the time</strong>
               {' '}and gained <strong className="mono">{signed(sim.mean_delta)} pts</strong>
-              {' '}on average this gameweek. {noTransfer && moveCount > 0 ? (
+              {' '}on average this gameweek, after transfer hits. {noTransfer && moveCount > 0 ? (
                 <>Over the full planning window, acting now instead of waiting gains
                   {' '}<strong className="mono">{signed(plan?.diff ?? 0)}</strong>.
                   The legacy policy requires <strong className="mono">+{moveBar.toFixed(1)}</strong> for {moveCount} moves.
@@ -507,7 +525,7 @@ function Digest({
           )}
           {(W.squad.changes?.length ?? 0) > 0 && (
             <details className="sync-details">
-              <summary>What changed in the latest FPL sync</summary>
+              <summary>{W.squad.source.includes('user-confirmed') ? 'Transfers you confirmed' : 'What changed in the latest FPL sync'}</summary>
               <ul>{W.squad.changes!.map(change => <li key={change}>{change}</li>)}</ul>
             </details>
           )}
@@ -574,9 +592,9 @@ function Digest({
             return (
               <p className="cap-edge">
                 {edge >= 1.0 ? (
-                  <>Clear call: <strong>{nameOf(m.ranked[0].id)}</strong> is {edge.toFixed(1)} ahead ({(edge * 2).toFixed(1)} once doubled).</>
+                  <><strong>{nameOf(m.ranked[0].id)}</strong> leads by {edge.toFixed(1)} in projected captain bonus, before vice fallback.</>
                 ) : (
-                  <>The edge is <strong className="mono">{edge.toFixed(1)}</strong> ({(edge * 2).toFixed(1)} doubled) — inside the noise of a single match.
+                  <>The captain bonus edge is <strong className="mono">{edge.toFixed(1)}</strong> before vice fallback — inside the noise of a single match.
                     {template
                       ? <> {template.name} is owned by {template.sel_pct.toFixed(0)}%: captaining him protects your rank if he hauls, {nameOf(m.ranked[0].id)} is the points play. Both are defensible.</>
                       : ' Either is defensible; the model leans ' + nameOf(m.ranked[0].id) + '.'}
@@ -701,9 +719,8 @@ function Digest({
             )}
             <p className="hint" style={{ padding: '10px 14px 14px' }}>
               On pitch is the lift to your expected XI and captain over GW{gw}–{horizon};
-              gain adds auto-sub cover (the bench playing when a starter sits) and is
-              not what the verdict is judged on; net takes off {HIT_COST} per move
-              beyond your free transfers.
+              gain adds auto-sub cover when a starter does not play at all; net takes off {HIT_COST} per move
+              beyond your free transfers. The decision above also compares future transfer paths.
             </p>
             </div>
           </details>

@@ -197,6 +197,7 @@ export interface WeeklySquad {
   selling_prices_unknown?: number[]
   account_basis?: string
   selling_price_basis?: string
+  public_baseline?: { ids: number[]; bank: number; ft: number; gw: number }
 }
 
 export interface WeeklyModel {
@@ -245,6 +246,10 @@ export interface WeeklyPlan {
   n_now?: number; worth_it?: boolean; move_bar?: number
   this_week_sim?: WeeklyDecisionSim
   this_week_sim_error?: string
+  candidates?: {
+    source: string; status: string; total?: number; gain?: number
+    n_now?: number; move_bar?: number; qualifies?: boolean; in_?: number[]; out?: number[]
+  }[]
 }
 
 export interface WeeklyPriceRow { id: number; net: number; pressure: number }

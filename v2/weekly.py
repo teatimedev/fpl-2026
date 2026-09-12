@@ -82,8 +82,7 @@ XI_MAX = {'GKP': 1, 'DEF': 5, 'MID': 5, 'FWD': 3}
 POS_ORDER = ('GKP', 'DEF', 'MID', 'FWD')
 HIT = 4.0
 MAX_FT = 5
-HOLD_THRESHOLD = 2.0     # a free transfer worth less than this over the window
-                         # is usually better banked: next week has more information
+HOLD_THRESHOLD = 2.0     # unvalidated uncertainty buffer, not an FT cost
 
 
 def worth_rebuilding(diff, n_moves):
@@ -93,6 +92,57 @@ def worth_rebuilding(diff, n_moves):
     decision cost of replacing most of a confirmed squad.
     """
     return n_moves > 0 and diff >= HOLD_THRESHOLD * n_moves
+
+
+def choose_plan(paths, hold):
+    """Apply the policy to each exact-scored path, always including hold.
+
+    A solver optimises a linear bench proxy; rescoring can reverse its
+    ordering. A weaker unconstrained result is not evidence against acting.
+    Nor should a large package below its buffer suppress a qualifying single.
+    """
+    score = lambda p: p.get('total_unrounded', p['total'])
+    hold = max([hold] + [p for _, p in paths if p and not p['weeks'][0]['in']], key=score)
+    baseline = score(hold)
+    eligible = [hold]
+    comparisons = []
+    for label, path in paths:
+        if not path:
+            comparisons.append(dict(source=label, status='no feasible result'))
+            continue
+        week = path['weeks'][0]
+        n = len(week['in'])
+        gain = score(path) - baseline
+        qualifies = worth_rebuilding(gain, n)
+        comparisons.append(dict(source=label, status='scored', total=score(path),
+                                gain=gain, n_now=n, move_bar=HOLD_THRESHOLD * n,
+                                qualifies=qualifies, in_=week['in'], out=week['out']))
+        if qualifies:
+            eligible.append(path)
+    chosen = max(eligible, key=lambda p: (score(p), -len(p['weeks'][0]['in'])))
+    return chosen, hold, comparisons
+
+
+def first_action_candidates(ids, engine, action_moves):
+    """Small independent actions to check with the SAME continuation planner."""
+    proposals = [('single/pair advice', list(action_moves))] if action_moves else []
+    singles = engine.get('singles', [])
+    # Include both the highest total gains and the best improvement on pitch.
+    shortlist = singles[:3] + sorted(singles, key=lambda m: -m['xi_gain'])[:1]
+    for move in shortlist:
+        proposals.append(('single replacement', [(move['out']['id'], move['in_']['id'])]))
+    for move in engine.get('pairs', [])[:2]:
+        proposals.append(('pair replacement', [(a['id'], b['id'])
+                                              for a, b in zip(move['out'], move['in_'])]))
+    seen, result = {frozenset(ids)}, []
+    for label, moves in proposals:
+        outgoing = {a for a, _ in moves}
+        after = [i for i in ids if i not in outgoing] + [b for _, b in moves]
+        key = frozenset(after)
+        if len(key) == 15 and key not in seen:
+            seen.add(key)
+            result.append((label, after))
+    return result
 
 
 def _supersede_transfer_recommendation(lines, push_lines, transfers, message,
@@ -212,9 +262,11 @@ def load_squad(team_id, players, gw):
                 ft = 1
             print(f'  loaded your real squad and lineup from Gameweek {ev} '
                   f'(bank £{bank:.1f}m, {ft} free transfer{"s" if ft != 1 else ""})')
-            return dict(ids=ids, bank=bank, ft=ft, lineup=lineup, history=hist,
-                        entry_id=team_id,
-                        source=f'FPL entry {team_id}, picks from GW{ev}')
+            from confirmed_transfers import apply_confirmed_transfers
+            state = dict(ids=ids, bank=bank, ft=ft, lineup=lineup, history=hist,
+                         entry_id=team_id, picks_gw=ev,
+                         source=f'FPL entry {team_id}, picks from GW{ev}')
+            return apply_confirmed_transfers(state, players, gw)
         print('  no public picks yet for that entry (they appear after a deadline)')
 
     if SQUAD_FILE.exists():
@@ -863,12 +915,13 @@ def main():
     if st.get('entry_id') and st.get('history'):
         try:
             sell_prices, price_unknown = public_selling_prices(
-                ids, elem, api(f"entry/{st['entry_id']}/transfers/"), st['history'], HERE / 'fpl.db')
+                ids, elem, api(f"entry/{st['entry_id']}/transfers/") + st.get('confirmed_transfers', []),
+                st['history'], HERE / 'fpl.db')
         except (OSError, ValueError, KeyError, sqlite3.Error) as ex:
             print(f'  selling values unavailable ({type(ex).__name__})')
     J['squad'] = dict(ids=list(ids), bank=bank, ft=ft, source=st['source'],
                       sell_prices=sell_prices, selling_prices_unknown=price_unknown,
-                      account_basis='Latest public deadline; unpublished transfers are not visible',
+                      account_basis=st.get('account_basis', 'Latest public deadline; unpublished transfers are not visible'),
                       selling_price_basis='Public transfer costs; GW1 deadline price assumed for initial holdings',
                       lineup={k: v for k, v in (lineup or {}).items() if v is not None})
     if st.get('confirmed_at'):
@@ -877,6 +930,8 @@ def main():
         J['squad']['entry_id'] = st['entry_id']
     if st.get('changes'):
         J['squad']['changes'] = st['changes']
+    if st.get('public_baseline'):
+        J['squad']['public_baseline'] = st['public_baseline']
     squad = [players[i] for i in ids if i in players]
     model_out, yours_out = {}, {}
 
@@ -956,10 +1011,12 @@ def main():
             ycap = players.get(lineup.get('captain'))
             yvice = players.get(lineup.get('vice'))
             if ycap and ycap is not cap:
-                d = (key(cap) - key(ycap)) * 2
+                # Both players' normal points already count in the XI; only
+                # the extra captain copy changes (before vice fallback).
+                d = key(cap) - key(ycap)
                 issues.append(f'**Captain:** you have {ycap["name"]} ({key(ycap):.1f}); '
                               f'the model prefers {cap["name"]} ({key(cap):.1f}) — '
-                              f'{d:+.1f} expected once doubled.')
+                              f'{d:+.1f} in projected captain bonus before vice fallback.')
             if yvice:
                 if yvice['pos'] == 'GKP':
                     issues.append(f'**Vice on a goalkeeper** ({yvice["name"]}): if the '
@@ -1271,6 +1328,20 @@ def main():
                                 if free is None or exact_plan['total'] > free['total']:
                                     free = exact_plan
                                     free_source = 'exact static build'
+                comparisons = []
+                if hold and ft < 15:
+                    paths = [('unconstrained planner', free)]
+                    seen = {frozenset(free['weeks'][0]['squad'])} if free else set()
+                    for label, first_squad in first_action_candidates(ids, eng, action_moves):
+                        if frozenset(first_squad) in seen:
+                            continue
+                        seen.add(frozenset(first_squad))
+                        candidate = plan(players, ids, bank, ft, gw, horizon,
+                                         sell_prices=sell_prices,
+                                         first_week_squad=first_squad, time_limit=15)
+                        paths.append((label, candidate))
+                    free, hold, comparisons = choose_plan(paths, hold)
+                    free_source = 'hold path' if free is hold else 'compared action paths'
                 if args.chips and free and ft < 15 and gw >= 2:
                     # What a wildcard would add: unlimited moves ONLY in the
                     # WC week itself — later weeks accrue normally from the
@@ -1282,7 +1353,8 @@ def main():
                     if wc:
                         wc_now = round(wc['total'] - free['total'], 1)
                 if free and hold:
-                    diff = free['total'] - hold['total']
+                    diff = (free.get('total_unrounded', free['total'])
+                            - hold.get('total_unrounded', hold['total']))
 
                     n_now = len(free['weeks'][0]['in'])
                     # Judge the value of acting now PER MOVE: four changes for
@@ -1294,6 +1366,7 @@ def main():
                     J['plan'] = dict(total=free['total'], hold_total=hold['total'],
                                      solver=free.get('solver'), hold_solver=hold.get('solver'),
                                      policy_status='Unvalidated 2-point-per-move heuristic',
+                                     candidates=comparisons,
                                      diff=round(diff, 1), hits=free['hits'],
                                      diff_unrounded=free.get('total_unrounded', free['total'])-hold.get('total_unrounded', hold['total']),
                                      n_now=n_now, worth_it=worth_it,
@@ -1316,6 +1389,7 @@ def main():
                                 this_week_sim = compare_decisions(
                                     ids, move_squad, players, load_fixture_xg(),
                                     gw, gw, n_sims=4000,
+                                    hit_points_b=4 * free['weeks'][0]['hits'],
                                 )
                                 this_week_sim['n_sims'] = 4000
                                 J['plan']['this_week_sim'] = this_week_sim
@@ -1363,39 +1437,20 @@ def main():
                             L, P, J['transfers'], recommendation,
                             f'Plan this week: {plan_text}',
                         )
-                    elif action_kind == 'transfer' and not unlimited:
-                        # The singles table found a move worth its window gain,
-                        # but using the free transfer NOW rather than next week
-                        # is worth less than the hold threshold: the gain is
-                        # real, the urgency is not. One verdict, in one voice
-                        # (GW2 2026/27: Milenković → Gvardiol +4.1 on the
-                        # pitch over the window; acting now +1.0).
+                    elif not unlimited:
                         action_kind = 'hold'
-                        w = free['weeks'][0]
-                        paired = []
-                        for pos in POS_ORDER:
-                            incoming = [i for i in w['in'] if players[i]['pos'] == pos]
-                            outgoing = [o for o in w['out'] if players[o]['pos'] == pos]
-                            paired.extend(zip(outgoing, incoming))
-                        queued = ', '.join(f"{players[o]['name']} → {players[i]['name']}"
-                                           for o, i in paired)
-                        lead_in = (f'{queued} is the move queued — worth taking over the '
-                                   'window, but taking it now rather than next week'
-                                   if queued else
-                                   'The best move is worth its window gain, but making it '
-                                   'now rather than next week')
                         recommendation = (
-                            f'**Recommended: hold.** {lead_in} is worth only {diff:+.1f} '
-                            f'(the plan scores {free["total"]:.1f} against {hold["total"]:.1f} '
-                            f'with this week held). '
+                            '**Recommended: hold.** None of the action paths tested '
+                            'beats holding this week by the current 2-point-per-move '
+                            'buffer. That buffer is an unvalidated policy choice, '
+                            'not a measured value of saving a transfer. '
                             + (f'You would have {ft + 1} free transfers next week.' if ft < MAX_FT else
                                'Your bank stays at five; holding forfeits the next weekly transfer. '
-                               'The remaining reason to wait is uncertainty, not gaining another transfer.')
+                               'Holding does not gain another transfer.')
                         )
                         _supersede_transfer_recommendation(
                             L, P, J['transfers'], recommendation,
-                            f'Transfers: HOLD ({queued or "best move"} queued; '
-                            f'acting now only {diff:+.1f})',
+                            'Transfers: HOLD under the current heuristic; no tested path clears its buffer',
                         )
                     if this_week_sim:
                         wins = this_week_sim['p_b_wins'] * 100
@@ -1420,22 +1475,32 @@ def main():
                             )
                         L.append('')
                         L.append(
-                            f'**This Friday under uncertainty:** the planner\'s proposed '
+                            f'**GW{gw} simulation:** the selected '
                             f'GW{gw} squad beats holding in {wins:.0f}% of '
                             f'{this_week_sim["n_sims"]:,} simulations '
-                            f'(average {mean_delta:+.1f} points). {interpretation}'
+                            f'(average {mean_delta:+.1f} points, net of hits). {interpretation} '
+                            'This covers one gameweek; the transfer decision compares the full window.'
                         )
                     lead = ('Best exact-scored pre-season build'
-                            if free_source == 'exact static build' else 'Best path from here')
+                            if free_source == 'exact static build' else 'Selected path under the current policy')
                     L.append(f'{lead}: **{free["total"]:.1f}** pts '
                              f'({free["hits"]} hit{"s" if free["hits"] != 1 else ""}). '
                              f'Making no move this week and re-planning: '
-                             f'{hold["total"]:.1f}. Acting now is worth **{diff:+.1f}**'
+                             f'{hold["total"]:.1f}. Selected path versus holding: **{diff:+.1f}**'
                              + (f' across {n_now} moves' if n_now > 1 else '')
                              + (' — use the free pre-GW1 rebuild.'
                                 if worth_it and unlimited else
                                 '.' if worth_it else ' — not enough; hold.'))
                     L.append('')
+                    if comparisons:
+                        L.append('| action tested now | window gain vs hold | policy buffer | clears buffer |')
+                        L.append('|---|---|---|---|')
+                        for row in comparisons:
+                            if row['status'] != 'scored':
+                                continue
+                            names = ', '.join(players[i]['name'] for i in row['out']) + ' → ' + ', '.join(players[i]['name'] for i in row['in_'])
+                            L.append(f'| {names} | {row["gain"]:+.2f} | {row["move_bar"]:.1f} | {"yes" if row["qualifies"] else "no"} |')
+                        L.append('')
                     L.extend(describe(free, players))
                     L.append('')
                     L.append('_The multiweek planner uses a linear bench proxy and small '

@@ -36,7 +36,7 @@ export function WeeklyBrief({ D, W, poolById, currentLineup, openPlayer }: {
       <p className="brief-eyebrow">Your Gameweek {W.gw} plan</p>
       <h2 id="weekly-action-title">{action.headline}</h2>
       <p className="brief-reason">{action.hold
-        ? `The expected benefit of changing your team now is too small.${W.gw < 38 ? ' Reassess next week.' : ''}`
+        ? `The model's current transfer rule favours waiting. That rule has not yet been validated.${W.gw < 38 ? ' Reassess next week.' : ''}`
         : action.moves.length > 0 ? 'Make the moves below, then set your team.'
           : 'A clear transfer instruction is not available yet. Check the analysis below.'}</p>
 
@@ -90,8 +90,9 @@ export function WeeklyBrief({ D, W, poolById, currentLineup, openPlayer }: {
               : 'Save your chips this week.'}</p>
         </li>
       </ol>
-      <p className="brief-source">Updated {analysed}. Based on your last published team;
-        changes made since the last deadline are not visible yet.</p>
+      <p className="brief-source">Updated {analysed}. {W.squad.public_baseline
+        ? 'Includes the transfers you confirmed. Bank and free transfers are inferred; your saved FPL lineup has not been verified.'
+        : 'Based on your last published team; changes made since the last deadline are not visible yet.'}</p>
       <a className="brief-fpl-link" href="https://fantasy.premierleague.com/my-team" target="_blank" rel="noreferrer">
         Open FPL to set your team ↗
       </a>

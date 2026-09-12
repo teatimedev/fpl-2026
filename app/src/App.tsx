@@ -35,7 +35,7 @@ export default function App() {
   const go = (t: Tab) => { setTab(t); window.scrollTo(0, 0) }
 
   // Live prices, availability and the linked team, loaded once for every tab.
-  const linked = useLinkedTeam(D.weekly?.squad.entry_id?.toString() ?? '')
+  const linked = useLinkedTeam(D.weekly?.squad.entry_id?.toString() ?? '', D.weekly)
 
   // The drafted squad (My squad → Draft mode). Persisted so the weekly view
   // can fall back to it, and so a phone does not lose it between visits.

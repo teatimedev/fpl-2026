@@ -324,8 +324,8 @@ PRICE_MEDIAN = {}
 
 def load_overlay():
     """Research the data cannot contain: confirmed line-up decisions, role
-    changes, squad-depth reality. Reuses the v1 overlay, which is keyed by FPL
-    element id and still current. Price-rank ordering cannot resolve two keepers
+    changes, squad-depth reality. Reuses the archived v1 preseason overlay,
+    keyed by FPL element id. Price-rank ordering cannot resolve two keepers
     on the same price -- only a press conference can."""
     import importlib.util
     spec = importlib.util.spec_from_file_location('ov', ROOT / 'overlay.py')
@@ -335,6 +335,21 @@ def load_overlay():
 
 
 OVERLAY, PRESEASON_FORM = load_overlay()
+
+
+def current_role_note(player):
+    """Surface current official set-piece orders, not August's role guesses.
+
+    The old overlay remains a preseason minutes PRIOR, subsequently updated
+    by observed starts. Its unvalidated attacking multipliers are retired:
+    they had no expiry and could contradict the current official role data.
+    """
+    roles = []
+    for field, label in (('pens', 'penalties'), ('corners', 'corners'),
+                         ('fk', 'direct free kicks')):
+        if player.get(field) is not None:
+            roles.append(f'{label}: order {player[field]}')
+    return 'FPL set-piece listing — ' + '; '.join(roles) + '.' if roles else ''
 
 
 # P5: how much MORE to believe the current season's rates for a player whose
@@ -714,10 +729,9 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
         af = age_factor(p['dob'])
         xg90 *= af
         xa90 *= af
-        ov = OVERLAY.get(p['id'], {})
-        rate_mult = ov.get('rate_mult', 1.0)
-        xg90 *= rate_mult
-        xa90 *= rate_mult
+        # Do not carry the unvalidated 6 August role multipliers into the
+        # season. Current attacking evidence is already in shrink(); a new
+        # role adjustment needs dated evidence and independent validation.
 
         fixtures = view['view'].get(p['team'], {})
         # zeros for gameweeks already played keep absolute indexing intact.
@@ -856,8 +870,7 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
             yellow90=round(yellow90, 4), dc_evidence=round(w_dc, 3),
             evidence=round(w_xg, 2),
             seasons=len([h for h in p['hist'] if h['mins'] >= 450]),
-            note=OVERLAY.get(p['id'], {}).get('note', '')
-                 or PRESEASON_FORM.get(p['id'], ''),
+            note=current_role_note(p),
             pts_last=next((h['pts'] for h in p['hist'] if h['season'] == '2025/26'), 0),
             # this season so far — what the model is now learning from
             pts_now=(p['now'] or {}).get('pts', 0) if p.get('now') else 0,

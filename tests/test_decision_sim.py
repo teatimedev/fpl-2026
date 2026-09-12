@@ -114,6 +114,16 @@ class DecisionSimTests(unittest.TestCase):
         self.assertEqual(result['p_delta_gt_2'], 0.0)
         self.assertEqual(result['p_delta_lt_minus_2'], 0.0)
 
+    def test_hit_cost_changes_every_draw_and_win_probability(self):
+        result = _run(SQUAD_A, SQUAD_A, hit_points_b=4)
+        self.assertEqual(result['mean_delta'], -4)
+        self.assertEqual(result['p_b_wins'], 0)
+        self.assertEqual(result['p_delta_lt_minus_2'], 1)
+        base = _run(SQUAD_A, SQUAD_B)
+        hit = _run(SQUAD_A, SQUAD_B, hit_points_b=4)
+        self.assertAlmostEqual(hit['mean_delta'], base['mean_delta'] - 4)
+        self.assertLessEqual(hit['p_b_wins'], base['p_b_wins'])
+
     def test_requires_exactly_fifteen_players(self):
         with self.assertRaisesRegex(ValueError, r'exactly 15'):
             _run(SQUAD_A[:-1], SQUAD_B)

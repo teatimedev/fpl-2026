@@ -97,6 +97,7 @@ export interface LoadedTeam {
   fromGw: number
   /** null when the picks payload carries no positions (should not happen once public) */
   lineup: Lineup | null
+  confirmedAt?: string
 }
 
 /**

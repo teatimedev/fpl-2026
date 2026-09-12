@@ -24,6 +24,11 @@ class WeeklyCoherenceTests(unittest.TestCase):
         squad = _weekly()["squad"]
         lineup = squad["lineup"]
 
+        if not lineup:
+            self.assertIn('user-confirmed', squad['source'])
+            self.assertIn('not verified', squad['account_basis'])
+            lineup = _weekly()['model']
+
         self.assertEqual(len(lineup["xi"]), 11)
         self.assertEqual(len(lineup["bench"]), 4)
         self.assertEqual(set(lineup["xi"]), set(squad["ids"]) - set(lineup["bench"]))
@@ -36,7 +41,7 @@ class WeeklyCoherenceTests(unittest.TestCase):
         # timestamp and change log); from GW1's deadline on, from the public
         # picks endpoint of the linked entry
         if squad["source"].startswith("FPL entry"):
-            self.assertRegex(squad["source"], r"^FPL entry \d+, picks from GW\d+$")
+            self.assertRegex(squad["source"], r"^FPL entry \d+, picks from GW\d+(; user-confirmed GW\d+ transfers)?$")
         else:
             self.assertEqual(squad["source"], "confirmed pre-deadline squad")
             self.assertTrue(squad["entry_id"])

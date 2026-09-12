@@ -179,6 +179,28 @@ Before Gameweek 1 your picks are not public, so list your 15 in
 `v2/my_squad.txt` instead. Add `--full` once a week to refresh the four-season
 histories; the default skips them.
 
+Public picks describe the last submitted deadline, so they cannot reveal a
+transfer made for the upcoming week. `v2/confirmed_transfers.json` can record
+ordinary permanent transfers explicitly reported by the user: entry, upcoming
+GW, baseline picks GW, confirmation/expiry timestamps, and sale/purchase prices
+in integer tenths. It updates planning inputs only and clears the unknown live
+lineup. It expires at the deadline, is ignored for other accounts, and fails on
+a conflicting baseline. The app applies it only when its fetched public squad,
+bank and free transfers match that baseline. Estimated prices and bank must be
+labelled as estimates until the authenticated account is checked.
+
+With `--plan`, the weekly run compares the unrestricted solver path and a bounded
+shortlist of singles/pairs, each with its first-week squad fixed and subsequent
+weeks re-optimised. Every path uses the same exact scoring and hit accounting.
+Hold is always feasible; each action must clear the existing, **unvalidated**
+two-point-per-move buffer separately. Solver bounds refer to the linear proxy,
+not the nonlinear squad score. The tested actions and their margins are saved
+in `weekly.plan.candidates` and shown under the recommendation details.
+
+The 6 August attacking multipliers and present-tense role notes are retired.
+Player notes now show the current FPL set-piece listing. Archived preseason
+minutes remain a prior updated by observed starts; they are not current news.
+
 ## 6. In-season learning (measured 27 Aug 2026)
 
 Per-gameweek rows for 2022/23–2025/26 are imported from vaastav

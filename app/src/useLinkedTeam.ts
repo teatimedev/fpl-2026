@@ -4,6 +4,8 @@ import {
   type LiveState, type LoadedTeam, type EntrySummary, type EntryHistory,
 } from './weekly'
 import { inferFreeTransfers } from './model'
+import { confirmedTeam } from './confirmedTeam'
+import type { Weekly } from './types'
 
 /**
  * The linked FPL team, loaded once for the whole app.
@@ -26,7 +28,7 @@ export interface LinkedTeam {
   ft: number
 }
 
-export function useLinkedTeam(defaultEntryId = ''): LinkedTeam {
+export function useLinkedTeam(defaultEntryId = '', weekly?: Weekly | null): LinkedTeam {
   const [entryId, setEntryIdState] = useState(
     () => localStorage.getItem('fplEntryId') || defaultEntryId)
   const setEntryId = useCallback((id: string) => {
@@ -71,5 +73,6 @@ export function useLinkedTeam(defaultEntryId = ''): LinkedTeam {
   const gw = live?.gw ?? 1
   const ft = team ? inferFreeTransfers(history, gw) : (gw <= 1 ? 15 : 1)
 
-  return { entryId, setEntryId, live, busy, err, team, summary, history, ft }
+  const confirmed = confirmedTeam(weekly, entryId, gw, team, ft)
+  return { entryId, setEntryId, live, busy, err, summary, history, ...confirmed }
 }

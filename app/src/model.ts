@@ -359,7 +359,7 @@ export function lineupIssues(
     issues.push({
       head: 'Captain:',
       body: `you have ${ycap.name} (${f1(key(ycap))}); the model prefers ${cap.name} `
-        + `(${f1(key(cap))}) — ${signed((key(cap) - key(ycap)) * 2)} expected once doubled.`,
+        + `(${f1(key(cap))}) — ${signed(key(cap) - key(ycap))} in projected captain bonus before vice fallback.`,
     })
   }
   if (yvice) {

@@ -1,0 +1,11 @@
+{
+  "entry_id": 3415101,
+  "gw": 4,
+  "base_picks_gw": 3,
+  "confirmed_at": "2026-09-12T10:04:00Z",
+  "expires_at": "2026-09-12T12:30:00Z",
+  "basis": "User reports Thiago to João Pedro completed. Bank and remaining transfers inferred from GW3 public picks and current official prices; live account lineup not verified. Expires at the GW4 deadline.",
+  "transfers": [
+    {"out": 106, "in": 165, "out_cost": 79, "in_cost": 77}
+  ]
+}

@@ -534,12 +534,14 @@ def _squad_gw_points(par_list, lineup, pts_by_pid, played_by_pid, wi):
 
 # ------------------------------------------------------------------ core
 def compare(squad_a_ids, squad_b_ids, players_by_id, fixture_xg,
-            start_gw, horizon, n_sims=4000, seed=DEFAULT_SEED):
+            start_gw, horizon, n_sims=4000, seed=DEFAULT_SEED,
+            hit_points_a=0, hit_points_b=0):
     """Monte-Carlo squad A vs squad B over [start_gw, horizon].
 
     Returns {'p_b_wins', 'mean_delta', 'p_delta_gt_2', 'p_delta_lt_minus_2'}
     where delta = squad B window total - squad A window total per simulation
-    and p_b_wins counts ties as half wins.
+    and p_b_wins counts ties as half wins. Hit costs are deducted from each
+    squad's total in every draw, including the win probability.
     """
     squad_a_ids = list(squad_a_ids)
     squad_b_ids = list(squad_b_ids)
@@ -549,6 +551,8 @@ def compare(squad_a_ids, squad_b_ids, players_by_id, fixture_xg,
         raise ValueError(f"horizon {horizon} before start_gw {start_gw}")
     if n_sims < 1:
         raise ValueError(f"n_sims must be >= 1, got {n_sims}")
+    if any(not math.isfinite(h) or h < 0 for h in (hit_points_a, hit_points_b)):
+        raise ValueError('hit points must be finite and non-negative')
 
     pool = sorted(set(squad_a_ids) | set(squad_b_ids))
     pars = {pid: _player_params(players_by_id[pid], start_gw, horizon)
@@ -575,6 +579,7 @@ def compare(squad_a_ids, squad_b_ids, players_by_id, fixture_xg,
 
     delta = window_total(squad_b_ids).astype(np.float64) \
         - window_total(squad_a_ids).astype(np.float64)
+    delta += hit_points_a - hit_points_b
     return {
         'p_b_wins': float((delta > 0).mean() + 0.5 * (delta == 0).mean()),
         'mean_delta': float(delta.mean()),

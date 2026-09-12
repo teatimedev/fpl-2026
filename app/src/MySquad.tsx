@@ -97,7 +97,7 @@ export default function MySquad({
   // the summary's money once the picks themselves are public.
   const valueShown = linked.team && summary ? summary.value : null
   const bankShown = linked.team
-    ? (summary?.bank ?? linked.team.bank)
+    ? (linked.team.confirmedAt ? linked.team.bank : summary?.bank ?? linked.team.bank)
     : (source?.kind === 'digest' ? source.bank : null)
 
   const genStr = (() => {
@@ -138,7 +138,7 @@ export default function MySquad({
                 entryId={entryId} onSave={linked.setEntryId} busy={busy} err={err} inputId="entry-ms"
                 hint="Find the number in the URL of your FPL points page."
                 linkedLine={linked.team
-                  ? <> · picks from GW{linked.team.fromGw} · £{linked.team.bank.toFixed(1)}m banked</>
+                  ? <> · {linked.team.confirmedAt ? 'includes your confirmed transfers' : `picks from GW${linked.team.fromGw}`} · £{linked.team.bank.toFixed(1)}m banked</>
                   : (!busy && !err ? ' · picks not public yet' : null)}
               />
               {source?.kind === 'digest' && (
