@@ -1,7 +1,7 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-09-12T00:23:10Z",
+  "checked_at": "2026-09-12T09:27:12Z",
   "claims": 2,
   "coverage": 0.95,
   "deadline": "2026-09-12T12:30:00Z",
@@ -306,7 +306,7 @@
     },
     "152": {
       "chance": 0,
-      "news": "Unspecified injury - Expected back 18 Sep",
+      "news": "Thigh injury - Expected back 18 Sep",
       "status": "i"
     },
     "153": {
@@ -3291,7 +3291,7 @@
     }
   },
   "official_fpl_ok": true,
-  "rebuild_required": false,
+  "rebuild_required": true,
   "state_changed": false,
   "status": "amber",
   "urgent": false,

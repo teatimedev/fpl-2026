@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-11T18:40:05Z",
+  "checked_at": "2026-09-12T09:27:12Z",
   "coverage": 0.95,
   "enabled": 20,
   "gw": 4,
@@ -28,9 +28,9 @@
       "club": "AVL",
       "content_hash": "54a857ed7e41f6d3ba6e05a20075b1b0dcc4bdfa5f28d8a5df97642d39d3e33c",
       "documents": 1,
-      "etag": "\"a1c0ece791239b6d8ee59cdabd93160d\"",
+      "etag": "\"34a1a16d6e1ed6139956fd4f37d4c232\"",
       "id": "avl-news",
-      "last_modified": "Fri, 11 Sep 2026 14:47:42 GMT",
+      "last_modified": "Sat, 12 Sep 2026 02:08:06 GMT",
       "publisher": "Aston Villa",
       "status": "ok",
       "url": "https://www.avfc.co.uk/news/"
@@ -70,7 +70,7 @@
       "content_hash": "511e5b401574ae56a77d5b61b461ef089e1aeda57ab4774e66f11e779e7743d8",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Fri, 11 Sep 2026 18:40:06 GMT",
+      "last_modified": "Sat, 12 Sep 2026 09:27:13 GMT",
       "publisher": "Brentford",
       "status": "ok",
       "url": "https://www.brentfordfc.com/en/news"
@@ -92,9 +92,9 @@
       "club": "COV",
       "content_hash": "3554129e1f24d0567ef56591d5bc9d490f2922a1a7e34bbf4e5ac2fd9588fb95",
       "documents": 1,
-      "etag": "\"bcc9e3a13ef9373bd8944b0979d528d8\"",
+      "etag": "\"8e164fac6fa53258cc668058eb8c05a1\"",
       "id": "cov-news",
-      "last_modified": "Fri, 11 Sep 2026 02:05:06 GMT",
+      "last_modified": "Sat, 12 Sep 2026 02:08:03 GMT",
       "publisher": "Coventry City",
       "status": "ok",
       "url": "https://www.ccfc.co.uk/news/"
@@ -105,7 +105,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"j8h1x5396htlt0\"",
+      "etag": "\"a6whmjiiaqtmxo\"",
       "id": "cry-news",
       "publisher": "Crystal Palace",
       "status": "ok",
@@ -117,9 +117,9 @@
       "club": "EVE",
       "content_hash": "7f2844b9f692f7f412b6ea5afd5433414d12302a05c9a406d86bec4a1c5a81d8",
       "documents": 1,
-      "etag": "\"78b3470a363aca8e66907a5ca45b9690\"",
+      "etag": "\"a98d9cb30e0e6e9f04ef5ea4d9b0a78d\"",
       "id": "eve-news",
-      "last_modified": "Fri, 11 Sep 2026 02:05:31 GMT",
+      "last_modified": "Sat, 12 Sep 2026 02:05:22 GMT",
       "publisher": "Everton",
       "status": "ok",
       "url": "https://www.evertonfc.com/news"
@@ -145,11 +145,11 @@
         }
       },
       "club": "FUL",
-      "content_hash": "ca4df8ddf071ac32444f38d3a9a28d3d838228d50b80a456b66899cdf7edb46f",
+      "content_hash": "c618e876a32cc1d7c5182c40b4b5bc728272278be0bbf9a58559532df4dcaacf",
       "documents": 1,
-      "etag": "\"4596d61d4255d6705673d6968ce660f7\"",
+      "etag": "\"b0408b0e7f4747811363d67157253337\"",
       "id": "ful-news",
-      "last_modified": "Fri, 11 Sep 2026 17:50:42 GMT",
+      "last_modified": "Sat, 12 Sep 2026 08:30:05 GMT",
       "publisher": "Fulham",
       "status": "ok",
       "url": "https://www.fulhamfc.com/news/"
@@ -160,9 +160,9 @@
       "club": "HUL",
       "content_hash": "ea6460d922a745cff521f5005b7d44149337d52b5fa04f089301403474385771",
       "documents": 1,
-      "etag": "\"1542deb420f51f9b0ee9ae0ebf5ff5a5\"",
+      "etag": "\"c78a691d01e8bf3943f7bc4701fb320c\"",
       "id": "hul-news",
-      "last_modified": "Fri, 11 Sep 2026 12:16:37 GMT",
+      "last_modified": "Sat, 12 Sep 2026 02:08:59 GMT",
       "publisher": "Hull City",
       "status": "ok",
       "url": "https://www.wearehullcity.co.uk/news/"
@@ -171,28 +171,28 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.itfc.co.uk/hospitality/conferences-meetings": {
-          "etag": "\"35602d9b3b5d1d0d7ddd926e4145bbbd\"",
-          "last_modified": "Fri, 11 Sep 2026 13:43:36 GMT"
+          "etag": "\"a2cc50c8633a8e4ea695f420771fcda9\"",
+          "last_modified": "Sat, 12 Sep 2026 02:14:40 GMT"
         },
         "https://www.itfc.co.uk/news/2026/september/08/Ipswich-Town-kit-colours-Premier-League-fixture-Crystal-Palace/": {
-          "etag": "\"7de1bfef0536a3cb576bba171c6ae064\"",
-          "last_modified": "Fri, 11 Sep 2026 15:13:13 GMT"
+          "etag": "\"7b41c10aa8855d53bebd4f7a1499c178\"",
+          "last_modified": "Sat, 12 Sep 2026 02:15:00 GMT"
         },
         "https://www.itfc.co.uk/news/2026/september/10/matchday-guide---crystal-palace--a-/": {
-          "etag": "\"672cc0da36154a82f3cc44736a75a536\"",
-          "last_modified": "Fri, 11 Sep 2026 13:43:57 GMT"
+          "etag": "\"06295bc70c18119eec3e7172aff8d423\"",
+          "last_modified": "Sat, 12 Sep 2026 02:15:00 GMT"
         },
         "https://www.itfc.co.uk/news/2026/september/11/gary-on-palace-challenge/": {
-          "etag": "\"3748c37cf59ec20c3289affc94cecdf9\"",
-          "last_modified": "Fri, 11 Sep 2026 16:18:36 GMT"
+          "etag": "\"afce1a6a28312cea16d03fc41f847b5a\"",
+          "last_modified": "Sat, 12 Sep 2026 02:15:00 GMT"
         }
       },
       "club": "IPS",
-      "content_hash": "21fe7c1116b8ed623cd93c7f193cf81ec785589d833e72181d41694eeca3ec0e",
-      "documents": 4,
-      "etag": "\"b155e1215bfe97170dc0071884bd8f8a\"",
+      "content_hash": "56e6a9fa3bcfd2f6887ebc29882f551130daef34223fba6c8743bd89451e1d95",
+      "documents": 5,
+      "etag": "\"5bbc72abe79ebd04df9fcfcbbb09a8df\"",
       "id": "ips-news",
-      "last_modified": "Fri, 11 Sep 2026 17:13:40 GMT",
+      "last_modified": "Sat, 12 Sep 2026 02:15:00 GMT",
       "publisher": "Ipswich Town",
       "status": "ok",
       "url": "https://www.itfc.co.uk/news/"
@@ -205,10 +205,10 @@
         "https://www.leedsunited.com/en/news/womens-preview-leeds-take-on-promotion-rivals-stockport": {}
       },
       "club": "LEE",
-      "content_hash": "aa80ebb4db46c622d5e97355670e0caa10bcddb648d8a2dbfd524deff933d92f",
+      "content_hash": "9ef32c8eda5105c7118bbe2675c9dcb823d2b88f306c83b4cc08af4c28b31154",
       "documents": 4,
       "id": "lee-news",
-      "last_modified": "Fri, 11 Sep 2026 18:06:19 GMT",
+      "last_modified": "Sat, 12 Sep 2026 09:27:14 GMT",
       "publisher": "Leeds United",
       "status": "ok",
       "url": "https://www.leedsunited.com/en/news"
@@ -216,26 +216,26 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.liverpoolfc.com/news/alexander-isak-his-fitness-and-form-liverpool-fans-and-barcola-excitement": {
-          "etag": "\"234ca-H4XPcazyiY+5fIiK/fG8mX72NQI\""
-        },
         "https://www.liverpoolfc.com/news/andoni-iraola-press-conference-facing-arbeloas-fulham-araujo-isak-koumas-and-more": {
-          "etag": "\"22266-pyipY7TlBmG2rpFRlXv3rTOThLI\""
+          "etag": "\"22268-ky8cme849V52M6s+luFnnnIIwdk\""
         },
-        "https://www.liverpoolfc.com/news/lfc-fitness-update-iraola-provides-latest-gakpo-barcola-and-ekitike": {
-          "etag": "\"1de61-Ke1kfOBvkK1AWbKlzzt2AMeNtGo\""
+        "https://www.liverpoolfc.com/news/ceri-holland-interview-lfc-women-v-tottenham-home-comforts-and-squad-strength": {
+          "etag": "\"21f34-QjFzjmglpP1t0zePKVtW5herX78\""
         },
         "https://www.liverpoolfc.com/news/liverpool-v-fulham-team-news-3": {
-          "etag": "\"21783-oHxXsEM0spfDdRNwE+u9aQyhClk\""
+          "etag": "\"21785-bzQrDzXCH96UvP7PO0H3eSKdx8w\""
         },
         "https://www.liverpoolfc.com/news/liverpools-injury-list-suspensions-and-availability": {
-          "etag": "\"1d3b9-WzE1Xe5YQsCGtvHO09xH9OPlhgQ\""
+          "etag": "\"1d3bb-jKl5nnhwVU1An+zU7qLX9aWf7KM\""
+        },
+        "https://www.liverpoolfc.com/news/wsl-stats-preview-taylors-200-games-lfc-record-v-spurs-and-more": {
+          "etag": "\"21b46-TD87mo2k3EInqCQGKDIfSpUM5rE\""
         }
       },
       "club": "LIV",
-      "content_hash": "8be5f6b200c644804d93dea45bae13d6c3ef5fa82b0fa8e3a207c03c2874d2dc",
+      "content_hash": "087deaf7144e391547e16fb9be834570672a4932178ad8d24e11edb436cb386d",
       "documents": 6,
-      "etag": "\"337b2-2lQnzmpi2TIWHCdKZnzZ0irrWOQ\"",
+      "etag": "\"3303b-YcBY+ZSwbvBjV7KRljsvas++qjk\"",
       "id": "liv-news",
       "publisher": "Liverpool",
       "status": "ok",
@@ -244,18 +244,15 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/citytv/womens/andree-jeglertz-aston-villa-preview-september-2026-63924715": {
-          "last_modified": "Fri, 11 Sep 2026 18:34:40 GMT"
-        },
+        "https://www.mancity.com/citytv/womens/andree-jeglertz-aston-villa-preview-september-2026-63924715": {},
         "https://www.mancity.com/news/mens/man-utd-v-city-match-preview-pl-13-sep-63924475": {},
         "https://www.mancity.com/news/womens/andree-jeglertz-injury-news-pre-aston-villa-wsl-63924732": {},
         "https://www.mancity.com/news/womens/aston-villa-wsl-match-preview-september-2026-63924452": {}
       },
       "club": "MCI",
-      "content_hash": "adb7ad3cec055af2f7828605116ae74d0815427ca3e766fd66415c88540bf507",
+      "content_hash": "d9121cd0b28770c1eb1904b579a7580353b04facb366459813279a1f232df772",
       "documents": 5,
       "id": "mci-news",
-      "last_modified": "Fri, 11 Sep 2026 18:38:14 GMT",
       "publisher": "Manchester City",
       "status": "ok",
       "url": "https://www.mancity.com/news"
@@ -274,7 +271,7 @@
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-fernandez-pardo-and-hall-latest-ahead-of-leeds-trip": {}
       },
       "club": "NEW",
-      "content_hash": "abe760803487593db7594c6d8e60e7bd17d893a7b7a80b3b92fc898b3e9bb533",
+      "content_hash": "f69b96de7e4b18240aaad53f1f3d7661be9c110692c62c124c3f8b24c7b5e572",
       "documents": 2,
       "id": "new-news",
       "publisher": "Newcastle United",
@@ -287,9 +284,9 @@
       "club": "NFO",
       "content_hash": "135299ec2a5dde67198ce61c0c2220511057525416bc2f31889bdc7235c9b4a7",
       "documents": 1,
-      "etag": "\"c6a6a7a55ddf61369e31a61909dcf43c\"",
+      "etag": "\"11af29fa59f4bd51e46ba9eb36f91e51\"",
       "id": "nfo-news",
-      "last_modified": "Fri, 11 Sep 2026 14:42:09 GMT",
+      "last_modified": "Sat, 12 Sep 2026 02:08:37 GMT",
       "publisher": "Nottingham Forest",
       "status": "ok",
       "url": "https://www.nottinghamforest.co.uk/news"
@@ -300,9 +297,9 @@
       "club": "SUN",
       "content_hash": "7a3cebfb60e6adae923252da91d99a1aaa75361948a69ec70326b273404ccac3",
       "documents": 1,
-      "etag": "\"a9b5d4c29f99b785b9a4894f905ae221\"",
+      "etag": "\"8e2c472ec2412b6241c5f17e36cc0f84\"",
       "id": "sun-news",
-      "last_modified": "Fri, 11 Sep 2026 15:59:57 GMT",
+      "last_modified": "Sat, 12 Sep 2026 02:05:26 GMT",
       "publisher": "Sunderland",
       "status": "ok",
       "url": "https://www.safc.com/news"
