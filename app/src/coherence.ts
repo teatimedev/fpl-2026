@@ -6,6 +6,20 @@ export function planForInstruction(plan: WeeklyPlan | null, hold: boolean) {
   return (hold ? plan?.hold_weeks : plan?.weeks) ?? []
 }
 
+/** Read-only access to a dated report never makes the live advice ready. */
+export function canReadSavedReview(D: Data, entryId: string, now = Date.now()) {
+  const w = D.weekly
+  if (!w || !entryId || String(w.squad.entry_id) !== entryId
+      || w.gw !== D.meta.start_gw || !D.meta.forecast_id
+      || w.forecast_id !== D.meta.forecast_id) return false
+  const generated = Date.parse(D.meta.generated.replace(' ', 'T').replace(/ UTC$/, 'Z'))
+  const deadline = Date.parse(w.deadline)
+  return Number.isFinite(generated) && Number.isFinite(deadline)
+    && generated <= now && now - generated <= 72 * 3600000 && now < deadline
+    && w.squad.ids.length === 15 && new Set(w.squad.ids).size === 15
+    && w.squad.ids.every(id => D.players.some(p => p.id === id))
+}
+
 /** Pure contract: a live label must never relabel a different forecast. */
 export function recommendationState(D: Data, live: LiveState | null, ids: number[],
   bank: number, ft: number, entryId: string, now = Date.now()) {

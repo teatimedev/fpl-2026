@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { recommendationState, planForInstruction } from '../src/coherence.ts'
+import { recommendationState, planForInstruction, canReadSavedReview } from '../src/coherence.ts'
 
 test('hold instructions use the banked path and do not assume rejected moves happened', () => {
   const act = [{ gw: 4, ft: 3, in_: [1, 2], out: [3, 4] }]
@@ -38,6 +38,16 @@ test('price rise invalidates transfer budget; injury invalidates projections', (
 test('live API failure and unknown selling values cannot imply hold', () => {
   assert.equal(check(data, null).digestReady, false)
   assert.equal(check({ ...data, weekly: { ...data.weekly, squad: { ...data.weekly.squad, selling_prices_unknown: [1] } } }).digestReady, false)
+})
+test('a dated report remains readable during an outage without becoming live advice', () => {
+  const saved = { ...data, players: ids.map(id => ({ id })),
+    weekly: { ...data.weekly, deadline: live.deadline } }
+  assert.equal(canReadSavedReview(saved, '123', now), true)
+  assert.equal(check(data, null).digestReady, false)
+  assert.equal(canReadSavedReview(saved, '456', now), false)
+  assert.equal(canReadSavedReview(saved, '123', Date.parse(live.deadline)), false)
+  assert.equal(canReadSavedReview({ ...saved, meta: { ...saved.meta, forecast_id: 'changed' } }, '123', now), false)
+  assert.equal(canReadSavedReview(saved, '123', now + 73 * 3600000), false)
 })
 test('unrelated player news cannot suppress a coherent squad recommendation', () => {
   const d = { ...data, players: [...data.players, { id: 99, name: 'Unrelated', status: 'a', news: '', price: 5, proj_by_gw: [0, 0, 0, 4] }] }

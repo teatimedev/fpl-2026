@@ -9,7 +9,7 @@ import { signed } from './squad'
 import { Pitch } from './components'
 import { LastWeek } from './LastWeek'
 import type { LinkedTeam } from './useLinkedTeam'
-import { recommendationState, planForInstruction } from './coherence'
+import { recommendationState, planForInstruction, canReadSavedReview } from './coherence'
 import { DecisionReview } from './DecisionReview'
 import { WeeklyBrief } from './WeeklyBrief'
 
@@ -60,6 +60,7 @@ export default function ThisWeek(
   const ft = linked.ft
   const state = recommendationState(D, live, squad.map(p => p.id), bank, ft, entryId)
   const digest = ready && state.digestReady
+  const savedReview = !busy && !live && !!err && !digest && canReadSavedReview(D, entryId)
 
   const { xi, bench } = ready ? xiForGw(squad, gw) : { xi: [], bench: [] }
   const ranked = [...xi].sort((a, b) => thisGw(b, gw) - thisGw(a, gw))
@@ -131,16 +132,29 @@ export default function ThisWeek(
 
       {ready && !digest && !busy && (
         <section className="panel" role="status" style={{ marginTop: 12 }}>
-          <div className="panel-hd"><h2>Your weekly advice needs updating</h2></div>
+          <div className="panel-hd"><h2>{err ? 'Live FPL checks are unavailable' : 'Your weekly advice needs updating'}</h2></div>
           <p className="week-refresh">{err
-            ? 'Your latest team could not be checked. Reload the page to try again.'
+            ? 'The live feed could not be checked. Verify your current squad, prices and team news in FPL before making changes.'
             : 'Your team or the latest information no longer matches this analysis. Fresh advice is needed before making transfers.'}</p>
           <details className="scenario-details"><summary>What needs updating?</summary>
             <ul className="problems soft" style={{ margin: 14 }}>
-              {state.reasons.map(reason => <li key={reason}>{reason}</li>)}
+              {(live ? state.reasons : state.reasons.slice(0, 1)).map(reason => <li key={reason}>{reason}</li>)}
             </ul>
           </details>
         </section>
+      )}
+
+      {savedReview && weekly && (
+        <details className="weekly-more" open>
+          <summary>Saved GW{weekly.gw} review · live checks unavailable</summary>
+          <div className="weekly-more-body">
+            <p>This is the saved report for entry {weekly.squad.entry_id}, analysed {new Date(weekly.generated).toLocaleString('en-GB')}.</p>
+            <p>At that analysis: {weekly.squad.ft} free transfers and £{weekly.squad.bank.toFixed(1)}m in the bank. {weekly.squad.account_basis}</p>
+            <p>Squad recorded: {weekly.squad.ids.map(nameOf).join(', ')}.</p>
+            <Digest D={D} W={weekly} gw={weekly.gw} horizon={weekly.horizon} poolById={poolById}
+              nameOf={nameOf} openPlayer={openPlayer} />
+          </div>
+        </details>
       )}
 
       {ready && digest && weekly && (
@@ -476,9 +490,7 @@ function Digest({
   return (
     <>
       <p className="stamp mono">
-        {W.squad.source.includes('user-confirmed') ? 'public picks + your confirmed transfers' : 'latest public FPL picks'} · analysed {W.squad.confirmed_at
-          ? new Date(W.squad.confirmed_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
-          : stampStr}
+        {W.squad.source.includes('user-confirmed') ? 'public picks + your confirmed transfers' : 'latest public FPL picks'} · analysed {stampStr}
         {W.squad.ft > 0 && ` · ${W.squad.ft >= 15 ? 'unlimited' : W.squad.ft} free transfer${W.squad.ft === 1 ? '' : 's'}`}
         {' '}· £{W.squad.bank.toFixed(1)}m banked
         {checks.length === 0 && ' · nobody flagged'}
