@@ -37,23 +37,31 @@ export function recommendationState(D: Data, live: LiveState | null, ids: number
   if (D.meta.start_gw !== gw) reason.push(`The published model is for GW${D.meta.start_gw}; the next deadline is GW${gw}.`)
   if (!D.meta.forecast_id) reason.push('This model predates the forecast identity checks.')
   const generated = Date.parse(D.meta.generated.replace(' ', 'T').replace(/ UTC$/, 'Z'))
-  if (!Number.isFinite(generated) || now - generated > 72 * 3600000) reason.push('The model needs a fresh rebuild.')
-  if (live && now >= Date.parse(live.deadline)) reason.push('This deadline has passed. Refresh the live state.')
+  if (!Number.isFinite(generated) || generated > now || now - generated > 72 * 3600000) reason.push('The model needs a fresh rebuild.')
+  if (live && (!Number.isFinite(Date.parse(live.deadline)) || now >= Date.parse(live.deadline)))
+    reason.push('The live deadline is missing or has passed. Refresh the live state.')
+  const known = new Set(D.players.map(p => p.id))
+  if (ids.length !== 15 || new Set(ids).size !== 15
+      || ids.some(id => !known.has(id) || (live && !live.elements.has(id))))
+    reason.push('The squad is incomplete in the model or live player feed.')
   const statusChanges = D.players.filter(p => {
     const e = live?.elements.get(p.id)
-    return e && (p.status !== e.status || (p.news || '') !== (e.news || ''))
-      && (p.proj_by_gw[gw - 1] ?? 0) > 0.5
+    return e && (p.status !== e.status || (p.news || '') !== (e.news || '')
+      || (p.chance ?? null) !== (e.chance_of_playing_next_round ?? null))
   })
   const ownedChanges = statusChanges.filter(p => ids.includes(p.id))
   if (ownedChanges.length) reason.push(`Squad news changed since the model ran: ${ownedChanges.slice(0, 4).map(p => p.name).join(', ')}. Projections need updating.`)
   const projectionsReady = reason.length === 0
+  if (live && [...relevant].some(id => !known.has(id) || !live.elements.has(id)))
+    reason.push('A transfer target is missing from the model or live player feed.')
   const targetChanges = statusChanges.filter(p => relevant.has(p.id) && !ids.includes(p.id))
   if (targetChanges.length) reason.push(`Transfer-target news needs refreshing: ${targetChanges.slice(0, 4).map(p => p.name).join(', ')}.`)
   if (!w || w.gw !== gw || w.forecast_id !== D.meta.forecast_id)
     reason.push('The detailed recommendation does not match this forecast.')
   if (w && (ids.length !== 15 || new Set(ids).size !== 15 || w.squad.ids.length !== 15
       || !ids.every(i => w.squad.ids.includes(i)))) reason.push('The analysed squad differs from the loaded squad.')
-  if (w && (Math.abs(w.squad.bank - bank) > 0.001 || w.squad.ft !== ft))
+  if (!Number.isFinite(bank) || bank < 0 || !Number.isInteger(ft) || ft < 0
+      || (w && (!Number.isFinite(w.squad.bank) || Math.abs(w.squad.bank - bank) > 0.001 || w.squad.ft !== ft)))
     reason.push('Bank or free-transfer count differs from the analysed account.')
   if (w?.squad.entry_id && String(w.squad.entry_id) !== entryId)
     reason.push('The analysis belongs to a different FPL entry.')

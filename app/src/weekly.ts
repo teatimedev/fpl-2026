@@ -63,8 +63,9 @@ export function priceMovers(live: LiveState | null, players: Player[]) {
     })
     .filter((x): x is { p: Player; net: number } => x !== null)
   const sorted = [...rows].sort((a, b) => b.net - a.net)
-  const active = sorted.length > 0 && Math.abs(sorted[0].net) > 0
-  return { rising: sorted.slice(0, 5), falling: sorted.slice(-5).reverse(), active }
+  const active = sorted.some(row => row.net !== 0)
+  return { rising: sorted.filter(row => row.net > 0).slice(0, 5),
+    falling: sorted.filter(row => row.net < 0).slice(-5).reverse(), active }
 }
 
 /** Fetch through the serverless proxy — the FPL API blocks browsers directly. */
@@ -98,7 +99,15 @@ export async function loadLive(): Promise<LiveState> {
   const boot = await fpl<any>('bootstrap-static/')
   const next = upcomingEvent(boot.events)
   const elements = new Map<number, LiveElement>()
+  if (!Array.isArray(boot.elements) || !boot.elements.length) throw new Error('FPL player data is empty')
   for (const e of boot.elements) {
+    if (!Number.isInteger(e.id) || e.id <= 0 || elements.has(e.id)
+        || !Number.isFinite(e.now_cost) || e.now_cost < 0
+        || typeof e.status !== 'string' || !e.status
+        || (e.chance_of_playing_next_round != null && (!Number.isFinite(e.chance_of_playing_next_round)
+          || e.chance_of_playing_next_round < 0 || e.chance_of_playing_next_round > 100))) {
+      throw new Error('FPL player data is incomplete or invalid')
+    }
     elements.set(e.id, {
       id: e.id, now_cost: e.now_cost, status: e.status, news: e.news,
       chance_of_playing_next_round: e.chance_of_playing_next_round,
@@ -130,16 +139,21 @@ export async function loadTeam(entryId: number, gw: number): Promise<LoadedTeam 
       const picks = await fpl<any>(`entry/${entryId}/event/${ev}/picks/`)
       // position 1–11 is the XI, 12–15 the bench in the order they come on
       const ps: any[] = [...picks.picks].sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
-      const positioned = ps.length === 15 && ps.every(p => typeof p.position === 'number')
-      const lineup: Lineup | null = positioned ? {
+      if (ps.length !== 15 || new Set(ps.map(p => p.element)).size !== 15
+          || !ps.every((p, i) => Number.isInteger(p.element) && p.element > 0 && p.position === i + 1)
+          || !Number.isFinite(picks.entry_history?.bank) || picks.entry_history.bank < 0
+          || ps.filter(p => p.is_captain).length !== 1 || ps.filter(p => p.is_vice_captain).length !== 1) {
+        throw new Error('Public FPL picks or bank balance are incomplete')
+      }
+      const lineup: Lineup = {
         xi: ps.filter(p => p.position <= 11).map(p => p.element),
         bench: ps.filter(p => p.position > 11).map(p => p.element),
         captain: ps.find(p => p.is_captain)?.element ?? null,
         vice: ps.find(p => p.is_vice_captain)?.element ?? null,
-      } : null
+      }
       return {
         ids: ps.map(p => p.element),
-        bank: (picks.entry_history?.bank ?? 0) / 10,
+        bank: picks.entry_history.bank / 10,
         fromGw: ev,
         lineup,
       }
@@ -207,6 +221,18 @@ export interface EntryHistoryRow {
 export interface EntryHistory {
   current: EntryHistoryRow[]
   chips: { name: string; event: number }[]
+}
+
+export function validateHistory(history: EntryHistory, previousGw: number) {
+  const events = history.current?.map(row => row.event)
+  if (!events?.length || !Array.isArray(history.chips)
+      || new Set(events).size !== events.length || !events.includes(previousGw)
+      || history.current.some(row => !Number.isInteger(row.event_transfers) || row.event_transfers < 0)) {
+    throw new Error('FPL transfer history is incomplete for the previous deadline')
+  }
+  for (let g = Math.min(...events); g <= previousGw; g++) {
+    if (!events.includes(g)) throw new Error('FPL transfer history has missing gameweeks')
+  }
 }
 
 interface EntryHistoryPayload {

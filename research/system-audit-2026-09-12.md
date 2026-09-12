@@ -95,8 +95,69 @@ restores verified inputs. A 390px viewport has no outer horizontal overflow.
 The browser's unsupported clock injection was not used; exact rollover is
 currently verified through the shared Python and browser-function tests.
 
-Research and numerical model validation remain in progress. These fixes have
-not yet been recorded as a new production deployment in this log.
+Research and numerical model validation remain in progress. Batch 1 was committed
+as `35cffc1` and deployed successfully to Vercel. The production browser shows
+GW4, the user-reported Pedro transfer, two remaining free transfers, and the
+explicitly unvalidated hold-policy wording. Python: 298 passing tests; app: 28,
+with lint/build passing. These are implementation checks, not predictive proof.
+
+### Batch 2: captain pairs and incomplete account inputs
+
+Captain selection used the highest individual mean before calculating fallback.
+It now compares each captain with their best vice, using the existing independent
+appearance assumption. A 5-point player with P(play)=.5 plus a certain 6-point
+vice yields 8 extra expected points, versus 6 in the opposite order. Exhaustive
+appearance-state tests verify the pair selection. Python, simulator, dashboard,
+lineup differences and digest use the same calculation. A goalkeeper is no
+longer dismissed as vice solely because of position.
+
+The weekly backend could walk backwards after any API error, load the saved
+preseason squad, or assume one FT when history failed. It now falls back only
+on an unpublished-picks 404, validates complete picks/bank/history, and stops
+if the requested entry cannot be resolved. Unknown selling values cannot fund
+a recommendation. The app checks incomplete player feeds, changed availability
+percentages, non-finite bank values, invalid deadlines and future build dates.
+
+Forecast price/status/news/availability inputs are compared with fresh FPL data
+before the solve and again before publication. A deadline crossed during a long
+run cannot publish the old analysis. The rebuilt GW4 report passed both input
+checks and was archived at 11:26:23 UTC. Haaland/Saka remains the preferred pair,
+with a 0.4-point advantage including fallback. No FPL account changes were made.
+
+This batch passes 308 Python tests and 34 app tests, plus lint/build. A clean
+checkout without the ignored database/cache passed 305 tests before the three
+market-selector tests were added. Model helper imports no longer fetch the
+calendar; the production entry point still requires a future deadline. Pinned
+Python dependencies and a read-only GitHub code-check workflow cover later edits.
+
+The browser review caught and fixed a 19px overflow from the new captain table
+and a false Mbeumo playing-time warning derived from positive attacking evidence.
+The 390px render now has a 390px document width; temporary emulation was cleared.
+
+### Simulator reproductions pending repair
+
+A deterministic defender with 90 minutes and two clean sheets receives 6 rather
+than 12 points because fixtures are collapsed before player scoring. Calibration
+uses one whole-window residual: targets [3, 9] become means [6, 6]. Additional
+open issues include unconserved attacking events, independent player selection,
+and unvalidated distribution shapes. Paired simulations do not supply evidence
+independent of the forecast means to which they are calibrated.
+
+### Team model and market source reproductions pending repair
+
+`dc_matrix(6, 1, -.2)` and `(3, 3, .2)` produce negative cell probabilities.
+The fixed 0–10 score grid gives a home mean of 8.38 when the supplied rate is
+12. Optimiser success and finite/valid market odds are not checked consistently.
+
+Historical ingestion selected `PSH/PSD/PSA`, although the documentation called
+the benchmark a closing line. Football-data's [column notes](https://www.football-data.co.uk/notes.txt)
+confirm these are pre-closing; closing headings add C. The provider also
+[warns](https://www.football-data.co.uk/data.php) that its Pinnacle feed has been
+unreliable since 23 July 2025. Current code prefers that feed over its market
+average and can mix outcomes from different books when individual fields are
+missing. A validated line selector and regressions are prepared; ingestion and
+benchmark reproduction still need updating. No claim of improved predictive
+skill follows from correcting the source labels.
 
 ### Playing-time experiment: selected before testing later seasons
 

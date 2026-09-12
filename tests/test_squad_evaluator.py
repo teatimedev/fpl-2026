@@ -3,6 +3,7 @@ import unittest
 from v2.squad_evaluator import (
     apply_autosubs,
     captain_replacement,
+    captain_options,
     deadline_unavailable,
     evaluate_squad,
     pick_lineup,
@@ -88,6 +89,42 @@ class SquadRuleTests(unittest.TestCase):
         self.assertIsNone(captain_replacement("captain", "vice", played))
         played["vice"] = True
         self.assertEqual(captain_replacement("captain", "vice", played), "vice")
+
+    def test_captain_pair_can_prefer_lower_mean_with_better_fallback(self):
+        safe = player('safe', 'MID', 6, 1)
+        risk = player('risk', 'MID', 5, .5)
+        pair = captain_options([safe, risk], 1)[0]
+        self.assertEqual(pair['captain']['id'], 'risk')
+        self.assertEqual(pair['vice']['id'], 'safe')
+        self.assertEqual(pair['bonus'], 8)
+
+    def test_captain_pair_matches_enumerated_independent_appearance_states(self):
+        from itertools import product, permutations
+        import random
+        rng = random.Random(20260912)
+        for _ in range(25):
+            ps = [player(i, 'MID', 0, rng.choice([.1, .4, .9, 1])) for i in range(4)]
+            conditional = [rng.uniform(-1, 12) for _ in ps]
+            for p, value in zip(ps, conditional):
+                p['proj_by_gw'] = [p['play_by_gw'][0] * value]
+            expected = {}
+            for cap, vice in permutations(range(4), 2):
+                total = 0
+                for state in product([False, True], repeat=4):
+                    weight = 1
+                    for p, appears in zip(ps, state):
+                        probability = p['play_by_gw'][0]
+                        weight *= probability if appears else 1 - probability
+                    scorer = captain_replacement(cap, vice, dict(enumerate(state)))
+                    total += weight * (conditional[scorer] if scorer is not None else 0)
+                expected[cap, vice] = total
+            best = captain_options(ps, 1)[0]
+            self.assertAlmostEqual(best['bonus'], max(expected.values()))
+
+    def test_no_appearance_captain_is_not_preferred_on_an_exact_pair_tie(self):
+        safe = player('safe', 'GKP', 6, 1)
+        absent = player('absent', 'MID', 0, 0)
+        self.assertEqual(captain_options([absent, safe], 1)[0]['captain'], safe)
 
 
 class SquadValueTests(unittest.TestCase):

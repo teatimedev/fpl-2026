@@ -61,6 +61,7 @@ export interface Player {
   bonus_last: number
   status: string
   news: string
+  chance?: number | null
   is_new: boolean
   joined: string
   pens: number | null
@@ -206,8 +207,9 @@ export interface WeeklyModel {
   captain: number
   vice: number
   captain_pts: number
+  captain_bonus?: number
   vice_pts: number
-  ranked: { id: number; pts: number }[]
+  ranked: { id: number; pts: number; bonus?: number; vice?: number }[]
   gw_pts: Record<string, number>
   remaining: Record<string, number>
 }

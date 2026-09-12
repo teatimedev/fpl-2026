@@ -38,7 +38,7 @@ KEEP = ('id', 'name', 'full_name', 'team', 'pos', 'price', 'proj_gw', 'proj_6gw'
         'availability_source', 'availability_confidence',
         'mins_proj', 'sel_pct', 'pts_last', 'mins_last', 'ppg_last', 'goals_last',
         'assists_last', 'xgi90_last', 'defcon_last', 'cs_last', 'bonus_last',
-        'status', 'news', 'is_new', 'joined', 'pens', 'corners', 'fk', 'note',
+        'status', 'news', 'chance', 'is_new', 'joined', 'pens', 'corners', 'fk', 'note',
         'fdr6', 'value', 'pts_now', 'mins_now', 'starts_now', 'games_now',
         'xg90', 'xa90', 'dc90', 'start_rate', 'evidence', 'seasons')
 players = []

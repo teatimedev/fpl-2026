@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import type { Data, NewsClaim, Player, Pos, Weekly } from './types'
 import { withLive, priceMovers } from './weekly'
 import {
-  xiForGw, thisGw, lineupIssues, HIT_COST,
+  xiForGw, thisGw, lineupIssues, HIT_COST, captainOptions,
   type TransferOption,
 } from './model'
 import { signed } from './squad'
@@ -63,9 +63,11 @@ export default function ThisWeek(
   const savedReview = !busy && !live && !!err && !digest && canReadSavedReview(D, entryId)
 
   const { xi, bench } = ready ? xiForGw(squad, gw) : { xi: [], bench: [] }
-  const ranked = [...xi].sort((a, b) => thisGw(b, gw) - thisGw(a, gw))
-  const captain = ranked[0]
-  const vice = ranked[1]
+  const pairs = captainOptions(xi, gw)
+  const captain = pairs[0]?.captain
+  const vice = pairs[0]?.vice
+  const ranked = [vice, ...pairs.map(row => row.captain).filter(p => p.id !== captain?.id && p.id !== vice?.id)]
+    .filter((p): p is Player => !!p)
   const flagged = squad.filter(p => p.status !== 'a')
   // Only meaningful for a real team: the lineup you have set, against the model's.
   const issues = ready && usingReal && lineup
@@ -187,7 +189,7 @@ export default function ThisWeek(
                 </span>
               </div>
               <ol className="alts">
-                {ranked.slice(1, 4).map((p, i) => (
+                {ranked.slice(0, 3).map((p, i) => (
                   <li key={p.id}>
                     <span className="n">{i === 0 ? 'vice' : `#${i + 2}`}</span>
                     <button className="plink" onClick={() => openPlayer(p.id)}>{p.name}</button>
@@ -565,11 +567,12 @@ function Digest({
           </div>
         </div>
         <div className="cap-ctx">
+          <div className="cap-table-scroll">
           <table className="cap-table">
             <thead>
               <tr>
                 <th className="l">option</th><th className="l">fixture</th><th>team xG</th>
-                <th>starts</th><th>owned</th><th>pts</th>
+                <th>starts</th><th>owned</th><th>pts</th><th title="Expected extra points with the best vice, assuming independent appearances">C + fallback</th>
               </tr>
             </thead>
             <tbody>
@@ -592,26 +595,31 @@ function Digest({
                     <td className="mono">{start != null ? `${Math.round(start * 100)}%` : '—'}</td>
                     <td className="mono">{p ? `${p.sel_pct.toFixed(0)}%` : '—'}</td>
                     <td className="mono strong">{r.pts.toFixed(1)}</td>
+                    <td className="mono">{r.bonus?.toFixed(1) ?? '—'}</td>
                   </tr>
                 )
               })}
             </tbody>
           </table>
+          </div>
           {m.ranked.length > 1 && (() => {
-            const edge = m.ranked[0].pts - m.ranked[1].pts
+            const hasFallback = m.ranked[0].bonus != null && m.ranked[1].bonus != null
+            const edge = (m.ranked[0].bonus ?? m.ranked[0].pts) - (m.ranked[1].bonus ?? m.ranked[1].pts)
+            const basis = hasFallback ? 'including vice fallback' : 'before vice fallback'
             const a = poolById.get(m.ranked[0].id), b = poolById.get(m.ranked[1].id)
             const template = a && b && b.sel_pct > a.sel_pct + 15 ? b : null
             return (
               <p className="cap-edge">
                 {edge >= 1.0 ? (
-                  <><strong>{nameOf(m.ranked[0].id)}</strong> leads by {edge.toFixed(1)} in projected captain bonus, before vice fallback.</>
+                  <><strong>{nameOf(m.ranked[0].id)}</strong> leads by {edge.toFixed(1)} in projected captain bonus, {basis}.</>
                 ) : (
-                  <>The captain bonus edge is <strong className="mono">{edge.toFixed(1)}</strong> before vice fallback — inside the noise of a single match.
+                  <>The captain bonus edge is <strong className="mono">{edge.toFixed(1)}</strong> {basis} — inside the noise of a single match.
                     {template
                       ? <> {template.name} is owned by {template.sel_pct.toFixed(0)}%: captaining him protects your rank if he hauls, {nameOf(m.ranked[0].id)} is the points play. Both are defensible.</>
                       : ' Either is defensible; the model leans ' + nameOf(m.ranked[0].id) + '.'}
                   </>
                 )}
+                {hasFallback && ' Fallback assumes the two players’ appearances are independent.'}
               </p>
             )
           })()}

@@ -30,7 +30,7 @@ DST_JSON = ROOT / 'data' / 'projections.json'
 FIELDS = ['id', 'name', 'full_name', 'team', 'team_id', 'pos', 'pos_id', 'price',
           'proj_gw', 'proj_6gw', 'proj_by_gw', 'mins_proj', 'value', 'sel_pct',
           'pts_last', 'mins_last', 'ppg_last', 'goals_last', 'assists_last',
-          'xgi90_last', 'defcon_last', 'cs_last', 'bonus_last', 'status', 'news',
+          'xgi90_last', 'defcon_last', 'cs_last', 'bonus_last', 'status', 'news', 'chance',
           'joined', 'is_new', 'pens', 'corners', 'fk', 'fdr6', 'cs_rate', 'note',
           'pts_now', 'mins_now', 'starts_now', 'games_now',
           'xg90', 'xa90', 'dc90', 'start_rate', 'start_by_gw', 'play_by_gw',
@@ -81,7 +81,7 @@ def main():
             'goals_last': g or 0, 'assists_last': a or 0,
             'xgi90_last': round(((xg or 0) + (xa or 0)) / p90, 3) if p90 else 0,
             'defcon_last': dc or 0, 'cs_last': cs or 0, 'bonus_last': bonus or 0,
-            'status': p['status'], 'news': p['news'], 'joined': p['joined'],
+            'status': p['status'], 'news': p['news'], 'chance': p.get('chance'), 'joined': p['joined'],
             'is_new': p['joined'] >= '2026-05-01', 'pens': p['pens'] or '',
             'corners': p['corners'] or '', 'fk': p['fk'] or '',
             'fdr6': fdr6, 'cs_rate': round(cs_rate, 3), 'note': p.get('note', ''),
@@ -110,7 +110,9 @@ def main():
     horizon = data.get('horizon') or (
         len(data['players'][0]['proj_by_gw']) if data['players'] else 6)
     start_gw = data.get('start_gw', 1)
-    _, deadline = next_gw()
+    current_gw, deadline = next_gw()
+    if current_gw != start_gw:
+        raise ValueError('Forecast window no longer matches the next deadline; rebuild first')
     schedule = {}
     for team, byweek in view['view'].items():
         schedule[team] = [

@@ -126,8 +126,9 @@ from availability import (  # noqa: E402
     load_overrides,
     status_for_gameweek,
 )
-START_GW, HORIZON = _gw_window()
-WINDOW = HORIZON - START_GW + 1
+# Importing statistical helpers must not access a live calendar. Production
+# configures the window below; replay/library callers must supply their own.
+START_GW = HORIZON = WINDOW = None
 LAST_GW = 38
 SEASON = {}                       # id -> per-gameweek projection to LAST_GW
 OUT_SEASON = ROOT / 'v2' / 'projections_season.json'
@@ -701,6 +702,8 @@ def defcon_hit_prob(mean, k, evidence):
 
 # ------------------------------------------------------------ projection
 def project(players, view, priors, refit_calibration=False, feedback=False):
+    if START_GW is None or HORIZON is None or WINDOW is None:
+        raise ValueError('Configure the projection window before projecting')
     from minutes_survival import fit as survival_fit, probability as p60_probability
     survival = survival_fit({pid: match_evidence(p) for pid, p in players.items()},
                             {pid: p['pos'] for pid, p in players.items()})
@@ -846,7 +849,7 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
         out.append(dict(
             id=p['id'], name=p['name'], full_name=p['full_name'], team=p['team'],
             pos=pos, price=p['price'], sel_pct=p['sel_pct'], status=p['status'],
-            news=p['news'], joined=p['joined'], pens=p['pens'],
+            news=p['news'], chance=p['chance'], joined=p['joined'], pens=p['pens'],
             corners=p['corners'], fk=p['fk'],
             proj_by_gw=by_gw, proj_6gw=round(total, 2),
             proj_gw=round(total / WINDOW, 3),
@@ -1098,6 +1101,8 @@ if __name__ == '__main__':
                     help='blend the frozen multipliers with the scorecard\'s '
                          'cumulative level ratio, subject to the GW8+/10%% guards (P7)')
     args = ap.parse_args()
+    START_GW, HORIZON = _gw_window()
+    WINDOW = HORIZON - START_GW + 1
     players = load()
     from manager_minutes import load_from_db as load_manager_minutes
     manager_table = load_manager_minutes([CURRENT], db=DB)

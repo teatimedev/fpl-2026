@@ -27,6 +27,7 @@ concurrency:
 jobs:
   gate:
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     outputs:
       run: ${{ steps.gate.outputs.run }}
       reason: ${{ steps.gate.outputs.reason }}
@@ -50,6 +51,9 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      PYTHONUNBUFFERED: '1'
     permissions:
       contents: write
     steps:
@@ -72,7 +76,7 @@ jobs:
 
       - name: Install full-model dependencies
         if: (needs.gate.outputs.mode == 'full' || steps.news.outputs.rebuild_required == 'true') && steps.news.outputs.official_fpl_ok == 'true'
-        run: pip install --quiet numpy scipy pulp highspy
+        run: pip install --quiet -r requirements.txt
 
       - name: Pull fresh data
         if: (needs.gate.outputs.mode == 'full' || steps.news.outputs.rebuild_required == 'true') && steps.news.outputs.official_fpl_ok == 'true'

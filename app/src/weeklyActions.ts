@@ -41,5 +41,9 @@ export function plainPlayerCheck(player: Player | undefined, check: WeeklyCheck)
   if (player?.status === 'd') return 'A doubt for this game. Check the latest team news.'
   if (check.flags.some(f => /starts only|start estimate/.test(f))) return 'May not start. Check the latest team news.'
   if (check.flags.some(f => /new signing/.test(f))) return 'His place in the team is still settling. Check the latest team news.'
-  return 'His playing time needs a check before the deadline.'
+  const attacking = check.flags.find(f => /role:.*xGI/i.test(f))
+  if (attacking) return /above/.test(attacking)
+    ? 'Recent chance involvement is higher than expected. Check whether his attacking role has changed.'
+    : 'Recent chance involvement is lower than expected. Check whether his attacking role has changed.'
+  return 'Review the flagged change before the deadline.'
 }

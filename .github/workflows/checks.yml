@@ -1,0 +1,42 @@
+name: Code checks
+
+on:
+  push:
+    paths:
+      - '**.py'
+      - 'tests/**'
+      - 'app/**'
+      - '!app/src/data/**'
+      - 'requirements*.txt'
+      - '.github/workflows/**'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - run: python -m pytest tests/ -q
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+        working-directory: app
+      - run: npm test && npm run lint && npm run build
+        working-directory: app

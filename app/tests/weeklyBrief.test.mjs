@@ -57,3 +57,9 @@ test('a minutes estimate is explained as uncertainty without implying an injury'
     'May not start. Check the latest team news.')
   assert.equal(plainPlayerCheck({ status: 'i', news: 'Hamstring injury' }, { flags: [] }), 'Hamstring injury')
 })
+
+test('a positive attacking-role signal does not become a false playing-time warning', () => {
+  const text = plainPlayerCheck({ status: 'a', news: '' }, { flags: ['role: last 3 starts: 2.78 xGI vs 1.86 expected, above the 80% band'] })
+  assert.match(text, /higher than expected/)
+  assert.doesNotMatch(text, /playing time|may not start/i)
+})

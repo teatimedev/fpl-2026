@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
-  loadLive, loadTeam, loadEntry, loadEntryHistory,
+  loadLive, loadTeam, loadEntry, loadEntryHistory, validateHistory,
   type LiveState, type LoadedTeam, type EntrySummary, type EntryHistory,
 } from './weekly'
 import { inferFreeTransfers } from './model'
@@ -87,6 +87,7 @@ export function useLinkedTeam(defaultEntryId = '', weekly?: Weekly | null): Link
         ])
         if (cancelled) return
         if (t && !h) throw new Error('FPL team history is unavailable; free transfers cannot be verified')
+        if (t && h) validateHistory(h, l.gw - 1)
         setTeam(t); setSummary(s); setHistory(h)
       })
       .catch(e => {

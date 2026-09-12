@@ -53,14 +53,18 @@ from datetime import datetime, timezone
 from itertools import combinations
 from pathlib import Path
 import urllib.request
+from urllib.error import HTTPError
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(HERE))
 from gwclock import next_gw          # noqa: E402
 from decision_state import forecast_id, public_selling_prices, atomic_json
+from input_validation import validate_public_picks, validate_history, validate_forecast_inputs
 from squad_evaluator import (       # noqa: E402
     deadline_unavailable,
+    captain_options,
+    play_probability,
     evaluate_squad,
     pick_lineup as shared_pick_lineup,
 )
@@ -241,11 +245,16 @@ def load_squad(team_id, players, gw):
     else dict(xi=[ids], bench=[ids in order], captain=id, vice=id).
     """
     if team_id:
+        if team_id <= 0:
+            raise ValueError('FPL entry ID must be positive')
         for ev in range(gw - 1, 0, -1):
             try:
                 picks = api(f'entry/{team_id}/event/{ev}/picks/')
-            except Exception:
-                continue
+            except HTTPError as ex:
+                if ex.code == 404:
+                    continue
+                raise
+            validate_public_picks(picks)
             ps = sorted(picks['picks'], key=lambda p: p['position'])
             ids = [p['element'] for p in ps]
             bank = picks['entry_history']['bank'] / 10
@@ -255,13 +264,10 @@ def load_squad(team_id, players, gw):
                 'captain': next((p['element'] for p in ps if p['is_captain']), None),
                 'vice': next((p['element'] for p in ps if p['is_vice_captain']), None),
             }
-            hist = {}
-            try:
-                hist = api(f'entry/{team_id}/history/')
-                ft = infer_free_transfers(hist, gw)
-            except Exception:
-                ft = 1
-            print(f'  loaded your real squad and lineup from Gameweek {ev} '
+            hist = api(f'entry/{team_id}/history/')
+            validate_history(hist, gw - 1)
+            ft = infer_free_transfers(hist, gw)
+            print(f'  loaded your public squad and lineup from Gameweek {ev} '
                   f'(bank £{bank:.1f}m, {ft} free transfer{"s" if ft != 1 else ""})')
             from confirmed_transfers import apply_confirmed_transfers
             state = dict(ids=ids, bank=bank, ft=ft, lineup=lineup, history=hist,
@@ -269,6 +275,8 @@ def load_squad(team_id, players, gw):
                          source=f'FPL entry {team_id}, picks from GW{ev}')
             return apply_confirmed_transfers(state, players, gw)
         print('  no public picks yet for that entry (they appear after a deadline)')
+        if gw > 1:
+            raise ValueError('No public squad is available for the requested entry')
 
     if SQUAD_FILE.exists():
         squad_text = SQUAD_FILE.read_text()
@@ -362,12 +370,12 @@ def weekly_action(kind, moves, instruction, squad, players, ft, gw):
         raise ValueError('The weekly action does not describe valid squad changes')
     after = [players[i] for i in ids if i not in outgoing] + [players[i] for i in incoming]
     xi, bench, key = pick_xi(after, gw)
-    ranked = sorted(xi, key=key, reverse=True)
+    pair = captain_options(xi, gw)[0]
     ledger = transfer_ledger(ft, len(moves), gw)
     return dict(kind=kind, instruction=instruction,
                 moves=[dict(out=o, in_=i) for o, i in moves],
                 lineup=dict(xi=[p['id'] for p in xi], bench=[p['id'] for p in bench],
-                            captain=ranked[0]['id'], vice=ranked[1]['id']),
+                            captain=pair['captain']['id'], vice=pair['vice']['id']),
                 hit_points=ledger['hits'] * 4, ft_next=ledger['ft_next'],
                 ft_lost=ledger['ft_lost'])
 
@@ -882,20 +890,14 @@ def main():
     if not args.no_refresh:
         refresh(full=args.full)
 
-    try:
-        boot = api('bootstrap-static/')
-    except Exception:
-        cached_boot = HERE / 'cache' / 'bootstrap.json'
-        if not args.no_refresh or not cached_boot.exists():
-            raise
-        boot = json.loads(cached_boot.read_text())
-        print(f'  FPL API unavailable; using cached bootstrap from {cached_boot.name}')
+    boot = api('bootstrap-static/')
     elem = {e['id']: e for e in boot['elements']}
     gw, deadline = next_gw(boot['events'])
     played_gw = gw - 1               # the gameweek just played, before any clamp
     players, horizon, start_gw = load_projections()
     if gw != start_gw or gw > horizon:
         raise SystemExit(f'Forecast starts at GW{start_gw}, live deadline is GW{gw}; refresh the model first')
+    validate_forecast_inputs(players, boot)
 
     dl = datetime.fromisoformat(deadline.replace('Z', '+00:00'))
     left = dl - datetime.now(timezone.utc)
@@ -918,6 +920,9 @@ def main():
     if args.bank is not None:
         st['bank'] = args.bank
     ids, bank, ft, lineup = st['ids'], st['bank'], st['ft'], st['lineup']
+    if (not math.isfinite(bank) or bank < 0 or ft < 0
+            or ft > (15 if gw == 1 else MAX_FT)):
+        raise ValueError('Invalid bank or free-transfer count')
     sell_prices, price_unknown = {}, list(ids)
     if st.get('entry_id') and st.get('history'):
         try:
@@ -926,6 +931,9 @@ def main():
                 st['history'], HERE / 'fpl.db')
         except (OSError, ValueError, KeyError, sqlite3.Error) as ex:
             print(f'  selling values unavailable ({type(ex).__name__})')
+    if ids and gw > 1 and price_unknown:
+        raise ValueError('Cannot recommend transfers with unknown selling values: '
+                         + ', '.join(str(pid) for pid in price_unknown))
     J['squad'] = dict(ids=list(ids), bank=bank, ft=ft, source=st['source'],
                       sell_prices=sell_prices, selling_prices_unknown=price_unknown,
                       account_basis=st.get('account_basis', 'Latest public deadline; unpublished transfers are not visible'),
@@ -970,12 +978,17 @@ def main():
         P.append('No squad loaded — set your team id in the app.')
     else:
         xi, bench, key = pick_xi(squad, gw)
-        ranked = sorted(xi, key=key, reverse=True)
-        cap, vice = ranked[0], ranked[1]
+        options = captain_options(xi, gw)
+        ranked = [row['captain'] for row in options]
+        cap, vice = options[0]['captain'], options[0]['vice']
         model_out = dict(xi=[p['id'] for p in xi], bench=[p['id'] for p in bench],
                          captain=cap['id'], vice=vice['id'])
         J['model'] = dict(model_out, captain_pts=round(key(cap), 2), vice_pts=round(key(vice), 2),
-                          ranked=[dict(id=p['id'], pts=round(key(p), 2)) for p in ranked[:4]],
+                          captain_bonus=round(options[0]['bonus'], 2),
+                          ranked=[dict(id=row['captain']['id'],
+                                       pts=round(key(row['captain']), 2),
+                                       bonus=round(row['bonus'], 2),
+                                       vice=row['vice']['id']) for row in options[:4]],
                           gw_pts={p['id']: round(key(p), 2) for p in squad},
                           remaining={p['id']: round(remaining(p, gw, horizon), 2) for p in squad})
 
@@ -984,12 +997,15 @@ def main():
         L.append('')
         L.append(f'Projected {key(cap):.1f} this week, doubled to {key(cap)*2:.1f}. '
                  f'Vice: {vice["name"]} ({key(vice):.1f}).')
+        L.append(f'The pair adds {options[0]["bonus"]:.1f} expected captain points '
+                 f'including vice fallback; non-appearances are assumed independent.')
         L.append('')
-        L.append('| rank | player | club | this GW | start % |')
-        L.append('|---|---|---|---|---|')
-        for i, p in enumerate(ranked[:4], 1):
+        L.append('| rank | player | club | this GW | captain bonus incl. vice | start % |')
+        L.append('|---|---|---|---|---|---|')
+        for i, row in enumerate(options[:4], 1):
+            p = row['captain']
             L.append(f'| {i} | {p["name"]} | {p["team"]} | {key(p):.1f} | '
-                     f'{p["start_rate"]*100:.0f} |')
+                     f'{row["bonus"]:.1f} | {p["start_rate"]*100:.0f} |')
         L.append('')
 
         # ---- XI
@@ -1018,21 +1034,18 @@ def main():
             ycap = players.get(lineup.get('captain'))
             yvice = players.get(lineup.get('vice'))
             if ycap and ycap is not cap:
-                # Both players' normal points already count in the XI; only
-                # the extra captain copy changes (before vice fallback).
-                d = key(cap) - key(ycap)
+                yours_bonus = key(ycap) + ((1 - play_probability(ycap, gw))
+                                          * key(yvice) if yvice else 0)
+                d = options[0]['bonus'] - yours_bonus
                 issues.append(f'**Captain:** you have {ycap["name"]} ({key(ycap):.1f}); '
                               f'the model prefers {cap["name"]} ({key(cap):.1f}) — '
-                              f'{d:+.1f} in projected captain bonus before vice fallback.')
+                              f'{d:+.1f} in projected captain bonus including vice fallback.')
             if yvice:
-                if yvice['pos'] == 'GKP':
-                    issues.append(f'**Vice on a goalkeeper** ({yvice["name"]}): if the '
-                                  f'captain misses, the armband doubles your keeper. '
-                                  f'Move it to {vice["name"] if vice is not ycap else cap["name"]}.')
-                elif yvice not in ranked[:3]:
-                    issues.append(f'**Vice:** {yvice["name"]} ({key(yvice):.1f}) is not one '
-                                  f'of your top three; the model would use '
-                                  f'{vice["name"] if vice is not ycap else cap["name"]}.')
+                armband = max((p for p in xi if p is not ycap), key=key)
+                if yvice is not armband:
+                    issues.append(f'**Vice:** {yvice["name"]} ({key(yvice):.1f}); '
+                                  f'the best fallback for your captain is '
+                                  f'{armband["name"]} ({key(armband):.1f}).')
             if lineup.get('xi'):
                 yxi = [players[i] for i in lineup['xi'] if i in players]
                 ybench = [players[i] for i in lineup['bench'] if i in players]
@@ -1628,9 +1641,10 @@ def main():
     L.append('')
     L.append('---')
     L.append('')
-    L.append(f'_Generated {datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC. Projections '
-             f'are estimates: hold-out rank correlation is about 0.46, so treat the '
-             f'ordering as a strong hint and the point totals as rough._')
+    L.append(f'_Generated {datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC. '
+             'Forecasts and simulation probabilities are estimates. The historical '
+             'rate benchmark does not validate the complete live decision system; '
+             'use the archived deadline scorecard to track its forward results._')
 
     if args.scout and len(squad) == 15:
         sys.path.insert(0, str(ROOT))
@@ -1648,6 +1662,12 @@ def main():
         sys.path.insert(0, str(ROOT))
         from v2.case_studies import build as build_cases
         J['case_studies'] = build_cases(J, players, elem, json.loads((HERE / 'cache/fixtures.json').read_text()))
+    # A long solve/news scan may have crossed a deadline or a price/news change.
+    # Verify again before replacing any published report or phone summary.
+    final_boot = api('bootstrap-static/')
+    if next_gw(final_boot['events']) != (gw, deadline):
+        raise ValueError('Deadline changed while analysing; rebuild before publishing')
+    validate_forecast_inputs(players, final_boot)
     text = '\n'.join(L)
     DIGEST.write_text(text)
     print()
@@ -1657,7 +1677,7 @@ def main():
     if args.json:
         J['digest_md'] = text
         WEEKLY_JSON.parent.mkdir(parents=True, exist_ok=True)
-        WEEKLY_JSON.write_text(json.dumps(J, separators=(',', ':')))
+        atomic_json(WEEKLY_JSON, J)
         print(f'(digest data written to {WEEKLY_JSON})')
     if args.push_file:
         P.append(f'Full digest: {APP_URL}')

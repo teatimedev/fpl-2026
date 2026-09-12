@@ -47,13 +47,14 @@ _400 players classified: 26 unavailable, 33 minutes loss, 38 minutes watch, 16 m
 ## Captain: **Haaland** (MCI)
 
 Projected 7.1 this week, doubled to 14.1. Vice: Saka (6.5).
+The pair adds 7.3 expected captain points including vice fallback; non-appearances are assumed independent.
 
-| rank | player | club | this GW | start % |
-|---|---|---|---|---|
-| 1 | Haaland | MCI | 7.1 | 95 |
-| 2 | Saka | ARS | 6.5 | 93 |
-| 3 | João Pedro | CHE | 6.3 | 92 |
-| 4 | Mbeumo | MUN | 5.4 | 95 |
+| rank | player | club | this GW | captain bonus incl. vice | start % |
+|---|---|---|---|---|---|
+| 1 | Haaland | MCI | 7.1 | 7.3 | 95 |
+| 2 | Saka | ARS | 6.5 | 6.9 | 93 |
+| 3 | João Pedro | CHE | 6.3 | 6.8 | 92 |
+| 4 | Foden | MCI | 3.8 | 5.8 | 64 |
 
 ## Starting XI
 
@@ -91,7 +92,7 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 | Tarkowski (EVE) | Gvardiol (MCI) | -0.4 | +1.6 | +1.1 | **+2.7** | +2.7 |
 | Kluivert (BOU) | Barnes (NEW) | +0.0 | +1.5 | +0.8 | **+2.3** | +2.3 |
 | O'Shea (IPS) | Ajayi (HUL) | +0.2 | +1.6 | -0.2 | **+1.4** | +1.4 |
-| Saka (ARS) | Palmer (CHE) | +0.2 | +1.1 | +0.0 | **+1.1** | +1.1 |
+| Saka (ARS) | Palmer (CHE) | +0.2 | +1.2 | +0.0 | **+1.2** | +1.2 |
 | Leno (FUL) | Tzolakis (HUL) | +0.1 | +0.7 | +0.1 | **+0.8** | +0.8 |
 | Foden (MCI) | Gakpo (LIV) | +0.2 | +3.5 | -3.0 | **+0.5** | +0.5 |
 
@@ -121,7 +122,7 @@ _Minutes check:_ the verdict above is on the numbers; Foden is a check-first cas
 
 ## The next six weeks, planned
 
-Selected path under the current policy: **401.4** pts (0 hits). Making no move this week and re-planning: 401.4. Selected path versus holding: **+0.0** — not enough; hold.
+Selected path under the current policy: **401.5** pts (0 hits). Making no move this week and re-planning: 401.5. Selected path versus holding: **+0.0** — not enough; hold.
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
@@ -129,7 +130,7 @@ Selected path under the current policy: **401.4** pts (0 hits). Making no move t
 | Sadiki, Milenković → Robinson, Barnes | +0.43 | 4.0 | no |
 | Milenković → Gvardiol | +0.15 | 2.0 | no |
 | Sadiki → Gomez | +1.62 | 2.0 | no |
-| Tarkowski → Gvardiol | -2.26 | 2.0 | no |
+| Tarkowski → Gvardiol | -2.36 | 2.0 | no |
 | Foden → Gakpo | -0.04 | 2.0 | no |
 | Sadiki, Tarkowski → Botman, Barnes | +1.53 | 4.0 | no |
 | Sadiki, Milenković → Maatsen, Barnes | +1.22 | 4.0 | no |
@@ -138,7 +139,7 @@ Selected path under the current policy: **401.4** pts (0 hits). Making no move t
 - **GW5** 65.3 pts, C Haaland, 3 FT  Foden → Barnes
 - **GW6** 68.6 pts, C Saka, 3 FT  Raya → Tzolakis, Milenković → Ajayi, Kluivert → Palmer
 - **GW7** 67.2 pts, C Haaland, 1 FT  Tarkowski → Andersen
-- **GW8** 68.1 pts, C Haaland, 1 FT  Sadiki → E.Le Fée
+- **GW8** 68.2 pts, C Palmer, 1 FT  Sadiki → E.Le Fée
 - **GW9** 68.6 pts, C Haaland, 1 FT  Andersen → Ballard
 
 _The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
@@ -162,12 +163,12 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Rogers £7.6 | +25.4% | +950,157 | B.Fernandes £12.0 | -12.3% | -558,308 |
-| Palmer £9.7 | +25.7% | +767,251 | O'Reilly £6.4 | -37.3% | -522,504 |
-| Ødegaard £6.7 | +33.0% | +653,552 | Shaw £4.4 | -29.1% | -363,768 |
-| Isak £9.1 | +22.9% | +588,099 | Calvert-Lewin £6.0 | -15.1% | -351,011 |
-| Konsa £4.5 | +31.2% | +567,114 | Maguire £4.9 | -29.6% | -332,806 |
-| De Cuyper £4.8 | +19.4% | +472,977 | Mbeumo £7.9 ⭑ | -13.3% | -331,837 |
+| Rogers £7.6 | +25.8% | +970,043 | B.Fernandes £12.0 | -12.7% | -570,994 |
+| Palmer £9.7 | +26.1% | +783,908 | O'Reilly £6.4 | -37.9% | -526,608 |
+| Ødegaard £6.7 | +33.5% | +666,036 | Shaw £4.4 | -29.9% | -371,673 |
+| Isak £9.1 | +23.0% | +596,838 | Calvert-Lewin £6.0 | -15.4% | -356,994 |
+| Konsa £4.5 | +31.6% | +577,450 | Mbeumo £7.9 ⭑ | -13.6% | -338,873 |
+| De Cuyper £4.8 | +19.7% | +482,184 | Maguire £4.9 | -30.4% | -338,751 |
 
 ⭑ = in your squad.
 
@@ -181,4 +182,4 @@ _Based on 10 price snapshots. This warning is not part of the transfer verdict u
 
 ---
 
-_Generated 2026-09-12 11:05 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-09-12 11:26 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._

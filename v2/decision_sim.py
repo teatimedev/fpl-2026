@@ -56,6 +56,11 @@ from pathlib import Path
 
 import numpy as np
 
+try:
+    from .squad_evaluator import captain_options
+except ImportError:
+    from squad_evaluator import captain_options
+
 ROOT = Path(__file__).resolve().parent.parent
 PROJ_PATH = ROOT / 'v2' / 'projections_v2.json'
 VIEW_PATH = ROOT / 'v2' / 'season_view.json'
@@ -434,8 +439,8 @@ def _pick_lineup(par_list, wi, gw):
 
     Formation minimums are filled first, then the best projection subject to
     XI caps.  The reserve keeper is followed by outfield substitutes in
-    descending projection order; captain and vice are the top two projected
-    starters.  Squad order breaks projection ties deterministically.
+    descending projection order. Captain/vice maximise the expected additional
+    copy including vice fallback. Squad order breaks ties deterministically.
     """
     def rank(ix):
         proj = par_list[ix]['proj'][wi] or 0.0
@@ -467,9 +472,15 @@ def _pick_lineup(par_list, wi, gw):
 
     bench = [ix for ix in range(len(par_list)) if ix not in xi]
     bench.sort(key=lambda ix: (par_list[ix]['pos'] != 'GKP', rank(ix)))
-    ranked = sorted(xi, key=rank)
-    return {'xi': xi, 'bench': bench, 'captain': ranked[0],
-            'vice': ranked[1] if len(ranked) > 1 else None}
+    options = captain_options(
+        [par_list[ix] for ix in xi], gw,
+        points=lambda par, _: par['proj'][wi] or 0.0,
+        play=lambda par, _: par['p_play'][wi])
+    indices = {par['id']: ix for ix, par in enumerate(par_list)}
+    best = options[0]
+    return {'xi': xi, 'bench': bench,
+            'captain': indices[best['captain']['id']],
+            'vice': indices[best['vice']['id']] if best['vice'] else None}
 
 
 def _squad_gw_points(par_list, lineup, pts_by_pid, played_by_pid, wi):

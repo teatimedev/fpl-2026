@@ -1108,6 +1108,7 @@ details[open].news-health > summary::before,
 
 /* captain context */
 .cap-ctx { padding: 0 14px 14px; }
+.cap-table-scroll { overflow-x: auto; }
 .cap-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
 .cap-table th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--chalk-faint); font-weight: 500; padding: 4px 6px; text-align: right; }

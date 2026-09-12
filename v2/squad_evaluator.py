@@ -66,6 +66,26 @@ def play_probability(player, gw):
     return max(0.0, min(1.0, start + (1.0 - start) * 0.20))
 
 
+def captain_options(xi, gw, points=gw_points, play=play_probability):
+    """Rank captain/vice pairs by extra expected points, assuming independent DNPs.
+
+    Points already include non-appearance risk. For each captain the best vice
+    is therefore the highest unconditional projection among the other players.
+    Prefer higher individual points when pair values tie (no needless risk).
+    This optimises the pair within the supplied XI, not the whole squad policy.
+    """
+    ranked = sorted(xi, key=lambda p: points(p, gw), reverse=True)
+    options = []
+    for captain in ranked:
+        vice = next((p for p in ranked if p is not captain), None)
+        bonus = points(captain, gw)
+        if vice is not None:
+            bonus += (1.0 - play(captain, gw)) * points(vice, gw)
+        options.append(dict(captain=captain, vice=vice, bonus=bonus))
+    return sorted(options, key=lambda row: (-row['bonus'],
+                  -points(row['captain'], gw)))
+
+
 def pick_lineup(squad: Sequence[Mapping], gw: int,
                 points: Callable[[Mapping, int], float] = gw_points):
     """Pick the highest-projected legal XI and ordered bench for one GW."""
@@ -98,12 +118,12 @@ def pick_lineup(squad: Sequence[Mapping], gw: int,
     # FPL displays the reserve goalkeeper separately, followed by outfield
     # substitutes in the order they would enter.
     bench.sort(key=lambda p: (p["pos"] != "GKP", -key(p)))
-    ranked = sorted(xi, key=key, reverse=True)
+    options = captain_options(xi, gw, points)
     return Lineup(
         xi=xi,
         bench=bench,
-        captain=ranked[0] if ranked else None,
-        vice=ranked[1] if len(ranked) > 1 else None,
+        captain=options[0]['captain'] if options else None,
+        vice=options[0]['vice'] if options else None,
     )
 
 

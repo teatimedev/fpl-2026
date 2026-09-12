@@ -5,7 +5,7 @@ import { round1, signed, type SquadState } from './squad'
 import { Pitch, ContextPanels, LinkTeamForm, type ShirtMarks } from './components'
 import { withLive, type LiveState } from './weekly'
 import {
-  xiForGw, thisGw, remaining, applyMoves, isLegal, sandboxGain, rankTransfers,
+  xiForGw, remaining, applyMoves, isLegal, sandboxGain, rankTransfers, captainOptions,
   lineupIssues, lineupDiff, HIT_COST, type Lineup, type Move, type TransferOption,
 } from './model'
 import MarketTable from './MarketTable'
@@ -216,10 +216,9 @@ function SquadView({
 
   // The model's XI for whatever is on the pitch.
   const model = useMemo(() => xiForGw(shown, gw), [shown, gw])
-  const modelRanked = useMemo(
-    () => [...model.xi].sort((a, b) => thisGw(b, gw) - thisGw(a, gw)), [model, gw])
-  const modelCap = modelRanked[0]?.id ?? null
-  const modelVice = modelRanked[1]?.id ?? null
+  const modelPair = useMemo(() => captainOptions(model.xi, gw)[0], [model, gw])
+  const modelCap = modelPair?.captain.id ?? null
+  const modelVice = modelPair?.vice?.id ?? null
 
   // Your lineup applies to the squad you own, not to a sandbox after-squad.
   const yours = !inSandbox ? lineup : null

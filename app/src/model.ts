@@ -1,5 +1,5 @@
 import type { Player, Pos } from './types'
-import { XI_MIN, XI_MAX, POS_ORDER, MAX_PER_CLUB } from './types'
+import { XI_MIN, XI_MAX, POS_ORDER, MAX_PER_CLUB } from './types.ts'
 import type { EntryHistory } from './weekly'
 
 /**
@@ -61,6 +61,20 @@ export function playProbability(p: Player, gw: number): number {
   if (p.status === 'u') return 0
   const start = p.start_by_gw?.[gw - 1] ?? p.start_rate
   return Math.max(0, Math.min(1, start + (1 - start) * 0.2))
+}
+
+/** Extra captain points including vice fallback; independent non-appearances. */
+export function captainBonus(captain: Player, vice: Player | undefined, gw: number): number {
+  return thisGw(captain, gw) + (vice ? (1 - playProbability(captain, gw)) * thisGw(vice, gw) : 0)
+}
+
+/** Best captain/vice pair within this XI; individual mean breaks pair ties. */
+export function captainOptions(xi: Player[], gw: number) {
+  const ranked = [...xi].sort((a, b) => thisGw(b, gw) - thisGw(a, gw))
+  return ranked.map(captain => {
+    const vice = ranked.find(p => p.id !== captain.id)
+    return { captain, vice, bonus: captainBonus(captain, vice, gw) }
+  }).sort((a, b) => b.bonus - a.bonus || thisGw(b.captain, gw) - thisGw(a.captain, gw))
 }
 
 type OutfieldPos = Exclude<Pos, 'GKP'>
@@ -163,12 +177,9 @@ export function squadBreakdown(
   for (let g = gw; g <= horizon; g++) {
     const { xi, bench } = xiForGw(squad, g)
     if (!xi.length) continue
-    const ranked = [...xi].sort((a, b) => thisGw(b, g) - thisGw(a, g))
+    const pair = captainOptions(xi, g)[0]
     xiPoints += xi.reduce((sum, p) => sum + thisGw(p, g), 0)
-    captainPoints += thisGw(ranked[0], g)
-    if (ranked[1]) {
-      captainPoints += (1 - playProbability(ranked[0], g)) * thisGw(ranked[1], g)
-    }
+    captainPoints += pair.bonus
 
     const startingKeeper = xi.find(p => p.pos === 'GKP')
     const benchKeeper = bench.find(p => p.pos === 'GKP')
@@ -345,36 +356,29 @@ export function lineupIssues(
   const f1 = (x: number) => x.toFixed(1)
   const signed = (x: number) => (x >= 0 ? '+' : '') + f1(x)
   const byId = new Map(squad.map(p => [p.id, p]))
-  const ranked = [...xi].sort((a, b) => key(b) - key(a))
-  const cap = ranked[0], vice = ranked[1]
+  const pair = captainOptions(xi, gw)[0]
+  const cap = pair?.captain, vice = pair?.vice
   if (!cap || !vice) return []
 
   const issues: LineupIssue[] = []
   const ycap = lineup.captain != null ? byId.get(lineup.captain) : undefined
   const yvice = lineup.vice != null ? byId.get(lineup.vice) : undefined
   // where the model would put the vice armband, given who you captain
-  const armband = ycap && vice.id === ycap.id ? cap : vice
+  const armband = [...xi].filter(p => p.id !== ycap?.id).sort((a, b) => key(b) - key(a))[0]
 
   if (ycap && ycap.id !== cap.id) {
     issues.push({
       head: 'Captain:',
       body: `you have ${ycap.name} (${f1(key(ycap))}); the model prefers ${cap.name} `
-        + `(${f1(key(cap))}) — ${signed(key(cap) - key(ycap))} in projected captain bonus before vice fallback.`,
+        + `(${f1(key(cap))}) — ${signed(pair.bonus - captainBonus(ycap, yvice, gw))} in projected captain bonus including vice fallback.`,
     })
   }
-  if (yvice) {
-    if (yvice.pos === 'GKP') {
-      issues.push({
-        head: `Vice on a goalkeeper (${yvice.name}):`,
-        body: `if the captain misses, the armband doubles your keeper. Move it to ${armband.name}.`,
-      })
-    } else if (!ranked.slice(0, 3).some(p => p.id === yvice.id)) {
-      issues.push({
-        head: 'Vice:',
-        body: `${yvice.name} (${f1(key(yvice))}) is not one of your top three; `
-          + `the model would use ${armband.name}.`,
-      })
-    }
+  if (yvice && armband && yvice.id !== armband.id) {
+    issues.push({
+      head: 'Vice:',
+      body: `${yvice.name} (${f1(key(yvice))}); the best fallback for your captain is `
+        + `${armband.name} (${f1(key(armband))}).`,
+    })
   }
   if (lineup.xi.length) {
     const yxi = lineup.xi.map(i => byId.get(i)).filter((p): p is Player => !!p)
@@ -424,12 +428,12 @@ export function lineupDiff(lineup: Lineup, squad: Player[], gw: number): DiffBad
   const { xi } = xiForGw(squad, gw)
   const modelXi = new Set(xi.map(p => p.id))
   const yourXi = new Set(lineup.xi)
-  const ranked = [...xi].sort((a, b) => thisGw(b, gw) - thisGw(a, gw))
+  const pair = captainOptions(xi, gw)[0]
   return {
     swapOut: new Set(lineup.xi.filter(id => !modelXi.has(id))),
     swapIn: new Set(lineup.xi.length ? xi.filter(p => !yourXi.has(p.id)).map(p => p.id) : []),
-    capModel: ranked[0]?.id ?? null,
-    viceModel: ranked[1]?.id ?? null,
+    capModel: pair?.captain.id ?? null,
+    viceModel: pair?.vice?.id ?? null,
     capYours: lineup.captain,
     viceYours: lineup.vice,
   }
