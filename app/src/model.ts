@@ -2,6 +2,7 @@ import type { Player, Pos } from './types'
 import { XI_MIN, XI_MAX, POS_ORDER, MAX_PER_CLUB } from './types.ts'
 import type { EntryHistory } from './weekly'
 import { optimalLineup } from './lineupSearch.ts'
+import { validateHistory } from './weekly.ts'
 
 /**
  * The model, in the browser: the single TypeScript mirror of v2/weekly.py.
@@ -311,17 +312,17 @@ export function rankTransfers(
  * Free transfers available at the deadline of `uptoGw`, from public entry
  * history — mirrors v2/weekly.py infer_free_transfers. FPL: one a week,
  * unused ones roll over up to five; a wildcard or free hit week neither
- * spends nor gains. Gameweek 1 is unlimited and everyone starts Gameweek 2
- * with exactly one.
+ * spends nor gains. Late entries start with one FT after their own first deadline.
  */
 export function inferFreeTransfers(history: EntryHistory | null, uptoGw: number): number {
   if (uptoGw <= 1) return 15
-  if (!history) return 1
+  if (!history) return NaN
+  validateHistory(history, uptoGw - 1)
+  const first = Math.min(...history.current.map(row => row.event))
   const chips = new Map(history.chips.map(c => [c.event, c.name]))
   const made = new Map(history.current.map(e => [e.event, e.event_transfers ?? 0]))
   let ft = 1
-  for (let g = 2; g < uptoGw; g++) {
-    if (!made.has(g)) break
+  for (let g = first + 1; g < uptoGw; g++) {
     const chip = chips.get(g)
     if (chip === 'wildcard' || chip === 'freehit')
       continue // FPL rule: WC/FH neither spends nor gains FTs; bank carries over

@@ -157,11 +157,12 @@ export default function Season({
                   ].filter(Boolean).join(' · ')}
             </p>
             <p className="season-caveat">
-              Rules of thumb: play Bench Boost at ≥{h.bb_play_min ?? 12} bench points,
+              Rules of thumb: play Bench Boost at ≥{h.bb_play_min ?? 12} extra points,
               Triple Captain at ≥{h.tc_play_min ?? 8} extra, Free Hit at a{' '}
               ≥{h.fh_play_min ?? 12}-point gap, Wildcard at ≥{h.wc_play_min ?? 20}.
-              Heuristics on point estimates — a nudge, not an order.
+              These thresholds have not been validated as an optimal chip policy.
             </p>
+            {chips?.method && <p className="season-caveat">{chips.method}</p>}
           </>
         )}
       </section>

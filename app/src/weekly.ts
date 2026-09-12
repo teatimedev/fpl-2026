@@ -132,9 +132,10 @@ export interface LoadedTeam {
  * deadline has passed, so this walks back from the most recent one and returns
  * null before the season starts.
  */
-export async function loadTeam(entryId: number, gw: number): Promise<LoadedTeam | null> {
+export async function loadTeam(entryId: number, gw: number, history?: EntryHistory): Promise<LoadedTeam | null> {
   if (!Number.isInteger(entryId) || entryId <= 0) throw new Error('Enter a valid FPL team ID')
   for (let ev = gw - 1; ev >= 1; ev--) {
+    if (history?.chips.some(c => c.name === 'freehit' && c.event === ev)) continue
     try {
       const picks = await fpl<any>(`entry/${entryId}/event/${ev}/picks/`)
       // position 1–11 is the XI, 12–15 the bench in the order they come on
@@ -142,9 +143,13 @@ export async function loadTeam(entryId: number, gw: number): Promise<LoadedTeam 
       if (ps.length !== 15 || new Set(ps.map(p => p.element)).size !== 15
           || !ps.every((p, i) => Number.isInteger(p.element) && p.element > 0 && p.position === i + 1)
           || !Number.isFinite(picks.entry_history?.bank) || picks.entry_history.bank < 0
+          || picks.entry_history?.event !== ev
           || ps.filter(p => p.is_captain).length !== 1 || ps.filter(p => p.is_vice_captain).length !== 1) {
         throw new Error('Public FPL picks or bank balance are incomplete')
       }
+      const captain = ps.find(p => p.is_captain), vice = ps.find(p => p.is_vice_captain)
+      if (captain.element === vice.element || captain.position > 11 || vice.position > 11)
+        throw new Error('Captain and vice must be distinct starting players')
       const lineup: Lineup = {
         xi: ps.filter(p => p.position <= 11).map(p => p.element),
         bench: ps.filter(p => p.position > 11).map(p => p.element),
@@ -227,7 +232,11 @@ export function validateHistory(history: EntryHistory, previousGw: number) {
   const events = history.current?.map(row => row.event)
   if (!events?.length || !Array.isArray(history.chips)
       || new Set(events).size !== events.length || !events.includes(previousGw)
-      || history.current.some(row => !Number.isInteger(row.event_transfers) || row.event_transfers < 0)) {
+      || events.some(event => !Number.isInteger(event) || event < 1 || event > 38)
+      || new Set(history.chips.map(c => c.event)).size !== history.chips.length
+      || history.current.some(row => !Number.isInteger(row.event_transfers) || row.event_transfers < 0)
+      || history.chips.some(c => !['wildcard', 'freehit', 'bboost', '3xc'].includes(c.name)
+        || !Number.isInteger(c.event) || c.event < 1 || c.event > 38)) {
     throw new Error('FPL transfer history is incomplete for the previous deadline')
   }
   for (let g = Math.min(...events); g <= previousGw; g++) {
@@ -243,6 +252,7 @@ interface EntryHistoryPayload {
 export async function loadEntryHistory(entryId: number): Promise<EntryHistory | null> {
   try {
     const h = await fpl<EntryHistoryPayload>(`entry/${entryId}/history/`)
+    if (!Array.isArray(h.current) || !Array.isArray(h.chips)) return null
     return {
       current: (h.current ?? []).map(r => ({
         event: r.event ?? 0,
@@ -251,7 +261,7 @@ export async function loadEntryHistory(entryId: number): Promise<EntryHistory | 
         overall_rank: r.overall_rank ?? null,
         bank: r.bank ?? 0,
         value: r.value ?? 0,
-        event_transfers: r.event_transfers ?? 0,
+        event_transfers: r.event_transfers ?? NaN,
         event_transfers_cost: r.event_transfers_cost ?? 0,
         points_on_bench: r.points_on_bench ?? 0,
       })),

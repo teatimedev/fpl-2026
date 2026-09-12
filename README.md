@@ -6,6 +6,11 @@ actual results.
 
 **Production:** [fpl-2026.vercel.app](https://fpl-2026.vercel.app/)
 
+The [12 September audit](research/system-audit-2026-09-12.md) records deployed
+repairs and unresolved limitations, including club-level starting probabilities,
+simulation dependence and unvalidated transfer/chip policies. The audit was
+stopped at the user's request; the system is not certified globally optimal.
+
 ## Using the app
 
 Start with **This week**. It gives four plain instructions: transfer or hold,

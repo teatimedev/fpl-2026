@@ -105,12 +105,15 @@ def _autosub_coefficients(probabilities):
     return coefficients
 
 
-def search(squad, gw):
+def search(squad, gw, captain_copies=1):
     """Return (best expected total, Lineup), examining all 3,300 legal choices."""
     try:
         from .squad_evaluator import Lineup, gw_points, play_probability
     except ImportError:
         from squad_evaluator import Lineup, gw_points, play_probability
+
+    if captain_copies not in (1, 2):
+        raise ValueError('Captain copies must be one ordinarily or two for Triple Captain')
 
     keepers = [p for p in squad if p['pos'] == 'GKP']
     outfield = [p for pos in POSITIONS for p in squad if p['pos'] == pos]
@@ -140,7 +143,7 @@ def search(squad, gw):
         bonuses = cap_means + (1 - cap_plays) * vice_means
         cap = np.argmax(np.where(bonuses >= bonuses.max(1)[:, None] - 1e-12,
                                   cap_means, -np.inf), axis=1)
-        bonus = bonuses[np.arange(len(xi)), cap]
+        bonus = bonuses[np.arange(len(xi)), cap] * captain_copies
         reserve = keepers[1 - ki]
         base = means[xi].sum(1) + kmean + (1 - kp) * gw_points(reserve, gw) + bonus
         scores = base[parent] + autosubs

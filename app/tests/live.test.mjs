@@ -33,7 +33,7 @@ test('only a 404 permits falling back to earlier public picks', async t => {
     if (calls === 1) return new Response('{}', { status: 404 })
     return Response.json({ picks: Array.from({ length: 15 }, (_, i) => ({
       element: i + 1, position: i + 1, is_captain: i === 0, is_vice_captain: i === 1,
-    })), entry_history: { bank: 2 } })
+    })), entry_history: { bank: 2, event: 3 } })
   })
   const team = await loadTeam(123, 5)
   assert.equal(team.fromGw, 3)

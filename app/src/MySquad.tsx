@@ -116,7 +116,7 @@ export default function MySquad({
   // the summary's money once the picks themselves are public.
   const valueShown = linked.team && summary ? summary.value : null
   const bankShown = linked.team
-    ? (linked.team.confirmedAt ? linked.team.bank : summary?.bank ?? linked.team.bank)
+    ? linked.team.bank
     : (source?.kind === 'digest' ? source.bank : null)
 
   const genStr = (() => {

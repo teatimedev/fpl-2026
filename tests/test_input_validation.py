@@ -9,7 +9,7 @@ from v2 import weekly
 def picks():
     return {'picks': [dict(element=i, position=i, is_captain=i == 1,
                           is_vice_captain=i == 2) for i in range(1, 16)],
-            'entry_history': {'bank': 0}}
+            'entry_history': {'bank': 0, 'event': 3}}
 
 
 def test_missing_bank_duplicate_players_and_duplicate_positions_fail():
@@ -21,6 +21,16 @@ def test_missing_bank_duplicate_players_and_duplicate_positions_fail():
         mutate(payload)
         with pytest.raises(ValueError):
             validate_public_picks(payload)
+
+
+def test_wrong_gameweek_or_illegal_armbands_cannot_be_used_as_current_picks():
+    with pytest.raises(ValueError, match='different gameweek'):
+        validate_public_picks(picks(), expected_gw=4)
+    payload = picks()
+    payload['picks'][0]['is_vice_captain'] = True
+    payload['picks'][1]['is_vice_captain'] = False
+    with pytest.raises(ValueError, match='distinct starting'):
+        validate_public_picks(payload)
 
 
 def test_weekly_outage_cannot_fall_back_to_an_old_squad_or_assume_one_ft(monkeypatch):

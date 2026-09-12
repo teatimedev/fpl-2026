@@ -1,6 +1,7 @@
 """Reproducible input identity and public purchase-price reconstruction."""
 import hashlib
 import json
+import math
 import sqlite3
 import tempfile
 from pathlib import Path
@@ -30,7 +31,9 @@ def public_selling_prices(ids, elements, transfers, history, db_path):
             continue
         acquisitions.pop(t['element_out'], None)
         acquisitions[t['element_in']] = t['element_in_cost']
-    cx = sqlite3.connect(f'file:{Path(db_path).resolve()}?mode=ro', uri=True)
+    first_gw = min((row['event'] for row in history.get('current', [])), default=None)
+    cx = (sqlite3.connect(f'file:{Path(db_path).resolve()}?mode=ro', uri=True)
+          if Path(db_path).exists() else None)
     result, unknown = {}, []
     for pid in ids:
         e = elements.get(pid)
@@ -38,16 +41,17 @@ def public_selling_prices(ids, elements, transfers, history, db_path):
             unknown.append(pid)
             continue
         buy = acquisitions.get(pid)
-        if buy is None:
+        if pid not in acquisitions and first_gw == 1 and cx is not None:
             row = cx.execute('SELECT price FROM gw_stat WHERE code=? AND season=? '
                              'AND round=1 AND price IS NOT NULL ORDER BY kickoff LIMIT 1',
                              (e['code'], '2026/27')).fetchone()
             buy = row[0] if row else None
-        if buy is None:
+        if not isinstance(buy, (int, float)) or not math.isfinite(buy) or buy < 0:
             unknown.append(pid)
         else:
             result[pid] = selling_value(int(buy), int(e['now_cost'])) / 10
-    cx.close()
+    if cx is not None:
+        cx.close()
     return result, unknown
 
 

@@ -83,13 +83,17 @@ export function useLinkedTeam(defaultEntryId = '', weekly?: Weekly | null): Link
         if (!entryId) return
         const id = Number(entryId)
         try {
-          const [t, s, h] = await Promise.all([
+          let [t, s, h] = await Promise.all([
             loadTeam(id, l.gw), loadEntry(id), loadEntryHistory(id),
           ])
           if (cancelled) return
           setSummary(s)
           if (t && !h) throw new Error('FPL team history is unavailable; free transfers cannot be verified')
           if (t && h) validateHistory(h, l.gw - 1)
+          if (t && h?.chips.some(c => c.name === 'freehit' && c.event === t!.fromGw)) {
+            t = await loadTeam(id, l.gw, h)
+            if (cancelled) return
+          }
           setTeam(t); setHistory(h)
         } catch (error) {
           // Account publication can lag the deadline calendar. Preserve the

@@ -366,6 +366,7 @@ export interface ChipInfo {
 }
 
 export interface ChipsData {
+  method?: string
   gw: number
   dgw: Record<string, string[]>
   bgw: Record<string, string[]>

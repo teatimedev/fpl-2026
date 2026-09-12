@@ -1,7 +1,37 @@
 # End-to-end FPL audit and improvement log
 
-Started 12 September 2026, from commit `8848760`. This is an active implementation
-and verification log, not a claim that forecasting can become perfect.
+Started 12 September 2026, from commit `8848760`. The user requested that the audit
+wrap up to conserve usage. Research is stopped; the original exhaustive scope
+was not completed. This log preserves verified repairs and the remaining work.
+
+## Wrap-up status
+
+Five repair batches through `90886b2` were deployed and verified in production.
+The sixth chip/account batch passes 375 Python tests and 58 browser-model tests,
+plus lint and the application build; publication verification follows below.
+No FPL transfers, captain changes or chip submissions were made.
+
+The remaining issues that most affect confidence are:
+
+- Starting probabilities are not constrained jointly by club. In single-fixture
+  GW5, 13 clubs sum above 11 expected starters; Coventry totals 12.885. A
+  constrained correction needs historical evaluation before changing forecasts.
+- The simulation does not fully conserve team goals/assists or model dependent
+  player selection. Its outcome probabilities are not independently calibrated.
+- Transfer and chip planning still use candidate searches and heuristic timing;
+  neither global optimality nor improved long-run FPL performance is established.
+- Eight club news sources supplied no articles in the latest scan. Player-rate,
+  ingestion-coverage and retrospective-replay audits remain incomplete.
+
+FPL's public account endpoints returned 503 maintenance responses after the GW4
+deadline. The fresh GW5 player forecasts are available, but a verified new
+personalised report could not be produced. The app withholds current advice
+when that report/account state is unavailable or mismatched. GW1–4 historical
+archives were preserved. The existing refresh workflow remains configured;
+no additional background audit, automation or notification was created.
+
+The coverage table below records where the audit stopped. Pending/in-progress
+items are deferred work, not work continuing after this user-requested wrap-up.
 
 ## Acceptance
 
@@ -227,6 +257,13 @@ yet be rebuilt. GW1–4 forecast archives remain unchanged. The old GW4 report
 stays dated and fails current-advice checks; no account transfer was submitted.
 Publication and production checks for this batch are still in progress.
 
+This batch was committed as `90886b2`; Vercel and GitHub check `34694655595`
+succeeded. The production browser shows GW5, distinguishes the available
+player feed from the account outage, withholds stale chip advice, and starts
+the fixture ticker at GW5. Defence cells now display clean-sheet probability.
+The suite passed 353 Python tests and 47 app tests, plus lint/build. FPL's 503
+response explicitly says the game is being updated; this is not a login gate.
+
 ### Further chip defects identified for the next repair
 
 Chip valuation still uses a separate greedy selector without vice fallback;
@@ -241,6 +278,29 @@ The current [official FPL rules](https://fantasy.premierleague.com/help/rules)
 confirm retained FT counts through Wildcard/Free Hit, unlimited transfers until
 an entry's first deadline, and the one-chip/consecutive-Free-Hit restrictions.
 Late-entry FT and initial purchase-price reconstruction still need auditing.
+
+Chip/account repairs are now in progress locally. Bench Boost subtracts ordinary
+autosub cover; Triple Captain reselects the XI with two extra captain copies and
+vice fallback. Free Hit uses sale proceeds, credits retained holdings correctly,
+checks solver completion and rescores its candidate with the full evaluator.
+It remains a linear candidate search, not a proven global optimum for the full
+nonlinear objective. Chip advice is restricted to one chip per week, and Free
+Hit eligibility excludes consecutive weeks. A wholly blank gameweek is retained
+in the fixture summary. Full-season appearance probabilities now accompany
+points and are tied to the detailed forecast hash.
+
+Public account reconstruction now starts transfer accumulation after the entry's
+first deadline. Missing transfer counts stay unknown. Temporary Free Hit picks
+are skipped when reconstructing the following week's permanent squad and bank.
+GW1 prices cannot be invented for a late joiner, or substituted for a missing
+recorded purchase cost. Public picks must match the requested gameweek and have
+distinct starting captain/vice selections. The initial chip/account test suite
+passes; a full rebuilt personalised GW5 report still awaits FPL's account update.
+
+The next structural minutes audit reproduced sums above 11 expected starters for
+13 clubs in the single-fixture GW5 forecast. Coventry has 12.885; Bournemouth's
+goalkeeper start probabilities sum to 1.294. A constrained-probability correction
+and historical evaluation are pending. No such correction is promoted yet.
 
 ### Simulator repairs and remaining limits
 

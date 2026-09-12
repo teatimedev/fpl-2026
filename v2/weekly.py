@@ -219,16 +219,16 @@ def load_projections():
 def infer_free_transfers(history, upto_gw):
     """Free transfers available at the deadline of `upto_gw`, from public
     history. FPL: one a week, unused ones roll over up to five; a wildcard or
-    free hit week neither spends nor gains. Gameweek 1 is unlimited and
-    everyone starts Gameweek 2 with exactly one."""
+    free hit week neither spends nor gains. An entry's first deadline is
+    unlimited, followed by one FT; late entries do not start counting at GW2."""
     if upto_gw <= 1:
         return 15
+    validate_history(history, upto_gw - 1)
+    first = min(row['event'] for row in history['current'])
     chips = {c['event']: c['name'] for c in history.get('chips', [])}
     made = {e['event']: e.get('event_transfers', 0) for e in history.get('current', [])}
     ft = 1
-    for g in range(2, upto_gw):
-        if g not in made:
-            break
+    for g in range(first + 1, upto_gw):
         if chips.get(g) in ('wildcard', 'freehit'):
             # FPL rule: a wildcard or free-hit week neither spends nor gains
             # free transfers — event_transfers (~11) is not a spend, and no
@@ -247,14 +247,17 @@ def load_squad(team_id, players, gw):
     if team_id:
         if team_id <= 0:
             raise ValueError('FPL entry ID must be positive')
+        hist = None
         for ev in range(gw - 1, 0, -1):
+            if hist and any(c['name'] == 'freehit' and c['event'] == ev for c in hist['chips']):
+                continue
             try:
                 picks = api(f'entry/{team_id}/event/{ev}/picks/')
             except HTTPError as ex:
                 if ex.code == 404:
                     continue
                 raise
-            validate_public_picks(picks)
+            validate_public_picks(picks, expected_gw=ev)
             ps = sorted(picks['picks'], key=lambda p: p['position'])
             ids = [p['element'] for p in ps]
             bank = picks['entry_history']['bank'] / 10
@@ -264,8 +267,11 @@ def load_squad(team_id, players, gw):
                 'captain': next((p['element'] for p in ps if p['is_captain']), None),
                 'vice': next((p['element'] for p in ps if p['is_vice_captain']), None),
             }
-            hist = api(f'entry/{team_id}/history/')
-            validate_history(hist, gw - 1)
+            if hist is None:
+                hist = api(f'entry/{team_id}/history/')
+                validate_history(hist, gw - 1)
+            if any(c['name'] == 'freehit' and c['event'] == ev for c in hist['chips']):
+                continue  # Temporary picks revert at the next deadline.
             ft = infer_free_transfers(hist, gw)
             print(f'  loaded your public squad and lineup from Gameweek {ev} '
                   f'(bank £{bank:.1f}m, {ft} free transfer{"s" if ft != 1 else ""})')
@@ -1542,7 +1548,9 @@ def main():
                 import chips as CH
                 season, _, last_gw = CH.load_season()
                 res = CH.evaluate(season, ids, bank, gw, last_gw, CH.chip_windows(),
-                                  CH.used_chips(st.get('history')), wc_now=wc_now)
+                                  CH.used_chips(st.get('history')), wc_now=wc_now,
+                                  sell_prices=sell_prices,
+                                  first_gw=min((r['event'] for r in st.get('history', {}).get('current', [])), default=1))
                 J['chips'] = res
                 L.append('## Chips')
                 L.append('')

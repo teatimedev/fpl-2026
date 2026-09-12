@@ -131,6 +131,7 @@ from availability import (  # noqa: E402
 START_GW = HORIZON = WINDOW = None
 LAST_GW = 38
 SEASON = {}                       # id -> per-gameweek projection to LAST_GW
+SEASON_PLAY = {}                  # matching chance of appearing in each GW
 OUT_SEASON = ROOT / 'v2' / 'projections_season.json'
 AVAILABILITY_OVERRIDES = load_overrides()
 BOOT_CACHE = ROOT / 'v2' / 'cache' / 'bootstrap.json'
@@ -743,6 +744,7 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
         # needs (which week is the bench worth most, where is the double).
         by_gw, total = [0.0] * (START_GW - 1), 0.0
         season_by_gw = [0.0] * (START_GW - 1)
+        season_play_by_gw = [0.0] * (START_GW - 1)
         start_by_gw = [0.0] * (START_GW - 1)
         p60_shadow_by_gw = [0.0] * (START_GW - 1)
         play_by_gw = [0.0] * (START_GW - 1)
@@ -778,13 +780,14 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
             minute_share = av.expected_minutes / 90.0
             start_share = av.start_minutes / 90.0
             cameo_share = av.cameo_minutes / 90.0
+            any_fixture = lambda probability: 1.0 - (1.0 - probability) ** len(fx)
+            season_play_by_gw.append(round(any_fixture(p_play), 3))
             if gw <= HORIZON:
                 p60_shadow_by_gw.append(round(p60_probability(survival[p['id']], p_start, p_cameo), 4)
                                        if av.source == 'model baseline' and len(fx) == 1 else None)
                 # Public gameweek probabilities mean at least one start/play.
                 # Individual fixtures currently have independent availability;
                 # retain their marginals explicitly for simulation and replay.
-                any_fixture = lambda probability: 1.0 - (1.0 - probability) ** len(fx)
                 start_by_gw.append(round(any_fixture(p_start), 3))
                 play_by_gw.append(round(any_fixture(p_play), 3))
                 mins_by_gw.append(round(av.expected_minutes * len(fx), 1))
@@ -850,6 +853,7 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
                 total += pts
 
         SEASON[p['id']] = season_by_gw
+        SEASON_PLAY[p['id']] = season_play_by_gw
         first = START_GW - 1
         current_availability = availability_by_gw[first]
         out.append(dict(
@@ -1157,9 +1161,11 @@ if __name__ == '__main__':
     # the coarse full-season projection, for chip timing (chips.py)
     season = [dict(id=r['id'], name=r['name'], team=r['team'], pos=r['pos'],
                    price=r['price'], status=r['status'], start_rate=r['start_rate'],
-                   by_gw=SEASON.get(r['id'], []))
+                   by_gw=SEASON.get(r['id'], []), play_by_gw=SEASON_PLAY.get(r['id'], []))
               for r in rows]
-    json.dump({'players': season, 'start_gw': START_GW, 'last_gw': LAST_GW},
+    from decision_state import forecast_id
+    json.dump({'players': season, 'start_gw': START_GW, 'last_gw': LAST_GW,
+               'forecast_id': forecast_id(OUT)},
               open(OUT_SEASON, 'w'), separators=(',', ':'))
     print(f'season outlook GW{START_GW}-{LAST_GW} -> {OUT_SEASON}\n')
 
