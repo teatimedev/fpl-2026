@@ -8,8 +8,8 @@ model, the player model and the exporters cannot disagree about it.
     from gwclock import next_gw
     gw, deadline = next_gw()          # e.g. (7, '2026-10-03T10:00:00Z')
 
-Falls back to the live API only if there is no cache, and to Gameweek 1 if
-there is no network either, so it always answers.
+Falls back to the live API only if there is no cache. Missing deadlines fail
+explicitly; a stale API flag must never reopen a closed gameweek.
 """
 import json
 import os
@@ -35,7 +35,32 @@ def _events():
         return []
 
 
-def next_gw(events=None):
+class NoUpcomingDeadline(ValueError):
+    """No future deadline is present in the supplied season calendar."""
+
+
+def upcoming_event(events, now=None):
+    """Earliest future deadline, regardless of delayed FPL current/next flags.
+
+    Return None after the season. An empty or malformed calendar is an error,
+    not evidence that the season ended or that GW1 should be invented.
+    """
+    if not events:
+        raise ValueError('FPL event calendar is unavailable or empty')
+    now = now or datetime.now(timezone.utc)
+    if now.tzinfo is None:
+        raise ValueError('Deadline clock requires a timezone-aware time')
+    future = []
+    for event in events:
+        deadline = datetime.fromisoformat(event['deadline_time'].replace('Z', '+00:00'))
+        if deadline.tzinfo is None:
+            raise ValueError('FPL deadline is missing a timezone')
+        if deadline > now:
+            future.append((deadline, int(event['id']), event))
+    return min(future, key=lambda item: item[:2])[2] if future else None
+
+
+def next_gw(events=None, *, now=None):
     """(gameweek id, deadline ISO string) of the next deadline still to pass."""
     events = events if events is not None else _events()
     # FPL_GW_OVERRIDE=7 pretends it is the run-up to Gameweek 7 — for testing
@@ -44,21 +69,13 @@ def next_gw(events=None):
     if forced:
         gw = int(forced)
         ev = next((e for e in events if e['id'] == gw), None)
-        return gw, (ev['deadline_time'] if ev else '2027-01-01T00:00:00Z')
-    if not events:
-        return 1, '2026-08-21T17:30:00Z'
-    now = datetime.now(timezone.utc)
-    nxt = next((e for e in events if e.get('is_next')), None)
-    if nxt:
-        return nxt['id'], nxt['deadline_time']
-    # between the last deadline of the season and its final whistle, or a
-    # bootstrap without flags: first event whose deadline is still ahead
-    for e in events:
-        dl = datetime.fromisoformat(e['deadline_time'].replace('Z', '+00:00'))
-        if dl > now:
-            return e['id'], e['deadline_time']
-    last = events[-1]
-    return last['id'], last['deadline_time']
+        if ev is None:
+            raise ValueError(f'FPL_GW_OVERRIDE={gw} is absent from the calendar')
+        return gw, ev['deadline_time']
+    nxt = upcoming_event(events, now)
+    if nxt is None:
+        raise NoUpcomingDeadline('No future FPL deadline remains in this season')
+    return nxt['id'], nxt['deadline_time']
 
 
 def window(events=None):

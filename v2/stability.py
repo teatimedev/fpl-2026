@@ -35,6 +35,13 @@ MIN_MINS = 900
 
 def load_panel():
     cx = sqlite3.connect(DB)
+    historical_positions = {}
+    if cx.execute("SELECT 1 FROM sqlite_master WHERE name='gw_stat'").fetchone():
+        for code, season, position, minutes in cx.execute(
+                'SELECT code,season,pos,SUM(minutes) FROM gw_stat '
+                'WHERE pos IS NOT NULL GROUP BY code,season,pos ORDER BY SUM(minutes)'):
+            if minutes:
+                historical_positions[(code, season)] = position
     rows = cx.execute("""
         SELECT s.code, s.season, s.minutes, s.starts, s.points, s.goals, s.assists,
                s.xg, s.xa, s.xgc, s.defcon, s.clean_sheets, s.bonus, s.bps,
@@ -49,13 +56,17 @@ def load_panel():
         if not mins:
             continue
         p90 = mins / 90.0
+        historical_pos = historical_positions.get((code, season))
         out[code][season] = dict(
-            code=code, season=season, mins=mins, starts=starts or 0, pos=pos,
+            code=code, season=season, mins=mins, starts=starts, pos=historical_pos or pos,
             name=name, dob=dob, team=team,
             pts90=pts / p90, g90=g / p90, a90=a / p90,
             xg90=(xg or 0) / p90, xa90=(xa or 0) / p90,
             xgi90=((xg or 0) + (xa or 0)) / p90,
-            xgc90=(xgc or 0) / p90, dc90=(dc or 0) / p90,
+            xgc90=(xgc or 0) / p90,
+            # FPL season aggregates backfill 2024/25 DefCon, whereas the
+            # separate historical fixture source only has it from 2025/26.
+            dc90=dc / p90 if dc is not None and season >= '2024/25' else None,
             cs90=(cs or 0) / p90, bonus90=(bonus or 0) / p90,
             bps90=(bps or 0) / p90,
             g=g, a=a, xg=xg or 0, xa=xa or 0, dc=dc or 0,
@@ -88,7 +99,7 @@ def consecutive_pairs(panel, metric, pos=None, need_both=MIN_MINS):
                 continue
             if a['mins'] < need_both or b['mins'] < need_both:
                 continue
-            if pos and a['pos'] != pos:
+            if pos and (a['pos'] != pos or b['pos'] != pos):
                 continue
             if a[metric] is None or b[metric] is None:
                 continue

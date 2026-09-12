@@ -68,17 +68,35 @@ export function priceMovers(live: LiveState | null, players: Player[]) {
 }
 
 /** Fetch through the serverless proxy — the FPL API blocks browsers directly. */
+class FplHttpError extends Error {
+  status: number
+  constructor(path: string, status: number) {
+    super(`${path} -> ${status}`)
+    this.status = status
+  }
+}
+
 async function fpl<T>(path: string): Promise<T> {
-  const r = await fetch(`/api/fpl?path=${encodeURIComponent(path)}`)
-  if (!r.ok) throw new Error(`${path} -> ${r.status}`)
+  const r = await fetch(`/api/fpl?path=${encodeURIComponent(path)}`, {
+    signal: AbortSignal.timeout(12000),
+  })
+  if (!r.ok) throw new FplHttpError(path, r.status)
   return r.json() as Promise<T>
+}
+
+export function upcomingEvent(events: { id: number; deadline_time: string }[], now = Date.now()) {
+  if (!events?.length || events.some(e => !Number.isFinite(Date.parse(e.deadline_time)))) {
+    throw new Error('FPL deadline calendar is unavailable or invalid')
+  }
+  const next = [...events].filter(e => Date.parse(e.deadline_time) > now)
+    .sort((a, b) => Date.parse(a.deadline_time) - Date.parse(b.deadline_time))[0]
+  if (!next) throw new Error('No future FPL deadline remains in this season')
+  return next
 }
 
 export async function loadLive(): Promise<LiveState> {
   const boot = await fpl<any>('bootstrap-static/')
-  const next = boot.events.find((e: any) => e.is_next)
-    ?? boot.events.find((e: any) => e.is_current)
-    ?? boot.events[0]
+  const next = upcomingEvent(boot.events)
   const elements = new Map<number, LiveElement>()
   for (const e of boot.elements) {
     elements.set(e.id, {
@@ -106,6 +124,7 @@ export interface LoadedTeam {
  * null before the season starts.
  */
 export async function loadTeam(entryId: number, gw: number): Promise<LoadedTeam | null> {
+  if (!Number.isInteger(entryId) || entryId <= 0) throw new Error('Enter a valid FPL team ID')
   for (let ev = gw - 1; ev >= 1; ev--) {
     try {
       const picks = await fpl<any>(`entry/${entryId}/event/${ev}/picks/`)
@@ -124,8 +143,10 @@ export async function loadTeam(entryId: number, gw: number): Promise<LoadedTeam 
         fromGw: ev,
         lineup,
       }
-    } catch {
-      /* not public yet — try the gameweek before */
+    } catch (error) {
+      // Only unpublished picks justify walking back. A 403, timeout or broken
+      // payload must not turn an outage into an apparently empty older team.
+      if (!(error instanceof FplHttpError) || error.status !== 404) throw error
     }
   }
   return null

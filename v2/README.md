@@ -1,9 +1,10 @@
-# v2 — the professional rebuild
+# v2 — FPL forecasting and decisions
 
-v1 was one season of aggregates plus a hand-tuned fixture heuristic. v2 replaces
-the heuristic with a fitted model, replaces the guessed shrinkage weights with
-measured ones, and — most importantly — checks itself against outside benchmarks
-instead of only against its own assumptions.
+v2 combines fitted team ratings, historical player rates, in-season minutes,
+availability, and squad optimisation. Some parameters are measured; others are
+heuristics. The historical component backtests do not establish that the complete
+live strategy has an advantage. The current audit and evidence are in
+[`../research/system-audit-2026-09-12.md`](../research/system-audit-2026-09-12.md).
 
 ## The pipeline
 
@@ -43,7 +44,7 @@ FPL's fixture difficulty is a hand-assigned 2–5. This fits attack and defence
 ratings by maximum likelihood on four seasons of results, with the Dixon-Coles
 low-score correction and exponential time decay.
 
-**Validation against the market** — the only honest benchmark:
+**Historical validation against closing market prices:**
 
 | | log-loss | Brier |
 |---|---|---|
@@ -63,14 +64,17 @@ Newcastle (FDR 2). FDR measures the opponent; what you need is the outcome.
 
 ## 2. What actually predicts next season
 
-Measured on 432 consecutive player-season pairs, minutes-weighted:
+The original pooled study used 432 consecutive player-season pairs,
+minutes-weighted. These are historical descriptive correlations, not validated
+position-specific shrinkage strengths. The September 12 corrected reproduction
+excludes unrecorded DefCon seasons and uses historical positions where available:
 
 | metric | stability | consequence |
 |---|---|---|
 | xGI/90 | **0.91** | the most repeatable attacking signal |
 | xG/90 | 0.90 | and it beats goals/90 (0.82) at predicting goals |
 | xA/90 | 0.84 | beats assists/90 (0.59) everywhere; 0.21→0.50 for forwards |
-| DefCon/90 | 0.56 | a real skill, but needs real shrinkage |
+| DefCon/90 | 0.93 on 171 recorded pairs | original 0.56 included unrecorded zeros; production coefficient still needs a predictive test |
 | starts | 0.46 | only moderately repeatable |
 | **clean sheets/90** | **0.21** | almost no signal — 0.09 for MID and FWD |
 | bonus/90 (DEF) | **0.14** | defender bonus is close to noise |
@@ -100,14 +104,16 @@ Predicting a season never seen during fitting.
 | v1_style | 0.845 | 1.032 | 0.457 |
 | **v2_shrunk** | 0.730 | 0.922 | **0.463** |
 
-**v2 beats v1 in both hold-outs**, on error and on ranking. But the margin over
-*price alone* is thin — price is a very strong baseline because it is itself an
-expert forecast. Rank correlation around **0.46 is the realistic ceiling** for
-this problem; anyone claiming much more is fooling themselves.
+This `v2_shrunk` benchmark is a historical points-per-90 model among players who
+subsequently played 900+ minutes, not the production xG/minutes/fixtures model or
+a decision replay. Its ranking margin over price is small and its absolute error
+is worse in the latest reproduction. There is no established correlation ceiling.
+September 12 also corrected average ranks for ties; see the saved reproduction
+in `research/system-audit-2026-09-12/legacy-rate-backtest.txt`.
 
-2025/26 was markedly harder to predict than 2024/25 for *every* method. That is
-the DefCon rule change breaking continuity — which implies 2026/27 should be
-easier now the rule has bedded in.
+2025/26 was harder in this benchmark. A scoring-rule change is one possible
+contributor; this experiment does not identify its cause or show that 2026/27
+will be easier.
 
 ### A bug worth recording
 
@@ -124,9 +130,10 @@ changed. A backtest that flatters a method is usually leaking.
   that includes fringe players. A per-position multiplier corrects the level.
   Ordering — v2's real strength — is untouched, but the levels are fitted, not
   derived.
-- **Share × volume could not be tested.** FPL's `history_past` does not record
-  which club a player was at, and that is the only case where share and absolute
-  rates differ. Absolute rates are kept because the alternative is unvalidated.
+- **Club volume remains unresolved.** Season aggregates lack historical clubs,
+  but the imported fixture panel now provides them. Absolute attacking rates
+  multiplied by fixture team xG/1.45 may count club strength twice. A complete
+  deadline replay of alternatives remains necessary.
 - **Ten new managers.** Ratings describe sides coached by someone else. Those
   clubs are shrunk 20% toward the mean, which is a judgement, not a measurement.
 - **Unknown players lean on the price prior.** Kostoulas and Thiaw rate well on
@@ -213,6 +220,10 @@ forward over them. What it settled — full tables in
   predictions, Brier 0.118 → 0.095 (regulars 0.174 → 0.135). Production
   switched (`player_model.MINUTES_RULE = 'recency'`); the aggregate rule is
   archived alongside so `scorecard.py` keeps grading both.
+  These original figures include unrecorded 2022/23 start labels; they are
+  retained as an historical result, not a corrected validation claim. The
+  repaired importer masks unknown values and the benchmark excludes unknown
+  targets. Historical injury status remains unavailable.
 - **Attacking rates:** the multi-season blend already learns for players
   whose context changed; a context multiplier buys nothing
   (`CONTEXT_CURRENT_MULT = 1.0`).

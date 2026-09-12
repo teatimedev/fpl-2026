@@ -44,6 +44,7 @@ Flags: --no-refresh (skip step 1), --plan, --chips, --snapshot, --price-log,
 import argparse
 import csv
 import json
+import math
 import re
 import sqlite3
 import subprocess
@@ -479,19 +480,25 @@ def price_watch(boot, players, owned_ids):
     the shape of FPL's (unpublished) rule. It is UNCALIBRATED until a few
     weeks of --price-log have been collected; treat the ordering as the
     signal and the percentages as rough."""
-    total = boot.get('total_players') or 1
+    total = boot.get('total_players')
+    if not isinstance(total, (int, float)) or not math.isfinite(total) or total <= 0:
+        total = None
     rows = []
     for e in boot['elements']:
         p = players.get(e['id'])
         if not p:
             continue
         net = e['transfers_in_event'] - e['transfers_out_event']
-        owners = max(1.0, float(e['selected_by_percent']) / 100 * total)
-        rows.append(dict(net=net, p=p, pressure=net / owners,
+        selected = float(e['selected_by_percent'])
+        # Ownership is rounded; a displayed 0.0% is not exactly one owner.
+        owners = selected / 100 * total if total and selected > 0 else None
+        rows.append(dict(net=net, p=p, pressure=net / owners if owners else None,
                          tin=e['transfers_in_event'], tout=e['transfers_out_event'],
                          changed=e.get('cost_change_event', 0)))
-    rises = sorted(rows, key=lambda r: -r['pressure'])[:6]
-    falls = sorted(rows, key=lambda r: r['pressure'])[:6]
+    # Fall back consistently to net flow when ownership counts are unknown.
+    rank = (lambda r: r['pressure']) if rows and all(r['pressure'] is not None for r in rows) else (lambda r: r['net'])
+    rises = sorted((r for r in rows if r['net'] > 0), key=rank, reverse=True)[:6]
+    falls = sorted((r for r in rows if r['net'] < 0), key=rank)[:6]
     return rises, falls
 
 
@@ -1540,32 +1547,34 @@ def main():
     # ---- price watch
     rises, falls = price_watch(boot, players, set(ids))
     J['price'] = dict(
-        locked=not rises or all(r['net'] == 0 for r in rises),
-        rises=[dict(id=r['p']['id'], net=r['net'], pressure=round(r['pressure'], 4)) for r in rises],
-        falls=[dict(id=r['p']['id'], net=r['net'], pressure=round(r['pressure'], 4)) for r in falls])
+        locked=gw == 1 and not rises and not falls,
+        rises=[dict(id=r['p']['id'], net=r['net'], pressure=round(r['pressure'], 4) if r['pressure'] is not None else None) for r in rises],
+        falls=[dict(id=r['p']['id'], net=r['net'], pressure=round(r['pressure'], 4) if r['pressure'] is not None else None) for r in falls])
     L.append('## Price watch')
     L.append('')
-    if not rises or all(r['net'] == 0 for r in rises):
-        L.append('Prices are locked until the Gameweek 1 deadline, so there is '
-                 'no transfer flow to read yet. This section becomes useful '
-                 'once the season starts.')
+    if not rises and not falls:
+        L.append('No nonzero net transfer flow is available in this snapshot. '
+                 'That alone does not establish that prices are locked.')
     else:
-        L.append('Net transfers this gameweek as a share of current owners. Top of '
-                 'the left column rises soonest, top of the right falls. '
-                 '(Uncalibrated until a few weeks of price logs exist.)')
+        L.append('Net transfer flow this gameweek; ownership pressure is shown '
+                 'only where its denominator is known. This is not a calibrated '
+                 'prediction of a price change or its timing.')
         L.append('')
         L.append('| rising | pressure | net | falling | pressure | net |')
         L.append('|---|---|---|---|---|---|')
-        for r, f in zip(rises, falls):
-            own_r = ' ⭑' if r['p']['id'] in ids else ''
-            own_f = ' ⭑' if f['p']['id'] in ids else ''
-            L.append(f'| {r["p"]["name"]} £{r["p"]["price"]}{own_r} | '
-                     f'{r["pressure"]*100:+.1f}% | {r["net"]:+,} | '
-                     f'{f["p"]["name"]} £{f["p"]["price"]}{own_f} | '
-                     f'{f["pressure"]*100:+.1f}% | {f["net"]:+,} |')
+        from itertools import zip_longest
+        def flow_cells(row):
+            if row is None:
+                return '— | — | —'
+            own = ' ⭑' if row['p']['id'] in ids else ''
+            pressure = f'{row["pressure"]*100:+.1f}%' if row['pressure'] is not None else 'unknown'
+            return f'{row["p"]["name"]} £{row["p"]["price"]}{own} | {pressure} | {row["net"]:+,}'
+        for r, f in zip_longest(rises, falls):
+            L.append(f'| {flow_cells(r)} | {flow_cells(f)} |')
         L.append('')
         L.append('⭑ = in your squad.')
-        mine_f = [f for f in falls if f['p']['id'] in ids and f['pressure'] < -0.05]
+        mine_f = [f for f in falls if f['p']['id'] in ids
+                  and f['pressure'] is not None and f['pressure'] < -0.05]
         if mine_f:
             P.append('Price: ' + ', '.join(f['p']['name'] for f in mine_f)
                      + ' under selling pressure')

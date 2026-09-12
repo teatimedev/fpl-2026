@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 4
 
-Deadline **Sat 12 Sep, 12:30 UTC** — 0d 2h away.
+Deadline **Sat 12 Sep, 12:30 UTC** — 0d 1h away.
 Projections cover GW4–9.
 
 ## GW3 in review — what happened, and what it does and does not change
@@ -82,7 +82,7 @@ Projected 7.1 this week, doubled to 14.1. Vice: Saka (6.5).
 
 Gain is the lift to your expected starting XI and captain plus modelled auto-sub cover over GW4–9. The auto-sub term uses each starter's non-appearance risk, not a flat bench weight. A hit costs 4.
 
-**Minutes warning:** Foden did not start last week while healthy (24', deadline start estimate 92%) — check first. Best legal same-position replacement: Gakpo (+0.5: +3.6 XI/captain, -3.2 auto-sub cover).
+**Minutes warning:** Foden did not start last week while healthy (24', deadline start estimate 92%) — check first. Best legal same-position replacement: Gakpo (+0.5: +3.5 XI/captain, -3.0 auto-sub cover).
 
 | out | in | £ | XI + captain | auto-sub | total | net |
 |---|---|---|---|---|---|---|
@@ -93,7 +93,7 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 | O'Shea (IPS) | Ajayi (HUL) | +0.2 | +1.6 | -0.2 | **+1.4** | +1.4 |
 | Saka (ARS) | Palmer (CHE) | +0.2 | +1.1 | +0.0 | **+1.1** | +1.1 |
 | Leno (FUL) | Tzolakis (HUL) | +0.1 | +0.7 | +0.1 | **+0.8** | +0.8 |
-| Foden (MCI) | Gakpo (LIV) | +0.2 | +3.6 | -3.2 | **+0.5** | +0.5 |
+| Foden (MCI) | Gakpo (LIV) | +0.2 | +3.5 | -3.0 | **+0.5** | +0.5 |
 
 _Last week, for the names above:_
 - Milenković — variance (team): 90', 0.00 xG, 0 goals, 7 pts (proj 3.7). Team (+3.2).
@@ -121,25 +121,25 @@ _Minutes check:_ the verdict above is on the numbers; Foden is a check-first cas
 
 ## The next six weeks, planned
 
-Selected path under the current policy: **401.7** pts (0 hits). Making no move this week and re-planning: 401.7. Selected path versus holding: **+0.0** — not enough; hold.
+Selected path under the current policy: **401.4** pts (0 hits). Making no move this week and re-planning: 401.4. Selected path versus holding: **+0.0** — not enough; hold.
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
-| Sadiki, Foden → Schade, Barnes | +1.81 | 4.0 | no |
-| Sadiki, Milenković → Robinson, Barnes | +0.09 | 4.0 | no |
-| Milenković → Gvardiol | -0.19 | 2.0 | no |
-| Sadiki → Gomez | +1.29 | 2.0 | no |
-| Tarkowski → Gvardiol | -2.60 | 2.0 | no |
-| Foden → Gakpo | -0.41 | 2.0 | no |
-| Sadiki, Tarkowski → Botman, Barnes | +1.19 | 4.0 | no |
-| Sadiki, Milenković → Maatsen, Barnes | +0.89 | 4.0 | no |
+| Sadiki, Foden → Schade, Barnes | +2.15 | 4.0 | no |
+| Sadiki, Milenković → Robinson, Barnes | +0.43 | 4.0 | no |
+| Milenković → Gvardiol | +0.15 | 2.0 | no |
+| Sadiki → Gomez | +1.62 | 2.0 | no |
+| Tarkowski → Gvardiol | -2.26 | 2.0 | no |
+| Foden → Gakpo | -0.04 | 2.0 | no |
+| Sadiki, Tarkowski → Botman, Barnes | +1.53 | 4.0 | no |
+| Sadiki, Milenković → Maatsen, Barnes | +1.22 | 4.0 | no |
 
 - **GW4** 63.5 pts, C Haaland, 2 FT  hold
 - **GW5** 65.3 pts, C Haaland, 3 FT  Foden → Barnes
 - **GW6** 68.6 pts, C Saka, 3 FT  Raya → Tzolakis, Milenković → Ajayi, Kluivert → Palmer
 - **GW7** 67.2 pts, C Haaland, 1 FT  Tarkowski → Andersen
-- **GW8** 68.2 pts, C Haaland, 1 FT  Sadiki → Schade
-- **GW9** 68.9 pts, C Haaland, 1 FT  Andersen → Ballard
+- **GW8** 68.1 pts, C Haaland, 1 FT  Sadiki → E.Le Fée
+- **GW9** 68.6 pts, C Haaland, 1 FT  Andersen → Ballard
 
 _The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
 
@@ -152,22 +152,22 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 | Bench Boost | 8.8 | GW8: 11.6 | Hold. Best-looking week for this one is GW8 (11.6 from the bench); this week is 8.8. Second copy (GW20–38): best week GW37 (11.1). |
 | Triple Captain | — | GW36: 7.8 (Haaland) | Hold. Best week for this one is GW36: Haaland (7.8 extra). |
 | Free Hit | 10.0 | GW4: 10.0 | Hold. Widest gap left is GW4 (10.0 behind the best possible XI); this week 10.0. |
-| Wildcard | +9.1 over the window | — | Hold. Unlimited transfers now are worth 9.1 over the window. The squad is holding up (gap to the best possible XI 10.0–10.0 over the next weeks). |
+| Wildcard | +9.4 over the window | — | Hold. Unlimited transfers now are worth 9.4 over the window. The squad is holding up (gap to the best possible XI 10.0–10.0 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 
 ## Price watch
 
-Net transfers this gameweek as a share of current owners. Top of the left column rises soonest, top of the right falls. (Uncalibrated until a few weeks of price logs exist.)
+Net transfer flow this gameweek; ownership pressure is shown only where its denominator is known. This is not a calibrated prediction of a price change or its timing.
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Vaz £5.0 | +231700.0% | +2,317 | Millar £5.0 | -240400.0% | -2,404 |
-| Samba £4.5 | +206600.0% | +2,066 | Igor £4.5 | -192400.0% | -1,924 |
-| Flemming £5.5 | +172200.0% | +1,722 | Elliott £5.4 | -161900.0% | -1,619 |
-| Elvedi £4.5 | +137400.0% | +1,374 | Drameh £4.0 | -144900.0% | -1,449 |
-| Palacios £5.0 | +134500.0% | +1,345 | Diarra £5.4 | -141400.0% | -1,414 |
-| Timber £5.0 | +124300.0% | +1,243 | Goretzka £6.0 | -111900.0% | -1,119 |
+| Rogers £7.6 | +25.4% | +950,157 | B.Fernandes £12.0 | -12.3% | -558,308 |
+| Palmer £9.7 | +25.7% | +767,251 | O'Reilly £6.4 | -37.3% | -522,504 |
+| Ødegaard £6.7 | +33.0% | +653,552 | Shaw £4.4 | -29.1% | -363,768 |
+| Isak £9.1 | +22.9% | +588,099 | Calvert-Lewin £6.0 | -15.1% | -351,011 |
+| Konsa £4.5 | +31.2% | +567,114 | Maguire £4.9 | -29.6% | -332,806 |
+| De Cuyper £4.8 | +19.4% | +472,977 | Mbeumo £7.9 ⭑ | -13.3% | -331,837 |
 
 ⭑ = in your squad.
 
@@ -181,4 +181,4 @@ _Based on 10 price snapshots. This warning is not part of the transfer verdict u
 
 ---
 
-_Generated 2026-09-12 10:22 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._
+_Generated 2026-09-12 11:05 UTC. Projections are estimates: hold-out rank correlation is about 0.46, so treat the ordering as a strong hint and the point totals as rough._

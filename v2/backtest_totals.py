@@ -68,6 +68,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import player_model as PM      # noqa: E402  (shrinkage machinery, reused as-is)
 import teams_model as TM       # noqa: E402  (Dixon-Coles refit per hold-out)
+from evaluation_metrics import rank_correlation  # noqa: E402
 
 SEASONS = ['2022/23', '2023/24', '2024/25', '2025/26']
 # 2022/23 cannot be a target: nothing precedes it to fit on. The newest season
@@ -107,12 +108,8 @@ def load_panel():
 
 
 def spearman(a, b):
-    a, b = np.asarray(a, float), np.asarray(b, float)
-    ra = np.argsort(np.argsort(a)).astype(float)
-    rb = np.argsort(np.argsort(b)).astype(float)
-    ra -= ra.mean(); rb -= rb.mean()
-    d = np.sqrt((ra ** 2).sum() * (rb ** 2).sum())
-    return float((ra * rb).sum() / d) if d else float('nan')
+    value = rank_correlation(a, b)
+    return value if value is not None else float('nan')
 
 
 # ------------------------------------------------------------ as-of pieces

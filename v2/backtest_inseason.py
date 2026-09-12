@@ -89,6 +89,7 @@ def load_gw_panel(seasons):
         r['mins'] = r['minutes'] or 0
         r['started'] = (int(r['starts'] > 0) if r['starts'] is not None
                         else int(r['mins'] >= 60))
+        r['starts_observed'] = r['starts'] is not None
         r['xg'] = r['xg'] if r['xg'] is not None else None
         panel[r['season']][r['code']].append(r)
     cx.close()
@@ -179,7 +180,9 @@ def run_minutes(panel, hist_rows, meta, seasons):
     print('\n' + '=' * 78)
     print('P2  MINUTES: predict "starts in GW n+1" from rows through GW n')
     print('=' * 78)
-    print('availability proxy: every club fixture counts (played-only conditioning)')
+    print('Historical availability unknown: all player-fixture rows count. '
+          'Missing start labels are excluded as targets; earlier missing '
+          'labels use minutes >=60 only as an explicit evidence proxy.')
     scores = defaultdict(list)          # (rule, phase, band) -> [(p, y)]
     n_obs = 0
     for season in seasons:
@@ -226,6 +229,8 @@ def run_minutes(panel, hist_rows, meta, seasons):
                             players[code], prior_rate, mps, k=k, half_life=hl,
                             evidence=evidence)[0]
                 for t in targets:
+                    if not t['starts_observed']:
+                        continue
                     y = t['started']
                     key = (phase(n), prior_band(prior_rate))
                     scores[('prior', *key)].append((max(0.0, min(0.97, prior_rate)), y))
@@ -459,6 +464,8 @@ def run_rates(panel, hist_rows, meta, seasons):
                 if mins_r < 450:
                     continue
                 for metric, key in (('xg90', 'xg'), ('xa90', 'xa')):
+                    if any(r[key] is None and r['mins'] > 0 for r in through + rest):
+                        continue  # no false-zero rates or partial-season denominators
                     actual = sum((r[key] or 0.0) for r in rest) / mins_r * 90.0
                     cur_rate = (sum((r[key] or 0.0) for r in through) / mins_t * 90.0
                                 if mins_t > 0 else 0.0)

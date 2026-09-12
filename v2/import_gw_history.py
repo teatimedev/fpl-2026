@@ -28,6 +28,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from fetch import DB, GW_STAT_COLUMNS, GW_STAT_INSERT, schema, f as _f, i as _i  # noqa: E402
+from metric_availability import fixture_metric_recorded  # noqa: E402
 
 BASE = 'https://raw.githubusercontent.com/vaastav/Fantasy-Premier-League/master/data'
 CACHE = HERE / 'cache' / 'vaastav'
@@ -76,12 +77,26 @@ def rows_from_merged(season, merged, code_of, team_of, pos_of, team_short, team_
         code = code_of.get(element)
         if code is None:
             continue
-        team = team_by_name.get((r.get('team') or '').strip()) or team_of.get(element)
-        pos = pos_of.get(element) or POS_NAME.get((r.get('position') or '').upper())
+        team_name = (r.get('team') or '').strip()
+        team = team_by_name.get(team_name) if team_name else team_of.get(element)
+        if team_name and team is None:
+            raise ValueError(f'{season}: unknown historical club {team_name!r}')
+        pos = POS_NAME.get((r.get('position') or '').upper()) or pos_of.get(element)
+        # Assistant managers are not players and have a different scoring rule.
+        if pos not in POS.values():
+            continue
         opponent = team_short.get(_i(r.get('opponent_team')))
-        starts = _i(r.get('starts')) if 'starts' in header else None
+        gameweek = _i(r.get('round') or r.get('GW'))
+        if gameweek is None:
+            raise ValueError(f'{season}: fixture row is missing its gameweek')
+
+        def measured(field, parser=_f):
+            return (parser(r.get(field))
+                    if fixture_metric_recorded(season, gameweek, field) else None)
+
+        starts = measured('starts', _i)
         rows.append((
-            code, season, _i(r.get('round') or r.get('GW')), _i(r.get('fixture')), team,
+            code, season, gameweek, _i(r.get('fixture')), team,
             pos, opponent, 1 if str(r.get('was_home', '')).strip().lower() in ('true', '1') else 0,
             r.get('kickoff_time'),
             _i(r.get('minutes')) or 0, starts, _i(r.get('total_points')) or 0,
@@ -89,15 +104,21 @@ def rows_from_merged(season, merged, code_of, team_of, pos_of, team_short, team_
             _i(r.get('clean_sheets')) or 0, _i(r.get('goals_conceded')) or 0,
             _i(r.get('own_goals')) or 0, _i(r.get('penalties_saved')) or 0,
             _i(r.get('penalties_missed')) or 0,
-            _f(r.get('expected_goals')), _f(r.get('expected_assists')),
-            _f(r.get('expected_goals_conceded')), _i(r.get('defensive_contribution')),
+            measured('expected_goals'), measured('expected_assists'),
+            measured('expected_goals_conceded'), measured('defensive_contribution', _i),
             _i(r.get('bps')) or 0, _i(r.get('bonus')) or 0, _i(r.get('saves')) or 0,
             _i(r.get('yellow_cards')) or 0, _i(r.get('red_cards')) or 0,
             _f(r.get('threat')), _f(r.get('creativity')), _f(r.get('influence')),
             _i(r.get('value')), _i(r.get('selected')),
         ))
     assert all(len(row) == len(GW_STAT_COLUMNS) for row in rows)
-    return rows, missing
+    unique = {}
+    for row in rows:
+        key = (row[0], row[1], row[3])  # stable code, season, fixture
+        if key in unique and unique[key] != row:
+            raise ValueError(f'{season}: conflicting player-fixture rows {key}')
+        unique[key] = row
+    return list(unique.values()), missing
 
 
 def import_season(cx, season, offline=False):

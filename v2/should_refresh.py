@@ -33,6 +33,10 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+try:
+    from .gwclock import upcoming_event
+except ImportError:  # direct script execution in the lightweight CI gate
+    from gwclock import upcoming_event
 ROOT = Path(__file__).resolve().parent.parent
 MARKER = ROOT / 'data' / 'last_refresh.json'
 FPL = 'https://fantasy.premierleague.com/api'
@@ -48,6 +52,9 @@ def decide_mode(hours, now, done=()):
 
     `done` lists the full windows already rebuilt for this gameweek; a done
     window is skipped so the tick falls through to the news cadence."""
+    # Even Thursday's catch-up must obey the deadline lock.
+    if hours < 0.75:
+        return 'noop', 'deadline-lock'
     for name, lo, hi in WINDOWS:
         if lo <= hours <= hi and name not in done:
             return 'full', name
@@ -56,8 +63,6 @@ def decide_mode(hours, now, done=()):
         return 'full', 'T-24h'
     if now.weekday() == WEEKLY_DAY and now.hour >= WEEKLY_HOUR and 'weekly' not in done:
         return 'full', 'weekly'
-    if hours < 0.75:
-        return 'noop', 'deadline-lock'
     if 0.75 <= hours <= 6:
         return 'news', 'news-hourly'
     if 6 < hours <= 30:
@@ -99,11 +104,10 @@ def main():
         # and reason != 'weekly' would fire a bogus GW0 notification.
         out(run='true', mode='full', reason='api-unreachable', gw='0', hours='0')
         return
-    nxt = next((e for e in events if e.get('is_next')), None)
-    if not nxt:
-        nxt = next((e for e in events
-                    if datetime.fromisoformat(e['deadline_time'].replace('Z', '+00:00')) > now),
-                   events[-1])
+    nxt = upcoming_event(events, now)
+    if nxt is None:
+        out(run='false', mode='noop', reason='season-finished', gw=0, hours='0')
+        return
     gw = nxt['id']
     dl = datetime.fromisoformat(nxt['deadline_time'].replace('Z', '+00:00'))
     hours = (dl - now).total_seconds() / 3600

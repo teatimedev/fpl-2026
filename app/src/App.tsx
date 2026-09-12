@@ -169,13 +169,15 @@ export default function App() {
           </p>
           <p>
             Transfer advice compares acting now with banking the moves, then runs this
-            gameweek 4,000 times to check whether the immediate advantage is reliable.
+            gameweek 4,000 times to estimate match variance under its own assumptions.
+            Those simulations do not independently validate the forecasts.
             Price-timing warnings are experimental until enough real rises and falls
             exist to calibrate them.
           </p>
           <p>
-            Hold-out rank correlation is about 0.46, so treat the ordering as a strong
-            hint and the totals as rough.
+            The historical points-per-90 backtest is a simpler model than the live
+            forecasting system. Use the Scorecard for its actual deadline record;
+            a sustained advantage over independent forecasts has not yet been established.
           </p>
         </details>
       </footer>

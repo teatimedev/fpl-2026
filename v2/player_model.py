@@ -750,24 +750,28 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
         start_recency_by_gw = [0.0] * (START_GW - 1)
         start_aggregate_by_gw = [0.0] * (START_GW - 1)
         for gw in range(START_GW, LAST_GW + 1):
+            fx = fixtures.get(str(gw)) or []
             effective_status = status_for_gameweek(
                 p['status'], gw, START_GW, news=p['news'],
                 gw_deadline=GW_DEADLINES.get(gw),
             )
 
             def deadline_forecast(rate):
-                start_input = (deadline_start_probability(
-                    rate, effective_status, p['chance'], p['news']
-                ) if effective_status != 'a' else rate)
+                fit_probability = (deadline_start_probability(
+                    1.0, effective_status, p['chance'], p['news']
+                ) if effective_status != 'a' else 1.0)
                 return availability_forecast(
-                    player_id=p['id'], gw=gw, base_start=start_input,
+                    player_id=p['id'], gw=gw, base_start=rate,
                     base_start_minutes=mps, position=pos, status=effective_status,
                     overrides=AVAILABILITY_OVERRIDES,
+                    availability_probability=fit_probability,
                 )
             av = deadline_forecast(base_start_rate)
             p_start = av.p_start
             p_cameo = (1.0 - p_start) * av.p_cameo
             p_play = av.p_play
+            if not fx:
+                p_start = p_cameo = p_play = 0.0
             minute_share = av.expected_minutes / 90.0
             start_share = av.start_minutes / 90.0
             cameo_share = av.cameo_minutes / 90.0
@@ -776,11 +780,11 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
                                        if av.source == 'model baseline' else None)
                 start_by_gw.append(round(p_start, 3))
                 play_by_gw.append(round(p_play, 3))
-                mins_by_gw.append(round(av.expected_minutes, 1))
+                mins_by_gw.append(round(av.expected_minutes, 1) if fx else 0.0)
                 if shadow_start_rate == base_start_rate:
                     shadow_p_start = p_start
                 else:
-                    shadow_p_start = deadline_forecast(shadow_start_rate).p_start
+                    shadow_p_start = deadline_forecast(shadow_start_rate).p_start if fx else 0.0
                 start_recency_by_gw.append(round(
                     shadow_p_start if shadow_rule == 'recency' else p_start, 3))
                 start_aggregate_by_gw.append(round(
@@ -798,7 +802,6 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
                     # so the claim_type group was always 'baseline')
                     generation_rule=av.generation_rule,
                 ))
-            fx = fixtures.get(str(gw)) or []
             if not fx:
                 season_by_gw.append(0.0)
                 if gw <= HORIZON:
@@ -813,7 +816,7 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
                         + xa90 * minute_share * vol * 3.0)
                 # clean sheet: straight from the fitted scoreline distribution
                 if CS_PTS[pos]:
-                    pts += CS_PTS[pos] * f['cs'] * p_start
+                    pts += CS_PTS[pos] * f['cs'] * p_start * (av.start_minutes >= 60)
                 if pos in ('GKP', 'DEF'):
                     pts -= expected_floor_div(f['xgc'], 2) * p_start
                 if pos == 'GKP':
@@ -825,7 +828,10 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
                         p_start * defcon_hit_prob(dc90 * start_share, thr, w_dc)
                         + p_cameo * defcon_hit_prob(dc90 * cameo_share, thr, w_dc)
                     )
-                pts += p_start * 2.0 + p_cameo
+                # Until a minutes distribution is validated, conditional role
+                # minutes are the model's fixed-duration scenarios. A 45-minute
+                # starter cannot receive 60-minute appearance/clean-sheet points.
+                pts += p_start * (1.0 + (av.start_minutes >= 60)) + p_cameo
                 pts += bonus90 * minute_share * 0.85
                 pts -= yellow90 * minute_share
             pts = round(max(0.0, pts), 3)

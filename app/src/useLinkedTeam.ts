@@ -48,10 +48,33 @@ export function useLinkedTeam(defaultEntryId = '', weekly?: Weekly | null): Link
   const [history, setHistory] = useState<EntryHistory | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [busy, setBusy] = useState(true)
+  const [refresh, setRefresh] = useState(0)
+
+  useEffect(() => {
+    const update = () => setRefresh(n => n + 1)
+    const timer = setInterval(update, 5 * 60 * 1000)
+    window.addEventListener('focus', update)
+    window.addEventListener('online', update)
+    return () => {
+      clearInterval(timer)
+      window.removeEventListener('focus', update)
+      window.removeEventListener('online', update)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!live) return
+    const remaining = Date.parse(live.deadline) - Date.now()
+    if (remaining < 0) return
+    const timer = setTimeout(() => setRefresh(n => n + 1),
+      Math.min(remaining + 50, 2_147_483_647))
+    return () => clearTimeout(timer)
+  }, [live])
 
   useEffect(() => {
     let cancelled = false
     setBusy(true); setErr(null)
+    setLive(null)
     setTeam(null); setSummary(null); setHistory(null)
     loadLive()
       .then(async l => {
@@ -63,12 +86,15 @@ export function useLinkedTeam(defaultEntryId = '', weekly?: Weekly | null): Link
           loadTeam(id, l.gw), loadEntry(id), loadEntryHistory(id),
         ])
         if (cancelled) return
+        if (t && !h) throw new Error('FPL team history is unavailable; free transfers cannot be verified')
         setTeam(t); setSummary(s); setHistory(h)
       })
-      .catch(e => !cancelled && setErr(String(e?.message ?? e)))
+      .catch(e => {
+        if (!cancelled) { setLive(null); setErr(String(e?.message ?? e)) }
+      })
       .finally(() => !cancelled && setBusy(false))
     return () => { cancelled = true }
-  }, [entryId])
+  }, [entryId, refresh])
 
   const gw = live?.gw ?? 1
   const ft = team ? inferFreeTransfers(history, gw) : (gw <= 1 ? 15 : 1)

@@ -11,6 +11,7 @@ starter's full per-90 exposure.
 from dataclasses import dataclass
 from datetime import datetime
 import json
+import math
 from pathlib import Path
 import re
 from typing import Iterable, Mapping
@@ -41,7 +42,10 @@ class AvailabilityForecast:
 
 
 def _clamp_probability(value):
-    return max(0.0, min(1.0, float(value)))
+    value = float(value)
+    if not math.isfinite(value):
+        raise ValueError('Availability probability must be finite')
+    return max(0.0, min(1.0, value))
 
 
 RETURN_DATE = re.compile(
@@ -176,7 +180,8 @@ def _active_override(player_id, gw, overrides: Iterable[Mapping]):
 
 
 def availability_forecast(*, player_id, gw, base_start, base_start_minutes,
-                          position=None, status="a", overrides=None):
+                          position=None, status="a", overrides=None,
+                          availability_probability=1.0):
     """Return the probability/minutes mixture for one player and gameweek."""
     base_start = _clamp_probability(base_start)
     start_minutes = max(0.0, min(95.0, float(base_start_minutes)))
@@ -209,6 +214,15 @@ def availability_forecast(*, player_id, gw, base_start, base_start_minutes,
         source = row.get("source", "model baseline") if row else "model baseline"
         confidence = row.get("confidence", "model") if row else "model"
         note = row.get("note", "") if row else ""
+
+        if row is None:
+            # FPL's chance flag is about being available at all. Scale BOTH
+            # ways of appearing, not just starts; otherwise 0% fit can still
+            # receive a cameo and an injury can create extra bench appearances.
+            fit_probability = _clamp_probability(availability_probability)
+            cameo_unconditional = (1.0 - p_start) * p_cameo * fit_probability
+            p_start *= fit_probability
+            p_cameo = cameo_unconditional / (1.0 - p_start) if p_start < 1 else 0.0
 
     p_play = p_start + (1.0 - p_start) * p_cameo
     expected_minutes = (

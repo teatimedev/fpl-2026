@@ -114,7 +114,10 @@ class ApiUnreachableTests(unittest.TestCase):
         def flaky(req, timeout):
             return responses.pop(0)
 
-        output, snooze = self._run(flaky)
+        with patch.object(refresh, 'datetime') as clock:
+            clock.now.return_value = datetime(2026, 8, 21, 16, tzinfo=UTC)
+            clock.fromisoformat.side_effect = datetime.fromisoformat
+            output, snooze = self._run(flaky)
         snooze.assert_called_once()
         # One blip then success: the gate must sleep once and proceed down the
         # normal path (real GW id, whatever window decide_mode picks), not the

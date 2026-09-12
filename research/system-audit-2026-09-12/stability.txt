@@ -1,0 +1,65 @@
+panel: 478 players, 319 with 2+ seasons, seasons 2022/23-2025/26
+
+==============================================================================
+1. YEAR-OVER-YEAR STABILITY  (how much last season tells you about next)
+==============================================================================
+metric               all         DEF         MID         FWD
+pts90          0.65 (n=435)    0.35(n=154)    0.65(n=193)    0.50(n=40)
+g90            0.82 (n=435)    0.20(n=154)    0.63(n=193)    0.64(n=40)
+a90            0.58 (n=435)    0.35(n=154)    0.44(n=193)    0.29(n=40)
+xg90           0.90 (n=435)    0.29(n=154)    0.77(n=193)    0.64(n=40)
+xa90           0.84 (n=435)    0.77(n=154)    0.74(n=193)    0.63(n=40)
+xgi90          0.91 (n=435)    0.52(n=154)    0.83(n=193)    0.65(n=40)
+bps90          0.49 (n=435)    0.32(n=154)    0.56(n=193)    0.52(n=40)
+bonus90        0.54 (n=435)    0.12(n=154)    0.52(n=193)    0.31(n=40)
+dc90           0.93 (n=171)    0.76(n=62)    0.85(n=79)    0.67(n=12)
+cs90           0.21 (n=435)    0.36(n=154)    0.10(n=193)    0.11(n=40)
+xgc90          0.40 (n=435)    0.42(n=154)    0.39(n=193)    0.35(n=40)
+starts         0.45 (n=435)    0.40(n=154)    0.44(n=193)    0.60(n=40)
+
+  Read: a metric near 1.00 repeats itself; near 0.00 is noise and
+  should be shrunk almost entirely towards the positional average.
+
+==============================================================================
+2. PREDICTING NEXT SEASON'S GOALS: is xG a better guide than goals?
+==============================================================================
+  MID           n=198   goals/90 -> next goals/90: 0.642   xG/90 -> next goals/90: 0.674   [xG wins]
+  FWD           n= 48   goals/90 -> next goals/90: 0.607   xG/90 -> next goals/90: 0.606   [goals win]
+  all outfield  n=435   goals/90 -> next goals/90: 0.822   xG/90 -> next goals/90: 0.847   [xG wins]
+
+  Same test for assists:
+  MID           n=198   assists/90 -> next: 0.437   xA/90 -> next: 0.536   [xA wins]
+  FWD           n= 48   assists/90 -> next: 0.209   xA/90 -> next: 0.355   [xA wins]
+  all outfield  n=435   assists/90 -> next: 0.585   xA/90 -> next: 0.643   [xA wins]
+
+==============================================================================
+3. SHARE vs ABSOLUTE RATE — CANNOT BE TESTED ON THIS DATA
+==============================================================================
+  FPL's history_past gives per-season stats but not which club the
+  player was at, and share x volume is only distinguishable from an
+  absolute rate for players who moved. Without team history there is
+  no test, so the model keeps absolute rates rather than adopting a
+  design that has not been validated.
+
+==============================================================================
+4. AGING  (per-90 points by age, minutes-weighted)
+==============================================================================
+age      pts/90   player-seasons
+19         3.66   ################################
+20         3.98   ###################################
+21         3.81   ##################################
+22         4.02   ####################################
+23         4.07   ####################################
+24         4.12   #####################################
+25         4.11   #####################################
+26         3.92   ###################################
+27         4.03   ####################################
+28         4.00   ###################################
+29         3.85   ##################################
+30         3.85   ##################################
+31         3.65   ################################
+32         3.78   #################################
+33         3.84   ##################################
+34         3.93   ###################################
+
+  Peak per-90 output at age 24. Effect size across the range is 13%.

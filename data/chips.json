@@ -283,7 +283,7 @@
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 9.1,
+   "now": 9.4,
    "gap_trend": [
     [
      4,
@@ -319,7 +319,7 @@
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 9.1 over the window. The squad is holding up (gap to the best possible XI 10.0\u201310.0 over the next weeks).",
+   "advice": "Hold. Unlimited transfers now are worth 9.4 over the window. The squad is holding up (gap to the best possible XI 10.0\u201310.0 over the next weeks).",
    "last_eligible": 19
   }
  },

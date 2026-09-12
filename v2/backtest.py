@@ -75,12 +75,12 @@ def load():
 
 
 def spearman(a, b):
-    a, b = np.asarray(a, float), np.asarray(b, float)
-    ra = np.argsort(np.argsort(a)).astype(float)
-    rb = np.argsort(np.argsort(b)).astype(float)
-    ra -= ra.mean(); rb -= rb.mean()
-    d = np.sqrt((ra ** 2).sum() * (rb ** 2).sum())
-    return float((ra * rb).sum() / d) if d else float('nan')
+    try:
+        from .evaluation_metrics import rank_correlation
+    except ImportError:
+        from evaluation_metrics import rank_correlation
+    value = rank_correlation(a, b)
+    return value if value is not None else float('nan')
 
 
 def age_factor(dob, year):
@@ -243,8 +243,9 @@ if __name__ == '__main__':
     print('\n' + '=' * 70)
     print('READING THIS')
     print('=' * 70)
-    print('  Spearman is the number that matters: FPL asks you to rank players,')
-    print('  not to estimate their totals. A method that is level-biased but')
-    print('  orders players well will still pick the right squad.')
+    print('  Ranking and calibration both matter: captaincy, transfer hits and')
+    print('  squad budgets depend on the size of expected point differences.')
+    print('  This is a points-per-90 survivor-cohort benchmark, not a replay of')
+    print('  the full production model or a season-long decision strategy.')
     print('  naive_price is the benchmark to beat — it is what the game-makers')
     print('  already believe, available for free, with no modelling at all.')

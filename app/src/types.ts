@@ -252,7 +252,7 @@ export interface WeeklyPlan {
   }[]
 }
 
-export interface WeeklyPriceRow { id: number; net: number; pressure: number }
+export interface WeeklyPriceRow { id: number; net: number; pressure: number | null }
 export interface WeeklyPriceHoldRisk {
   shadow: boolean
   snapshots: number

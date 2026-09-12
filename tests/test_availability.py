@@ -11,6 +11,23 @@ from v2.availability import (
 
 
 class AvailabilityForecastTests(unittest.TestCase):
+    def test_fitness_uncertainty_scales_starts_and_cameos_together(self):
+        inputs = dict(player_id=1, gw=4, base_start=.8,
+                      base_start_minutes=80, position='MID', status='d')
+        healthy = availability_forecast(**inputs)
+        half_fit = availability_forecast(**inputs, availability_probability=.5)
+        out = availability_forecast(**inputs, availability_probability=0)
+        self.assertAlmostEqual(half_fit.p_start, healthy.p_start / 2)
+        self.assertAlmostEqual(half_fit.p_play, healthy.p_play / 2)
+        self.assertAlmostEqual(half_fit.expected_minutes, healthy.expected_minutes / 2)
+        self.assertEqual(out.p_play, 0)
+        self.assertEqual(out.expected_minutes, 0)
+
+    def test_nonfinite_probabilities_fail_instead_of_becoming_certain_starts(self):
+        with self.assertRaisesRegex(ValueError, 'finite'):
+            availability_forecast(player_id=1, gw=4, base_start=float('nan'),
+                                  base_start_minutes=80)
+
     def test_manual_override_wins_over_generated_for_the_same_gameweek(self):
         with tempfile.TemporaryDirectory() as tmp:
             manual = Path(tmp) / "availability.json"

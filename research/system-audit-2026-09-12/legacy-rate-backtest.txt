@@ -1,0 +1,50 @@
+======================================================================
+HOLD-OUT BACKTEST — predicting a season never seen during fitting
+======================================================================
+
+target 2024/25  (trained on 2022/23, 2023/24)   n=167
+  method             MAE    RMSE  Spearman
+  naive_last       0.752   0.969     0.719
+  naive_price      0.754   0.923     0.689
+  positional       0.837   1.048     0.521
+  v1_style         0.707   0.879     0.720
+  v2_shrunk        0.689   0.843     0.720  best MAE  best rank
+
+target 2025/26  (trained on 2022/23, 2023/24, 2024/25)   n=200
+  method             MAE    RMSE  Spearman
+  naive_last       0.953   1.189     0.443
+  naive_price      0.721   0.911     0.444  best MAE
+  positional       0.737   0.971     0.262
+  v1_style         0.843   1.030     0.458
+  v2_shrunk        0.728   0.920     0.467  best rank
+
+======================================================================
+BY POSITION, target 2025/26
+======================================================================
+
+DEF   n=73
+  method             MAE    RMSE  Spearman
+  naive_last       1.004   1.245     0.364
+  naive_price      0.800   1.004     0.433  best MAE  best rank
+  positional       0.855   1.114       nan
+  v1_style         0.914   1.084     0.345
+  v2_shrunk        0.862   1.050     0.362
+
+MID   n=98
+  method             MAE    RMSE  Spearman
+  naive_last       0.943   1.128     0.437
+  naive_price      0.684   0.841     0.411
+  positional       0.648   0.830       nan  best MAE
+  v1_style         0.830   0.999     0.446
+  v2_shrunk        0.655   0.810     0.461  best rank
+FWD: too few cases
+
+======================================================================
+READING THIS
+======================================================================
+  Ranking and calibration both matter: captaincy, transfer hits and
+  squad budgets depend on the size of expected point differences.
+  This is a points-per-90 survivor-cohort benchmark, not a replay of
+  the full production model or a season-long decision strategy.
+  naive_price is the benchmark to beat — it is what the game-makers
+  already believe, available for free, with no modelling at all.

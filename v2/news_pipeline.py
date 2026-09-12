@@ -13,6 +13,7 @@ from pathlib import Path
 from v2.news_contracts import aliases_from_bootstrap, load_aliases, load_sources
 from v2.news_extract import extract_claims
 from v2.news_fetch import fetch_all
+from v2.gwclock import next_gw
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -265,13 +266,10 @@ def _fixture_context(bootstrap: dict, fixtures: list[dict], gw: int) -> dict[str
 
 def _context(bootstrap: dict, now: datetime) -> tuple[int, dict[int, str], float]:
     events = bootstrap["events"]
-    upcoming = next((event for event in events if event.get("is_next")), None)
-    if not upcoming:
-        upcoming = next(event for event in events
-                        if datetime.fromisoformat(event["deadline_time"].replace("Z", "+00:00")) > now)
+    gw, deadline_text = next_gw(events, now=now)
     deadlines = {int(event["id"]): event["deadline_time"] for event in events}
-    deadline = datetime.fromisoformat(upcoming["deadline_time"].replace("Z", "+00:00"))
-    return int(upcoming["id"]), deadlines, (deadline - now).total_seconds() / 3600
+    deadline = datetime.fromisoformat(deadline_text.replace("Z", "+00:00"))
+    return int(gw), deadlines, (deadline - now).total_seconds() / 3600
 
 
 def _owned(root: Path) -> tuple[set[int], int | None, int | None]:

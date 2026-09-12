@@ -38,6 +38,7 @@ jobs:
         with:
           sparse-checkout: |
             v2/should_refresh.py
+            v2/gwclock.py
             data/last_refresh.json
           sparse-checkout-cone-mode: false
       - id: gate
@@ -157,7 +158,9 @@ jobs:
             echo "No change."
           else
             git commit -m "Refresh (${{ needs.gate.outputs.reason }}, GW${{ needs.gate.outputs.gw }}): $(date -u +%Y-%m-%d\ %H:%M)"
-            git pull --rebase --autostash origin master
+            # Never rebase generated forecasts onto code they did not run.
+            # A newer remote commit makes this push fail safely; the next
+            # scheduled run checks out the new revision and recomputes.
             git push
           fi
 

@@ -22,12 +22,16 @@ const ALLOWED: RegExp[] = [
   /^entry\/\d+\/event\/\d+\/picks\/$/,
 ]
 
-// Prices and availability change at most once a day; team picks change once a
-// week. A minute of edge caching keeps a phone refresh instant without ever
-// serving genuinely stale team news.
-const CACHE = 'public, s-maxage=60, stale-while-revalidate=600'
+// Injury news can change throughout the day. Cache for at most a minute;
+// do not silently serve another ten minutes of stale deadline information.
+const CACHE = 'public, s-maxage=60, must-revalidate'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  res.setHeader('Cache-Control', 'no-store')
+  if (req.method && req.method !== 'GET') {
+    res.setHeader('Allow', 'GET')
+    return res.status(405).json({ error: 'method not allowed' })
+  }
   const raw = req.query.path
   const path = Array.isArray(raw) ? raw[0] : raw
 
@@ -43,6 +47,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const upstream = await fetch(`${UPSTREAM}/${path}`, {
+      signal: AbortSignal.timeout(8000),
       headers: {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
         Accept: 'application/json',
@@ -60,7 +65,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } catch (err) {
     return res.status(502).json({
       error: 'could not reach the FPL API',
-      detail: err instanceof Error ? err.message : String(err),
+      detail: err instanceof Error && err.name === 'TimeoutError'
+        ? 'upstream request timed out' : 'upstream request failed',
     })
   }
 }

@@ -1,0 +1,445 @@
+{
+  "training": "2022/23 recorded rows",
+  "selection": "2023/24",
+  "priors": {
+    "GKP": {
+      "p_cameo": 0.003832752613240418,
+      "p60_start": 0.9928425357873211,
+      "p60_cameo": 0.25,
+      "start_minutes": 89.62909836065573,
+      "cameo_minutes": 35.6,
+      "n_starts": 488,
+      "n_nonstarts": 1434,
+      "n_cameos": 5
+    },
+    "DEF": {
+      "p_cameo": 0.10440751445086706,
+      "p60_start": 0.9510296333500753,
+      "p60_cameo": 0.044930875576036866,
+      "start_minutes": 85.61909547738694,
+      "cameo_minutes": 18.884526558891455,
+      "n_starts": 1990,
+      "n_nonstarts": 4151,
+      "n_cameos": 433
+    },
+    "MID": {
+      "p_cameo": 0.20112504610844706,
+      "p60_start": 0.9046094750320103,
+      "p60_cameo": 0.011457378551787351,
+      "start_minutes": 80.07301451750641,
+      "cameo_minutes": 18.996330275229358,
+      "n_starts": 2342,
+      "n_nonstarts": 5421,
+      "n_cameos": 1090
+    },
+    "FWD": {
+      "p_cameo": 0.2519804996953077,
+      "p60_start": 0.895264116575592,
+      "p60_cameo": 0.010869565217391304,
+      "start_minutes": 78.20985401459853,
+      "cameo_minutes": 18.24455205811138,
+      "n_starts": 548,
+      "n_nonstarts": 1640,
+      "n_cameos": 413
+    }
+  },
+  "selected": {
+    "name": "player-k4.0-hl6.0",
+    "strength": 4.0,
+    "half_life": 6.0
+  },
+  "results": [
+    {
+      "configuration": {
+        "name": "legacy"
+      },
+      "objective": 0.31537882801133893,
+      "active": {
+        "cameo_error": {
+          "n": 7379,
+          "mean": 0.24998509283100695
+        },
+        "p60_error": {
+          "n": 8013,
+          "mean": 0.06539373518033197
+        },
+        "start_minutes_error": {
+          "n": 8013,
+          "mean": -0.2239653042401239,
+          "mae": 8.772404229614823,
+          "rmse": 12.47523235279297
+        },
+        "cameo_minutes_error": {
+          "n": 2595,
+          "mean": 6.347206165703276,
+          "mae": 13.060886319845858,
+          "rmse": 15.66212372127423
+        },
+        "calibration": {
+          "cameo_pred": 0.19300718254506033,
+          "cameo_actual": 0.35167366851876947,
+          "p60_pred": 1.0,
+          "p60_actual": 0.934606264819668
+        }
+      }
+    },
+    {
+      "configuration": {
+        "name": "positional"
+      },
+      "objective": 0.3117416069286637,
+      "active": {
+        "cameo_error": {
+          "n": 7379,
+          "mean": 0.2510776030158095
+        },
+        "p60_error": {
+          "n": 8013,
+          "mean": 0.06066400391285419
+        },
+        "start_minutes_error": {
+          "n": 8013,
+          "mean": -0.2239653042401239,
+          "mae": 8.772404229614823,
+          "rmse": 12.47523235279297
+        },
+        "cameo_minutes_error": {
+          "n": 2595,
+          "mean": 0.21786655706384683,
+          "mae": 11.232868921356971,
+          "rmse": 14.289182981770189
+        },
+        "calibration": {
+          "cameo_pred": 0.17061924911113222,
+          "cameo_actual": 0.35167366851876947,
+          "p60_pred": 0.9288954639792905,
+          "p60_actual": 0.934606264819668
+        }
+      }
+    },
+    {
+      "configuration": {
+        "name": "player-k4.0-hl6.0",
+        "strength": 4.0,
+        "half_life": 6.0
+      },
+      "objective": 0.26471274072878154,
+      "active": {
+        "cameo_error": {
+          "n": 7379,
+          "mean": 0.20508949541859448
+        },
+        "p60_error": {
+          "n": 8013,
+          "mean": 0.05962324531018705
+        },
+        "start_minutes_error": {
+          "n": 8013,
+          "mean": 0.5042369841293773,
+          "mae": 7.821498136314754,
+          "rmse": 11.972666004644342
+        },
+        "cameo_minutes_error": {
+          "n": 2595,
+          "mean": -0.31749394857984936,
+          "mae": 10.85116056652117,
+          "rmse": 14.047987083727895
+        },
+        "calibration": {
+          "cameo_pred": 0.2666867073544974,
+          "cameo_actual": 0.35167366851876947,
+          "p60_pred": 0.941022555827338,
+          "p60_actual": 0.934606264819668
+        }
+      }
+    },
+    {
+      "configuration": {
+        "name": "player-k4.0-hl12.0",
+        "strength": 4.0,
+        "half_life": 12.0
+      },
+      "objective": 0.2659234986210594,
+      "active": {
+        "cameo_error": {
+          "n": 7379,
+          "mean": 0.2061830009659223
+        },
+        "p60_error": {
+          "n": 8013,
+          "mean": 0.05974049765513713
+        },
+        "start_minutes_error": {
+          "n": 8013,
+          "mean": 0.47984907811095934,
+          "mae": 7.772800667174143,
+          "rmse": 11.964236105963435
+        },
+        "cameo_minutes_error": {
+          "n": 2595,
+          "mean": -0.31709764977341864,
+          "mae": 10.843251807576127,
+          "rmse": 14.05423592074579
+        },
+        "calibration": {
+          "cameo_pred": 0.27796227726568673,
+          "cameo_actual": 0.35167366851876947,
+          "p60_pred": 0.9405239273575242,
+          "p60_actual": 0.934606264819668
+        }
+      }
+    },
+    {
+      "configuration": {
+        "name": "player-k4.0-hlNone",
+        "strength": 4.0,
+        "half_life": null
+      },
+      "objective": 0.27078285924928885,
+      "active": {
+        "cameo_error": {
+          "n": 7379,
+          "mean": 0.2104155110016265
+        },
+        "p60_error": {
+          "n": 8013,
+          "mean": 0.060367348247662364
+        },
+        "start_minutes_error": {
+          "n": 8013,
+          "mean": 0.3915908804480546,
+          "mae": 7.755232428703591,
+          "rmse": 12.007109171751031
+        },
+        "cameo_minutes_error": {
+          "n": 2595,
+          "mean": -0.3190542607968901,
+          "mae": 10.865751960318617,
+          "rmse": 14.110211691329456
+        },
+        "calibration": {
+          "cameo_pred": 0.2901091474498764,
+          "cameo_actual": 0.35167366851876947,
+          "p60_pred": 0.93900029586212,
+          "p60_actual": 0.934606264819668
+        }
+      }
+    },
+    {
+      "configuration": {
+        "name": "player-k8.0-hl6.0",
+        "strength": 8.0,
+        "half_life": 6.0
+      },
+      "objective": 0.2739486859999384,
+      "active": {
+        "cameo_error": {
+          "n": 7379,
+          "mean": 0.2145213191848051
+        },
+        "p60_error": {
+          "n": 8013,
+          "mean": 0.059427366815133276
+        },
+        "start_minutes_error": {
+          "n": 8013,
+          "mean": 0.3357508399299832,
+          "mae": 8.073355500547379,
+          "rmse": 12.051089443521555
+        },
+        "cameo_minutes_error": {
+          "n": 2595,
+          "mean": -0.12276294587731304,
+          "mae": 10.950639573002613,
+          "rmse": 14.074164177410509
+        },
+        "calibration": {
+          "cameo_pred": 0.23664414545560766,
+          "cameo_actual": 0.35167366851876947,
+          "p60_pred": 0.9379454363711598,
+          "p60_actual": 0.934606264819668
+        }
+      }
+    },
+    {
+      "configuration": {
+        "name": "player-k8.0-hl12.0",
+        "strength": 8.0,
+        "half_life": 12.0
+      },
+      "objective": 0.2724515815955603,
+      "active": {
+        "cameo_error": {
+          "n": 7379,
+          "mean": 0.213067534337382
+        },
+        "p60_error": {
+          "n": 8013,
+          "mean": 0.059384047258178335
+        },
+        "start_minutes_error": {
+          "n": 8013,
+          "mean": 0.3616353459980074,
+          "mae": 7.9925027661510315,
+          "rmse": 12.016734919433913
+        },
+        "cameo_minutes_error": {
+          "n": 2595,
+          "mean": -0.13751769015667722,
+          "mae": 10.923779187556132,
+          "rmse": 14.058021599374577
+        },
+        "calibration": {
+          "cameo_pred": 0.24842670712496723,
+          "cameo_actual": 0.35167366851876947,
+          "p60_pred": 0.9382358773765578,
+          "p60_actual": 0.934606264819668
+        }
+      }
+    },
+    {
+      "configuration": {
+        "name": "player-k8.0-hlNone",
+        "strength": 8.0,
+        "half_life": null
+      },
+      "objective": 0.27358325017230045,
+      "active": {
+        "cameo_error": {
+          "n": 7379,
+          "mean": 0.2139035932651652
+        },
+        "p60_error": {
+          "n": 8013,
+          "mean": 0.05967965690713528
+        },
+        "start_minutes_error": {
+          "n": 8013,
+          "mean": 0.34193989348160436,
+          "mae": 7.919929790918954,
+          "rmse": 12.015018680187708
+        },
+        "cameo_minutes_error": {
+          "n": 2595,
+          "mean": -0.1595176528841896,
+          "mae": 10.906860038161863,
+          "rmse": 14.067427545320342
+        },
+        "calibration": {
+          "cameo_pred": 0.26314900049034345,
+          "cameo_actual": 0.35167366851876947,
+          "p60_pred": 0.9377853128315522,
+          "p60_actual": 0.934606264819668
+        }
+      }
+    },
+    {
+      "configuration": {
+        "name": "player-k16.0-hl6.0",
+        "strength": 16.0,
+        "half_life": 6.0
+      },
+      "objective": 0.2854543645578984,
+      "active": {
+        "cameo_error": {
+          "n": 7379,
+          "mean": 0.22580567222270923
+        },
+        "p60_error": {
+          "n": 8013,
+          "mean": 0.059648692335189206
+        },
+        "start_minutes_error": {
+          "n": 8013,
+          "mean": 0.15330033002664986,
+          "mae": 8.31547975688702,
+          "rmse": 12.170522056199431
+        },
+        "cameo_minutes_error": {
+          "n": 2595,
+          "mean": 0.019535226536658998,
+          "mae": 11.05657806873382,
+          "rmse": 14.139470303479712
+        },
+        "calibration": {
+          "cameo_pred": 0.21160286638788622,
+          "cameo_actual": 0.35167366851876947,
+          "p60_pred": 0.9348704507817571,
+          "p60_actual": 0.934606264819668
+        }
+      }
+    },
+    {
+      "configuration": {
+        "name": "player-k16.0-hl12.0",
+        "strength": 16.0,
+        "half_life": 12.0
+      },
+      "objective": 0.28241668393420016,
+      "active": {
+        "cameo_error": {
+          "n": 7379,
+          "mean": 0.22290995131136226
+        },
+        "p60_error": {
+          "n": 8013,
+          "mean": 0.05950673262283787
+        },
+        "start_minutes_error": {
+          "n": 8013,
+          "mean": 0.2041118694224319,
+          "mae": 8.228978926115667,
+          "rmse": 12.1221374999349
+        },
+        "cameo_minutes_error": {
+          "n": 2595,
+          "mean": 0.0030327872804156416,
+          "mae": 11.02935975855676,
+          "rmse": 14.117017133338758
+        },
+        "calibration": {
+          "cameo_pred": 0.22152046685972415,
+          "cameo_actual": 0.35167366851876947,
+          "p60_pred": 0.9355490920063027,
+          "p60_actual": 0.934606264819668
+        }
+      }
+    },
+    {
+      "configuration": {
+        "name": "player-k16.0-hlNone",
+        "strength": 16.0,
+        "half_life": null
+      },
+      "objective": 0.28016803880877417,
+      "active": {
+        "cameo_error": {
+          "n": 7379,
+          "mean": 0.2206531228349396
+        },
+        "p60_error": {
+          "n": 8013,
+          "mean": 0.059514915973834556
+        },
+        "start_minutes_error": {
+          "n": 8013,
+          "mean": 0.24222902735555707,
+          "mae": 8.124039815102124,
+          "rmse": 12.081638564189381
+        },
+        "cameo_minutes_error": {
+          "n": 2595,
+          "mean": -0.024381417913884595,
+          "mae": 10.995185141267443,
+          "rmse": 14.09939627714417
+        },
+        "calibration": {
+          "cameo_pred": 0.2359567560517007,
+          "cameo_actual": 0.35167366851876947,
+          "p60_pred": 0.935977740724733,
+          "p60_actual": 0.934606264819668
+        }
+      }
+    }
+  ]
+}

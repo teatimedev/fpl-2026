@@ -432,6 +432,27 @@ class CalibrationTests(unittest.TestCase):
         self.assertEqual(len(base["start_recency_by_gw"]), 6)
 
 
+class ScoringEligibilityTests(unittest.TestCase):
+    def project_scenario(self, minutes, fixtures):
+        p = make_player(pos='DEF')
+        with patch.multiple(PM, START_GW=1, HORIZON=1, LAST_GW=1, WINDOW=1,
+                            AVAILABILITY_OVERRIDES=[], GW_DEADLINES={}), \
+                patch.object(PM, 'minutes_model', return_value=(1.0, minutes)), \
+                patch.object(PM, 'shrink', return_value=(0.0, 0.0)), \
+                patch.object(PM, 'calibrate'):
+            return PM.project({p['id']: p}, {'view': {'MCI': {'1': fixtures}}}, {})[0]
+
+    def test_short_start_does_not_earn_sixty_minute_points(self):
+        fx = [dict(xg=0, xgc=0, cs=1)]
+        self.assertEqual(self.project_scenario(45, fx)['proj_by_gw'], [1.0])
+        self.assertEqual(self.project_scenario(60, fx)['proj_by_gw'], [6.0])
+
+    def test_blank_gameweek_has_no_appearance_or_minutes(self):
+        p = self.project_scenario(90, [])
+        for key in ('proj_by_gw', 'play_by_gw', 'start_by_gw', 'mins_by_gw'):
+            self.assertEqual(p[key], [0.0])
+
+
 # ---------------------------------------------------------------------- P5
 class ContextMultiplierTests(unittest.TestCase):
     def test_default_multiplier_is_one_until_measured(self):

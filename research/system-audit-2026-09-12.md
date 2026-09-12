@@ -1,0 +1,152 @@
+# End-to-end FPL audit and improvement log
+
+Started 12 September 2026, from commit `8848760`. This is an active implementation
+and verification log, not a claim that forecasting can become perfect.
+
+## Acceptance
+
+Inspect every production stage and the research used to justify it. Reproduce
+substantive defects, repair them, and test the behaviour that matters. Numerical
+changes need chronological evidence or must remain explicitly experimental.
+Preserve authentic deadline forecasts and distinguish production verification
+from tests, simulations, retrospective proxies and unavailable account state.
+
+Completion requires coverage of the areas below, no unresolved reproducible
+correctness defect within the available scope, measured evidence for promoted
+forecast changes, and documented limits where additional data is required.
+
+## Coverage ledger
+
+| Area | Status | Evidence / next investigation |
+|---|---|---|
+| Source ingestion, schema and historical missingness | Pending | FPL, football-data, imported fixture panel, freshness and joins |
+| Deadline clock, scheduled execution and concurrent publishing | In progress | Stale `is_next` flag, gate windows, snapshot deadlines, code/data revision coherence |
+| Team model and odds | Pending | Chronological fitting, scoring, source timing, promoted/manager priors |
+| Player rates, roles and calibration | Pending | Historical clubs, shrinkage, attack scaling, penalty exposure, current season learning |
+| Starts, cameos, P60 and availability | In progress | Reproduce conditional cameo and short-start scoring; measure against fixture panel |
+| News and scouting | Pending | Article quality, source evidence, expiry, extraction, effect and cost controls |
+| Account state, prices, FT and chips | In progress | User-reported Pedro move is not authenticated account access; unknown price pressure denominator |
+| Legal XI, bench and captain evaluation | Pending | Exhaustive small cases and realistic squads |
+| Transfer planner and policy | Pending | Exact versus proxy scoring, candidate coverage, costs, robustness and empirical evidence |
+| Match and decision simulation | Pending | Means, event conservation, dependence, doubles, chips and hits |
+| Scorecard, retrospective explanations and replay | Pending | Actual submitted results, immutable forecasts, common cohorts and no future leakage |
+| Dashboard and public API | Pending | Runtime, desktop/mobile, stale/mismatched account and network failure states |
+| Documentation, maintainability and deployment | In progress | Claims in README predate known limitations; end-to-end production verification required |
+
+## Findings and changes
+
+The repairs immediately preceding this audit are documented separately in
+[repair-2026-09-12.md](repair-2026-09-12.md).
+
+### Batch 1: reproduced correctness and operational defects
+
+- The Python clock, news scan, scheduler and browser trusted a stale `is_next`
+  flag. They now select the earliest future deadline, including at the exact
+  deadline boundary. Missing calendars fail explicitly. A finished season does
+  not fabricate GW1. Thursday catch-up now obeys the 45-minute deadline lock.
+- CI used `git pull --rebase` after computing forecasts. A run using older code
+  could publish its output on top of a newer implementation. Publishing now
+  uses an ordinary fast-forward push: remote changes reject the outdated run.
+- An FPL 403 or timeout was treated like unpublished picks, potentially walking
+  through 37 earlier gameweeks and returning an empty squad. Only 404 permits
+  that fallback now. Missing account history cannot imply a verified FT count.
+- The public API proxy had no timeout and permitted ten minutes of stale data
+  after its one-minute cache. It now limits requests to eight seconds, permits
+  GET only, caches successful responses for one minute, and never caches errors.
+  The app retries on focus, reconnection, five-minute intervals and rollover.
+- Price pressure invented one owner when the manager count or rounded ownership
+  was unknown. Those pressures are now null, rankings use net flow consistently,
+  and seller/riser lists are sign-correct. No flow is not evidence of locked prices.
+- Fitness flags previously reduced starting probability without reducing all
+  cameo exposure. Fitness probability now scales both routes to appearing. This
+  fixes, for example, a doubtful player at zero availability receiving a cameo.
+- Fixed-duration 45-minute starting scenarios earned two appearance points and
+  clean-sheet points. They now earn one appearance point and no clean sheet.
+  This corrects scoring within the existing approximation; an empirical P60
+  distribution still needs separate validation.
+- Blank gameweeks previously retained nonzero appearance probabilities and
+  minutes despite zero fixtures. They now have zero starts, appearances and minutes.
+
+### Historical data repair
+
+Direct SQL reproduced zero starts, xG, xA and xGC throughout 2022/23 GW1–15,
+including 2,818 rows with at least 60 minutes. The importer now marks these
+source-specific values unknown. Later observed zeros remain zero. Start
+benchmarks exclude unknown target labels and disclose the earlier minutes-based
+evidence proxy; rate benchmarks reject partially unmeasured exposure windows.
+
+Fixture-row positions now take precedence over end-of-season metadata; assistant
+manager rows are excluded from player datasets. Historical club names cannot
+silently fall back to a player's end-of-season club. Exact duplicate rows are
+deduplicated, and conflicting duplicates fail rather than silently replacing data.
+
+An offline reimport retained 26,505 / 29,725 / 27,283 / 29,747 player-fixture rows
+in 2022/23 through 2025/26. The 2024/25 reduction removes 322 assistant-manager
+rows. All available season aggregate minutes reconcile except one existing
+2024/25 discrepancy: code 487117 has 385 aggregate versus 368 fixture minutes.
+Do not quietly repair that source discrepancy by inventing minutes.
+
+### Verification so far
+
+Focused deadline, data, probability and API regressions pass. The app's test,
+lint and build commands pass. In the running browser, a blocked FPL feed removes
+live advice and exposes only the labelled dated review; restoring the feed
+restores verified inputs. A 390px viewport has no outer horizontal overflow.
+The browser's unsupported clock injection was not used; exact rollover is
+currently verified through the shared Python and browser-function tests.
+
+Research and numerical model validation remain in progress. These fixes have
+not yet been recorded as a new production deployment in this log.
+
+### Playing-time experiment: selected before testing later seasons
+
+Protocol: [playing-time-protocol-2026-09-12.md](playing-time-protocol-2026-09-12.md).
+The selected strength was four prior observations with a six-fixture half-life,
+chosen on 2023/24 after fitting positional priors on recorded 2022/23 rows.
+
+| Active player component | 2024/25 fixed | 2024/25 candidate | 2025/26 fixed | 2025/26 candidate |
+|---|---:|---:|---:|---:|
+| Cameo Brier, lower better | .26574 | .20864 | .27061 | .21564 |
+| Starter P60 Brier | .06923 | .06377 | .07064 | .06450 |
+| Conditional start minutes RMSE | 12.44 | 11.98 | 12.62 | 12.06 |
+| Conditional cameo minutes RMSE | 15.19 | 13.49 | 15.69 | 14.17 |
+
+The cameo comparisons contain 7,358 and 7,109 non-starts respectively; P60
+contains 8,017 and 8,013 starts. Paired gameweek-block intervals favour the
+candidate over the fixed cameo/P60 assumptions in each season. The individual
+P60 estimates do **not** show a clear advantage over a positional P60 prior.
+Candidate cameo rates remain under-calibrated in the active cohort (.279/.282
+predicted versus .379/.386 observed). The minutes comparator is a positional
+start mean and fixed 25-minute cameo, **not the full production minutes model**.
+
+This is evidence to develop a forward experiment, not to assert total-points
+improvement. Historical availability is unknown, and the earliest recorded
+kickoff is a calendar proxy. The selected grid boundary is not proof of an
+optimal setting. Frozen selection and later-season evaluation are saved in
+`system-audit-2026-09-12/playing-time-*.json`.
+
+### Evaluation and documentation repairs
+
+The two legacy backtests broke ties using arbitrary input order. They now use
+average ranks, with tie/permutation regressions. Reproduction gives 2025/26
+points-per-90 MAE .728 for the historical model versus .721 for price; rank
+correlation .467 versus .444. This remains a survivor-cohort proxy.
+
+The stability study now excludes the unrecorded aggregate DefCon seasons and
+uses historical positions when available. Pooled DefCon correlation is .93 on
+171 recorded pairs; defender xG correlation is .29 versus .90 pooled. These
+correlations do not directly validate new shrinkage constants. Old numeric
+production constants remain visible for a separate predictive comparison.
+
+The app footer no longer presents 4,000 draws as independent validation or the
+legacy .46 correlation as evidence of the complete live model's skill.
+
+## Evidence boundaries
+
+- GW4 closes at 12:30 UTC on 12 September. Subsequent observations cannot become
+  inputs to a GW4 pre-deadline evaluation.
+- Public FPL data cannot verify upcoming private transfers or lineup. The user
+  reported Thiago to João Pedro; further previously discussed moves have not
+  been submitted by this assistant.
+- A passing test suite establishes its assertions, not a forecasting advantage.
+- Full optimality and an absence of possible future improvements are unprovable.
