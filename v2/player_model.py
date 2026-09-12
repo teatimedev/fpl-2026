@@ -780,20 +780,26 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
             cameo_share = av.cameo_minutes / 90.0
             if gw <= HORIZON:
                 p60_shadow_by_gw.append(round(p60_probability(survival[p['id']], p_start, p_cameo), 4)
-                                       if av.source == 'model baseline' else None)
-                start_by_gw.append(round(p_start, 3))
-                play_by_gw.append(round(p_play, 3))
-                mins_by_gw.append(round(av.expected_minutes, 1) if fx else 0.0)
+                                       if av.source == 'model baseline' and len(fx) == 1 else None)
+                # Public gameweek probabilities mean at least one start/play.
+                # Individual fixtures currently have independent availability;
+                # retain their marginals explicitly for simulation and replay.
+                any_fixture = lambda probability: 1.0 - (1.0 - probability) ** len(fx)
+                start_by_gw.append(round(any_fixture(p_start), 3))
+                play_by_gw.append(round(any_fixture(p_play), 3))
+                mins_by_gw.append(round(av.expected_minutes * len(fx), 1))
                 if shadow_start_rate == base_start_rate:
                     shadow_p_start = p_start
                 else:
                     shadow_p_start = deadline_forecast(shadow_start_rate).p_start if fx else 0.0
                 start_recency_by_gw.append(round(
-                    shadow_p_start if shadow_rule == 'recency' else p_start, 3))
+                    any_fixture(shadow_p_start if shadow_rule == 'recency' else p_start), 3))
                 start_aggregate_by_gw.append(round(
-                    shadow_p_start if shadow_rule == 'aggregate' else p_start, 3))
+                    any_fixture(shadow_p_start if shadow_rule == 'aggregate' else p_start), 3))
                 availability_by_gw.append(dict(
                     source=av.source, confidence=av.confidence, note=av.note,
+                    fixtures=len(fx), p_start=round(p_start, 6), p_play=round(p_play, 6),
+                    probability_basis='per fixture; independent across fixtures',
                     p_cameo=round(av.p_cameo, 3),
                     start_minutes=round(av.start_minutes, 1),
                     cameo_minutes=round(av.cameo_minutes, 1),

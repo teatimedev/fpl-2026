@@ -83,7 +83,8 @@ def matches_this_season(season=CURRENT_SEASON, db=None):
 
 
 def adjust_ratings(model, shorts, n_matches=None, new_manager=None, promoted=None,
-                   promoted_blend=None, decay=True):
+                   promoted_blend=None, decay=True, promoted_k=PROMOTED_K,
+                   manager_k=MANAGER_K):
     """The post-fit adjustments as pure arithmetic on a fitted model, so the
     walk-forward validation applies exactly what production applies.
 
@@ -110,13 +111,13 @@ def adjust_ratings(model, shorts, n_matches=None, new_manager=None, promoted=Non
             why.append('no Premier League record — promoted-club prior')
         elif t in promoted:
             w0 = promoted_blend.get(t, 1.0)
-            w = promoted_prior_weight(n, w0) if decay else w0
+            w = promoted_prior_weight(n, w0, k=promoted_k) if decay else w0
             a = w * pa + (1 - w) * a
             d = w * pdf + (1 - w) * d
             why.append(f'promoted — blended {w:.0%} towards the promoted prior'
                        + (f' after {n} match{"es" if n != 1 else ""}' if decay else ''))
         if t in new_manager:
-            s = manager_shrink(n) if decay else MANAGER_SHRINK
+            s = manager_shrink(n, k=manager_k) if decay else MANAGER_SHRINK
             a = mean_a + (a - mean_a) * s
             d = mean_d + (d - mean_d) * s
             why.append(f'new manager — shrunk {1 - s:.0%} to the mean'
@@ -170,13 +171,15 @@ def validate_decay(seasons=('2022/23', '2023/24', '2024/25', '2025/26'), k_t=PRO
             atk, dfn, _ = adjust_ratings(
                 model, sorted(clubs), n_matches,
                 new_manager=new_mgr, promoted=promoted_s,
-                promoted_blend={t: 1.0 for t in promoted_s}, decay=decay)
+                promoted_blend={t: 1.0 for t in promoted_s}, decay=decay,
+                promoted_k=k_t, manager_k=k_m)
             return atk, dfn, promoted_s | new_mgr
         v = TM.walk_forward_adjusted(matches, TM.DEFAULT_HALF_LIFE, adjust, seasons)
         print(f'  {label:<9} n={v["n"]:>4}  model log-loss {v["model_ll"]:.4f}  '
               f'bookmaker {v["book_ll"]:.4f}  Brier {v["model_brier"]:.4f}')
-    print('Read: if decaying does not beat fixed on these fixtures, K_T/K_M are too '
-          'small (the data is being trusted too early).')
+    print('This is a retrospective comparison of the selected shrinkage rules. '
+          'It neither establishes an optimal constant nor proves the adjustment '
+          'itself is better than no adjustment.')
 
 
 def season_parameters(model, atk, dfn, horizon=None):
@@ -207,7 +210,7 @@ def season_parameters(model, atk, dfn, horizon=None):
         h, a = short[th], short[ta]
         odds = None
         for date, o in market.get((h, a), []):
-            if not kickoff or not date or abs(_days_between(date, kickoff)) <= 10:
+            if kickoff and date and _days_between(date, kickoff) == 0:
                 odds = o
         if odds and odds[0]:
             both = TM.market_view(m, h, a, odds)
@@ -228,8 +231,8 @@ def _days_between(iso_a, iso_b):
         da = datetime.fromisoformat(iso_a[:10])
         db = datetime.fromisoformat(iso_b[:10])
         return (da - db).days
-    except ValueError:
-        return 0
+    except (ValueError, TypeError):
+        return None
 
 
 if __name__ == '__main__':

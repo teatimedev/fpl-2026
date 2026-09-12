@@ -16,3 +16,23 @@ def test_incomplete_lines_are_not_mixed_and_stale_pinnacle_is_not_preferred():
 def test_invalid_odds_never_become_probabilities():
     for line in [(1, 3, 4), (0, 3, 4), (-2, 3, 4), (float('nan'), 3, 4), (2, None, 4)]:
         assert valid_line(line) is None
+
+
+def test_direct_provider_needs_future_kickoff_and_recent_quote():
+    from copy import deepcopy
+    from datetime import datetime, timezone
+    from v2.fetch import odds_api_rows
+    now = datetime(2026, 9, 12, 11, tzinfo=timezone.utc)
+    event = dict(home_team='Manchester United', away_team='Manchester City',
+                 commence_time='2026-09-13T15:30:00Z', bookmakers=[dict(
+                     key='pinnacle', last_update='2026-09-12T10:00:00Z', markets=[dict(
+                         key='h2h', outcomes=[dict(name='Manchester United', price=3),
+                                               dict(name='Draw', price=3.5),
+                                               dict(name='Manchester City', price=2.3)])])])
+    assert len(odds_api_rows([event], now)) == 1
+    for timestamp in ['2026-09-01T10:00:00Z', '2026-09-13T10:00:00Z', None]:
+        changed = deepcopy(event)
+        changed['bookmakers'][0]['last_update'] = timestamp
+        assert odds_api_rows([changed], now) == []
+    event['commence_time'] = '2026-09-11T15:30:00Z'
+    assert odds_api_rows([event], now) == []

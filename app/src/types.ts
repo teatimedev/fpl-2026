@@ -441,7 +441,7 @@ export interface NewsClaim {
 }
 export interface NewsSourceHealth {
   id: string; club: string; publisher?: string; url?: string
-  status: 'ok' | 'error' | 'unsupported'; error?: string
+  status: 'ok' | 'partial' | 'error' | 'unsupported' | 'no_articles'; error?: string
 }
 export interface NewsData {
   run?: {

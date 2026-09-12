@@ -1,50 +1,20 @@
-"""
-Squad-vs-squad Monte Carlo for hold-or-act transfer decisions.
+"""Paired squad simulations, conditional on the forecast and its assumptions.
 
-The weekly digest currently quotes a projected point delta, but the projection
-model's measured rank correlation is only ~0.46, so a "+2.1 over the window"
-headline is mostly noise: two squads a couple of points apart in projection are
-not two points apart in expectation of finishing ahead. What the decision
-actually needs is a probability, and probabilities need a distribution, which a
-point estimate cannot supply. This module simulates both squads over the
-projection window under ONE set of random draws and returns P(squad B finishes
-ahead), so the digest can say "the queued move wins in 62% of simulations"
-instead of quoting a mean.
+Shared players have identical outcomes in both squads; opponents share match
+goals and all fixtures are scored separately before gameweek aggregation.
+Goals currently use independent Poisson marginals from season-view xG, without
+the fitted Dixon-Coles low-score dependence. Starts are independent across
+players and fixtures; attacking events are not yet conserved across a club.
 
-Design choices, and why:
+Each player's expected score is reconciled separately in each gameweek using
+the sampling equations' analytic mean and a per-appearance residual. These
+fractional adjustments and approximate bonus/cards/minutes make this a model
+of score variation, not an exact match-event simulator. It cannot independently
+validate the projections it is calibrated to. At 4,000 draws, Monte Carlo error
+alone is at most about 0.8 percentage points; model uncertainty is additional.
 
-  * PAIRED DRAWS (common random numbers). Every player in the union of the two
-    squads is simulated once and his outcome is shared. Squads that differ by
-    two players keep 13 identical trajectories, so the delta reflects the swap
-    and not Monte Carlo wobble. At n_sims=4000 the standard error on a win
-    probability is ~0.8 percentage points; pairing removes most of the rest of
-    the shared variance (weather for one club is weather for both squads).
-
-  * TEAM LAYER FIRST. Each match's goals are drawn once from the season-view
-    Dixon-Coles xG, and the home side's draw IS the away side's goals conceded.
-    Clean sheets and conceded-goal hits therefore hit every Arsenal asset in a
-    squad together, which is the correlation a point estimate hides.
-
-  * THE PROJECTION IS THE MEAN; THE SIMULATION IS THE SHAPE. Raw per-90 rates
-    undershoot the projections (finishing over-performs xG, and the bonus model
-    is crude), so each player's attacking rates are scaled by an analytic
-    multiplier k and the remaining gap is closed by a flat per-appearance term
-    fitted by a short pilot run -- the same two-step calibration measured and
-    justified in simulate.py, ported here without the v1 FPL-API wiring.
-
-  * TIES COUNT AS HALF WINS. p_b_wins = P(delta > 0) + 0.5 * P(delta == 0).
-    Under paired draws two identical squads tie in every simulation and report
-    exactly 0.5, which is the right answer.
-
-The model distinguishes starts from cameos using ``start_by_gw`` and
-``play_by_gw``.  Minutes come from the availability model where available, so
-60-minute clean-sheet eligibility and one-point cameos are represented.  Red
-cards and own goals are omitted; bonus is a gated Bernoulli x 1-3 rather than a
-BPS ranking.  The autosub engine applies bench order and formation legality per
-simulation without a Python loop over simulations.
-
-Manager identity is not modelled at all: a club is a club, and a mid-season
-sacking can only enter through the season-view xG and the start-rate priors.
+Ties count as half wins. The autosub engine follows bench order and legal
+formation constraints. Manager identity, red cards and own goals are omitted.
 """
 from __future__ import annotations
 
@@ -75,9 +45,6 @@ SQUAD_SIZE = 15
 SQUAD_COUNTS = {'GKP': 2, 'DEF': 5, 'MID': 5, 'FWD': 3}
 MAX_PER_CLUB = 3
 DEFAULT_SEED = 20260902
-# Cap on the calibration pilot; the residual's Monte Carlo error at 2048 sims
-# is ~0.1 pts/gameweek per player, comfortably below the deltas being judged.
-PILOT_CAP = 2048
 
 
 # ------------------------------------------------------------------ inputs
@@ -168,6 +135,12 @@ def _player_params(player, start_gw, horizon):
     for wi, gw in enumerate(gws):
         row = availability[gw - 1] if gw - 1 < len(availability) else None
         row = row if isinstance(row, dict) else {}
+        if row.get('p_start') is not None and row.get('p_play') is not None:
+            p_start[wi] = float(row['p_start'])
+            p_play[wi] = float(row['p_play'])
+            expected_mins[wi] /= max(int(row.get('fixtures', 1)), 1)
+            if not 0 <= p_start[wi] <= p_play[wi] <= 1:
+                raise ValueError(f"Player {player['id']}: invalid per-fixture availability")
         cameo = float(np.clip(row.get('cameo_minutes', 25.0), 1.0, 59.0))
         if row.get('start_minutes') is not None:
             start = float(row['start_minutes'])
@@ -211,92 +184,50 @@ def _team_draws(teams, fixture_xg, start_gw, horizon, n_sims, rng):
 
     One Poisson draw per MATCH, taken from whichever club's view comes first
     alphabetically, so the home side's goals are exactly the away side's goals
-    conceded (the season view is mirrored: 0 inconsistencies across GW3-8).
+    conceded. Contradictory mirrored rates are rejected.
     Clubs outside the pool are never drawn; a club with no fixture in a
     gameweek leaves everyone at zero minutes that week.
     """
     window = horizon - start_gw + 1
     clubs = sorted(teams)
-    gf = {c: np.zeros((n_sims, window), np.int16) for c in clubs}
-    ga = {c: np.zeros((n_sims, window), np.int16) for c in clubs}
-    lam = {c: np.zeros(window) for c in clubs}          # expected goals per gw
+    slots = max([1] + [len(_fixtures_at(fixture_xg, c, gw)) for c in clubs
+                       for gw in range(start_gw, horizon + 1)])
+    gf = {c: np.zeros((n_sims, window, slots), np.int16) for c in clubs}
+    ga = {c: np.zeros((n_sims, window, slots), np.int16) for c in clubs}
+    lam = {c: np.zeros((window, slots)) for c in clubs}
     n_fx = {c: np.zeros(window, int) for c in clubs}    # fixtures per gw
     fx_rows = {c: [] for c in clubs}                    # (wi, xg, xgc) per club
-    drawn = set()
+    drawn = {}
     for c in clubs:
         for wi, gw in enumerate(range(start_gw, horizon + 1)):
-            for xg, xgc, opp in _fixtures_at(fixture_xg, c, gw):
-                lam[c][wi] += xg
+            occurrences = {}
+            for fi, (xg, xgc, opp) in enumerate(_fixtures_at(fixture_xg, c, gw)):
+                if not all(math.isfinite(x) and x >= 0 for x in (xg, xgc)):
+                    raise ValueError('Fixture goal expectations must be finite and non-negative')
+                lam[c][wi, fi] = xg
                 n_fx[c][wi] += 1
                 fx_rows[c].append((wi, xg, xgc))
-                key = (gw, frozenset((c, opp))) if opp else None
+                occurrence = occurrences.get(opp, 0)
+                occurrences[opp] = occurrence + 1
+                key = (gw, frozenset((c, opp)), occurrence) if opp else None
                 if key is not None and key in drawn:
-                    continue
-                goals_for = rng.poisson(xg, n_sims)
-                goals_agt = rng.poisson(xgc, n_sims)
-                gf[c][:, wi] += goals_for
-                ga[c][:, wi] += goals_agt
-                if key is not None:
-                    drawn.add(key)
-                    if opp in gf:
-                        gf[opp][:, wi] += goals_agt
-                        ga[opp][:, wi] += goals_for
+                    _, against, goals_for, previous_xg, previous_xgc = drawn[key]
+                    if not (math.isclose(xg, previous_xgc, abs_tol=1e-6)
+                            and math.isclose(xgc, previous_xg, abs_tol=1e-6)):
+                        raise ValueError(f'Contradictory mirrored fixture rates: {c}/{opp}, GW{gw}')
+                    goals_agt = against
+                else:
+                    goals_for = rng.poisson(xg, n_sims)
+                    goals_agt = rng.poisson(xgc, n_sims)
+                    if key is not None:
+                        drawn[key] = (c, goals_for, goals_agt, xg, xgc)
+                gf[c][:, wi, fi] = goals_for
+                ga[c][:, wi, fi] = goals_agt
     return gf, ga, lam, n_fx, fx_rows
 
 
 # -------------------------------------------------------------- physics
-def _poisson_at_least(mean, k):
-    """P(Poisson(mean) >= k) for small integer k, without scipy."""
-    term = math.exp(-mean)
-    cdf = term
-    for i in range(1, k):
-        term *= mean / i
-        cdf += term
-    return 1.0 - cdf
-
-
-def _attacking_calibration(par, fx_rows, window, target):
-    """Estimate an attacking-rate multiplier before pilot reconciliation."""
-    active_rows = fx_rows.get(par['team'], [])
-    active_wis = sorted({wi for wi, _, _ in active_rows})
-    if not active_wis or target is None or target <= 0.0:
-        return 1.0
-    p_appear = sum(par['p_play'][wi] for wi in active_wis) / window
-    minute_share = sum(par['mins'][wi] / 90.0 for wi in active_wis) / window
-    pos = par['pos']
-
-    steady = sum(
-        par['p_start'][wi] * (2.0 if par['start_mins'][wi] >= 60.0 else 1.0)
-        + (par['p_play'][wi] - par['p_start'][wi])
-        for wi in active_wis) / window
-    xgc_by_wi = {wi: 0.0 for wi in active_wis}
-    for wi, _, xgc in active_rows:
-        xgc_by_wi[wi] += xgc
-    if pos in ('GKP', 'DEF', 'MID'):
-        steady += CS_PTS[pos] * sum(
-            math.exp(-xgc_by_wi[wi]) * par['p_start'][wi]
-            * (par['start_mins'][wi] >= 60.0)
-            for wi in active_wis) / window
-    if pos in ('GKP', 'DEF'):
-        steady -= sum(xgc_by_wi[wi] / 2.0 * par['p_start'][wi]
-                      for wi in active_wis) / window
-    if pos == 'GKP':
-        steady += par['saves90'] * minute_share / 3.0
-    if pos != 'GKP' and par['dc90'] > 0:
-        thr = 10 if pos == 'DEF' else 12
-        steady += 2.0 * _poisson_at_least(
-            par['dc90'] * minute_share / max(p_appear, 1e-9), thr) * p_appear
-    steady -= min(0.6, par['yellow90'] * minute_share)
-
-    attacking = ((par['xg90'] * GOAL_PTS[pos] + par['xa90'] * 3.0)
-                 * minute_share)
-    attacking += min(0.9, par['bonus90'] * 0.55) * minute_share
-    if attacking <= 1e-6:
-        return 1.0
-    return float(np.clip((target - steady) / attacking, 0.25, 4.0))
-
-
-def _simulate_player(par, gf, ga, lam, n_fx, rng):
+def _simulate_fixture_player(par, gf, ga, lam, n_fx, rng):
     """Return point and appearance draws with shape ``(n_sims, window)``.
 
     A single uniform draw couples start and appearance, then conditional
@@ -328,7 +259,7 @@ def _simulate_player(par, gf, ga, lam, n_fx, rng):
         team_goals = gf[team][:, wi]
         expected = max(float(lam[team][wi]), 0.3)
         boost = np.where(team_goals > 0, team_goals / expected, 0.0)
-        k = par['k_att']
+        k = par['k_att'][wi] if isinstance(par['k_att'], (list, np.ndarray)) else par['k_att']
         goals = rng.poisson(np.clip(
             par['xg90'] * k * frac * boost, 0.0, 6.0))
         assists = rng.poisson(np.clip(
@@ -362,36 +293,100 @@ def _simulate_player(par, gf, ga, lam, n_fx, rng):
         pts[:, wi] -= (
             rng.random(n_sims)
             < np.clip(par['yellow90'] * frac, 0.0, 0.6)) & appears
-        pts[:, wi] += appears * par['add']
         played[:, wi] = appears
     return pts, played
 
 
-def _calibrate_pool(pool, fx_rows, gf, ga, lam, n_fx, rng):
-    """Fit each player's k_att analytically, then close the mean gap with a
-    pilot-measured flat per-appearance term (simulate.py found the analytic
-    estimate alone never reconciles: floor() on saves/conceded, Jensen gaps on
-    clean sheets, position-specific bonus rules). A rule that is not reconciled
-    here would bias every squad comparison by player type.
+def _simulate_player(par, gf, ga, lam, n_fx, rng):
+    """Score fixtures individually; aggregate points and any appearance by GW."""
+    shape = gf[par['team']].shape
+    if len(shape) == 2:
+        if any(np.max(n) > 1 for n in n_fx.values()):
+            raise ValueError('Double gameweeks require separate fixture goal draws')
+        pts, played = _simulate_fixture_player(par, gf, ga, lam, n_fx, rng)
+    else:
+        pts = np.zeros(shape[:2], np.float64)
+        played = np.zeros(shape[:2], bool)
+        for fi in range(shape[2]):
+            this_pts, this_played = _simulate_fixture_player(
+                par, {c: v[:, :, fi] for c, v in gf.items()},
+                {c: v[:, :, fi] for c, v in ga.items()},
+                {c: v[:, fi] for c, v in lam.items()},
+                {c: (v > fi).astype(int) for c, v in n_fx.items()}, rng)
+            pts += this_pts
+            played |= this_played
+    return pts + played * np.asarray(par['add']), played
+
+
+def _floor_poisson(mean, divisor):
+    from scipy.stats import poisson
+    values = np.arange(int(poisson.ppf(1 - 1e-12, mean)) + 1)
+    return float(np.dot(values // divisor, poisson.pmf(values, mean)))
+
+
+def _raw_fixture_mean(par, wi, xg, xgc, k):
+    """Analytic mean of the implemented single-fixture approximation.
+
+    Includes Poisson clipping, discrete saves/conceded floors, conditional
+    bonus gating and the negative-binomial DefCon threshold. This reconciles
+    the actual sampling equations, without fitting noise from a short pilot.
     """
-    n_sims, window = next(iter(gf.values())).shape
-    n_pilot = min(n_sims, PILOT_CAP)
-    gf_p = {c: v[:n_pilot] for c, v in gf.items()}
-    ga_p = {c: v[:n_pilot] for c, v in ga.items()}
+    from scipy.stats import poisson, nbinom
+    team_goals = np.arange(int(poisson.ppf(1 - 1e-12, xg)) + 1)
+    mass = poisson.pmf(team_goals, xg)
+    pos = par['pos']
+    expected = 0.
+    for probability, minutes, starts in (
+        (par['p_start'][wi], par['start_mins'][wi], True),
+        (par['p_play'][wi] - par['p_start'][wi], par['cameo_mins'][wi], False),
+    ):
+        if probability <= 0:
+            continue
+        frac = minutes / 90.
+        boost = team_goals / max(xg, .3)
+        goals = np.clip(par['xg90'] * k * frac * boost, 0, 6)
+        assists = np.clip(par['xa90'] * k * frac * boost, 0, 6)
+        mean = 1. + (starts and minutes >= 60)
+        mean += float(np.dot(mass, GOAL_PTS[pos] * goals + 3 * assists))
+        cs = math.exp(-xgc) if starts and minutes >= 60 else 0.
+        mean += cs * CS_PTS[pos]
+        if pos in ('GKP', 'DEF') and starts:
+            mean -= _floor_poisson(xgc, 2)
+        if pos == 'GKP':
+            mean += _floor_poisson(float(np.clip(par['saves90'] * frac, 0, 12)), 3)
+        elif par['dc90'] > 0:
+            m = float(np.clip(par['dc90'] * frac, 0, 30))
+            mean += 2 * nbinom.sf((10 if pos == 'DEF' else 12) - 1, 12., 12. / (12. + m))
+        good = float(np.dot(mass, 1 - np.exp(-goals - assists)))
+        if pos in ('GKP', 'DEF'):
+            good += (1 - good) * cs
+        mean += 2 * good * float(np.clip(par['bonus90'] * k * frac * .55, 0, .9))
+        mean -= float(np.clip(par['yellow90'] * frac, 0, .6))
+        expected += probability * mean
+    return float(expected)
+
+
+def _calibrate_pool(pool, fx_rows, gf, ga, lam, n_fx, rng):
+    """Reconcile each player's gameweek mean analytically, with no pilot noise."""
+    _, window = next(iter(gf.values())).shape[:2]
     for pid in sorted(pool):
         par = pool[pid]
-        target = (sum(p for p in par['proj'] if p is not None) / window
-                  if any(p is not None for p in par['proj']) else None)
-        if target is None:
-            continue
-        par['k_att'] = _attacking_calibration(par, fx_rows, window, target)
-        probe = dict(par, add=0.0)
-        pts, _ = _simulate_player(probe, gf_p, ga_p, lam, n_fx, rng)
-        got = pts.mean(axis=0).sum() / window
-        p_play = sum(par['p_play'][wi]
-                     for wi in range(window)
-                     if n_fx[par['team']][wi] > 0) / window
-        par['add'] = float((target - got) / max(p_play, 0.15))
+        par['k_att'], par['add'], par['p_play_gw'] = [1.] * window, [0.] * window, [0.] * window
+        for wi, target in enumerate(par['proj']):
+            rows = [(xg, xgc) for index, xg, xgc in fx_rows.get(par['team'], []) if index == wi]
+            p_any = 1 - (1 - par['p_play'][wi]) ** len(rows)
+            par['p_play_gw'][wi] = p_any
+            if target is None:
+                continue
+            if p_any == 0:
+                if abs(target) > 1e-8:
+                    raise ValueError(f'Player {pid}, week {wi}: nonzero projection without an appearance route')
+                continue
+            raw = lambda k: sum(_raw_fixture_mean(par, wi, xg, xgc, k) for xg, xgc in rows)
+            steady, unit = raw(0.), raw(1.)
+            k = float(np.clip((target - steady) / (unit - steady), .25, 4.)) if unit > steady + 1e-8 else 1.
+            par['k_att'][wi] = k
+            par['add'][wi] = (target - raw(k)) / p_any
 
 
 # ------------------------------------------------------------- squad rules
@@ -475,7 +470,7 @@ def _pick_lineup(par_list, wi, gw):
     options = captain_options(
         [par_list[ix] for ix in xi], gw,
         points=lambda par, _: par['proj'][wi] or 0.0,
-        play=lambda par, _: par['p_play'][wi])
+        play=lambda par, _: (par.get('p_play_gw') or par['p_play'])[wi])
     indices = {par['id']: ix for ix, par in enumerate(par_list)}
     best = options[0]
     return {'xi': xi, 'bench': bench,

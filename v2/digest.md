@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 4
 
-Deadline **Sat 12 Sep, 12:30 UTC** — 0d 1h away.
+Deadline **Sat 12 Sep, 12:30 UTC** — 0d 0h away.
 Projections cover GW4–9.
 
 ## GW3 in review — what happened, and what it does and does not change
@@ -42,7 +42,7 @@ _400 players classified: 26 unavailable, 33 minutes loss, 38 minutes watch, 16 m
 - set-piece duty changed: Xhaka (SUN, 0.1 xG, 3 pts; GW4–9 22.7), Barry (EVE, 0.4 xG, 2 pts; GW4–9 22.1), Giles (HUL, 0.0 xG, 8 pts; GW4–9 18.8), N.Angulo (SUN, 0.0 xG, 2 pts; GW4–9 17.3), Slater (HUL, 0.0 xG, 3 pts; GW4–9 16.2)
 - lost their place — benched while healthy: O'Reilly (MCI, 0.0 xG, 0 pts; GW4–9 19.9), Aaronson (LEE, 0.0 xG, 1 pts; GW4–9 14.9), Igor Jesus (NFO, 0.0 xG, 1 pts; GW4–9 14.7), Hume (SUN, 0.0 xG, 1 pts; GW4–9 13.8), Gusto (CHE, 0.0 xG, 1 pts; GW4–9 13.8)
 - hauled on low xG — do not chase: Scott (BOU, 0.1 xG, 10 pts; GW4–9 23.6), Vuskovic (BHA, 0.2 xG, 12 pts; GW4–9 20.0), Janelt (BRE, 0.1 xG, 11 pts; GW4–9 19.1), J.Ramsey (NEW, 0.1 xG, 6 pts; GW4–9 3.3)
-- blanked on good xG — unchanged as targets: N.Jackson (AVL, 0.2 xG, 2 pts; GW4–9 24.7), Gonzalo (FUL, 0.4 xG, 2 pts; GW4–9 24.6), Lewis-Potter (BRE, 0.2 xG, 2 pts; GW4–9 20.6)
+- blanked on good xG — unchanged as targets: N.Jackson (AVL, 0.2 xG, 2 pts; GW4–9 24.8), Gonzalo (FUL, 0.4 xG, 2 pts; GW4–9 24.6), Lewis-Potter (BRE, 0.2 xG, 2 pts; GW4–9 20.6)
 
 ## Captain: **Haaland** (MCI)
 
@@ -53,7 +53,7 @@ The pair adds 7.3 expected captain points including vice fallback; non-appearanc
 |---|---|---|---|---|---|
 | 1 | Haaland | MCI | 7.1 | 7.3 | 95 |
 | 2 | Saka | ARS | 6.5 | 6.9 | 93 |
-| 3 | João Pedro | CHE | 6.3 | 6.8 | 92 |
+| 3 | João Pedro | CHE | 6.3 | 6.7 | 92 |
 | 4 | Foden | MCI | 3.8 | 5.8 | 64 |
 
 ## Starting XI
@@ -66,11 +66,11 @@ The pair adds 7.3 expected captain points including vice fallback; non-appearanc
 | DEF | Tarkowski | EVE | 3.7 | 24.3 |
 | DEF | Milenković | NFO | 3.3 | 22.6 |
 | MID | Saka (V) | ARS | 6.5 | 38.0 |
-| MID | Mbeumo | MUN | 5.4 | 34.5 |
+| MID | Mbeumo | MUN | 5.4 | 34.7 |
 | MID | Kluivert | BOU | 4.5 | 26.0 |
 | MID | Foden | MCI | 3.8 | 24.0 |
-| FWD | Haaland (C) | MCI | 7.1 | 43.8 |
-| FWD | João Pedro | CHE | 6.3 | 31.4 |
+| FWD | Haaland (C) | MCI | 7.1 | 43.7 |
+| FWD | João Pedro | CHE | 6.3 | 31.6 |
 
 **Bench order:** Leno (2.6), O'Shea (3.1), Sadiki (2.7), Obi (0.5)
 
@@ -88,11 +88,11 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 | out | in | £ | XI + captain | auto-sub | total | net |
 |---|---|---|---|---|---|---|
 | Milenković (NFO) | Gvardiol (MCI) | +0.1 | +3.2 | +1.2 | **+4.4** | +4.4 |
-| Sadiki (SUN) | Gomez (BHA) | +0.1 | +1.8 | +2.3 | **+4.2** | +4.2 |
+| Sadiki (SUN) | Gomez (BHA) | +0.1 | +1.9 | +2.3 | **+4.2** | +4.2 |
 | Tarkowski (EVE) | Gvardiol (MCI) | -0.4 | +1.6 | +1.1 | **+2.7** | +2.7 |
 | Kluivert (BOU) | Barnes (NEW) | +0.0 | +1.5 | +0.8 | **+2.3** | +2.3 |
+| Saka (ARS) | Palmer (CHE) | +0.2 | +1.7 | +0.0 | **+1.7** | +1.7 |
 | O'Shea (IPS) | Ajayi (HUL) | +0.2 | +1.6 | -0.2 | **+1.4** | +1.4 |
-| Saka (ARS) | Palmer (CHE) | +0.2 | +1.2 | +0.0 | **+1.2** | +1.2 |
 | Leno (FUL) | Tzolakis (HUL) | +0.1 | +0.7 | +0.1 | **+0.8** | +0.8 |
 | Foden (MCI) | Gakpo (LIV) | +0.2 | +3.5 | -3.0 | **+0.5** | +0.5 |
 
@@ -122,7 +122,7 @@ _Minutes check:_ the verdict above is on the numbers; Foden is a check-first cas
 
 ## The next six weeks, planned
 
-Selected path under the current policy: **401.5** pts (0 hits). Making no move this week and re-planning: 401.5. Selected path versus holding: **+0.0** — not enough; hold.
+Selected path under the current policy: **402.2** pts (0 hits). Making no move this week and re-planning: 402.2. Selected path versus holding: **+0.0** — not enough; hold.
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
@@ -130,16 +130,16 @@ Selected path under the current policy: **401.5** pts (0 hits). Making no move t
 | Sadiki, Milenković → Robinson, Barnes | +0.43 | 4.0 | no |
 | Milenković → Gvardiol | +0.15 | 2.0 | no |
 | Sadiki → Gomez | +1.62 | 2.0 | no |
-| Tarkowski → Gvardiol | -2.36 | 2.0 | no |
+| Tarkowski → Gvardiol | -1.56 | 2.0 | no |
 | Foden → Gakpo | -0.04 | 2.0 | no |
 | Sadiki, Tarkowski → Botman, Barnes | +1.53 | 4.0 | no |
-| Sadiki, Milenković → Maatsen, Barnes | +1.22 | 4.0 | no |
+| Sadiki, Milenković → Maatsen, Barnes | +1.23 | 4.0 | no |
 
-- **GW4** 63.5 pts, C Haaland, 2 FT  hold
+- **GW4** 63.4 pts, C Haaland, 2 FT  hold
 - **GW5** 65.3 pts, C Haaland, 3 FT  Foden → Barnes
-- **GW6** 68.6 pts, C Saka, 3 FT  Raya → Tzolakis, Milenković → Ajayi, Kluivert → Palmer
+- **GW6** 68.8 pts, C Saka, 3 FT  Raya → Tzolakis, Milenković → Ajayi, Kluivert → Palmer
 - **GW7** 67.2 pts, C Haaland, 1 FT  Tarkowski → Andersen
-- **GW8** 68.2 pts, C Palmer, 1 FT  Sadiki → E.Le Fée
+- **GW8** 68.8 pts, C Palmer, 1 FT  Sadiki → E.Le Fée
 - **GW9** 68.6 pts, C Haaland, 1 FT  Andersen → Ballard
 
 _The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
@@ -163,12 +163,12 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Rogers £7.6 | +25.8% | +970,043 | B.Fernandes £12.0 | -12.7% | -570,994 |
-| Palmer £9.7 | +26.1% | +783,908 | O'Reilly £6.4 | -37.9% | -526,608 |
-| Ødegaard £6.7 | +33.5% | +666,036 | Shaw £4.4 | -29.9% | -371,673 |
-| Isak £9.1 | +23.0% | +596,838 | Calvert-Lewin £6.0 | -15.4% | -356,994 |
-| Konsa £4.5 | +31.6% | +577,450 | Mbeumo £7.9 ⭑ | -13.6% | -338,873 |
-| De Cuyper £4.8 | +19.7% | +482,184 | Maguire £4.9 | -30.4% | -338,751 |
+| Rogers £7.6 | +26.3% | +993,429 | B.Fernandes £12.0 | -13.0% | -584,888 |
+| Palmer £9.7 | +26.5% | +802,151 | O'Reilly £6.4 | -38.2% | -530,949 |
+| Ødegaard £6.7 | +33.7% | +679,015 | Shaw £4.4 | -30.9% | -380,023 |
+| Isak £9.1 | +23.3% | +606,056 | Calvert-Lewin £6.0 | -15.7% | -363,550 |
+| Konsa £4.5 | +32.0% | +588,756 | Mbeumo £7.9 ⭑ | -14.0% | -346,433 |
+| De Cuyper £4.8 | +20.0% | +491,699 | Maguire £4.9 | -31.3% | -345,177 |
 
 ⭑ = in your squad.
 
@@ -182,4 +182,4 @@ _Based on 10 price snapshots. This warning is not part of the transfer verdict u
 
 ---
 
-_Generated 2026-09-12 11:26 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-09-12 12:04 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._

@@ -25,6 +25,9 @@ CLAIM_PATTERNS = (
     ("predicted_start", re.compile(r"\b(?:expected|predicted|likely)\s+to start\b", re.I)),
 )
 NEGATED_OUT = re.compile(r"\b(?:not|isn't|is not|hasn't|has not)\s+(?:been\s+)?ruled out\b", re.I)
+UNCERTAIN_ABSENCE = re.compile(
+    r"\b(?:if|unless|whether|might|may|could|would|should|rumou?rs?|"
+    r"denied|denies|deny|incorrect|untrue|not true)\b|\?", re.I)
 RETURN_DATE = re.compile(
     r"\b(?:expected|due)\s+(?:to be )?back(?:\s+on)?\s+(\d{1,2})(?:st|nd|rd|th)?\s+"
     r"(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|"
@@ -59,8 +62,8 @@ def _recent(value: str | None, now: datetime) -> bool:
         if published.tzinfo is None:
             published = published.replace(tzinfo=timezone.utc)
         age = (now - published.astimezone(timezone.utc)).total_seconds()
-        return -86400 <= age <= 7 * 86400
-    except ValueError:
+        return 0 <= age <= 7 * 86400
+    except (ValueError, TypeError, AttributeError):
         return False
 
 
@@ -72,11 +75,17 @@ def _return_date(sentence: str, now: datetime) -> str | None:
         parsed = datetime.strptime(f"{match.group(1)} {match.group(2)[:3]} 2000", "%d %b %Y")
     except ValueError:
         return None
-    candidate = parsed.replace(year=now.year).date()
+    try:
+        candidate = parsed.replace(year=now.year).date()
+    except ValueError:
+        return None
     # A season crosses New Year. Only wrap a month/day into next year when it
     # is clearly on the other side of that boundary, not merely yesterday.
     if (now.date() - candidate).days > 180:
-        candidate = candidate.replace(year=now.year + 1)
+        try:
+            candidate = candidate.replace(year=now.year + 1)
+        except ValueError:
+            return None
     return candidate.isoformat()
 
 
@@ -99,6 +108,7 @@ def extract_claims(document: dict, players: list[dict], *, gw: int,
         if not matched:
             continue
         negated = matched == "explicit_out" and NEGATED_OUT.search(sentence)
+        uncertain = bool(UNCERTAIN_ABSENCE.search(sentence))
         ambiguous = len(mentioned) != 1
         recent = _recent(document.get("published_at"), now)
         return_date = _return_date(sentence, now)
@@ -109,7 +119,7 @@ def extract_claims(document: dict, players: list[dict], *, gw: int,
             re.search(rf"(?<!\w){re.escape(term)}(?!\w)", fixture_text) for term in markers
         ))
         safe = (matched in {"explicit_out", "suspended_until", "return_date"} and not negated
-                and not ambiguous and recent)
+                and not ambiguous and recent and not uncertain)
         if matched == "explicit_out" and not (fixture_matched and fixture_specific):
             safe = False
         if matched in {"suspended_until", "return_date"} and not return_date:
@@ -117,6 +127,7 @@ def extract_claims(document: dict, players: list[dict], *, gw: int,
         reason = "explicit_absence" if safe else (
             "multiple_players_in_sentence" if ambiguous else
             "negated_absence" if negated else
+            "conditional_or_disputed_absence" if uncertain else
             "missing_or_stale_publication_time" if not recent else
             "fixture_not_matched" if matched == "explicit_out" and not (fixture_matched and fixture_specific) else
             "observation_only"

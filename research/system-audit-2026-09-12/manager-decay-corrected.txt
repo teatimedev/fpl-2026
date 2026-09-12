@@ -1,0 +1,4 @@
+1550 matches; scoring only fixtures involving promoted or new-manager clubs, fixed adjustments vs decaying (K_T=30, K_M=15)
+  fixed     n= 485  model log-loss 0.9678  bookmaker 0.9365  Brier 0.5783
+  decaying  n= 485  model log-loss 0.9561  bookmaker 0.9365  Brier 0.5704
+This is a retrospective comparison of the selected shrinkage rules. It neither establishes an optimal constant nor proves the adjustment itself is better than no adjustment.

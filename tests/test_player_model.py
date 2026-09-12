@@ -433,11 +433,11 @@ class CalibrationTests(unittest.TestCase):
 
 
 class ScoringEligibilityTests(unittest.TestCase):
-    def project_scenario(self, minutes, fixtures):
+    def project_scenario(self, minutes, fixtures, start=1.):
         p = make_player(pos='DEF')
         with patch.multiple(PM, START_GW=1, HORIZON=1, LAST_GW=1, WINDOW=1,
                             AVAILABILITY_OVERRIDES=[], GW_DEADLINES={}), \
-                patch.object(PM, 'minutes_model', return_value=(1.0, minutes)), \
+                patch.object(PM, 'minutes_model', return_value=(start, minutes)), \
                 patch.object(PM, 'shrink', return_value=(0.0, 0.0)), \
                 patch.object(PM, 'calibrate'):
             return PM.project({p['id']: p}, {'view': {'MCI': {'1': fixtures}}}, {})[0]
@@ -451,6 +451,17 @@ class ScoringEligibilityTests(unittest.TestCase):
         p = self.project_scenario(90, [])
         for key in ('proj_by_gw', 'play_by_gw', 'start_by_gw', 'mins_by_gw'):
             self.assertEqual(p[key], [0.0])
+
+    def test_double_gameweek_exports_any_appearance_and_total_minutes(self):
+        fx = [dict(xg=0, xgc=0, cs=1)]
+        single = self.project_scenario(90, fx, start=.5)
+        double = self.project_scenario(90, fx * 2, start=.5)
+        self.assertAlmostEqual(double['start_by_gw'][0], .75)
+        p_play = single['availability_by_gw'][0]['p_play']
+        self.assertAlmostEqual(double['play_by_gw'][0], 1 - (1 - p_play) ** 2, places=3)
+        self.assertAlmostEqual(double['mins_by_gw'][0], 2 * single['mins_by_gw'][0], delta=.1)
+        self.assertEqual(double['availability_by_gw'][0]['fixtures'], 2)
+        self.assertIsNone(double['p60_shadow_by_gw'][0])
 
 
 # ---------------------------------------------------------------------- P5

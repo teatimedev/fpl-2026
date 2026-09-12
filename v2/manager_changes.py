@@ -18,21 +18,39 @@ Verify against your own records before trusting a conclusion that leans on
 one club; the split is the point, not any single row.
 """
 
-# 2026/27 (the season being modelled) — mirrors overlay.NEW_MANAGER by club
-NEW_MANAGER = {'BOU', 'CHE', 'CRY', 'FUL', 'IPS', 'LIV', 'MCI', 'NEW', 'NFO', 'TOT'}
+# Verified 12 September 2026 against the official appointment-date table:
+# https://www.premierleague.com/en/managers
+# De Zerbi (31 March 2026) and Carrick (13 January 2026) already managed the
+# previous season's closing matches, so neither is a summer appointment.
+CURRENT_MANAGER_APPOINTMENTS = {
+    'BOU': ('Marco Rose', '2026-06-01'),
+    'CHE': ('Xabi Alonso', '2026-07-01'),
+    'CRY': ('Pierre Sage', '2026-06-15'),
+    'FUL': ('Alvaro Arbeloa', '2026-07-07'),
+    'IPS': ("Gary O'Neil", '2026-06-23'),
+    'LIV': ('Andoni Iraola', '2026-06-04'),
+    'MCI': ('Enzo Maresca', '2026-06-29'),
+    'NEW': ('Matthias Jaissle', '2026-08-05'),
+    'NFO': ('Oliver Glasner', '2026-07-06'),
+}
+NEW_MANAGER = set(CURRENT_MANAGER_APPOINTMENTS)
 
 # Past seasons. Sources: the appointment dates as reported at the time.
-#   2022/23  MUN ten Hag (summer 22); EVE Lampard's first full season.
+#   2022/23  MUN ten Hag (summer 22).
 #   2023/24  CHE Pochettino; TOT Postecoglou; BOU Iraola; WOL O'Neil (Aug 23);
-#            EVE Dyche's first full season.
 #   2024/25  LIV Slot; CHE Maresca; BHA Hurzeler; LEI Cooper; WHU Lopetegui.
-#   2025/26  TOT Frank; BRE Andrews; WHU Potter's first full season.
-#            (The least certain row — check it.)
+#   2025/26  TOT Frank; BRE Andrews.
+# First full seasons are not summer changes: Lampard (31 Jan 2022), Dyche
+# (30 Jan 2023) and Potter (9 Jan 2025) already coached the previous season.
+# Official appointment records:
+# https://www.premierleague.com/en/news/2468044
+# https://www.premierleague.com/en/news/3039338
+# https://www.premierleague.com/en/news/4219619
 NEW_MANAGER_BY_SEASON = {
-    '2022/23': {'MUN', 'EVE'},
-    '2023/24': {'CHE', 'TOT', 'BOU', 'WOL', 'EVE'},
+    '2022/23': {'MUN'},
+    '2023/24': {'CHE', 'TOT', 'BOU', 'WOL'},
     '2024/25': {'LIV', 'CHE', 'BHA', 'LEI', 'WHU'},
-    '2025/26': {'TOT', 'BRE', 'WHU'},
+    '2025/26': {'TOT', 'BRE'},
     '2026/27': NEW_MANAGER,
 }
 

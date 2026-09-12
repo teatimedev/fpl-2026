@@ -19,13 +19,11 @@ with two refinements that matter:
   * exponential time decay, so a result from 2022 counts less than one from
     2026. The half-life is tuned by out-of-sample log-loss rather than guessed.
 
-What this buys over FDR: a full scoreline distribution for every fixture, so
-clean-sheet probability, expected goals conceded and expected goals scored all
-come out calibrated instead of being read off a 2-5 scale.
-
-Validation is against Pinnacle's closing odds, which is the honest benchmark --
-the market is very hard to beat, and a model that cannot get close to it should
-not be trusted to price a defender.
+The model produces a scoreline distribution and clean-sheet probabilities;
+their calibration must be measured separately. Historical validation compares
+with closing market-average prices (complete bookmaker fallback where missing).
+Those closing prices may postdate an FPL deadline and are a retrospective
+benchmark, not proof of decision-time information or player-forecast accuracy.
 """
 import json
 import sqlite3
@@ -39,6 +37,20 @@ ROOT = Path(__file__).resolve().parent.parent
 DB = ROOT / 'v2' / 'fpl.db'
 OUT = ROOT / 'v2' / 'team_ratings.json'
 MAXG = 10          # scoreline grid, 0..MAXG goals
+VALIDATION_METHOD = 'closing-market-date-blocks-v2'
+
+
+def feasible_rho(lam, mu, rho):
+    """Shrink dependence only as far as needed to keep all four cells valid.
+
+    Unlike clipping negative cells afterwards, this retains the Poisson
+    marginals. Ordinary fitted fixtures keep their original rho unchanged.
+    """
+    lam, mu = np.broadcast_arrays(np.asarray(lam, float), np.asarray(mu, float))
+    product, largest = lam * mu, np.maximum(lam, mu)
+    lower = -np.divide(1., largest, out=np.full_like(largest, np.inf), where=largest > 0)
+    upper = np.minimum(1., np.divide(1., product, out=np.full_like(product, np.inf), where=product > 0))
+    return np.clip(rho, lower, upper)
 
 
 # ------------------------------------------------------------------- data
@@ -67,15 +79,16 @@ def tau(hg, ag, lam, mu, rho):
     Independent Poisson gets the 0-0/1-0/0-1/1-1 cell probabilities wrong;
     this reweights exactly those four cells and leaves the rest untouched.
     """
+    rho = feasible_rho(lam, mu, rho)
     t = np.ones_like(lam, dtype=float)
     m00 = (hg == 0) & (ag == 0)
     m01 = (hg == 0) & (ag == 1)
     m10 = (hg == 1) & (ag == 0)
     m11 = (hg == 1) & (ag == 1)
-    t[m00] = 1.0 - lam[m00] * mu[m00] * rho
-    t[m01] = 1.0 + lam[m01] * rho
-    t[m10] = 1.0 + mu[m10] * rho
-    t[m11] = 1.0 - rho
+    t[m00] = 1.0 - lam[m00] * mu[m00] * rho[m00]
+    t[m01] = 1.0 + lam[m01] * rho[m01]
+    t[m10] = 1.0 + mu[m10] * rho[m10]
+    t[m11] = 1.0 - rho[m11]
     return np.clip(t, 1e-9, None)
 
 
@@ -95,6 +108,8 @@ def negloglik(params, hi, ai, hg, ag, w, n_teams):
 
 
 def fit(matches, half_life_days=340.0, ref_date=None):
+    if not matches or not np.isfinite(half_life_days) or half_life_days <= 0:
+        raise ValueError('A team fit needs matches and a positive finite half-life')
     teams = sorted({m['home'] for m in matches} | {m['away'] for m in matches})
     idx = {t: k for k, t in enumerate(teams)}
     n = len(teams)
@@ -105,6 +120,8 @@ def fit(matches, half_life_days=340.0, ref_date=None):
     ag = np.array([m['ag'] for m in matches], dtype=float)
 
     ref = ref_date or max(m['date'] for m in matches)
+    if any(m['date'] > ref for m in matches):
+        raise ValueError('Team fit contains results after its reference date')
     age = np.array([(ref - m['date']).days for m in matches], dtype=float)
     w = np.exp(-np.log(2) * age / half_life_days)
 
@@ -113,6 +130,8 @@ def fit(matches, half_life_days=340.0, ref_date=None):
     res = minimize(negloglik, x0, args=(hi, ai, hg, ag, w, n),
                    method='L-BFGS-B', bounds=bounds,
                    options={'maxiter': 3000, 'ftol': 1e-10})
+    if not res.success or not np.isfinite(res.fun) or not np.all(np.isfinite(res.x)):
+        raise ValueError(f'Team fit did not converge: {res.message}')
     # Only ONE direction is unidentifiable: adding a constant to every attack
     # rating and the same constant to every defence rating leaves every lambda
     # unchanged. Pinning the attack mean to zero (the penalty above) fixes it.
@@ -126,8 +145,9 @@ def fit(matches, half_life_days=340.0, ref_date=None):
     # catch it because scaling both sides' goals together barely moves
     # win/draw/loss, while it wrecks clean sheets — which is most of what a
     # defender is worth in FPL.
-    atk = res.x[:n] - res.x[:n].mean()
-    dfn = res.x[n:2 * n]
+    offset = res.x[:n].mean()
+    atk = res.x[:n] - offset
+    dfn = res.x[n:2 * n] - offset
     return dict(teams=teams, atk=dict(zip(teams, atk)), dfn=dict(zip(teams, dfn)),
                 home_adv=float(res.x[-2]), rho=float(res.x[-1]),
                 nll=float(res.fun), half_life=half_life_days)
@@ -136,14 +156,20 @@ def fit(matches, half_life_days=340.0, ref_date=None):
 # ---------------------------------------------------------- match outcomes
 def dc_matrix(lam, mu, rho):
     """Dixon-Coles scoreline matrix for given expected goals."""
-    k = np.arange(MAXG + 1)
     from scipy.stats import poisson
+    if not all(np.isfinite(v) for v in (lam, mu, rho)) or min(lam, mu) < 0:
+        raise ValueError('Expected goals and dependence must be finite; goal rates cannot be negative')
+    upper = max(MAXG, int(poisson.ppf(1 - 1e-12, max(lam, mu))))
+    if upper > 1000:
+        raise ValueError('Expected goals exceed the supported scoreline grid')
+    k = np.arange(upper + 1)
+    rho = float(feasible_rho(lam, mu, rho))
     ph = poisson.pmf(k, lam)
     pa = poisson.pmf(k, mu)
     M = np.outer(ph, pa)
-    M[0, 0] *= 1 - lam * mu * rho
-    M[0, 1] *= 1 + lam * rho
-    M[1, 0] *= 1 + mu * rho
+    M[0, 0] *= max(0., 1 - lam * mu * rho)
+    M[0, 1] *= max(0., 1 + lam * rho)
+    M[1, 0] *= max(0., 1 + mu * rho)
     M[1, 1] *= 1 - rho
     return M / M.sum()
 
@@ -186,13 +212,11 @@ def market_view(model, home, away, odds, weight=MARKET_WEIGHT):
     """team_view, but with this fixture's expected goals pulled towards what
     the bookmaker odds imply.
 
-    The model validated 1.6% behind Pinnacle's closing line, so when a price
-    exists it is the better estimate. We back out the (home xG, away xG) pair
+    We back out the (home xG, away xG) pair
     whose Dixon-Coles scoreline distribution best reproduces the de-vigged 1X2
     and over/under 2.5 prices, then blend it with the model in log space —
-    80/20 by default, because lines posted a week out are not yet the closing
-    line and the model still knows things about squad news the market has not
-    priced. Falls back to the plain model view if the odds are unusable.
+    80/20 by default. This blend weight is a heuristic, not independently
+    validated here. Falls back to the plain model view for unusable odds.
 
     `odds` is (h, d, a, over25, under25); any may be None.
     """
@@ -203,13 +227,13 @@ def market_view(model, home, away, odds, weight=MARKET_WEIGHT):
         return team_view(model, home, away)
     ph, pd_, pa = p1x2
     po = None
-    if oo and ou:
+    if (oo is not None and ou is not None
+            and all(np.isfinite(v) and v > 1 for v in (oo, ou))):
         po = (1 / oo) / (1 / oo + 1 / ou)
     rho = model['rho']
 
     from scipy.optimize import minimize
     # scorelines with at most two goals in total, for the over/under 2.5 price
-    mask_le2 = np.fromfunction(lambda i, j: i + j <= 2, (MAXG + 1, MAXG + 1))
 
     def loss(x):
         lam, mu = float(np.exp(x[0])), float(np.exp(x[1]))
@@ -217,6 +241,7 @@ def market_view(model, home, away, odds, weight=MARKET_WEIGHT):
         h, d, a = outcome_probs(M)
         l = (h - ph) ** 2 + (a - pa) ** 2 + (d - pd_) ** 2
         if po is not None:
+            mask_le2 = np.fromfunction(lambda i, j: i + j <= 2, M.shape)
             over = 1.0 - float(M[mask_le2].sum())
             l += (over - po) ** 2
         else:
@@ -225,8 +250,9 @@ def market_view(model, home, away, odds, weight=MARKET_WEIGHT):
         return l
 
     res = minimize(loss, [np.log(lam0), np.log(mu0)], method='Nelder-Mead',
+                   bounds=[(np.log(.01), np.log(12.))] * 2,
                    options=dict(xatol=1e-4, fatol=1e-8, maxiter=400))
-    if not res.success and res.fun > 1e-3:
+    if not res.success or not np.isfinite(res.fun) or not np.all(np.isfinite(res.x)):
         return team_view(model, home, away)
     lam_m, mu_m = float(np.exp(res.x[0])), float(np.exp(res.x[1]))
     lam = float(np.exp(weight * np.log(lam_m) + (1 - weight) * np.log(lam0)))
@@ -236,7 +262,7 @@ def market_view(model, home, away, odds, weight=MARKET_WEIGHT):
 
 # ------------------------------------------------------------- validation
 def devig(oh, od, oa):
-    if not (oh and od and oa):
+    if any(v is None or not np.isfinite(v) or v <= 1 for v in (oh, od, oa)):
         return None
     p = np.array([1 / oh, 1 / od, 1 / oa])
     return p / p.sum()
@@ -247,20 +273,29 @@ def logloss(probs, outcome_idx):
     return -np.log(p[outcome_idx])
 
 
+def date_blocks(matches, min_train=600, step=40):
+    """Keep same-date results together when kickoff times are unavailable."""
+    if min_train < 1 or step < 1:
+        raise ValueError('Training size and test step must be positive')
+    ordered = sorted(matches, key=lambda m: m['date'])
+    i = min_train
+    while i < len(ordered) and ordered[i]['date'] == ordered[i - 1]['date']:
+        i += 1
+    while i < len(ordered):
+        end = min(len(ordered), i + step)
+        while end < len(ordered) and ordered[end]['date'] == ordered[end - 1]['date']:
+            end += 1
+        yield ordered[:i], ordered[i:end]
+        i = end
+
+
 def walk_forward(matches, half_life, min_train=600, step=40):
     """Rolling-origin validation: fit on the past, predict the next block, never
     look ahead. Reports the model against the bookmaker on identical matches."""
     m_ll, b_ll, m_br, b_br, n = [], [], [], [], 0
-    i = min_train
-    while i < len(matches):
-        train = matches[:i]
-        test = matches[i:i + step]
-        try:
-            mdl = fit(train, half_life_days=half_life,
-                      ref_date=train[-1]['date'])
-        except Exception:
-            i += step
-            continue
+    for train, test in date_blocks(matches, min_train, step):
+        mdl = fit(train, half_life_days=half_life,
+                  ref_date=train[-1]['date'])
         known = set(mdl['teams'])
         for m in test:
             if m['home'] not in known or m['away'] not in known:
@@ -277,9 +312,10 @@ def walk_forward(matches, half_life, min_train=600, step=40):
             m_br.append(float(((pm - act) ** 2).sum()))
             b_br.append(float(((mk - act) ** 2).sum()))
             n += 1
-        i += step
     return dict(n=n, model_ll=float(np.mean(m_ll)), book_ll=float(np.mean(b_ll)),
-                model_brier=float(np.mean(m_br)), book_brier=float(np.mean(b_br)))
+                model_brier=float(np.mean(m_br)), book_brier=float(np.mean(b_br)),
+                method=VALIDATION_METHOD, cutoff=max(m['date'] for m in matches).isoformat(),
+                basis='Retrospective closing market comparison; not an FPL deadline replay')
 
 
 def walk_forward_adjusted(matches, half_life, adjust, seasons, min_train=600, step=20):
@@ -292,16 +328,9 @@ def walk_forward_adjusted(matches, half_life, adjust, seasons, min_train=600, st
     decay is a function of. Log-loss against the bookmaker on the same
     matches, never looking ahead."""
     m_ll, b_ll, m_br, b_br, n = [], [], [], [], 0
-    i = min_train
-    while i < len(matches):
-        train = matches[:i]
-        test = matches[i:i + step]
-        try:
-            mdl = fit(train, half_life_days=half_life, ref_date=train[-1]['date'])
-            mdl['promoted_prior'] = dict(zip(('atk', 'dfn'), promoted_prior(train)))
-        except Exception:
-            i += step
-            continue
+    for train, test in date_blocks(matches, min_train, step):
+        mdl = fit(train, half_life_days=half_life, ref_date=train[-1]['date'])
+        mdl['promoted_prior'] = dict(zip(('atk', 'dfn'), promoted_prior(train)))
         for m in test:
             if m['season'] not in seasons:
                 continue
@@ -327,7 +356,6 @@ def walk_forward_adjusted(matches, half_life, adjust, seasons, min_train=600, st
             m_br.append(float(((pm - act) ** 2).sum()))
             b_br.append(float(((mk - act) ** 2).sum()))
             n += 1
-        i += step
     if not n:
         return dict(n=0, model_ll=float('nan'), book_ll=float('nan'),
                     model_brier=float('nan'), book_brier=float('nan'))
@@ -385,6 +413,8 @@ if __name__ == '__main__':
                     help='re-run the half-life sweep (slow: many walk-forward '
                          'refits, several minutes). Only worth doing when a lot '
                          'of new results have accumulated.')
+    ap.add_argument('--validate', action='store_true',
+                    help='Recompute the retrospective benchmark at the stored half-life without retuning')
     args = ap.parse_args()
 
     matches = load_matches()
@@ -415,6 +445,10 @@ if __name__ == '__main__':
         prev = json.loads(OUT.read_text()) if OUT.exists() else {}
         hl = prev.get('half_life', DEFAULT_HALF_LIFE)
         v = prev.get('validation', {})
+        if v.get('method') != VALIDATION_METHOD:
+            v = {}
+        if args.validate:
+            v = walk_forward(matches, hl)
         print(f'\nUsing stored half-life: {hl:.0f} days  (pass --tune to re-tune)')
 
     model = fit(matches, half_life_days=hl)

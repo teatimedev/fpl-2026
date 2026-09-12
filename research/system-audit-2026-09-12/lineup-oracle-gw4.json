@@ -1,0 +1,54 @@
+{
+  "gw": 4,
+  "baseline": 63.450121624945965,
+  "optimum": 63.450121624945965,
+  "gain": 0.0,
+  "candidates": 3300,
+  "elapsed_seconds": 2.5655334580224007,
+  "baseline_lineup": {
+    "xi": [
+      "Raya",
+      "Calafiori",
+      "Thiaw",
+      "Tarkowski",
+      "Saka",
+      "Mbeumo",
+      "Haaland",
+      "Jo\u00e3o Pedro",
+      "Kluivert",
+      "Foden",
+      "Milenkovi\u0107"
+    ],
+    "bench": [
+      "Leno",
+      "O'Shea",
+      "Sadiki",
+      "Obi"
+    ],
+    "captain": "Haaland",
+    "vice": "Saka"
+  },
+  "optimum_lineup": {
+    "xi": [
+      "Raya",
+      "Calafiori",
+      "Thiaw",
+      "Tarkowski",
+      "Milenkovi\u0107",
+      "Saka",
+      "Mbeumo",
+      "Foden",
+      "Kluivert",
+      "Haaland",
+      "Jo\u00e3o Pedro"
+    ],
+    "bench": [
+      "Leno",
+      "O'Shea",
+      "Sadiki",
+      "Obi"
+    ],
+    "captain": "Haaland",
+    "vice": "Saka"
+  }
+}

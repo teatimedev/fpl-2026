@@ -1,0 +1,4 @@
+1550 matches; scoring only fixtures involving promoted or new-manager clubs, fixed adjustments vs decaying (K_T=30, K_M=15)
+  fixed     n= 523  model log-loss 0.9707  bookmaker 0.9419  Brier 0.5802
+  decaying  n= 523  model log-loss 0.9600  bookmaker 0.9419  Brier 0.5730
+Read: if decaying does not beat fixed on these fixtures, K_T/K_M are too small (the data is being trusted too early).

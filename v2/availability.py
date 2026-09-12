@@ -58,9 +58,12 @@ def _dated_return(news, season_year=2026):
     match = RETURN_DATE.search(news or "")
     if not match:
         return None
-    parsed = datetime.strptime(f"{match.group(1)} {match.group(2)} 2000", "%d %b %Y")
-    year = season_year if parsed.month >= 7 else season_year + 1
-    return parsed.replace(year=year).date()
+    try:
+        parsed = datetime.strptime(f"{match.group(1)} {match.group(2)} 2000", "%d %b %Y")
+        year = season_year if parsed.month >= 7 else season_year + 1
+        return parsed.replace(year=year).date()
+    except ValueError:
+        return None
 
 
 def status_for_gameweek(status, gw, deadline_gw, *, news="", gw_deadline=None,

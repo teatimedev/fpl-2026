@@ -11,7 +11,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 from v2.news_contracts import aliases_from_bootstrap, load_aliases, load_sources
-from v2.news_extract import extract_claims
+from v2.news_extract import extract_claims, _recent
 from v2.news_fetch import fetch_all
 from v2.gwclock import next_gw
 
@@ -158,6 +158,21 @@ def resolve_claim_conflicts(claims: list[dict]) -> list[dict]:
             claim["reason"] = "conflicting_first_party_claims"
         resolved.append(claim)
     return resolved
+
+
+def retained_claims(previous, unchanged_sources, unchanged_urls, *, gw, now):
+    """Retain same-GW evidence on a 304/outage, without renewing its age."""
+    retained = []
+    for prior in previous:
+        if prior.get('gw') != gw or not (
+                prior.get('source_id') in unchanged_sources or prior.get('url') in unchanged_urls):
+            continue
+        claim = dict(prior, retrieved_from_cache=True)
+        if not _recent(claim.get('published_at'), now):
+            claim.update(decision='candidate', confidence='review',
+                         reason='missing_or_stale_publication_time')
+        retained.append(claim)
+    return retained
 
 
 def _semantic_generated(value: dict) -> list[dict]:
@@ -354,10 +369,9 @@ def run(root: Path = ROOT, *, now: datetime | None = None) -> dict:
                                      fixture_terms=context.get("opponents", set()),
                                      fixture_markers=context.get("match_markers", set())))
     previous_evidence = _read(root / "data/news/evidence.json", {})
-    claims.extend(claim for claim in previous_evidence.get("claims", [])
-                  if (claim.get("source_id") in unchanged_sources or claim.get("url") in unchanged_urls)
-                  and claim.get("gw") == gw)
-    claims = [dict(claim, observed_at=stamp) for claim in
+    claims.extend(retained_claims(previous_evidence.get('claims', []), unchanged_sources,
+                                 unchanged_urls, gw=gw, now=now))
+    claims = [dict(claim, observed_at=claim.get('observed_at', stamp), checked_at=stamp) for claim in
               {claim["id"]: claim for claim in claims}.values()]
     claims = resolve_claim_conflicts(sorted(claims, key=lambda row: row["id"]))
     enabled = sum(1 for source in sources if source["enabled"])
@@ -427,9 +441,9 @@ def run(root: Path = ROOT, *, now: datetime | None = None) -> dict:
                 "notification_key": notification_key, **impact},
     }
     payload["evidence"] = _stabilize(root, "data/news/evidence.json", payload["evidence"])
-    payload["health"] = _stabilize(root, "data/news/source_health.json", payload["health"])
     payload["generated"] = _stabilize(root, "v2/availability.generated.json", payload["generated"])
-    payload["run"] = _stabilize(root, "data/news/latest_run.json", payload["run"])
+    # A successful recheck must advance its visible freshness timestamp even
+    # when the underlying claims are unchanged. Materiality remains semantic.
     persisted = persist_scan(root, payload)
     result = {**payload["run"], **impact, "state_changed": persisted["state_changed"],
               "files_changed": persisted["written"]}

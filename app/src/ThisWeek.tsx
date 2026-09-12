@@ -391,17 +391,19 @@ function NewsStatus({ D, gw, squadIds, openPlayer }: {
             ? 'Official FPL data was unavailable, so the model rebuild was stopped and the last safe inputs were retained.'
             : tone === 'green'
             ? 'Official club pages were healthy in the last published scan. Only explicit, recent absences for the upcoming fixture can change the model automatically.'
-            : 'Some official club pages could not be checked. The model keeps its last safe inputs and this warning stays visible.'}
+            : 'Some club sources failed or supplied no articles. Existing evidence is retained only while its publication date remains valid; missing coverage does not mean a player is available.'}
         </p>
         {applied.map(claim => <NewsClaimRow key={claim.id} claim={claim} applied openPlayer={openPlayer} />)}
         {candidates.map(claim => <NewsClaimRow key={claim.id} claim={claim} openPlayer={openPlayer} />)}
         {owned.length === 0 && <p className="news-none">No new club-news claims matched anyone in your 15.</p>}
         <details className="sync-details">
           <summary>Source health and audit trail</summary>
-          <p>{Math.round(news.health.coverage * 100)}% club-source coverage at the last published state change. Stored evidence is a short excerpt, publication time and public link—not the full article.</p>
+          <p>{Math.round(news.health.coverage * 100)}% of club sources supplied article pages at the latest check. This measures collection coverage; it does not guarantee recent news about every player.</p>
           <ul>
             {news.health.sources.filter(source => source.status !== 'ok').map(source => (
-              <li key={source.id}><strong>{source.club}</strong>: {source.error || source.status}</li>
+              <li key={source.id}><strong>{source.club}</strong>: {source.status === 'no_articles'
+                ? 'The news page loaded, but no article links were found.'
+                : source.error || source.status.replaceAll('_', ' ')}</li>
             ))}
           </ul>
         </details>

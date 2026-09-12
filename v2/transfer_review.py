@@ -20,8 +20,12 @@ def stress_player(player, view, gw, horizon, attack_drop=0.0, start_drop=0.0):
         if i >= len(p['proj_by_gw']):
             continue
         if attack_drop:
-            volume = sum(f['xg'] / 1.45 for f in view.get(p['team'], {}).get(str(week), []))
+            fixtures = view.get(p['team'], {}).get(str(week), [])
+            volume = sum(f['xg'] / 1.45 for f in fixtures)
             minutes = (p.get('mins_by_gw') or [p.get('mins_proj', 0)] * horizon)[i]
+            # Exported minutes are a GW total; attacking volume already sums
+            # fixtures, so use the per-fixture mean duration here.
+            minutes /= max(len(fixtures), 1)
             attack = (p.get('xg90', 0) * GOAL_POINTS[p['pos']] + 3 * p.get('xa90', 0)) \
                 * minutes / 90 * volume * p.get('calibration_k', 1)
             p['proj_by_gw'][i] = max(0, p['proj_by_gw'][i] - attack_drop * attack)

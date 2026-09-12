@@ -7,11 +7,27 @@ from unittest.mock import patch
 
 from v2.news_pipeline import (
     build_generated_overrides, degraded_materiality, materiality, persist_scan,
-    resolve_claim_conflicts, _official_json, _official_outage, _valid_official_payloads,
+    resolve_claim_conflicts, retained_claims, _official_json, _official_outage, _valid_official_payloads,
 )
 
 
 class NewsPipelineTests(unittest.TestCase):
+    def test_cached_absence_does_not_gain_a_new_publication_or_observation_date(self):
+        prior = self.claim(observed_at='2026-08-28T13:00:00Z')
+        results = retained_claims([prior], set(), {prior['url']}, gw=2,
+                                 now=datetime(2026, 9, 10, tzinfo=timezone.utc))
+        self.assertEqual(results[0]['decision'], 'candidate')
+        self.assertEqual(results[0]['observed_at'], prior['observed_at'])
+        self.assertEqual(results[0]['published_at'], prior['published_at'])
+
+    def test_current_absence_survives_a_transient_fetch_failure_until_expiry(self):
+        prior = self.claim()
+        results = retained_claims([prior], set(), {prior['url']}, gw=2,
+                                 now=datetime(2026, 8, 29, tzinfo=timezone.utc))
+        self.assertEqual(results[0]['decision'], 'applied')
+        self.assertEqual(retained_claims([prior], set(), {prior['url']}, gw=3,
+                                        now=datetime(2026, 8, 29, tzinfo=timezone.utc)), [])
+
     def claim(self, **updates):
         row = {
             "id": "ev-1", "player_id": 12, "player": "Bukayo Saka", "club": "ARS",

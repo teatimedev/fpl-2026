@@ -1,0 +1,11 @@
+{
+  "n": 911,
+  "model_ll": 0.9845306064647391,
+  "book_ll": 0.96857259675163,
+  "model_brier": 0.5878049640213222,
+  "book_brier": 0.5764315733330875,
+  "half_life": 280,
+  "basis": "Repaired retrospective; previously selected half-life, not untouched holdout",
+  "odds_basis": "Closing market average; complete-book fallback",
+  "elapsed_seconds": 2.4162751249969006
+}

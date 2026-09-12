@@ -115,12 +115,10 @@ def fetch_source(source: dict, *, article_limit: int = 5,
                     "error": source.get("unsupported_reason")}
     try:
         body, headers = _request(source["url"], conditional=prior)
-        if body is None and prior and prior.get("status") == "ok":
-            return [], {**prior, "_not_modified": True}
         prior_articles = (prior or {}).get("article_validators") or {}
         if body is None:
-            # The index may be unchanged while an article failed last time.
-            # Retry retained article URLs until the source recovers.
+            # An unchanged index says nothing about edits to its articles.
+            # Always revalidate the retained article URLs themselves.
             urls = list(prior_articles)[:article_limit]
             documents = []
             headers = {k: (prior or {}).get(k) for k in ("etag", "last_modified")}
@@ -172,7 +170,7 @@ def fetch_source(source: dict, *, article_limit: int = 5,
             "\n".join(d["text"] for d in documents).encode()).hexdigest()
         loaded_articles = len([doc for doc in documents if doc["url"] != source["url"]])
         status = ("error" if urls and loaded_articles == 0 and article_errors else
-                  "partial" if article_errors else "ok")
+                  "partial" if article_errors else "ok" if urls else "no_articles")
         row = {
             "id": source["id"], "club": source["club"], "publisher": source["publisher"],
             "url": source["url"], "status": status, "documents": len(documents),
@@ -188,8 +186,12 @@ def fetch_source(source: dict, *, article_limit: int = 5,
             row["error"] = "some discovered team-news articles failed; prior evidence retained"
         return documents, row
     except RuntimeError as exc:
-        return [], {"id": source["id"], "club": source["club"], "publisher": source["publisher"],
-                    "url": source["url"], "status": "error", "error": str(exc)[:240]}
+        # Keep bounded prior evidence through a transient index outage. Its
+        # publication time is rechecked by the pipeline before reuse.
+        return [], {**(prior or {}), "id": source["id"], "club": source["club"],
+                    "publisher": source["publisher"], "url": source["url"],
+                    "status": "error", "error": str(exc)[:240],
+                    "_unchanged_articles": list((prior or {}).get("article_validators", {}))}
 
 
 def fetch_all(sources: list[dict], *, workers: int = 6,

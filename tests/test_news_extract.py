@@ -34,6 +34,29 @@ class NewsExtractionTests(unittest.TestCase):
         self.assertEqual(claims[0]["decision"], "applied")
         self.assertEqual(claims[0]["player_id"], 12)
 
+    def test_conditional_questions_and_disputed_absences_never_auto_apply(self):
+        for text in (
+            'If Saka is ruled out against Fulham, he will be replaced.',
+            'Saka will miss Fulham if he fails his fitness test.',
+            'Is it confirmed that Saka is ruled out against Fulham?',
+            'It is not true that Saka is ruled out against Fulham.',
+        ):
+            with self.subTest(text=text):
+                claims = self.extract(text)
+                self.assertTrue(claims)
+                self.assertTrue(all(c['decision'] == 'candidate' for c in claims))
+
+    def test_future_publication_cannot_override_current_availability(self):
+        document = self.document('Saka will miss Fulham.')
+        document['published_at'] = '2026-08-22T12:00:00Z'
+        claims = extract_claims(document, PLAYERS, gw=1, now=self.NOW, fixture_terms={'fulham'})
+        self.assertEqual(claims[0]['decision'], 'candidate')
+
+    def test_invalid_leap_day_stays_review_only_without_crashing_scan(self):
+        claims = self.extract('Saka is expected to be back 29 February.')
+        self.assertEqual(claims[0]['decision'], 'candidate')
+        self.assertNotIn('return_date', claims[0])
+
     def test_late_test_remains_a_candidate(self):
         claims = self.extract("Saka will have a late fitness test.")
         self.assertEqual(claims[0]["claim_type"], "late_test")

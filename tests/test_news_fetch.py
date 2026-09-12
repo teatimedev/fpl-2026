@@ -26,6 +26,28 @@ class NewsFetchTests(unittest.TestCase):
         self.assertEqual(documents, [])
         self.assertEqual(health["status"], "error")
 
+    def test_index_without_articles_is_not_complete_news_coverage(self):
+        with patch('v2.news_fetch._request', return_value=('<title>News</title>', {})):
+            _, health = fetch_source(SOURCE)
+        self.assertEqual(health['status'], 'no_articles')
+
+    def test_healthy_unchanged_index_still_rechecks_updated_article(self):
+        url = 'https://www.arsenal.com/news/team-news'
+        prior = {'status': 'ok', 'etag': 'index', 'article_validators': {url: {'etag': 'old'}}}
+        with patch('v2.news_fetch._request', side_effect=[
+                (None, {'not_modified': True}), ('<title>Now available</title>', {'etag': 'new'})]) as request:
+            documents, health = fetch_source(SOURCE, prior=prior)
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(documents[0]['title'], 'Now available')
+        self.assertEqual(health['article_validators'][url]['etag'], 'new')
+
+    def test_index_outage_preserves_prior_evidence_locations(self):
+        url = 'https://www.arsenal.com/news/team-news'
+        with patch('v2.news_fetch._request', side_effect=RuntimeError('offline')):
+            _, health = fetch_source(SOURCE, prior={'article_validators': {url: {}}})
+        self.assertEqual(health['_unchanged_articles'], [url])
+        self.assertEqual(health['status'], 'error')
+
     def test_discovered_articles_use_and_persist_conditional_validators(self):
         index = '<a href="/news/team-news">Team news</a>'
         calls = [

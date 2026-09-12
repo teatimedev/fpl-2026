@@ -12,11 +12,9 @@ Pulls three sources into one SQLite database:
                                plus closing bookmaker odds, and forward fixtures
                                with market odds once they are posted
 
-The third source is what makes a professional model possible: FPL's own fixture
-difficulty is a 2-5 hand-wave, whereas real results let us fit actual team
-strength, and Pinnacle's closing line is the sharpest public estimate of a
-match's true probabilities. Having both means the model can be checked against
-the market rather than only against itself.
+Match results fit team strength; bookmaker prices provide an external benchmark.
+Historical closing prices are a retrospective comparator, not information known
+at an earlier FPL deadline. Forward prices use the provider's market average.
 
 Usage:  python v2/fetch.py [--refresh]
 """
@@ -28,8 +26,14 @@ import sqlite3
 import sys
 import time
 import urllib.request
+from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+
+try:
+    from .market_odds import football_data_line, valid_line
+except ImportError:
+    from market_odds import football_data_line, valid_line
 
 ROOT = Path(__file__).resolve().parent.parent
 DB = ROOT / 'v2' / 'fpl.db'
@@ -444,11 +448,12 @@ def load_current_season(cx, boot, fixtures):
     return len(results)
 
 
-def load_results(cx):
+def load_results(cx, *, offline=False):
     total = 0
     for s in SEASONS + [CURRENT_FD]:
         try:
-            raw = get(f'{FD}/{s}/E0.csv', binary=True)
+            raw = ((CACHE / f'E0_{s}.csv').read_bytes() if offline else
+                   get(f'{FD}/{s}/E0.csv', binary=True))
         except Exception as e:
             print(f'  20{s[:2]}/{s[2:]}: football-data file unavailable ({e})')
             continue
@@ -471,16 +476,14 @@ def load_results(cx):
                 print(f'    unmapped club: {r["HomeTeam"]} / {r["AwayTeam"]}',
                       file=sys.stderr)
                 continue
+            outcome_odds, _ = football_data_line(r, closing=True)
+            total_odds, _ = football_data_line(r, closing=True, totals=True)
             rows.append((
                 season, r['Date'], h, a, i(r['FTHG']), i(r['FTAG']),
                 i(r.get('HS')), i(r.get('AS')), i(r.get('HST')), i(r.get('AST')),
                 i(r.get('HC')), i(r.get('AC')), i(r.get('HY')), i(r.get('AY')),
                 i(r.get('HR')), i(r.get('AR')),
-                f(r.get('PSH') or r.get('AvgH') or r.get('B365H')),
-                f(r.get('PSD') or r.get('AvgD') or r.get('B365D')),
-                f(r.get('PSA') or r.get('AvgA') or r.get('B365A')),
-                f(r.get('P>2.5') or r.get('Avg>2.5') or r.get('B365>2.5')),
-                f(r.get('P<2.5') or r.get('Avg<2.5') or r.get('B365<2.5')),
+                *outcome_odds, *total_odds,
             ))
         cx.executemany(
             'INSERT OR REPLACE INTO match VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
@@ -506,8 +509,7 @@ def load_market(cx):
 
     Two feeds. football-data.co.uk posts a fixtures file about a week out
     (free, no key). the-odds-api gives live prices from many books — Pinnacle
-    when available — but needs a key: set ODDS_API_KEY (free tier is 500
-    requests a month; this uses one per refresh). Its rows overwrite
+    when freshly timestamped — but needs a key: set ODDS_API_KEY. Its rows overwrite
     football-data's for the same fixture, because they are fresher.
     """
     rows = []
@@ -522,12 +524,10 @@ def load_market(cx):
             a = FD_TO_SHORT.get((r.get('AwayTeam') or '').strip())
             if not h or not a:
                 continue
-            rows.append((_iso_date(r['Date']), h, a,
-                         f(r.get('PSH') or r.get('AvgH') or r.get('B365H')),
-                         f(r.get('PSD') or r.get('AvgD') or r.get('B365D')),
-                         f(r.get('PSA') or r.get('AvgA') or r.get('B365A')),
-                         f(r.get('Avg>2.5') or r.get('B365>2.5')),
-                         f(r.get('Avg<2.5') or r.get('B365<2.5'))))
+            outcome_odds, source = football_data_line(r)
+            total_odds, _ = football_data_line(r, totals=True)
+            if source:
+                rows.append((_iso_date(r['Date']), h, a, *outcome_odds, *total_odds))
     except Exception as e:
         print(f'  football-data market odds unavailable: {e}')
     n_fd = len(rows)
@@ -568,7 +568,8 @@ ODDS_API_TO_SHORT = {
 def load_odds_api():
     """Live match odds from the-odds-api.com, if ODDS_API_KEY is set.
 
-    Uses Pinnacle's price where it is offered, else the average across books.
+    Uses fresh, valid bookmaker lines only. The separate Football-data Pinnacle
+    warning does not establish that this provider's direct feed is stale.
     Returns rows in the `market` shape, or [] (no key, no credit, no network).
     The raw response is cached for inspection.
     """
@@ -581,28 +582,48 @@ def load_odds_api():
     try:
         events = get(url)
     except Exception as e:
-        print(f'  the-odds-api unavailable: {e}')
+        print(f'  the-odds-api unavailable ({type(e).__name__})')
         return []
     (CACHE / 'odds_api.json').write_text(json.dumps(events))
+    return odds_api_rows(events)
+
+
+def odds_api_rows(events, now=None):
+    """Only future fixtures and quotes updated within 24 hours are usable."""
+    now = now or datetime.now(timezone.utc)
     rows = []
     for ev in events:
         h = ODDS_API_TO_SHORT.get((ev.get('home_team') or '').strip().lower())
         a = ODDS_API_TO_SHORT.get((ev.get('away_team') or '').strip().lower())
         if not h or not a:
             continue
-        date = _iso_date(ev.get('commence_time'))
+        try:
+            kickoff = datetime.fromisoformat(ev['commence_time'].replace('Z', '+00:00'))
+            if kickoff.tzinfo is None or kickoff <= now:
+                continue
+        except (KeyError, ValueError, TypeError):
+            continue
+        date = kickoff.date().isoformat()
         # collect per-book prices, prefer pinnacle
         h2h, tot = {}, {}
         for bk in ev.get('bookmakers', []):
             for mk in bk.get('markets', []):
+                try:
+                    updated = datetime.fromisoformat((mk.get('last_update') or bk['last_update']).replace('Z', '+00:00'))
+                    if updated.tzinfo is None or not 0 <= (now - updated).total_seconds() <= 24 * 3600:
+                        continue
+                except (KeyError, ValueError, TypeError, AttributeError):
+                    continue
                 if mk['key'] == 'h2h':
                     o = {x['name']: x['price'] for x in mk['outcomes']}
                     if ev['home_team'] in o and ev['away_team'] in o and 'Draw' in o:
-                        h2h[bk['key']] = (o[ev['home_team']], o['Draw'], o[ev['away_team']])
+                        line = valid_line((o[ev['home_team']], o['Draw'], o[ev['away_team']]))
+                        if line: h2h[bk['key']] = line
                 elif mk['key'] == 'totals':
                     o = {(x['name'], x.get('point')): x['price'] for x in mk['outcomes']}
                     if ('Over', 2.5) in o and ('Under', 2.5) in o:
-                        tot[bk['key']] = (o[('Over', 2.5)], o[('Under', 2.5)])
+                        line = valid_line((o[('Over', 2.5)], o[('Under', 2.5)]))
+                        if line: tot[bk['key']] = line
         if not h2h:
             continue
 
@@ -647,7 +668,7 @@ def main():
     print('Forward market odds')
     load_market(cx)
     cx.execute('INSERT OR REPLACE INTO meta VALUES (?,?)',
-               ('fetched_at', time.strftime('%Y-%m-%dT%H:%M:%S')))
+               ('fetched_at', datetime.now(timezone.utc).isoformat()))
     cx.commit()
 
     print(f'\nwrote {DB}')

@@ -14,6 +14,8 @@ from v2.decision_sim import (  # noqa: E402
     _simulate_player,
     _squad_gw_points,
     _team_draws,
+    _calibrate_pool,
+    _raw_fixture_mean,
     compare,
 )
 
@@ -90,6 +92,66 @@ def _run(a, b, **overrides):
 
 
 class DecisionSimTests(unittest.TestCase):
+    def test_per_fixture_availability_does_not_double_count_any_play_probability(self):
+        p = _player(90, 'Doubler', 'MID', 'N1', 4, .1, .1, start=.5)
+        p.update(start_by_gw=[.75], play_by_gw=[.84], mins_by_gw=[94.4])
+        p['availability_by_gw'][0].update(p_start=.5, p_play=.6, fixtures=2)
+        par = _player_params(p, 1, 1)
+        self.assertEqual(par['p_start'], [.5])
+        self.assertEqual(par['p_play'], [.6])
+        self.assertEqual(par['mins'], [47.2])
+        gf, ga, lam, n, rows = _team_draws({'N1'}, {'N1': {1: [(0, 0), (0, 0)]}},
+                                         1, 1, 10000, np.random.default_rng(SEED))
+        _calibrate_pool({90: par}, rows, gf, ga, lam, n, np.random.default_rng(SEED))
+        _, played = _simulate_player(par, gf, ga, lam, n, np.random.default_rng(SEED))
+        self.assertAlmostEqual(par['p_play_gw'][0], .84)
+        self.assertAlmostEqual(played.mean(), .84, delta=.02)
+
+    def test_contradictory_mirrored_fixture_rates_are_rejected(self):
+        fixtures = {'A': {1: [(2, .7, 'B')]}, 'B': {1: [(1, 2, 'A')]}}
+        with self.assertRaisesRegex(ValueError, 'Contradictory mirrored'):
+            _team_draws({'A', 'B'}, fixtures, 1, 1, 20, np.random.default_rng(SEED))
+
+    def test_double_clean_sheets_are_scored_per_fixture(self):
+        p = _player(90, 'Defender', 'DEF', 'N1', 12, 0, 0, dc90=0, start=1)
+        p['bonus90'] = p['yellow90'] = 0
+        par = _player_params(p, 1, 1)
+        gf, ga, lam, n, _ = _team_draws({'N1'}, {'N1': {1: [(0, 0), (0, 0)]}},
+                                      1, 1, 20, np.random.default_rng(SEED))
+        points, played = _simulate_player(par, gf, ga, lam, n, np.random.default_rng(SEED))
+        np.testing.assert_array_equal(points, np.full((20, 1), 12))
+        self.assertTrue(played.all())
+
+    def test_calibration_preserves_each_gameweek_not_only_the_window_total(self):
+        p = _player(90, 'Defender', 'DEF', 'N1', 3, 0, 0, dc90=0, start=1)
+        p['proj_by_gw'] = [3, 9]
+        p['bonus90'] = p['yellow90'] = 0
+        par = _player_params(p, 1, 2)
+        gf, ga, lam, n, rows = _team_draws({'N1'}, {'N1': {1: [(0, 0), (0, 0)], 2: [(0, 0)]}},
+                                          1, 2, 20, np.random.default_rng(SEED))
+        _calibrate_pool({90: par}, rows, gf, ga, lam, n, np.random.default_rng(SEED))
+        points, _ = _simulate_player(par, gf, ga, lam, n, np.random.default_rng(SEED))
+        np.testing.assert_allclose(points.mean(0), [3, 9])
+
+    def test_analytic_mean_matches_independent_high_volume_sampling(self):
+        p = _player(90, 'Keeper', 'GKP', 'N1', 4, .02, .03, start=.7)
+        p['play_by_gw'] = [.8, .8]
+        par = _player_params(p, 1, 1)
+        gf, ga, lam, n, _ = _team_draws({'N1'}, {'N1': {1: [(2.3, 1.8)]}},
+                                      1, 1, 100_000, np.random.default_rng(9))
+        points, _ = _simulate_player(par, gf, ga, lam, n, np.random.default_rng(10))
+        mean = _raw_fixture_mean(par, 0, 2.3, 1.8, 1.)
+        self.assertLess(abs(points.mean() - mean), 5 * points.std() / np.sqrt(len(points)))
+
+    def test_calibration_does_not_depend_on_pilot_draws_or_simulation_count(self):
+        outputs = []
+        for size, seed in [(5, 1), (100, 42)]:
+            par = _player_params(PLAYERS[23], 1, 2)
+            gf, ga, lam, n, rows = _team_draws({'CHE'}, FIXTURE_XG, 1, 2, size, np.random.default_rng(seed))
+            _calibrate_pool({23: par}, rows, gf, ga, lam, n, np.random.default_rng(seed))
+            outputs.append((par['k_att'], par['add']))
+        self.assertEqual(outputs[0], outputs[1])
+
     def test_fixed_seed_is_deterministic(self):
         first = _run(SQUAD_A, SQUAD_B)
         second = _run(SQUAD_A, SQUAD_B)

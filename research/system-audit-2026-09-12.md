@@ -21,16 +21,16 @@ forecast changes, and documented limits where additional data is required.
 |---|---|---|
 | Source ingestion, schema and historical missingness | Pending | FPL, football-data, imported fixture panel, freshness and joins |
 | Deadline clock, scheduled execution and concurrent publishing | In progress | Stale `is_next` flag, gate windows, snapshot deadlines, code/data revision coherence |
-| Team model and odds | Pending | Chronological fitting, scoring, source timing, promoted/manager priors |
+| Team model and odds | In progress | Repaired scoreline support/rho, coherent closing lines and chronological date blocks; current-manager flags and independent parameter validation remain |
 | Player rates, roles and calibration | Pending | Historical clubs, shrinkage, attack scaling, penalty exposure, current season learning |
 | Starts, cameos, P60 and availability | In progress | Reproduce conditional cameo and short-start scoring; measure against fixture panel |
-| News and scouting | Pending | Article quality, source evidence, expiry, extraction, effect and cost controls |
+| News and scouting | In progress | Corrected false index coverage, skipped article revalidation and retained-evidence expiry; collector coverage and semantic extraction continue |
 | Account state, prices, FT and chips | In progress | User-reported Pedro move is not authenticated account access; unknown price pressure denominator |
-| Legal XI, bench and captain evaluation | Pending | Exhaustive small cases and realistic squads |
+| Legal XI, bench and captain evaluation | In progress | Exhaustive 3,300-lineup GW4 comparison agrees; synthetic keeper case exposes a 1.5-point greedy-search loss |
 | Transfer planner and policy | Pending | Exact versus proxy scoring, candidate coverage, costs, robustness and empirical evidence |
-| Match and decision simulation | Pending | Means, event conservation, dependence, doubles, chips and hits |
+| Match and decision simulation | In progress | Per-fixture scoring and analytic gameweek reconciliation repaired; event conservation and selection dependence still open |
 | Scorecard, retrospective explanations and replay | Pending | Actual submitted results, immutable forecasts, common cohorts and no future leakage |
-| Dashboard and public API | Pending | Runtime, desktop/mobile, stale/mismatched account and network failure states |
+| Dashboard and public API | In progress | Deployed captain pairs, news warning and responsive table verified; remaining data/display audit continues |
 | Documentation, maintainability and deployment | In progress | Claims in README predate known limitations; end-to-end production verification required |
 
 ## Findings and changes
@@ -134,14 +134,38 @@ The browser review caught and fixed a 19px overflow from the new captain table
 and a false Mbeumo playing-time warning derived from positive attacking evidence.
 The 390px render now has a 390px document width; temporary emulation was cleared.
 
-### Simulator reproductions pending repair
+### Batch 3 publication checks
 
-A deterministic defender with 90 minutes and two clean sheets receives 6 rather
-than 12 points because fixtures are collapsed before player scoring. Calibration
-uses one whole-window residual: targets [3, 9] become means [6, 6]. Additional
-open issues include unconserved attacking events, independent player selection,
-and unvalidated distribution shapes. Paired simulations do not supply evidence
-independent of the forecast means to which they are calibrated.
+The 12:04 UTC rebuilt GW4 archive, weekly report and app export all match
+projection hash `f0e9236e73580596239d`. The previous GW1–3 archives are unchanged.
+Tests passed (346 collected Python tests before removing seven duplicate imported
+test cases; 34 app tests), with lint and the production app build passing after
+adding the new source-health statuses to the TypeScript contract. The local
+browser shows the 10/20 source count and explanatory details. At 390px viewport
+width, document width is also 390px; temporary emulation was cleared.
+
+The fast exhaustive lineup search remains experimental in this batch; existing
+production selection is unchanged. Deployment verification is pending.
+Commit `539262c` passed the new GitHub code-check job on Python 3.12 / Node 24
+(run `34691242390`) and completed its Vercel deployment. Production browser
+verification of this second deployment remains to be recorded.
+
+### Simulator repairs and remaining limits
+
+A deterministic defender with 90 minutes and two clean sheets previously
+received 6 rather than 12 points. Fixtures are now scored individually. The
+whole-window calibration that turned targets [3, 9] into means [6, 6] has been
+replaced with analytic reconciliation per gameweek, independent of sample size
+and seed. A 100,000-draw check agrees with the analytic keeper mean within its
+sampling error. Mirrored fixture rates must agree before shared draws are used.
+
+Public double-gameweek starts/appearances now mean any start/appearance, and
+minutes are totals. Per-fixture probabilities remain explicit in availability
+rows. The current assumption is independent availability across fixtures. P60
+shadow outputs are withheld for doubles rather than scored against the wrong
+outcome. Unconserved attacking events, independent player selection and
+unvalidated distribution shapes remain open. Paired simulations do not supply
+evidence independent of the forecast means to which they are calibrated.
 
 ### Team model and market source reproductions pending repair
 
@@ -158,6 +182,69 @@ average and can mix outcomes from different books when individual fields are
 missing. A validated line selector and regressions are prepared; ingestion and
 benchmark reproduction still need updating. No claim of improved predictive
 skill follows from correcting the source labels.
+
+The closing-line selector is now used by results ingestion, with 1,550 cached
+match rows reimported offline. Forward Football-data prices use complete average
+or bookmaker lines; the direct Odds API requires a future kickoff and a quote
+timestamp within 24 hours. Unknown dates cannot match a future fixture, and
+the former +/-10-day match is now an exact fixture-date check.
+
+Scoreline support now expands until the omitted Poisson tail is below 1e-12;
+rho is shrunk into its feasible interval before either likelihood or probability
+evaluation. This preserves Poisson marginals, unlike clipping negative cells
+afterwards. Failed fits stop explicitly, and centring applies the same gauge
+shift to attack and defence. Same-day matches stay together in rolling tests.
+A fixed-280-day reproduction scores 911 historical matches: model log loss
+.98453 versus .96857 for closing prices; Brier .58780 versus .57643. This
+retrospective reuse of a previously selected parameter is not an untouched
+holdout or a new tuning exercise. The market remains ahead on these measures.
+
+The manager-decay comparison accepted alternative constants without passing
+them into the calculation; it now applies its arguments. Three false summer
+appointment labels (Lampard at Everton 2022/23, Dyche there 2023/24 and Potter
+at West Ham 2025/26) were removed using official appointment dates. On the
+corrected 485-match cohort, fixed/decaying log loss is .9678/.9561 versus .9365
+for the market. No unshrunk ablation has established that either adjustment is
+better than no adjustment. The current official manager table also shows
+Tottenham's De Zerbi was appointed on 31 March 2026. Tottenham's false summer
+flag was removed; the other nine flags now have verified appointment dates.
+
+Batch 2 (`539262c`) passed GitHub's new Python 3.12/Node 24 code checks and
+deployed successfully. The production browser shows the captain pair and the
+corrected Mbeumo attacking-evidence warning. Batch 3 currently passes 324
+Python tests; the full rebuilt output is being generated before deployment.
+
+### Lineup search reference
+
+`research/lineup_oracle.py` enumerates all 3,300 legal XI/bench orders for a
+15-player squad and scores their captain pairs and independent autosubs. The
+current GW4 XI and bench are optimal under these equations (63.4501 points),
+but a synthetic 4-point keeper with .5 appearance probability versus a certain
+5-point keeper exposes a 1.5-point loss in the general greedy selector. The
+lower-mean keeper should start: 4 + .5*5 = 6.5, versus 5 + 0*4 = 5. An efficient
+general search now agrees with all 3,300 scalar choices on five randomized
+squads, including zero appearances and negative point draws. This experimental
+implementation takes roughly 2–5 milliseconds after setup. Production
+integration and browser agreement remain outstanding.
+
+### News freshness and coverage
+
+An unchanged news-index response previously skipped revalidation of linked
+articles, missing same-URL updates. Articles are now rechecked individually.
+An index request failure no longer immediately deletes previously verified
+evidence, but retained evidence does not renew its publication/observation age
+and cannot continue auto-applying once stale. A successful scan advances its
+displayed check time even when the claims are unchanged.
+
+Hypothetical, conditional, questioned or disputed absence sentences remain
+review candidates; future publication dates cannot auto-apply. Invalid leap-day
+return dates no longer crash extraction or availability parsing.
+
+Loading an index without finding an article no longer counts as successful
+article coverage. The 11:56 UTC rescan shows 10/20 sources supplying articles,
+with official FPL current and no generated absence overrides. The original
+95% measure mostly described reachable indexes. Article collection is still
+not a guarantee of fresh, player-specific evidence; the dashboard now says so.
 
 ### Playing-time experiment: selected before testing later seasons
 
