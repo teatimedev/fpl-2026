@@ -26,7 +26,7 @@ forecast changes, and documented limits where additional data is required.
 | Starts, cameos, P60 and availability | In progress | Reproduce conditional cameo and short-start scoring; measure against fixture panel |
 | News and scouting | In progress | Corrected false index coverage, skipped article revalidation and retained-evidence expiry; collector coverage and semantic extraction continue |
 | Account state, prices, FT and chips | In progress | User-reported Pedro move is not authenticated account access; unknown price pressure denominator |
-| Legal XI, bench and captain evaluation | In progress | Exhaustive 3,300-lineup GW4 comparison agrees; synthetic keeper case exposes a 1.5-point greedy-search loss |
+| Legal XI, bench and captain evaluation | In progress | Exhaustive selector now wired into Python/browser/simulator; 8 cross-language cases and scalar enumeration pass; chip-specific selection remains |
 | Transfer planner and policy | Pending | Exact versus proxy scoring, candidate coverage, costs, robustness and empirical evidence |
 | Match and decision simulation | In progress | Per-fixture scoring and analytic gameweek reconciliation repaired; event conservation and selection dependence still open |
 | Scorecard, retrospective explanations and replay | Pending | Actual submitted results, immutable forecasts, common cohorts and no future leakage |
@@ -175,6 +175,72 @@ the transfer. Browser totals for Gvardiol/Gomez/Barnes matched Python, and the
 Commit `539262c` passed the new GitHub code-check job on Python 3.12 / Node 24
 (run `34691242390`) and completed its Vercel deployment. Production browser
 verification of this second deployment remains to be recorded.
+
+The sandbox batch was committed as `94c68d5`, passed GitHub check `34693364367`
+and deployed successfully. The production browser confirmed matching transfer
+comparisons and the public sale-proceeds explanation before the GW4 deadline.
+
+### Exhaustive selection, deadline rollover and shared article parsing
+
+The full 3,300-choice XI/bench search now feeds Python, the browser and the
+simulator. Its score and selections agree on eight portable cases, including
+uncertain keepers, blank weeks, negative returns and captain fallback. The
+scalar reference independently enumerates the legal choices; it checks search
+correctness under the existing independent-appearance model, not calibration.
+The keeper reproduction improves 82 to 83.5 points. Stable ties prefer the
+stronger XI/captain and then projected bench order. A cached six-week evaluation
+takes about 5.4ms on this machine. Non-finite keeper inputs fail explicitly.
+
+`v2/decision_version.json` is shared by Python and the compiled browser. Export,
+weekly reports and deadline archives record the version; the browser refuses
+to mix an older decision algorithm with a newer one, even when projections
+have the same hash. Concurrent JSON writers now own separate temporary files;
+a parallel-writer regression verifies complete payloads and cleanup.
+
+At the actual 12:30 UTC GW4 deadline, the browser withheld stale advice as
+intended. Account-history lag nevertheless discarded the successful calendar
+fetch, leaving the header on GW4. Account errors now preserve the independent
+live feed. The local browser subsequently showed GW5 while exposing the account
+failure. Unknown free transfers are NaN, not an invented one. Public lineups
+are labelled with their submitted gameweek, and fixture dots cover the forecast
+window rather than showing already-passed fixtures.
+
+Both news collectors now share `public_article.py`. Inline emphasis no longer
+separates a name from an absence statement. Dates come from article metadata,
+matching JSON-LD or supported publisher headers; generic kickoff times and
+explicitly different related articles cannot date the current page. Hydrated
+links are shared, with first-team filtering. Parser/extractor upgrades force
+revalidation rather than treating a 304 as proof that old extraction was right.
+
+A live City article exposed Enzo Maresca being attributed to Enzo Fernandez
+while a curly apostrophe hid Nico O'Reilly. Accent/apostrophe normalisation,
+first-name disambiguation and direct-subject checks repair these reproductions.
+Return-date expectations alone remain review candidates. An available claim
+from another fixture or stale evidence cannot cancel a scoped explicit absence.
+The 12:41 UTC scan collected articles from 12/20 sources (previously 10/20),
+with two review-only observations and no automatic overrides. This measures
+collection coverage; it is not proof of complete team news.
+
+GW5 forecasts and draft squads are rebuilt. FPL's public account endpoints
+return 503 during deadline processing, so the GW5 personalised report cannot
+yet be rebuilt. GW1–4 forecast archives remain unchanged. The old GW4 report
+stays dated and fails current-advice checks; no account transfer was submitted.
+Publication and production checks for this batch are still in progress.
+
+### Further chip defects identified for the next repair
+
+Chip valuation still uses a separate greedy selector without vice fallback;
+Bench Boost counts the bench without subtracting ordinary autosub cover.
+Free Hit budgeting uses market value rather than sale proceeds, and a solver
+result is read without checking successful optimisation. Several chips can be
+recommended in the same week, despite the one-chip rule. Free Hit eligibility
+also needs its prohibition on consecutive gameweeks. These are open defects,
+not evidence that the current chip advice is optimal.
+
+The current [official FPL rules](https://fantasy.premierleague.com/help/rules)
+confirm retained FT counts through Wildcard/Free Hit, unlimited transfers until
+an entry's first deadline, and the one-chip/consecutive-Free-Hit restrictions.
+Late-entry FT and initial purchase-price reconstruction still need auditing.
 
 ### Simulator repairs and remaining limits
 

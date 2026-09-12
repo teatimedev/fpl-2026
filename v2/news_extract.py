@@ -7,10 +7,12 @@ from __future__ import annotations
 
 import hashlib
 import re
+import unicodedata
 from datetime import datetime, timezone
 
 
 SENTENCE = re.compile(r"(?<=[.!?])\s+|[\r\n]+")
+EXTRACTION_VERSION = 'explicit-fixture-subject-v3'
 CLAIM_PATTERNS = (
     ("explicit_out", re.compile(
         r"\b(?:will miss|is ruled out|has been ruled out|will not be available|"
@@ -41,15 +43,46 @@ def _excerpt(text: str, limit: int = 280) -> str:
     return clean if len(clean) <= limit else clean[:limit - 1].rstrip() + "…"
 
 
+def _name_text(text):
+    value = ''.join(c for c in unicodedata.normalize('NFKD', text)
+                    if not unicodedata.combining(c))
+    return value.translate(str.maketrans({'’': "'", '‘': "'", 'ʼ': "'"}))
+
+
+def _name_spans(sentence, player):
+    text = _name_text(sentence)
+    canonical = _name_text(player['canonical']).casefold().split()
+    for alias in sorted(player['aliases'], key=len, reverse=True):
+        name = _name_text(alias)
+        for match in re.finditer(rf"(?<!\w){re.escape(name)}(?!\w)", text, re.I):
+            if re.search(r'\b(?:boss|manager|coach)\s+$', text[:match.start()], re.I):
+                continue
+            # A first-name FPL display alias must not match a named coach or
+            # another person: Enzo Maresca is not Enzo Fernandez.
+            if len(canonical) > 1 and name.casefold() == canonical[0]:
+                following = re.match(r'\s+([A-Z][A-Za-z\'-]+)\b', text[match.end():])
+                if following and following[1].casefold() not in canonical[1:]:
+                    continue
+            yield match.span()
+
+
+def _direct_subject(sentence, player, pattern):
+    text = _name_text(sentence)
+    for start, _ in (m.span() for m in pattern.finditer(text)):
+        for _, end in _name_spans(sentence, player):
+            if end <= start and re.fullmatch(
+                    r'\s*[,—–-]?\s*(?:(?:is|has|was|remains|now|still|also|definitely|certainly)\s+)*',
+                    text[end:start], re.I):
+                return True
+    return False
+
+
 def _mentions(sentence: str, players: list[dict], club: str) -> list[dict]:
     matches = []
-    folded = sentence.casefold()
     for player in players:
         if player["club"] != club:
             continue
-        aliases = sorted(player["aliases"], key=len, reverse=True)
-        if any(re.search(rf"(?<!\w){re.escape(alias.casefold())}(?!\w)", folded)
-               for alias in aliases):
+        if any(_name_spans(sentence, player)):
             matches.append(player)
     return matches
 
@@ -118,9 +151,12 @@ def extract_claims(document: dict, players: list[dict], *, gw: int,
         fixture_specific = (markers is None or any(
             re.search(rf"(?<!\w){re.escape(term)}(?!\w)", fixture_text) for term in markers
         ))
-        safe = (matched in {"explicit_out", "suspended_until", "return_date"} and not negated
+        safe = (matched in {"explicit_out", "suspended_until"} and not negated
                 and not ambiguous and recent and not uncertain)
-        if matched == "explicit_out" and not (fixture_matched and fixture_specific):
+        direct = len(mentioned) == 1 and _direct_subject(sentence, mentioned[0], pattern)
+        if not direct:
+            safe = False
+        if matched in {'explicit_out', 'suspended_until'} and not (fixture_matched and fixture_specific):
             safe = False
         if matched in {"suspended_until", "return_date"} and not return_date:
             safe = False
@@ -128,6 +164,7 @@ def extract_claims(document: dict, players: list[dict], *, gw: int,
             "multiple_players_in_sentence" if ambiguous else
             "negated_absence" if negated else
             "conditional_or_disputed_absence" if uncertain else
+            "player_not_direct_subject" if not direct and matched in {'explicit_out', 'suspended_until'} else
             "missing_or_stale_publication_time" if not recent else
             "fixture_not_matched" if matched == "explicit_out" and not (fixture_matched and fixture_specific) else
             "observation_only"
@@ -140,6 +177,9 @@ def extract_claims(document: dict, players: list[dict], *, gw: int,
                 "id": "ev-" + hashlib.sha256(stable.encode()).hexdigest()[:16],
                 "player_id": player["player_id"], "player": player["canonical"],
                 "club": player["club"], "claim_type": matched,
+                "extraction_version": EXTRACTION_VERSION,
+                "availability_scope_verified": bool(direct and recent and not uncertain
+                                                     and fixture_matched and fixture_specific),
                 "decision": "applied" if safe else "candidate", "reason": reason,
                 "gw": gw, "confidence": "high" if safe else "review",
                 "source_id": document["source_id"], "publisher": document["publisher"],

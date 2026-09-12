@@ -3,7 +3,7 @@ import unittest
 import urllib.error
 from unittest.mock import patch
 
-from v2.news_fetch import _request, fetch_source
+from v2.news_fetch import _request, fetch_source, PARSER_VERSION
 
 
 SOURCE = {"id": "ars-news", "club": "ARS", "publisher": "Arsenal",
@@ -54,7 +54,7 @@ class NewsFetchTests(unittest.TestCase):
             (index, {"etag": '"index-new"'}),
             (None, {"not_modified": True}),
         ]
-        prior = {"article_validators": {
+        prior = {"parser_version": PARSER_VERSION, "article_validators": {
             "https://www.arsenal.com/news/team-news": {"etag": '"article-old"'}
         }}
         with patch("v2.news_fetch._request", side_effect=calls) as request:
@@ -65,7 +65,7 @@ class NewsFetchTests(unittest.TestCase):
 
     def test_failed_article_preserves_prior_claim_url_fail_safe(self):
         index = '<a href="/news/team-news">Team news</a>'
-        prior = {"article_validators": {
+        prior = {"parser_version": PARSER_VERSION, "article_validators": {
             "https://www.arsenal.com/news/team-news": {"etag": '"article-old"'}
         }}
         with patch("v2.news_fetch._request", side_effect=[(index, {}), RuntimeError("timeout")]):
@@ -95,6 +95,29 @@ class NewsFetchTests(unittest.TestCase):
         self.assertEqual(request.call_count, 2)
         self.assertEqual(documents[0]["url"], article_url)
         self.assertEqual(health["status"], "ok")
+
+    def test_parser_upgrade_forces_new_bytes_and_uses_article_publication_date(self):
+        url = 'https://www.arsenal.com/news/team-news'
+        prior = {'etag': 'index-old', 'article_validators': {url: {'etag': 'article-old'}}}
+        article = ('<time datetime="2026-09-12T15:00:00Z">Kickoff</time>'
+                   '<meta property="article:published_time" content="2026-09-11T12:00:00Z">'
+                   '<article><p><strong>Saka</strong> will miss the match.</p></article>')
+        with patch('v2.news_fetch._request', side_effect=[
+                ('<a href="/news/team-news">Team news</a>', {}), (article, {})]) as request:
+            docs, health = fetch_source(SOURCE, prior=prior)
+        self.assertIsNone(request.call_args_list[0].kwargs['conditional']['etag'])
+        self.assertEqual(request.call_args_list[1].kwargs['conditional'], {})
+        self.assertEqual(docs[1]['text'], 'Saka will miss the match.')
+        self.assertEqual(docs[1]['published_at'], '2026-09-11T12:00:00+00:00')
+        self.assertEqual(health['parser_version'], PARSER_VERSION)
+
+    def test_hydrated_news_links_are_collected_but_academy_links_are_not(self):
+        index = ('<div data-component="FeaturedArticle" data-props=\'{"url":"/news/team-news"}\'></div>'
+                 '<a href="/news/u18-team-news">U18 team news</a>')
+        with patch('v2.news_fetch._request', side_effect=[(index, {}), ('<title>News</title>', {})]) as request:
+            _, health = fetch_source(SOURCE)
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(health['status'], 'ok')
 
 
 if __name__ == "__main__":

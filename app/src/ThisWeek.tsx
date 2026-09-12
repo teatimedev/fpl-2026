@@ -42,7 +42,7 @@ export default function ThisWeek(
   const bank = linked.team?.bank ?? 0
   const fromGw = linked.team?.fromGw ?? null
 
-  const gw = live?.gw ?? D.weekly?.gw ?? D.meta.start_gw ?? 1
+  const gw = live?.gw ?? D.meta.start_gw ?? D.weekly?.gw ?? 1
   const horizon = D.meta.horizon
 
   const pool = useMemo(() => D.players.map(p => withLive(p, live)), [D.players, live])
@@ -134,9 +134,10 @@ export default function ThisWeek(
 
       {ready && !digest && !busy && (
         <section className="panel" role="status" style={{ marginTop: 12 }}>
-          <div className="panel-hd"><h2>{err ? 'Live FPL checks are unavailable' : 'Your weekly advice needs updating'}</h2></div>
+          <div className="panel-hd"><h2>{err ? (live ? 'Your FPL account needs checking' : 'Live FPL checks are unavailable') : 'Your weekly advice needs updating'}</h2></div>
           <p className="week-refresh">{err
-            ? 'The live feed could not be checked. Verify your current squad, prices and team news in FPL before making changes.'
+            ? (live ? 'The player feed is available, but your squad and free transfers could not be verified. Account updates can lag behind the deadline.'
+              : 'The live feed could not be checked. Current advice will return when the FPL checks succeed.')
             : 'Your team or the latest information no longer matches this analysis. Fresh advice is needed before making transfers.'}</p>
           <details className="scenario-details"><summary>What needs updating?</summary>
             <ul className="problems soft" style={{ margin: 14 }}>

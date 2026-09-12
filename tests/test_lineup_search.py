@@ -1,4 +1,6 @@
 import random
+import json
+from pathlib import Path
 
 import pytest
 
@@ -31,3 +33,30 @@ def test_reserve_keeper_covers_a_higher_conditional_value_starter():
     score, lineup = search(fixture.squad, 1)
     assert score == 83.5
     assert lineup.xi[0]['id'] == 'g1'
+
+
+def test_simulator_and_browser_fixtures_use_the_same_selected_lineup():
+    from v2.decision_sim import _pick_lineup
+    from v2.squad_evaluator import evaluate_week
+    path = Path(__file__).resolve().parents[1] / 'app/tests/fixtures/lineup-parity.json'
+    for case in json.loads(path.read_text())['cases']:
+        squad, expected = case['squad'], case['expected']
+        value = evaluate_week(squad, 1)
+        assert value.total == pytest.approx(expected['score'], abs=1e-9)
+        pars = [dict(id=p['id'], pos=p['pos'], proj=p['proj_by_gw'],
+                     p_play=[0.], p_play_gw=p['play_by_gw']) for p in squad]
+        lineup = _pick_lineup(pars, 0, 4)
+        for key in ['xi', 'bench']:
+            assert [squad[i]['id'] for i in lineup[key]] == expected[key]
+        for key in ['captain', 'vice']:
+            assert squad[lineup[key]]['id'] == expected[key]
+
+
+@pytest.mark.parametrize('field,value', [('proj_by_gw', float('nan')),
+                                       ('play_by_gw', float('inf'))])
+def test_invalid_keeper_values_do_not_become_valid_lineups(field, value):
+    fixture = fixtures.SquadRuleTests()
+    fixture.setUp()
+    fixture.squad[0][field] = [value]
+    with pytest.raises(ValueError, match='finite'):
+        search(fixture.squad, 1)

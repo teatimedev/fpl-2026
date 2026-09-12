@@ -1,12 +1,12 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-09-12T11:56:11Z",
+  "checked_at": "2026-09-12T12:41:55Z",
   "claims": 2,
-  "coverage": 0.5,
-  "deadline": "2026-09-12T12:30:00Z",
-  "gw": 4,
-  "notification_key": "cf689c5a14407f712ebe",
+  "coverage": 0.6,
+  "deadline": "2026-09-18T17:30:00Z",
+  "gw": 5,
+  "notification_key": "d879524f4b61e51b41d4",
   "notify_required": false,
   "official_fpl": {
     "1": {

@@ -1,5 +1,6 @@
 """One source of truth for FPL lineup, autosub and squad-value rules."""
 from dataclasses import dataclass
+import math
 from typing import Callable, Mapping, Sequence
 
 
@@ -57,12 +58,17 @@ def gw_points(player, gw):
 def play_probability(player, gw):
     values = player.get("play_by_gw") or []
     if 0 <= gw - 1 < len(values):
-        return max(0.0, min(1.0, float(values[gw - 1])))
+        value = float(values[gw - 1])
+        if not math.isfinite(value):
+            raise ValueError('Appearance probability must be finite')
+        return max(0.0, min(1.0, value))
     if player.get("status") == "u":
         return 0.0
     starts = player.get("start_by_gw") or []
     start = (float(starts[gw - 1]) if 0 <= gw - 1 < len(starts)
              else float(player.get("start_rate", 1.0)))
+    if not math.isfinite(start):
+        raise ValueError('Starting probability must be finite')
     return max(0.0, min(1.0, start + (1.0 - start) * 0.20))
 
 
@@ -88,7 +94,19 @@ def captain_options(xi, gw, points=gw_points, play=play_probability):
 
 def pick_lineup(squad: Sequence[Mapping], gw: int,
                 points: Callable[[Mapping, int], float] = gw_points):
-    """Pick the highest-projected legal XI and ordered bench for one GW."""
+    """Maximise XI, captain fallback and autosubs for a complete squad.
+
+    Arbitrary candidate pools and custom linear objectives retain the greedy
+    positional selector used to construct solver proxies.
+    """
+    if (points is gw_points and len(squad) == 15
+            and all(sum(p['pos'] == pos for p in squad) == n
+                    for pos, n in SQUAD_SHAPE.items())):
+        try:
+            from .lineup_search import search
+        except ImportError:
+            from lineup_search import search
+        return search(squad, gw)[1]
     key = lambda p: points(p, gw)
     by_pos = {pos: [] for pos in POS_ORDER}
     for player in squad:

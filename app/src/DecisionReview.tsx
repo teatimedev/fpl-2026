@@ -18,7 +18,7 @@ export function DecisionReview({ D, gw, ids, current, openPlayer }: {
   const covered = new Set(active.map(c => c.player_id))
   const cases = D.weekly?.case_studies
   const recent = cases && cases.forecast_id === D.meta.forecast_id ? cases.players.filter(p => watched.includes(p.id)) : []
-  const lab = D.policy_lab && D.policy_lab.forecast_id === D.meta.forecast_id && D.policy_lab.gw === gw
+  const lab = current && D.policy_lab && D.policy_lab.forecast_id === D.meta.forecast_id && D.policy_lab.gw === gw
     && D.policy_lab.account.ids.length === ids.length && D.policy_lab.account.ids.every(id => ids.includes(id))
     && D.policy_lab.account.bank === D.weekly?.squad.bank && D.policy_lab.account.ft === D.weekly?.squad.ft
     ? D.policy_lab : null
@@ -41,7 +41,7 @@ export function DecisionReview({ D, gw, ids, current, openPlayer }: {
             <button className="plink strong" onClick={() => openPlayer(selected.player_id)}>{name(selected.player_id)}</button>
             {' → '}<button className="plink strong" onClick={() => openPlayer(selected.replacement!)}>{name(selected.replacement)}</button>
           </p>
-          <p>Current model: <strong className="mono">{signed(selected.net ?? 0)} points</strong> over the window;
+          <p>{current ? 'Current model' : 'Archived model'}: <strong className="mono">{signed(selected.net ?? 0)} points</strong> over the window;
             {' '}<strong className="mono">{signed(selected.now_net ?? 0)}</strong> in GW{review.gw}, both after hits.
             {selected.sell_price != null && <> Sell £{selected.sell_price.toFixed(1)}m · buy £{selected.buy_price?.toFixed(1)}m.</>}
           </p>

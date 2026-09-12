@@ -1,5 +1,8 @@
 import type { Data, WeeklyPlan } from './types'
 import type { LiveState } from './weekly'
+import decisionVersion from '../../v2/decision_version.json' with { type: 'json' }
+
+export const DECISION_VERSION = decisionVersion.version
 
 /** A hold instruction cannot display a path that spends transfers now. */
 export function planForInstruction(plan: WeeklyPlan | null, hold: boolean) {
@@ -11,7 +14,9 @@ export function canReadSavedReview(D: Data, entryId: string, now = Date.now()) {
   const w = D.weekly
   if (!w || !entryId || String(w.squad.entry_id) !== entryId
       || w.gw !== D.meta.start_gw || !D.meta.forecast_id
-      || w.forecast_id !== D.meta.forecast_id) return false
+      || w.forecast_id !== D.meta.forecast_id
+      || w.decision_version !== DECISION_VERSION
+      || D.meta.decision_version !== DECISION_VERSION) return false
   const generated = Date.parse(D.meta.generated.replace(' ', 'T').replace(/ UTC$/, 'Z'))
   const deadline = Date.parse(w.deadline)
   return Number.isFinite(generated) && Number.isFinite(deadline)
@@ -36,6 +41,7 @@ export function recommendationState(D: Data, live: LiveState | null, ids: number
   if (!live) reason.push('Waiting for live FPL data to verify the deadline and player status.')
   if (D.meta.start_gw !== gw) reason.push(`The published model is for GW${D.meta.start_gw}; the next deadline is GW${gw}.`)
   if (!D.meta.forecast_id) reason.push('This model predates the forecast identity checks.')
+  if (D.meta.decision_version !== DECISION_VERSION) reason.push('The saved analysis needs rebuilding for this decision model.')
   const generated = Date.parse(D.meta.generated.replace(' ', 'T').replace(/ UTC$/, 'Z'))
   if (!Number.isFinite(generated) || generated > now || now - generated > 72 * 3600000) reason.push('The model needs a fresh rebuild.')
   if (live && (!Number.isFinite(Date.parse(live.deadline)) || now >= Date.parse(live.deadline)))
@@ -56,7 +62,7 @@ export function recommendationState(D: Data, live: LiveState | null, ids: number
     reason.push('A transfer target is missing from the model or live player feed.')
   const targetChanges = statusChanges.filter(p => relevant.has(p.id) && !ids.includes(p.id))
   if (targetChanges.length) reason.push(`Transfer-target news needs refreshing: ${targetChanges.slice(0, 4).map(p => p.name).join(', ')}.`)
-  if (!w || w.gw !== gw || w.forecast_id !== D.meta.forecast_id)
+  if (!w || w.gw !== gw || w.forecast_id !== D.meta.forecast_id || w.decision_version !== DECISION_VERSION)
     reason.push('The detailed recommendation does not match this forecast.')
   if (w && (ids.length !== 15 || new Set(ids).size !== 15 || w.squad.ids.length !== 15
       || !ids.every(i => w.squad.ids.includes(i)))) reason.push('The analysed squad differs from the loaded squad.')

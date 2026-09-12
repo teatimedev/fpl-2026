@@ -24,7 +24,7 @@ export interface LinkedTeam {
   team: LoadedTeam | null
   summary: EntrySummary | null
   history: EntryHistory | null
-  /** free transfers at this deadline: inferred from history when linked and public, else 1 (15 before GW1) */
+  /** free transfers from validated public history; NaN when unavailable */
   ft: number
 }
 
@@ -82,13 +82,20 @@ export function useLinkedTeam(defaultEntryId = '', weekly?: Weekly | null): Link
         setLive(l)
         if (!entryId) return
         const id = Number(entryId)
-        const [t, s, h] = await Promise.all([
-          loadTeam(id, l.gw), loadEntry(id), loadEntryHistory(id),
-        ])
-        if (cancelled) return
-        if (t && !h) throw new Error('FPL team history is unavailable; free transfers cannot be verified')
-        if (t && h) validateHistory(h, l.gw - 1)
-        setTeam(t); setSummary(s); setHistory(h)
+        try {
+          const [t, s, h] = await Promise.all([
+            loadTeam(id, l.gw), loadEntry(id), loadEntryHistory(id),
+          ])
+          if (cancelled) return
+          setSummary(s)
+          if (t && !h) throw new Error('FPL team history is unavailable; free transfers cannot be verified')
+          if (t && h) validateHistory(h, l.gw - 1)
+          setTeam(t); setHistory(h)
+        } catch (error) {
+          // Account publication can lag the deadline calendar. Preserve the
+          // independently verified GW/player feed when that happens.
+          if (!cancelled) setErr(String((error as Error)?.message ?? error))
+        }
       })
       .catch(e => {
         if (!cancelled) { setLive(null); setErr(String(e?.message ?? e)) }
@@ -98,7 +105,7 @@ export function useLinkedTeam(defaultEntryId = '', weekly?: Weekly | null): Link
   }, [entryId, refresh])
 
   const gw = live?.gw ?? 1
-  const ft = team ? inferFreeTransfers(history, gw) : (gw <= 1 ? 15 : 1)
+  const ft = team ? inferFreeTransfers(history, gw) : (live?.gw === 1 ? 15 : NaN)
 
   const confirmed = confirmedTeam(weekly, entryId, gw, team, ft)
   return { entryId, setEntryId, live, busy, err, summary, history, ...confirmed }

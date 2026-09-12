@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { recommendationState, planForInstruction, canReadSavedReview } from '../src/coherence.ts'
+import { recommendationState, planForInstruction, canReadSavedReview, DECISION_VERSION } from '../src/coherence.ts'
 
 test('hold instructions use the banked path and do not assume rejected moves happened', () => {
   const act = [{ gw: 4, ft: 3, in_: [1, 2], out: [3, 4] }]
@@ -13,14 +13,18 @@ test('hold instructions use the banked path and do not assume rejected moves hap
 const now = Date.parse('2026-09-06T10:00:00Z')
 const ids = Array.from({ length: 15 }, (_, i) => i + 1)
 const data = {
-  meta: { start_gw: 4, horizon: 9, generated: '2026-09-06 09:00 UTC', forecast_id: 'one' },
+  meta: { start_gw: 4, horizon: 9, generated: '2026-09-06 09:00 UTC', forecast_id: 'one', decision_version: DECISION_VERSION },
   players: ids.map(id => ({ id, name: 'Player' + id, status: 'a', news: '', price: 5, proj_by_gw: [0, 0, 0, 5] })),
-  weekly: { gw: 4, forecast_id: 'one', squad: { ids, bank: 0, ft: 3, entry_id: 123 } },
+  weekly: { gw: 4, forecast_id: 'one', decision_version: DECISION_VERSION, squad: { ids, bank: 0, ft: 3, entry_id: 123 } },
 }
 const live = { gw: 4, deadline: '2026-09-12T12:30:00Z', elements: new Map(ids.map(id => [id, { now_cost: 50, status: 'a', news: '' }])) }
 const check = (d = data, l = live, bank = 0, ft = 3, account = '123') => recommendationState(d, l, ids, bank, ft, account, now)
 
 test('matching current forecast and account accepted', () => assert.equal(check().digestReady, true))
+test('the same projections with an older decision algorithm require a rebuild', () => {
+  assert.equal(check({ ...data, meta: { ...data.meta, decision_version: 'old' } }).projectionsReady, false)
+  assert.equal(check({ ...data, weekly: { ...data.weekly, decision_version: 'old' } }).digestReady, false)
+})
 test('gameweek rollover cannot relabel an old digest', () => {
   assert.equal(check({ ...data, weekly: { ...data.weekly, gw: 3 } }).digestReady, false)
   assert.equal(check({ ...data, meta: { ...data.meta, start_gw: 3 } }).projectionsReady, false)

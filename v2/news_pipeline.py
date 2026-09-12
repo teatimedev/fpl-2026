@@ -11,7 +11,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 from v2.news_contracts import aliases_from_bootstrap, load_aliases, load_sources
-from v2.news_extract import extract_claims, _recent
+from v2.news_extract import extract_claims, _recent, EXTRACTION_VERSION
 from v2.news_fetch import fetch_all
 from v2.gwclock import next_gw
 
@@ -103,7 +103,7 @@ def build_generated_overrides(claims: list[dict], *, gw: int, deadlines: dict[in
     for claim in claims:
         if claim.get("decision") == "applied":
             by_player.setdefault(int(claim["player_id"]), []).append(claim)
-        if claim.get("claim_type") == "available":
+        if claim.get("claim_type") == "available" and claim.get('availability_scope_verified'):
             conflicts.add(int(claim["player_id"]))
     for player_id, evidence in sorted(by_player.items()):
         if player_id in conflicts:
@@ -143,7 +143,7 @@ def build_generated_overrides(claims: list[dict], *, gw: int, deadlines: dict[in
 
 def resolve_claim_conflicts(claims: list[dict]) -> list[dict]:
     available = {int(claim["player_id"]) for claim in claims
-                 if claim.get("claim_type") == "available"}
+                 if claim.get("claim_type") == "available" and claim.get('availability_scope_verified')}
     dated: dict[int, set[str]] = {}
     for claim in claims:
         if claim.get("decision") == "applied" and claim.get("return_date"):
@@ -168,8 +168,13 @@ def retained_claims(previous, unchanged_sources, unchanged_urls, *, gw, now):
                 prior.get('source_id') in unchanged_sources or prior.get('url') in unchanged_urls):
             continue
         claim = dict(prior, retrieved_from_cache=True)
+        if claim.get('extraction_version') != EXTRACTION_VERSION:
+            claim.update(decision='candidate', confidence='review',
+                         availability_scope_verified=False,
+                         reason='extraction_rules_changed_recheck_required')
         if not _recent(claim.get('published_at'), now):
             claim.update(decision='candidate', confidence='review',
+                         availability_scope_verified=False,
                          reason='missing_or_stale_publication_time')
         retained.append(claim)
     return retained

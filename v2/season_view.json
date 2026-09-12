@@ -67,8 +67,8 @@
  },
  "home_adv": 0.1760921214287283,
  "rho": -0.106542600825775,
- "start_gw": 4,
- "horizon": 9,
+ "start_gw": 5,
+ "horizon": 10,
  "view": {
   "ARS": {
    "1": [

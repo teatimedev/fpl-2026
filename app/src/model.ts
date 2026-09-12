@@ -1,6 +1,7 @@
 import type { Player, Pos } from './types'
 import { XI_MIN, XI_MAX, POS_ORDER, MAX_PER_CLUB } from './types.ts'
 import type { EntryHistory } from './weekly'
+import { optimalLineup } from './lineupSearch.ts'
 
 /**
  * The model, in the browser: the single TypeScript mirror of v2/weekly.py.
@@ -28,6 +29,9 @@ export function thisGw(p: Player, gw: number): number {
 
 /** Best legal XI for one specific gameweek (not the whole horizon). */
 export function xiForGw(squad: Player[], gw: number) {
+  if (squad.length === 15 && [2, 5, 5, 3].every((n, i) => squad.filter(p => p.pos === POS_ORDER[i]).length === n)) {
+    return optimalLineup(squad, gw, thisGw, playProbability)
+  }
   const byPos: Record<Pos, Player[]> = { GKP: [], DEF: [], MID: [], FWD: [] }
   for (const p of squad) byPos[p.pos].push(p)
   for (const k of POS_ORDER) byPos[k].sort((a, b) => thisGw(b, gw) - thisGw(a, gw))

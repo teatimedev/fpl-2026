@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { accountSellingValues, bankAfterMoves } from '../src/transferBudget.ts'
 import { rankTransfers } from '../src/model.ts'
+import { DECISION_VERSION } from '../src/coherence.ts'
 
 test('sandbox uses actual sale proceeds rather than a market-price gain', () => {
   const moves = [{ out: { id: 1, price: 5.5 }, in: { id: 2, price: 5.4 } }]
@@ -15,9 +16,9 @@ test('selling values require the matching fresh account, forecast and complete m
   const values = Object.fromEntries(ids.map(id => [id, 5.2]))
   const now = Date.parse('2026-09-12T10:00:00Z')
   const data = {
-    meta: { start_gw: 4, generated: '2026-09-12T09:00:00Z', forecast_id: 'f' },
+    meta: { start_gw: 4, generated: '2026-09-12T09:00:00Z', forecast_id: 'f', decision_version: DECISION_VERSION },
     players: ids.map(id => ({ id, price: 5.5, status: 'a', news: '' })),
-    weekly: { gw: 4, forecast_id: 'f', squad: { ids, bank: .1, ft: 2, entry_id: 123, sell_prices: values } },
+    weekly: { gw: 4, forecast_id: 'f', decision_version: DECISION_VERSION, squad: { ids, bank: .1, ft: 2, entry_id: 123, sell_prices: values } },
   }
   const live = { gw: 4, deadline: '2026-09-12T12:30:00Z', elements: new Map(ids.map(id => [id, { now_cost: 55, status: 'a', news: '' }])) }
   const check = (account = '123') => accountSellingValues(data, live, ids, .1, 2, account, now)

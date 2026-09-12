@@ -39,6 +39,10 @@ class CollectorTests(unittest.TestCase):
         doc = parse_article('<time datetime="2026-09-08T19:00:00Z">Kickoff</time>', {'url':'https://example.com/report'})
         self.assertIsNone(doc['published_at'])
 
+    def test_a_single_explicitly_different_jsonld_article_cannot_date_the_page(self):
+        raw = '<script type="application/ld+json">{"@type":"NewsArticle","url":"https://example.com/other","datePublished":"2026-09-05T10:00:00Z"}</script>'
+        self.assertIsNone(parse_article(raw, {'url': 'https://example.com/report'})['published_at'])
+
     def test_city_visible_byline_uses_british_summer_time(self):
         doc = parse_article('<p>Sat 05 Sep 2026, 18:15</p>', {'url':'https://www.mancity.com/news/mens/report'})
         self.assertEqual(doc['published_at'], '2026-09-05T17:15:00+00:00')

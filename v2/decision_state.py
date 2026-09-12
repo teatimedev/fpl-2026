@@ -2,8 +2,10 @@
 import hashlib
 import json
 import sqlite3
+import tempfile
 from pathlib import Path
 
+DECISION_VERSION = json.loads(Path(__file__).with_name('decision_version.json').read_text())['version']
 
 def forecast_id(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()[:20]
@@ -52,6 +54,15 @@ def public_selling_prices(ids, elements, transfers, history, db_path):
 def atomic_json(path, payload):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(path.suffix + '.tmp')
-    tmp.write_text(json.dumps(payload, separators=(',', ':'), allow_nan=False))
-    tmp.replace(path)
+    encoded = json.dumps(payload, separators=(',', ':'), allow_nan=False)
+    # Each writer owns its temporary file. A fixed .tmp name allows concurrent
+    # writers to replace or delete one another's in-progress output.
+    with tempfile.NamedTemporaryFile(mode='w', dir=path.parent,
+            prefix=path.name + '.', suffix='.tmp', delete=False) as handle:
+        tmp = Path(handle.name)
+        try:
+            handle.write(encoded)
+            handle.flush()
+            tmp.replace(path)
+        finally:
+            tmp.unlink(missing_ok=True)

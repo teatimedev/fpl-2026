@@ -145,7 +145,7 @@ export default function MarketTable({
                   <td style={{ color: 'var(--chalk-dim)' }}>{p.pts_last}</td>
                   <td style={{ color: 'var(--chalk-dim)' }}>{p.sel_pct.toFixed(1)}%</td>
                   <td style={{ color: 'var(--chalk-dim)' }}>{p.mins_proj}</td>
-                  <td className="l"><Pips fixtures={D.schedule[p.team] ?? []} /></td>
+                  <td className="l"><Pips fixtures={D.schedule[p.team] ?? []} startGw={D.meta.start_gw} horizon={D.meta.horizon} /></td>
                   <td>
                     {picked ? (
                       onRemove ? (

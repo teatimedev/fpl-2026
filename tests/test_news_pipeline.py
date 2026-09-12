@@ -4,6 +4,7 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
+from v2.news_extract import EXTRACTION_VERSION
 
 from v2.news_pipeline import (
     build_generated_overrides, degraded_materiality, materiality, persist_scan,
@@ -30,6 +31,7 @@ class NewsPipelineTests(unittest.TestCase):
 
     def claim(self, **updates):
         row = {
+            'extraction_version': EXTRACTION_VERSION,
             "id": "ev-1", "player_id": 12, "player": "Bukayo Saka", "club": "ARS",
             "claim_type": "explicit_out", "decision": "applied", "gw": 2,
             "source_id": "ars-team-news", "publisher": "Arsenal",
@@ -38,6 +40,13 @@ class NewsPipelineTests(unittest.TestCase):
         }
         row.update(updates)
         return row
+
+    def test_unchanged_bytes_cannot_validate_a_claim_from_an_older_extractor(self):
+        prior = self.claim(extraction_version='old')
+        claims = retained_claims([prior], set(), {prior['url']}, gw=2,
+                                 now=datetime(2026, 8, 29, tzinfo=timezone.utc))
+        self.assertEqual(claims[0]['decision'], 'candidate')
+        self.assertEqual(claims[0]['reason'], 'extraction_rules_changed_recheck_required')
 
     def test_explicit_out_builds_expiring_override(self):
         out = build_generated_overrides([self.claim()], gw=2, deadlines={2: "2026-08-29T11:00:00Z"}, generated_at="2026-08-28T13:00:00Z")
@@ -99,12 +108,21 @@ class NewsPipelineTests(unittest.TestCase):
 
     def test_available_claim_conflicts_fail_safe(self):
         claims = [self.claim(), self.claim(id="ev-2", claim_type="available",
-                                          decision="candidate", excerpt="Saka is available.")]
+                                          decision="candidate", excerpt="Saka is available.",
+                                          availability_scope_verified=True)]
         out = build_generated_overrides(claims, gw=2, deadlines={2: "2026-08-29T11:00:00Z"}, generated_at="x")
         self.assertEqual(out["overrides"], [])
         resolved = resolve_claim_conflicts(claims)
         self.assertEqual({claim["decision"] for claim in resolved}, {"candidate"})
         self.assertIn("conflicting_first_party_claims", {claim.get("reason") for claim in resolved})
+
+    def test_an_available_claim_from_a_different_fixture_cannot_cancel_an_absence(self):
+        claims = [self.claim(), self.claim(id='ev-2', claim_type='available',
+                  decision='candidate', availability_scope_verified=False)]
+        resolved = resolve_claim_conflicts(claims)
+        self.assertEqual(resolved[0]['decision'], 'applied')
+        self.assertEqual(len(build_generated_overrides(resolved, gw=2, deadlines={},
+                                                       generated_at='x')['overrides']), 1)
 
     def test_conflicting_dated_claims_fail_safe(self):
         claims = [self.claim(id="ev-1", claim_type="return_date", return_date="2026-09-01"),

@@ -3,6 +3,8 @@ import type { ChipInfo, Data, MoverTopRow } from './types'
 import { BarSpark, LineSpark } from './components'
 import { csTone, xgTone } from './weekly'
 import { signed } from './squad'
+import type { LinkedTeam } from './useLinkedTeam'
+import { recommendationState } from './coherence'
 
 /**
  * The season view: when to play each chip, how every club's fixtures swing
@@ -24,15 +26,18 @@ function chipBest(c: ChipInfo): string {
 }
 
 export default function Season({
-  D, openPlayer,
+  D, linked, openPlayer,
 }: {
   D: Data
+  linked: LinkedTeam
   openPlayer: (id: number) => void
 }) {
-  const chips = D.chips ?? D.weekly?.chips ?? null
+  const gw = linked.live?.gw ?? D.meta.start_gw ?? 1
+  const ready = recommendationState(D, linked.live, linked.team?.ids ?? [],
+    linked.team?.bank ?? NaN, linked.ft, linked.entryId).digestReady
+  const chips = ready && D.weekly?.chips?.gw === gw ? D.weekly.chips : null
   const movers = D.movers ?? null
   const ticker = D.ticker ?? null
-  const gw = D.weekly?.gw ?? chips?.gw ?? D.meta.start_gw ?? 1
   const byId = useMemo(() => new Map(D.players.map(p => [p.id, p])), [D.players])
 
   /* ------------------------------------------------------------- ticker */
@@ -87,7 +92,7 @@ export default function Season({
     : []
 
   const days = movers?.days ?? 0
-  const price = D.weekly?.price ?? null
+  const price = D.weekly?.gw === gw ? D.weekly.price : null
 
   return (
     <div className="season">
@@ -98,7 +103,7 @@ export default function Season({
           <span className="sub">when to play what</span>
         </div>
         {chipList.length === 0 ? (
-          <div className="empty-state">No chip analysis in this build yet.</div>
+          <div className="empty-state">Chip advice is waiting for a matching forecast and verified squad for GW{gw}.</div>
         ) : (
           <>
             <div className="tbl-scroll">
@@ -197,7 +202,7 @@ export default function Season({
                               <span key={j} className="tick-fx"
                                 data-tone={view === 'def' ? csTone(f.cs) : xgTone(f.xg)}>
                                 <span className="o">{f.opp} ({f.home ? 'H' : 'A'})</span>
-                                <span className="x">xG {f.xg.toFixed(1)}</span>
+                                <span className="x">{view === 'def' ? `CS ${Math.round(f.cs * 100)}%` : `xG ${f.xg.toFixed(1)}`}</span>
                               </span>
                             ))}
                         </td>
@@ -209,7 +214,7 @@ export default function Season({
             </div>
             <p className="season-caveat">
               {view === 'def'
-                ? 'Coloured by the model’s clean-sheet odds for that fixture: green ≥45%, neutral 30–45%, amber 20–30%, red <20%. Clubs sorted by average over the range shown. The small number is the club’s expected goals in the game.'
+                ? 'Clean-sheet probability for each fixture: green ≥45%, neutral 30–45%, amber 20–30%, red <20%. Clubs are sorted by expected clean sheets per gameweek over this range.'
                 : 'Coloured by the club’s expected goals in that fixture: green ≥1.8, neutral 1.4–1.8, amber 1.0–1.4, red <1.0. Clubs sorted by average over the range shown.'}
               {' '}Two chips stacked = a double gameweek; — = blank.
             </p>

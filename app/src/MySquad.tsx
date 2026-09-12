@@ -11,7 +11,7 @@ import {
 import MarketTable from './MarketTable'
 import SquadBuilder from './SquadBuilder'
 import type { LinkedTeam } from './useLinkedTeam'
-import { recommendationState } from './coherence'
+import { recommendationState, canReadSavedReview } from './coherence'
 import { accountSellingValues, bankAfterMoves, type SellingValues } from './transferBudget'
 import { useTransferSuggestions } from './useTransferSuggestions'
 
@@ -38,6 +38,7 @@ interface Source {
   kind: 'linked' | 'digest'
   ids: number[]
   lineup: Lineup | null
+  lineupGw?: number | null
   bank: number
   ft: number
 }
@@ -69,7 +70,7 @@ export default function MySquad({
   clear: () => void
   openPlayer: (id: number) => void
 }) {
-  const gw = linked.live?.gw ?? D.weekly?.gw ?? D.meta.start_gw ?? 1
+  const gw = linked.live?.gw ?? D.meta.start_gw ?? D.weekly?.gw ?? 1
   const horizon = D.meta.horizon
   const weekly = D.weekly ?? null
   const { entryId, busy, err, summary } = linked
@@ -81,10 +82,12 @@ export default function MySquad({
   const source = useMemo<Source | null>(() => {
     if (linked.team) {
       return { kind: 'linked', ids: linked.team.ids, lineup: linked.team.lineup,
+        lineupGw: linked.team.fromGw,
         bank: linked.team.bank, ft: linked.ft }
     }
     if (weekly && weekly.squad.ids.length === 15 && String(weekly.squad.entry_id) === entryId) {
       return { kind: 'digest', ids: weekly.squad.ids, lineup: toLineup(weekly.squad.lineup),
+        lineupGw: weekly.squad.picks_gw,
         bank: weekly.squad.bank, ft: weekly.squad.ft }
     }
     return null
@@ -96,6 +99,7 @@ export default function MySquad({
   const coherence = recommendationState(D, linked.live, source?.ids ?? [],
     source?.bank ?? NaN, source?.ft ?? NaN, entryId)
   const ready = squad.length === 15 && coherence.projectionsReady
+    && (source?.kind === 'linked' || canReadSavedReview(D, entryId))
   const sellingValues = useMemo(() => accountSellingValues(D, linked.live,
     source?.ids ?? [], source?.bank ?? NaN, source?.ft ?? NaN, entryId),
     [D, linked.live, source, entryId])
@@ -180,6 +184,7 @@ export default function MySquad({
           add={add} remove={remove} loadPreset={loadPreset} clear={clear} openPlayer={openPlayer} />
       ) : ready && source ? (
         <SquadView key={squadKey} D={D} squad={squad} lineup={source.lineup}
+          lineupGw={source.lineupGw}
           bank={source.bank} ft={source.ft} gw={gw} horizon={horizon}
           pool={validPool} live={linked.live} openPlayer={openPlayer}
           sellingValues={sellingValues} />
@@ -208,11 +213,12 @@ export default function MySquad({
    Pitch, sandbox, health and context for one resolved squad. Keyed by the
    squad ids from the parent so the sandbox resets when the squad changes. */
 function SquadView({
-  D, squad, lineup, bank, ft, gw, horizon, pool, live, openPlayer, sellingValues,
+  D, squad, lineup, lineupGw, bank, ft, gw, horizon, pool, live, openPlayer, sellingValues,
 }: {
   D: Data
   squad: Player[]
   lineup: Lineup | null
+  lineupGw?: number | null
   bank: number
   ft: number
   gw: number
@@ -353,7 +359,7 @@ function SquadView({
           <div className="panel-hd">
             <h2>{inSandbox ? 'After your moves' : 'Your lineup'}</h2>
             <span className="sub">
-              {shape}{hasXi && !inSandbox ? ' · as set' : " · model's XI"}
+              {shape}{hasXi && !inSandbox ? (lineupGw ? ` · submitted GW${lineupGw}` : ' · saved lineup') : " · model's XI"}
             </span>
           </div>
           <Pitch D={D} xi={xiPlayers} bench={benchPlayers} captain={captain} vice={vice}

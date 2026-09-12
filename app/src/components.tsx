@@ -6,16 +6,18 @@ import { analyse, squadOutlook } from './squad'
 /* --------------------------------------------------------------- fixture pips
    Six dots for the next six opponents, coloured by FDR. Away games are dimmed.
    This is the fastest way to read a player's opening run. */
-export function Pips({ fixtures }: { fixtures: (Fixture | null)[] }) {
+export function Pips({ fixtures, startGw = 1, horizon = startGw + 5 }: {
+  fixtures: (Fixture | null)[]; startGw?: number; horizon?: number
+}) {
   return (
     <span className="pips">
-      {fixtures.map((f, i) => (
+      {fixtures.slice(startGw - 1, horizon).map((f, i) => (
         <span
           key={i}
           className="pip"
           data-fdr={f?.fdr}
           data-home={f ? String(f.home) : undefined}
-          title={f ? `GW${i + 1}: ${f.opp} ${f.home ? '(H)' : '(A)'} · difficulty ${f.fdr}` : `GW${i + 1}: no fixture`}
+          title={f ? `GW${i + startGw}: ${f.opp} ${f.home ? '(H)' : '(A)'} · difficulty ${f.fdr}` : `GW${i + startGw}: no fixture`}
         />
       ))}
     </span>
@@ -38,7 +40,7 @@ export interface ShirtMarks {
 export function Shirt({
   player, team, fixtures, isCaptain, isVice, onClick,
   swapOut, swapIn, capModel, viceModel, hint,
-  simple = false,
+  simple = false, startGw = 1, horizon = startGw + 5,
 }: {
   player: Player
   team: Team
@@ -47,6 +49,8 @@ export function Shirt({
   isVice?: boolean
   onClick: () => void
   simple?: boolean
+  startGw?: number
+  horizon?: number
 } & ShirtMarks) {
   const flagged = player.status !== 'a'
   const cls = `shirt${swapOut ? ' swap-out' : ''}${swapIn ? ' swap-in' : ''}`
@@ -70,7 +74,7 @@ export function Shirt({
       />
       <span className="nm">{player.name}</span>
       {!simple && <><span className="meta">£{player.price.toFixed(1)} · {player.proj_6gw.toFixed(0)}</span>
-        <Pips fixtures={fixtures} /></>}
+        <Pips fixtures={fixtures} startGw={startGw} horizon={horizon} /></>}
     </button>
   )
 }
@@ -116,6 +120,7 @@ export function Pitch({
                   player={pl}
                   team={D.teams[pl.team]}
                   fixtures={D.schedule[pl.team] ?? []}
+                  startGw={D.meta.start_gw} horizon={D.meta.horizon}
                   isCaptain={captain === pl.id}
                   isVice={vice === pl.id}
                   simple={simple}
@@ -142,6 +147,7 @@ export function Pitch({
                 player={pl}
                 team={D.teams[pl.team]}
                 fixtures={D.schedule[pl.team] ?? []}
+                startGw={D.meta.start_gw} horizon={D.meta.horizon}
                 isCaptain={false}
                 simple={simple}
                 onClick={() => openPlayer(pl.id)}

@@ -27,9 +27,9 @@ from pathlib import Path
 import numpy as np
 
 try:
-    from .squad_evaluator import captain_options
+    from .squad_evaluator import pick_lineup
 except ImportError:
-    from squad_evaluator import captain_options
+    from squad_evaluator import pick_lineup
 
 ROOT = Path(__file__).resolve().parent.parent
 PROJ_PATH = ROOT / 'v2' / 'projections_v2.json'
@@ -430,52 +430,18 @@ def _validate_squad(ids, players_by_id, label):
 
 
 def _pick_lineup(par_list, wi, gw):
-    """Greedy legal XI by projected points, plus ordered bench and captaincy.
-
-    Formation minimums are filled first, then the best projection subject to
-    XI caps.  The reserve keeper is followed by outfield substitutes in
-    descending projection order. Captain/vice maximise the expected additional
-    copy including vice fallback. Squad order breaks ties deterministically.
-    """
-    def rank(ix):
-        proj = par_list[ix]['proj'][wi] or 0.0
-        return (-proj, ix)
-
-    by_pos = {pos: [] for pos in POS_ORDER}
-    for ix, par in enumerate(par_list):
-        by_pos[par['pos']].append(ix)
-    for ixs in by_pos.values():
-        ixs.sort(key=rank)
-
-    xi = []
-    used = {pos: 0 for pos in POS_ORDER}
-    for pos in POS_ORDER:
-        for ix in by_pos[pos][:XI_MIN[pos]]:
-            xi.append(ix)
-            used[pos] += 1
-    for ix in sorted(range(len(par_list)), key=rank):
-        pos = par_list[ix]['pos']
-        if len(xi) >= 11:
-            break
-        if ix in xi or used[pos] >= XI_MAX[pos]:
-            continue
-        xi.append(ix)
-        used[pos] += 1
-    if len(xi) < 11:
-        raise ValueError(
-            f"cannot field a legal XI in GW{gw}: selected {len(xi)} players")
-
-    bench = [ix for ix in range(len(par_list)) if ix not in xi]
-    bench.sort(key=lambda ix: (par_list[ix]['pos'] != 'GKP', rank(ix)))
-    options = captain_options(
-        [par_list[ix] for ix in xi], gw,
-        points=lambda par, _: par['proj'][wi] or 0.0,
-        play=lambda par, _: (par.get('p_play_gw') or par['p_play'])[wi])
+    """Use the same exhaustive selection as the deterministic squad evaluator."""
+    squad = [dict(id=p['id'], pos=p['pos'], proj_by_gw=[p['proj'][wi]],
+                  play_by_gw=[(p.get('p_play_gw') or p['p_play'])[wi]])
+             for p in par_list]
+    best = pick_lineup(squad, 1)
+    if len(best.xi) != 11:
+        raise ValueError(f'cannot field a legal XI in GW{gw}')
     indices = {par['id']: ix for ix, par in enumerate(par_list)}
-    best = options[0]
-    return {'xi': xi, 'bench': bench,
-            'captain': indices[best['captain']['id']],
-            'vice': indices[best['vice']['id']] if best['vice'] else None}
+    return {'xi': [indices[p['id']] for p in best.xi],
+            'bench': [indices[p['id']] for p in best.bench],
+            'captain': indices[best.captain['id']],
+            'vice': indices[best.vice['id']] if best.vice else None}
 
 
 def _squad_gw_points(par_list, lineup, pts_by_pid, played_by_pid, wi):

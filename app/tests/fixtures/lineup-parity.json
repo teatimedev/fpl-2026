@@ -1,0 +1,1797 @@
+{
+  "basis": "Scalar exhaustive independent-appearance expectation",
+  "cases": [
+    {
+      "case": "None",
+      "squad": [
+        {
+          "id": "g1",
+          "name": "g1",
+          "pos": "GKP",
+          "proj_by_gw": [
+            5
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "g2",
+          "name": "g2",
+          "pos": "GKP",
+          "proj_by_gw": [
+            4
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d1",
+          "name": "d1",
+          "pos": "DEF",
+          "proj_by_gw": [
+            6
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d2",
+          "name": "d2",
+          "pos": "DEF",
+          "proj_by_gw": [
+            5
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d3",
+          "name": "d3",
+          "pos": "DEF",
+          "proj_by_gw": [
+            4
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d4",
+          "name": "d4",
+          "pos": "DEF",
+          "proj_by_gw": [
+            1
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d5",
+          "name": "d5",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m1",
+          "name": "m1",
+          "pos": "MID",
+          "proj_by_gw": [
+            10
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m2",
+          "name": "m2",
+          "pos": "MID",
+          "proj_by_gw": [
+            9
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m3",
+          "name": "m3",
+          "pos": "MID",
+          "proj_by_gw": [
+            8
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m4",
+          "name": "m4",
+          "pos": "MID",
+          "proj_by_gw": [
+            7
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m5",
+          "name": "m5",
+          "pos": "MID",
+          "proj_by_gw": [
+            2
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f1",
+          "name": "f1",
+          "pos": "FWD",
+          "proj_by_gw": [
+            8
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f2",
+          "name": "f2",
+          "pos": "FWD",
+          "proj_by_gw": [
+            7
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f3",
+          "name": "f3",
+          "pos": "FWD",
+          "proj_by_gw": [
+            3
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        }
+      ],
+      "expected": {
+        "score": 82.0,
+        "xi": [
+          "g1",
+          "d1",
+          "d2",
+          "d3",
+          "m1",
+          "m2",
+          "m3",
+          "m4",
+          "f1",
+          "f2",
+          "f3"
+        ],
+        "bench": [
+          "g2",
+          "m5",
+          "d4",
+          "d5"
+        ],
+        "captain": "m1",
+        "vice": "m2"
+      }
+    },
+    {
+      "case": "1",
+      "squad": [
+        {
+          "id": "g1",
+          "name": "g1",
+          "pos": "GKP",
+          "proj_by_gw": [
+            0.5261242623044334
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "g2",
+          "name": "g2",
+          "pos": "GKP",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d1",
+          "name": "d1",
+          "pos": "DEF",
+          "proj_by_gw": [
+            6.633528204634498
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d2",
+          "name": "d2",
+          "pos": "DEF",
+          "proj_by_gw": [
+            5.550770429955354
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d3",
+          "name": "d3",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.003245545451658383
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d4",
+          "name": "d4",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d5",
+          "name": "d5",
+          "pos": "DEF",
+          "proj_by_gw": [
+            3.3843939722600282
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m1",
+          "name": "m1",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m2",
+          "name": "m2",
+          "pos": "MID",
+          "proj_by_gw": [
+            3.468470177874304
+          ],
+          "play_by_gw": [
+            0.5
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m3",
+          "name": "m3",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.5502687785014343
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m4",
+          "name": "m4",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m5",
+          "name": "m5",
+          "pos": "MID",
+          "proj_by_gw": [
+            -0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f1",
+          "name": "f1",
+          "pos": "FWD",
+          "proj_by_gw": [
+            -0.8987456759017652
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f2",
+          "name": "f2",
+          "pos": "FWD",
+          "proj_by_gw": [
+            5.89619015637289
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f3",
+          "name": "f3",
+          "pos": "FWD",
+          "proj_by_gw": [
+            6.2859407543205
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        }
+      ],
+      "expected": {
+        "score": 38.66230888583989,
+        "xi": [
+          "g1",
+          "d1",
+          "d2",
+          "d3",
+          "d4",
+          "d5",
+          "m1",
+          "m2",
+          "m3",
+          "f2",
+          "f3"
+        ],
+        "bench": [
+          "g2",
+          "m4",
+          "m5",
+          "f1"
+        ],
+        "captain": "d1",
+        "vice": "f3"
+      }
+    },
+    {
+      "case": "9",
+      "squad": [
+        {
+          "id": "g1",
+          "name": "g1",
+          "pos": "GKP",
+          "proj_by_gw": [
+            5.17083080854854
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "g2",
+          "name": "g2",
+          "pos": "GKP",
+          "proj_by_gw": [
+            0.26196676882950376
+          ],
+          "play_by_gw": [
+            0.5
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d1",
+          "name": "d1",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d2",
+          "name": "d2",
+          "pos": "DEF",
+          "proj_by_gw": [
+            7.993149903316188
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d3",
+          "name": "d3",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d4",
+          "name": "d4",
+          "pos": "DEF",
+          "proj_by_gw": [
+            6.701081286742191
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d5",
+          "name": "d5",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.7772006307874304
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m1",
+          "name": "m1",
+          "pos": "MID",
+          "proj_by_gw": [
+            8.517584846750998
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m2",
+          "name": "m2",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.655855899806596
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m3",
+          "name": "m3",
+          "pos": "MID",
+          "proj_by_gw": [
+            -0.04353257326750255
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m4",
+          "name": "m4",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.4568959568358805
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m5",
+          "name": "m5",
+          "pos": "MID",
+          "proj_by_gw": [
+            -0.30339671286714076
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f1",
+          "name": "f1",
+          "pos": "FWD",
+          "proj_by_gw": [
+            6.916989895599652
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f2",
+          "name": "f2",
+          "pos": "FWD",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f3",
+          "name": "f3",
+          "pos": "FWD",
+          "proj_by_gw": [
+            0.6416596013809084
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        }
+      ],
+      "expected": {
+        "score": 46.827416057599315,
+        "xi": [
+          "g1",
+          "d1",
+          "d2",
+          "d3",
+          "d4",
+          "d5",
+          "m1",
+          "m2",
+          "m4",
+          "f1",
+          "f3"
+        ],
+        "bench": [
+          "g2",
+          "f2",
+          "m3",
+          "m5"
+        ],
+        "captain": "m1",
+        "vice": "d2"
+      }
+    },
+    {
+      "case": "18",
+      "squad": [
+        {
+          "id": "g1",
+          "name": "g1",
+          "pos": "GKP",
+          "proj_by_gw": [
+            0.0350970277754485
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "g2",
+          "name": "g2",
+          "pos": "GKP",
+          "proj_by_gw": [
+            2.412141061358251
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d1",
+          "name": "d1",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.9471041309719299
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d2",
+          "name": "d2",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.9114439953099794
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d3",
+          "name": "d3",
+          "pos": "DEF",
+          "proj_by_gw": [
+            2.0208211308544555
+          ],
+          "play_by_gw": [
+            0.5
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d4",
+          "name": "d4",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.578648707985171
+          ],
+          "play_by_gw": [
+            0.5
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d5",
+          "name": "d5",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m1",
+          "name": "m1",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.8525401023317987
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m2",
+          "name": "m2",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.0859309484149248
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m3",
+          "name": "m3",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.7083082653737759
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m4",
+          "name": "m4",
+          "pos": "MID",
+          "proj_by_gw": [
+            4.585156308267745
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m5",
+          "name": "m5",
+          "pos": "MID",
+          "proj_by_gw": [
+            1.2393522120362175
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f1",
+          "name": "f1",
+          "pos": "FWD",
+          "proj_by_gw": [
+            0.9574770557630514
+          ],
+          "play_by_gw": [
+            0.5
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f2",
+          "name": "f2",
+          "pos": "FWD",
+          "proj_by_gw": [
+            4.866238096577447
+          ],
+          "play_by_gw": [
+            0.5
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f3",
+          "name": "f3",
+          "pos": "FWD",
+          "proj_by_gw": [
+            0.7489741094396613
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        }
+      ],
+      "expected": {
+        "score": 28.076424952763887,
+        "xi": [
+          "g2",
+          "d1",
+          "d3",
+          "d4",
+          "m1",
+          "m3",
+          "m4",
+          "m5",
+          "f1",
+          "f2",
+          "f3"
+        ],
+        "bench": [
+          "g1",
+          "d2",
+          "m2",
+          "d5"
+        ],
+        "captain": "f2",
+        "vice": "m4"
+      }
+    },
+    {
+      "case": "42",
+      "squad": [
+        {
+          "id": "g1",
+          "name": "g1",
+          "pos": "GKP",
+          "proj_by_gw": [
+            -0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "g2",
+          "name": "g2",
+          "pos": "GKP",
+          "proj_by_gw": [
+            0.8469051959191192
+          ],
+          "play_by_gw": [
+            0.5
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d1",
+          "name": "d1",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.7101183355804137
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d2",
+          "name": "d2",
+          "pos": "DEF",
+          "proj_by_gw": [
+            -0.04367284107642233
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d3",
+          "name": "d3",
+          "pos": "DEF",
+          "proj_by_gw": [
+            -0.5853514731303424
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d4",
+          "name": "d4",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d5",
+          "name": "d5",
+          "pos": "DEF",
+          "proj_by_gw": [
+            5.622206019549783
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m1",
+          "name": "m1",
+          "pos": "MID",
+          "proj_by_gw": [
+            1.1872141575531332
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m2",
+          "name": "m2",
+          "pos": "MID",
+          "proj_by_gw": [
+            3.6147180305782465
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m3",
+          "name": "m3",
+          "pos": "MID",
+          "proj_by_gw": [
+            4.9337302703714965
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m4",
+          "name": "m4",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m5",
+          "name": "m5",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.6679533344870496
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f1",
+          "name": "f1",
+          "pos": "FWD",
+          "proj_by_gw": [
+            1.0282923791940302
+          ],
+          "play_by_gw": [
+            0.5
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f2",
+          "name": "f2",
+          "pos": "FWD",
+          "proj_by_gw": [
+            0.9529343794274594
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f3",
+          "name": "f3",
+          "pos": "FWD",
+          "proj_by_gw": [
+            0.062156520859167896
+          ],
+          "play_by_gw": [
+            0.5
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        }
+      ],
+      "expected": {
+        "score": 25.010255810416858,
+        "xi": [
+          "g2",
+          "d1",
+          "d4",
+          "d5",
+          "m1",
+          "m2",
+          "m3",
+          "m5",
+          "f1",
+          "f2",
+          "f3"
+        ],
+        "bench": [
+          "g1",
+          "m4",
+          "d2",
+          "d3"
+        ],
+        "captain": "f2",
+        "vice": "d5"
+      }
+    },
+    {
+      "case": "71",
+      "squad": [
+        {
+          "id": "g1",
+          "name": "g1",
+          "pos": "GKP",
+          "proj_by_gw": [
+            2.296538057999031
+          ],
+          "play_by_gw": [
+            0.5
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "g2",
+          "name": "g2",
+          "pos": "GKP",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d1",
+          "name": "d1",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.804374356808726
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d2",
+          "name": "d2",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.18968533125086534
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d3",
+          "name": "d3",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.4634556655601544
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d4",
+          "name": "d4",
+          "pos": "DEF",
+          "proj_by_gw": [
+            1.131826129200213
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d5",
+          "name": "d5",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m1",
+          "name": "m1",
+          "pos": "MID",
+          "proj_by_gw": [
+            3.022366667100772
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m2",
+          "name": "m2",
+          "pos": "MID",
+          "proj_by_gw": [
+            6.630653060881016
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m3",
+          "name": "m3",
+          "pos": "MID",
+          "proj_by_gw": [
+            3.0563881949886555
+          ],
+          "play_by_gw": [
+            0.5
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m4",
+          "name": "m4",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m5",
+          "name": "m5",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f1",
+          "name": "f1",
+          "pos": "FWD",
+          "proj_by_gw": [
+            1.0876982258389436
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f2",
+          "name": "f2",
+          "pos": "FWD",
+          "proj_by_gw": [
+            0.2534212051126618
+          ],
+          "play_by_gw": [
+            0.1
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f3",
+          "name": "f3",
+          "pos": "FWD",
+          "proj_by_gw": [
+            3.514598756029875
+          ],
+          "play_by_gw": [
+            0.9
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        }
+      ],
+      "expected": {
+        "score": 29.43311858725492,
+        "xi": [
+          "g1",
+          "d1",
+          "d2",
+          "d3",
+          "d4",
+          "m1",
+          "m2",
+          "m3",
+          "f1",
+          "f2",
+          "f3"
+        ],
+        "bench": [
+          "g2",
+          "d5",
+          "m4",
+          "m5"
+        ],
+        "captain": "m2",
+        "vice": "f3"
+      }
+    },
+    {
+      "case": "keeper",
+      "squad": [
+        {
+          "id": "g1",
+          "name": "g1",
+          "pos": "GKP",
+          "proj_by_gw": [
+            4.0
+          ],
+          "play_by_gw": [
+            0.5
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "g2",
+          "name": "g2",
+          "pos": "GKP",
+          "proj_by_gw": [
+            5.0
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d1",
+          "name": "d1",
+          "pos": "DEF",
+          "proj_by_gw": [
+            6
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d2",
+          "name": "d2",
+          "pos": "DEF",
+          "proj_by_gw": [
+            5
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d3",
+          "name": "d3",
+          "pos": "DEF",
+          "proj_by_gw": [
+            4
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d4",
+          "name": "d4",
+          "pos": "DEF",
+          "proj_by_gw": [
+            1
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d5",
+          "name": "d5",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m1",
+          "name": "m1",
+          "pos": "MID",
+          "proj_by_gw": [
+            10
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m2",
+          "name": "m2",
+          "pos": "MID",
+          "proj_by_gw": [
+            9
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m3",
+          "name": "m3",
+          "pos": "MID",
+          "proj_by_gw": [
+            8
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m4",
+          "name": "m4",
+          "pos": "MID",
+          "proj_by_gw": [
+            7
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m5",
+          "name": "m5",
+          "pos": "MID",
+          "proj_by_gw": [
+            2
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f1",
+          "name": "f1",
+          "pos": "FWD",
+          "proj_by_gw": [
+            8
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f2",
+          "name": "f2",
+          "pos": "FWD",
+          "proj_by_gw": [
+            7
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f3",
+          "name": "f3",
+          "pos": "FWD",
+          "proj_by_gw": [
+            3
+          ],
+          "play_by_gw": [
+            1.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        }
+      ],
+      "expected": {
+        "score": 83.5,
+        "xi": [
+          "g1",
+          "d1",
+          "d2",
+          "d3",
+          "m1",
+          "m2",
+          "m3",
+          "m4",
+          "f1",
+          "f2",
+          "f3"
+        ],
+        "bench": [
+          "g2",
+          "m5",
+          "d4",
+          "d5"
+        ],
+        "captain": "m1",
+        "vice": "m2"
+      }
+    },
+    {
+      "case": "blank",
+      "squad": [
+        {
+          "id": "g1",
+          "name": "g1",
+          "pos": "GKP",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "g2",
+          "name": "g2",
+          "pos": "GKP",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d1",
+          "name": "d1",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d2",
+          "name": "d2",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d3",
+          "name": "d3",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d4",
+          "name": "d4",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "d5",
+          "name": "d5",
+          "pos": "DEF",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m1",
+          "name": "m1",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m2",
+          "name": "m2",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m3",
+          "name": "m3",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m4",
+          "name": "m4",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "m5",
+          "name": "m5",
+          "pos": "MID",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f1",
+          "name": "f1",
+          "pos": "FWD",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f2",
+          "name": "f2",
+          "pos": "FWD",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        },
+        {
+          "id": "f3",
+          "name": "f3",
+          "pos": "FWD",
+          "proj_by_gw": [
+            0.0
+          ],
+          "play_by_gw": [
+            0.0
+          ],
+          "start_rate": 1.0,
+          "status": "a"
+        }
+      ],
+      "expected": {
+        "score": 0.0,
+        "xi": [
+          "g1",
+          "d1",
+          "d2",
+          "d3",
+          "d4",
+          "d5",
+          "m1",
+          "m2",
+          "m3",
+          "m4",
+          "f1"
+        ],
+        "bench": [
+          "g2",
+          "m5",
+          "f2",
+          "f3"
+        ],
+        "captain": "g1",
+        "vice": "d1"
+      }
+    }
+  ]
+}

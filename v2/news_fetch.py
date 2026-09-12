@@ -2,73 +2,27 @@
 from __future__ import annotations
 
 import hashlib
-import html
 import re
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from html.parser import HTMLParser
 
 
 UA = "fpl-2026-team-news/1.0 (+https://github.com/teatimedev/fpl-2026)"
 RELEVANT = re.compile(r"team.news|injur|fitness|press|conference|squad|availability|preview", re.I)
+EXCLUDE = re.compile(r'\b(?:women|womens|wsl|academy|u18s?|u21s?|under-18|under-21|b-team|tickets?|hospitality)\b', re.I)
 
 
-class PageParser(HTMLParser):
-    def __init__(self):
-        super().__init__(convert_charrefs=True)
-        self.parts: list[str] = []
-        self.links: list[tuple[str, str]] = []
-        self._skip = 0
-        self._href: str | None = None
-        self._anchor: list[str] = []
-        self.title: str = ""
-        self.published_at: str | None = None
-        self._in_title = False
+try:
+    from .public_article import PageParser, ScoutingPage, parse_article
+    from .news_extract import EXTRACTION_VERSION
+except ImportError:
+    from public_article import PageParser, ScoutingPage, parse_article
+    from news_extract import EXTRACTION_VERSION
 
-    def handle_starttag(self, tag, attrs):
-        attributes = dict(attrs)
-        if tag == "title":
-            self._in_title = True
-        if tag == "time" and attributes.get("datetime") and not self.published_at:
-            self.published_at = attributes["datetime"]
-        if tag == "meta":
-            key = (attributes.get("property") or attributes.get("name") or "").lower()
-            if key in {"article:published_time", "date", "datepublished", "publish-date"}:
-                self.published_at = attributes.get("content") or self.published_at
-        if tag in {"script", "style", "svg", "noscript"}:
-            self._skip += 1
-        if not self._skip and tag == "a":
-            self._href = dict(attrs).get("href")
-            self._anchor = []
-
-    def handle_endtag(self, tag):
-        if tag == "title":
-            self._in_title = False
-        if tag in {"script", "style", "svg", "noscript"} and self._skip:
-            self._skip -= 1
-        if tag == "a" and self._href:
-            label = " ".join(self._anchor).strip()
-            self.links.append((self._href, label))
-            self._href = None
-            self._anchor = []
-
-    def handle_data(self, data):
-        if self._skip:
-            return
-        clean = re.sub(r"\s+", " ", html.unescape(data)).strip()
-        if clean:
-            self.parts.append(clean)
-            if self._in_title:
-                self.title = (self.title + " " + clean).strip()
-            if self._href:
-                self._anchor.append(clean)
-
-    @property
-    def text(self):
-        return "\n".join(self.parts)
+PARSER_VERSION = 'public-article-v2+' + EXTRACTION_VERSION
 
 
 def _request(url: str, *, timeout: int = 18, attempts: int = 3,
@@ -114,6 +68,11 @@ def fetch_source(source: dict, *, article_limit: int = 5,
         return [], {"id": source["id"], "club": source["club"], "status": "unsupported",
                     "error": source.get("unsupported_reason")}
     try:
+        # A 304 validates unchanged bytes, not unchanged extraction rules.
+        # Re-fetch once after a parser upgrade before reusing old claims.
+        if (prior or {}).get('parser_version') != PARSER_VERSION:
+            prior = {**(prior or {}), 'etag': None, 'last_modified': None}
+            prior['article_validators'] = {url: {} for url in prior.get('article_validators', {})}
         body, headers = _request(source["url"], conditional=prior)
         prior_articles = (prior or {}).get("article_validators") or {}
         if body is None:
@@ -123,11 +82,14 @@ def fetch_source(source: dict, *, article_limit: int = 5,
             documents = []
             headers = {k: (prior or {}).get(k) for k in ("etag", "last_modified")}
         else:
-            parser = PageParser(); parser.feed(body)
+            parser = ScoutingPage(); parser.feed(body)
             urls = []
             for href, label in parser.links:
                 absolute = urllib.parse.urljoin(source["url"], href).split("#", 1)[0]
-                if _same_site(source["url"], absolute) and relevant.search(label + " " + absolute):
+                context = label + ' ' + urllib.parse.urlparse(absolute).path
+                if (absolute != source['url'] and _same_site(source["url"], absolute)
+                        and relevant.search(context) and not EXCLUDE.search(context)
+                        and not re.search(r'/category/|/tag/|/gallery/|/video/', absolute)):
                     if absolute not in urls:
                         urls.append(absolute)
                 if len(urls) >= article_limit:
@@ -148,18 +110,14 @@ def fetch_source(source: dict, *, article_limit: int = 5,
                     article_validators[url] = prior_articles.get(url, {})
                     continue
                 article_validators[url] = {k: v for k, v in article_headers.items() if v}
-                page = PageParser(); page.feed(article)
-                if not page.published_at:
-                    published = re.search(r'"datePublished"\s*:\s*"([^"]+)"', article, re.I)
-                    if published:
-                        page.published_at = published.group(1)
-                title = page.title or next((part for part in page.parts if len(part) >= 8), url)
-                documents.append({
+                document = parse_article(article, {
                     "source_id": source["id"], "publisher": source["publisher"], "club": source["club"],
-                    "url": url, "title": title[:160], "text": page.text,
-                    "published_at": page.published_at,
+                    "url": url,
                 })
-            except RuntimeError as exc:
+                document['title'] = (document['title'] or url)[:160]
+                if not EXCLUDE.search(document['title']):
+                    documents.append(document)
+            except (RuntimeError, ValueError) as exc:
                 article_errors.append(str(exc))
                 # A transient article failure must not erase a previously
                 # verified absence from the model. Preserve its claim and its
@@ -173,6 +131,7 @@ def fetch_source(source: dict, *, article_limit: int = 5,
                   "partial" if article_errors else "ok" if urls else "no_articles")
         row = {
             "id": source["id"], "club": source["club"], "publisher": source["publisher"],
+            "parser_version": PARSER_VERSION,
             "url": source["url"], "status": status, "documents": len(documents),
             "article_errors": len(article_errors), "content_hash": digest,
             "article_validators": article_validators,

@@ -82,7 +82,7 @@ export default function App() {
   const openPlayer = useCallback((id: number) => setDrawerId(id), [])
   const closeDrawer = useCallback(() => setDrawerId(null), [])
   const drawerPlayer = drawerId != null ? byId.get(drawerId) ?? null : null
-  const drawerGw = linked.live?.gw ?? D.weekly?.gw ?? D.meta.start_gw ?? 1
+  const drawerGw = linked.live?.gw ?? D.meta.start_gw ?? D.weekly?.gw ?? 1
 
   const add = (p: Player) => {
     if (!blockReason(p, state)) { setPresetXI(null); setPicks(s => [...s, p]) }
@@ -142,7 +142,7 @@ export default function App() {
         <ThisWeek D={D} linked={linked} builtSquad={picks} openPlayer={openPlayer}
           loadSquad={ids => { setPresetXI(null); setPicks(ids.map(id => byId.get(id)).filter((p): p is Player => !!p)) }} />
       )}
-      {tab === 'season' && <Season D={D} openPlayer={openPlayer} />}
+      {tab === 'season' && <Season D={D} linked={linked} openPlayer={openPlayer} />}
       {tab === 'score' && <Scorecard sc={D.scorecard ?? null} linked={linked} />}
       {tab === 'squad' && (
         <MySquad D={D} linked={linked} picks={picks} presetXI={presetXI} state={state}

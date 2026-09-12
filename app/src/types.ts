@@ -191,6 +191,7 @@ export interface WeeklySquad {
   ft: number
   source: string
   confirmed_at?: string
+  picks_gw?: number
   entry_id?: number
   changes?: string[]
   lineup?: WeeklyLineup | null
@@ -324,6 +325,7 @@ export interface Weekly {
   horizon: number
   generated: string
   forecast_id?: string
+  decision_version?: string
   transfer_review?: TransferReview
   case_studies?: CaseStudies | null
   squad: WeeklySquad
@@ -459,7 +461,7 @@ export interface NewsData {
 
 export interface Data {
   /** The window rolls: start_gw is the next gameweek, horizon the last one modelled. */
-  meta: { horizon: number; start_gw?: number; deadline: string; budget: number; generated: string; forecast_id?: string }
+  meta: { horizon: number; start_gw?: number; deadline: string; budget: number; generated: string; forecast_id?: string; decision_version?: string }
   teams: Record<string, Team>
   schedule: Record<string, (Fixture | null)[]>
   players: Player[]

@@ -88,8 +88,35 @@ class NewsExtractionTests(unittest.TestCase):
     def test_explicit_return_date_is_parsed_for_expiry(self):
         claims = self.extract("Bukayo Saka is expected to be back 6 September.")
         self.assertEqual(claims[0]["claim_type"], "return_date")
-        self.assertEqual(claims[0]["decision"], "applied")
+        self.assertEqual(claims[0]["decision"], "candidate")
         self.assertEqual(claims[0]["return_date"], "2026-09-06")
+
+    def test_suspension_date_without_a_matching_league_fixture_is_review_only(self):
+        claims = self.extract('Saka is suspended until 6 September in the Champions League.')
+        self.assertEqual(claims[0]['decision'], 'candidate')
+
+    def test_inline_emphasis_cannot_separate_a_player_from_the_absence(self):
+        from v2.public_article import parse_article
+        doc = parse_article('<meta property="article:published_time" content="2026-08-21T12:00:00Z">'
+                            '<article><p><strong>Bukayo Saka</strong> will <em>miss</em> Fulham.</p>'
+                            '<p>Odegaard is available.</p></article>', self.document(''))
+        claims = extract_claims(doc, PLAYERS, gw=1, now=self.NOW, fixture_terms={'fulham'})
+        self.assertEqual(next(c['decision'] for c in claims if c['player_id'] == 12), 'applied')
+        self.assertEqual(next(c['claim_type'] for c in claims if c['player_id'] == 13), 'available')
+
+    def test_a_coach_first_name_is_not_attributed_to_the_player(self):
+        from v2.news_extract import _mentions
+        players = [dict(player_id=155, club='MCI', canonical='Enzo Fernández',
+                        aliases=['Enzo', 'Fernández', 'Enzo Fernández']),
+                   dict(player_id=387, club='MCI', canonical="Nico O'Reilly", aliases=["O'Reilly"])]
+        names = _mentions('City boss Enzo Maresca says Nico O’Reilly is fit and available.', players, 'MCI')
+        self.assertEqual([p['player_id'] for p in names], [387])
+        self.assertEqual(_mentions('Enzo Fernandez is available.', players, 'MCI')[0]['player_id'], 155)
+
+    def test_mentioning_a_player_is_insufficient_to_assign_someone_elses_absence(self):
+        claims = self.extract('Saka spoke about his teammate who will miss Fulham.')
+        self.assertEqual(claims[0]['decision'], 'candidate')
+        self.assertEqual(claims[0]['reason'], 'player_not_direct_subject')
 
     def test_explicit_out_for_unmatched_fixture_is_review_only(self):
         claims = self.extract("Saka will miss the match against Chelsea.", fixture_terms={"fulham"})

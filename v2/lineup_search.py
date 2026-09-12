@@ -1,7 +1,7 @@
 """Exhaustive XI/bench search using vectorised independent-appearance states.
 
-This is an experimental search implementation until parity with the scalar
-reference and the browser is established. It does not change player forecasts.
+Optimises selection conditional on supplied forecasts and independent player
+appearances. It does not establish predictive calibration.
 """
 from functools import lru_cache
 from itertools import combinations, permutations, product
@@ -118,6 +118,9 @@ def search(squad, gw):
             tuple(POSITIONS[index] for index in LABELS)
             or len({p['id'] for p in squad}) != 15):
         raise ValueError('Lineup search requires a complete legal positional squad')
+    if not all(np.isfinite(gw_points(p, gw)) and np.isfinite(play_probability(p, gw))
+               for p in keepers):
+        raise ValueError('Lineup inputs must be finite')
     means = np.array([gw_points(p, gw) for p in outfield])
     play = np.array([play_probability(p, gw) for p in outfield])
     if not np.isfinite(means).all() or not np.isfinite(play).all():
@@ -141,9 +144,18 @@ def search(squad, gw):
         reserve = keepers[1 - ki]
         base = means[xi].sum(1) + kmean + (1 - kp) * gw_points(reserve, gw) + bonus
         scores = base[parent] + autosubs
-        winner = int(np.argmax(scores))
+        # Numerically tied totals prefer the stronger XI/captain, then the
+        # highest projected bench order. This avoids arbitrary bench churn
+        # when, for example, every starter has P(play)=1.
+        tied = np.flatnonzero(scores >= scores.max() - 1e-10)
+        xi_captain = means[xi].sum(1) + kmean + bonus
+        tie_keys = np.column_stack((xi_captain[parent[tied]], means[benches[tied]]))
+        order = np.lexsort(tuple(-tie_keys[:, i] for i in reversed(range(4))))
+        winner = int(tied[order[0]])
         score = float(scores[winner])
-        if best is None or score > best[0] + 1e-10:
+        key = tuple(float(v) for v in (xi_captain[parent[winner]], *means[benches[winner]]))
+        if (best is None or score > best[0] + 1e-10
+                or (abs(score - best[0]) <= 1e-10 and key > best_key)):
             chosen = int(parent[winner])
             players = [keeper, *[outfield[i] for i in xi[chosen]]]
             ci = int(cap[chosen])
@@ -151,4 +163,5 @@ def search(squad, gw):
             lineup = Lineup(players, [reserve, *[outfield[i] for i in benches[winner]]],
                             players[ci], players[vi])
             best = score, lineup
+            best_key = key
     return best

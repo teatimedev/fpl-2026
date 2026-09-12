@@ -59,7 +59,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(HERE))
 from gwclock import next_gw          # noqa: E402
-from decision_state import forecast_id, public_selling_prices, atomic_json
+from decision_state import forecast_id, public_selling_prices, atomic_json, DECISION_VERSION
 from input_validation import validate_public_picks, validate_history, validate_forecast_inputs
 from squad_evaluator import (       # noqa: E402
     deadline_unavailable,
@@ -612,7 +612,7 @@ def snapshot(gw, deadline, players, squad, model, yours, elem=None, props=None,
                squad=[p['id'] for p in squad] if squad else [],
                model=model or {}, previous_public_lineup=yours or {}, entry_id=entry_id,
                scouting=scouting, decision_context=decision_context,
-               forecast_id=forecast_id(PROJ))
+               forecast_id=forecast_id(PROJ), decision_version=DECISION_VERSION)
     if len(squad) == 15:
         from decision_replay import freeze
         context = decision_context or {}
@@ -906,6 +906,7 @@ def main():
     L, P = [], []          # digest lines, push lines
     J = dict(gw=gw, deadline=deadline, horizon=horizon,
              forecast_id=forecast_id(PROJ),
+             decision_version=DECISION_VERSION,
              generated=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'))
     L.append(f'# FPL weekly — Gameweek {gw}')
     L.append('')
@@ -943,6 +944,8 @@ def main():
         J['squad']['confirmed_at'] = st['confirmed_at']
     if st.get('entry_id'):
         J['squad']['entry_id'] = st['entry_id']
+    if st.get('picks_gw'):
+        J['squad']['picks_gw'] = st['picks_gw']
     if st.get('changes'):
         J['squad']['changes'] = st['changes']
     if st.get('public_baseline'):
