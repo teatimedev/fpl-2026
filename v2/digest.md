@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 5
 
-Deadline **Fri 18 Sep, 17:30 UTC** — 0d 22h away.
+Deadline **Fri 18 Sep, 17:30 UTC** — 0d 19h away.
 Projections cover GW5–10.
 
 ## GW4 in review — what happened, and what it does and does not change
 
-_382 players classified: 35 unavailable, 22 minutes loss, 40 minutes watch, 18 minutes gain, 15 role change, 59 variance, 193 on model. Retrospective classes graded: 3 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_382 players classified: 34 unavailable, 23 minutes loss, 40 minutes watch, 18 minutes gain, 15 role change, 59 variance, 193 on model. Retrospective classes graded: 3 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -168,29 +168,29 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Rogers £7.7 | +10.9% | +454,841 | Elanga £6.2 | -38.3% | -332,658 |
-| Gibbs-White £8.0 | +25.9% | +385,128 | Szoboszlai £7.0 ⭑ | -7.5% | -287,543 |
-| Groß £5.7 ⭑ | +17.1% | +368,332 | Shaw £4.4 | -20.3% | -213,472 |
-| Gvardiol £5.7 | +13.7% | +361,192 | Pedro Porro £5.5 | -20.3% | -191,280 |
-| Schade £6.1 | +36.8% | +267,601 | B.Fernandes £12.0 | -3.8% | -167,806 |
-| Belloumi £5.1 | +61.1% | +245,030 | Tzolis £6.4 | -10.9% | -167,140 |
+| Rogers £7.7 | +11.2% | +469,276 | Elanga £6.2 | -41.7% | -352,574 |
+| Gibbs-White £8.0 | +26.9% | +409,107 | Szoboszlai £7.0 ⭑ | -7.7% | -295,749 |
+| Groß £5.7 ⭑ | +17.6% | +381,026 | Shaw £4.4 | -21.5% | -223,572 |
+| Gvardiol £5.7 | +14.2% | +376,903 | Pedro Porro £5.5 | -21.2% | -198,086 |
+| Schade £6.1 | +37.3% | +275,131 | B.Fernandes £12.0 | -4.0% | -176,751 |
+| Belloumi £5.1 | +61.0% | +251,580 | Tzolis £6.4 | -11.4% | -174,250 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Target Gvardiol (net +327k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +327k this event (in 353k / out 26k), sel 23.9% = Q3 (~150k to move), price 5.7 over 11 snaps (+0.2m in window), already +1x0.1m this event]
-- Target Mykolenko (net +114k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +114k this event (in 127k / out 14k), sel 3.2% = Q1 (~77k to move), price 4.5 over 11 snaps (+0.0m in window)]
-- Squad player Mbeumo (net -105k this event) at fall risk (-0.1m hurts the bank) [net -105k this event (in 60k / out 165k), sel 22.5% = Q3 (~150k to move), price 7.9 over 11 snaps (-0.1m in window)]
-- Squad player Szoboszlai (net -271k this event) at fall risk (-0.1m hurts the bank) [net -271k this event (in 55k / out 326k), sel 35.7% = Q3 (~150k to move), price 7.0 over 11 snaps (+0.0m in window)]
-- Squad player Milenković (net -31k this event) at fall risk (-0.1m hurts the bank) [net -31k this event (in 0k / out 31k), sel 1.3% = Q0 (~40k to move), price 5.5 over 11 snaps (+0.0m in window)]
+- Target Gvardiol (net +361k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +361k this event (in 390k / out 29k), sel 24.3% = Q3 (~150k to move), price 5.7 over 11 snaps (+0.2m in window), already +1x0.1m this event]
+- Target Mykolenko (net +126k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +126k this event (in 141k / out 16k), sel 3.3% = Q1 (~77k to move), price 4.5 over 11 snaps (+0.0m in window)]
+- Squad player Mbeumo (net -119k this event) at fall risk (-0.1m hurts the bank) [net -119k this event (in 66k / out 186k), sel 22.3% = Q3 (~150k to move), price 7.9 over 11 snaps (-0.1m in window)]
+- Squad player Szoboszlai (net -288k this event) at fall risk (-0.1m hurts the bank) [net -288k this event (in 63k / out 350k), sel 35.4% = Q3 (~150k to move), price 7.0 over 11 snaps (+0.0m in window)]
+- Squad player Milenković (net -34k this event) at fall risk (-0.1m hurts the bank) [net -34k this event (in 0k / out 34k), sel 1.3% = Q0 (~40k to move), price 5.5 over 11 snaps (+0.0m in window)]
 
 _Based on 11 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-09-17 18:45 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-09-17 21:57 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
 
 ## Scouting
 
-6 sourced observations; 3 API calls. Review these alongside the transfer stress tests in the app.
+8 sourced observations; 3 API calls. Review these alongside the transfer stress tests in the app.

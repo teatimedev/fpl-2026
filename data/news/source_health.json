@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-09-17T18:21:38Z",
-  "coverage": 0.55,
+  "checked_at": "2026-09-17T21:33:25Z",
+  "coverage": 0.5,
   "enabled": 20,
   "gw": 5,
-  "healthy": 11,
+  "healthy": 10,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -28,7 +28,7 @@
       "article_validators": {},
       "club": "AVL",
       "content_hash": "9c7825becb8ff42f8c499d57fe8c1093bd5159607ffeacf1c5ac976ec67ff3f9",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"f2a179ea432feec3e1f0cb8540277225\"",
       "id": "avl-news",
       "last_modified": "Thu, 17 Sep 2026 14:12:57 GMT",
@@ -71,14 +71,14 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.brentfordfc.com/en/news/article/match-preview-brentford-v-strasbourg": {
-          "last_modified": "Thu, 17 Sep 2026 18:21:41 GMT"
+          "last_modified": "Thu, 17 Sep 2026 21:33:27 GMT"
         }
       },
       "club": "BRE",
       "content_hash": "23a3b30414e326eba003975d921e741cdfa74cde12cf3623bce6ac32195ec333",
       "documents": 2,
       "id": "bre-news",
-      "last_modified": "Thu, 17 Sep 2026 18:21:40 GMT",
+      "last_modified": "Thu, 17 Sep 2026 21:33:26 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "ok",
@@ -117,7 +117,7 @@
       "article_validators": {},
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"11wd499uas4ti5a\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -153,7 +153,7 @@
       },
       "club": "FUL",
       "content_hash": "e9cdc5bee29e5d4ecb7c675fa88a60f4377337bd03f76d485c70e6dd4c3fa321",
-      "documents": 3,
+      "documents": 0,
       "etag": "\"54ee93bfb5879b32c3fc554ac02e21dd\"",
       "id": "ful-news",
       "last_modified": "Thu, 17 Sep 2026 13:53:31 GMT",
@@ -167,7 +167,7 @@
       "article_validators": {},
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"466f0f1e7cab7141443628e25e3f7d07\"",
       "id": "hul-news",
       "last_modified": "Thu, 17 Sep 2026 09:28:06 GMT",
@@ -190,7 +190,7 @@
       },
       "club": "IPS",
       "content_hash": "ef8b9f7ed76d8b6ab366d67b99b2fd53c85baba551d54ccc27be7d4b65706f2e",
-      "documents": 2,
+      "documents": 0,
       "etag": "\"76a9b440ae27073a2282f69865e9dbe7\"",
       "id": "ips-news",
       "last_modified": "Thu, 17 Sep 2026 13:41:31 GMT",
@@ -208,7 +208,7 @@
       "content_hash": "71864547f1ed4b774635fd5c2b4f451205c47c91eacfe9dcb7607b77d4bb454e",
       "documents": 2,
       "id": "lee-news",
-      "last_modified": "Thu, 17 Sep 2026 17:23:57 GMT",
+      "last_modified": "Thu, 17 Sep 2026 21:02:06 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -218,16 +218,16 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.liverpoolfc.com/news/friday-watch-andoni-iraolas-pre-bournemouth-press-conference-live": {
-          "etag": "\"1b598-gFhlpkrKf5Dq40i2qvimB8HpHwE\""
+          "etag": "\"1b59a-v99ahINoJ7QMLmtr+59LRrF0MuI\""
         },
         "https://www.liverpoolfc.com/news/volley-or-half-volley-liverpool-squad-debate-dominik-szoboszlais-spurs-stunner": {
-          "etag": "\"1bb48-RuJxTxnfThEb79Z3LhZDCsLt0RM\""
+          "etag": "\"1bb48-5Ri1R7zjPVd4Kf3+5jn1lFrGV/8\""
         }
       },
       "club": "LIV",
-      "content_hash": "b277e780311e29ea8e2733bbf0f8b111e08c8aa25afcca33c6eccd32ffdbad6b",
+      "content_hash": "69c7bd80cb88264bed612404c218972ff5f14d5fd14fadeb3c7e9b7e62982236",
       "documents": 3,
-      "etag": "\"33de9-lUd4eDM9CcOiCWvA/SBbUV4qLdw\"",
+      "etag": "\"33de6-+FZ9c61NRfn7Ll+W/21UoinJM2U\"",
       "id": "liv-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
@@ -243,10 +243,11 @@
       "club": "MCI",
       "content_hash": "669aae477db23bd596a079ad7b8426265d839ad43ff6a711afd0fb3145f8e65c",
       "documents": 3,
+      "error": "The read operation timed out",
       "id": "mci-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
-      "status": "ok",
+      "status": "error",
       "url": "https://www.mancity.com/news"
     },
     {
@@ -276,7 +277,7 @@
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-elanga-latest-ahead-of-hull-visit": {}
       },
       "club": "NEW",
-      "content_hash": "d602527ba02d73d215ff2c3bd7c2733ec7d9594ac6d207970ad7d64bda0ce1e0",
+      "content_hash": "fc66b37e08055777e3db6fa889b3cb5e8723831b882753f885cbfad6ce9c94cd",
       "documents": 2,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -289,7 +290,7 @@
       "article_validators": {},
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"a90cae25fa13fac233708590f6c33ed7\"",
       "id": "nfo-news",
       "last_modified": "Thu, 17 Sep 2026 15:45:04 GMT",
@@ -303,7 +304,7 @@
       "article_validators": {},
       "club": "SUN",
       "content_hash": "191fbb568fbd24f60eb2575b6a2ad66dbbf72f8961bce0b666fc2a248e2add01",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"269e127aa4a5a6f5a13a26cc3807dc9f\"",
       "id": "sun-news",
       "last_modified": "Thu, 17 Sep 2026 14:30:33 GMT",

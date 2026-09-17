@@ -1,12 +1,14 @@
 {
-  "affected_clubs": [],
+  "affected_clubs": [
+    "MCI"
+  ],
   "affected_owned": [],
-  "checked_at": "2026-09-17T18:21:38Z",
+  "checked_at": "2026-09-17T21:33:25Z",
   "claims": 0,
-  "coverage": 0.55,
+  "coverage": 0.5,
   "deadline": "2026-09-18T17:30:00Z",
   "gw": 5,
-  "notification_key": "d879524f4b61e51b41d4",
+  "notification_key": "69dbdabfcaa988f9c1e7",
   "notify_required": false,
   "official_fpl": {
     "1": {
@@ -615,9 +617,9 @@
       "status": "a"
     },
     "208": {
-      "chance": 50,
-      "news": "Groin injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "209": {
       "chance": null,
@@ -705,9 +707,9 @@
       "status": "i"
     },
     "224": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "225": {
       "chance": 0,
