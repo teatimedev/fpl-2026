@@ -14,77 +14,77 @@
    "weeks": [
     [
      5,
-     3.7
+     4.7
     ],
     [
      6,
-     7.7
+     5.9
     ],
     [
      7,
-     11.3
+     7.9
     ],
     [
      8,
-     11.1
+     9.2
     ],
     [
      9,
-     10.3
+     7.7
     ],
     [
      10,
-     9.9
+     7.6
     ],
     [
      11,
-     10.6
+     6.9
     ],
     [
      12,
-     6.7
+     7.9
     ],
     [
      13,
-     11.4
+     8.1
     ],
     [
      14,
-     9.8
+     7.6
     ],
     [
      15,
-     10.5
+     7.6
     ],
     [
      16,
-     8.6
+     7.1
     ],
     [
      17,
-     8.9
+     7.4
     ],
     [
      18,
-     8.0
+     7.1
     ],
     [
      19,
-     8.7
+     7.0
     ]
    ],
-   "best_gw": 13,
-   "best": 11.4,
-   "now": 3.7,
+   "best_gw": 8,
+   "best": 9.2,
+   "now": 4.7,
    "play": false,
-   "advice": "Hold. Best-looking week for this one is GW13 (11.4 extra points); this week is 3.7. Second copy (GW20\u201338): best week GW37 (11.0).",
+   "advice": "Hold. Best-looking week for this one is GW8 (9.2 extra points); this week is 4.7. Second copy (GW20\u201338): best week GW37 (8.7).",
    "last_eligible": 19,
    "later": [
     {
      "lo": 20,
      "hi": 38,
      "best_gw": 37,
-     "best": 11.0
+     "best": 8.7
     }
    ]
   },
@@ -93,111 +93,111 @@
    "weeks": [
     [
      20,
-     91.8,
-     "Jo\u00e3o Pedro"
-    ],
-    [
-     21,
-     42.8,
-     "Jo\u00e3o Pedro"
-    ],
-    [
-     22,
-     28.1,
-     "Mbeumo"
-    ],
-    [
-     23,
-     11.6,
-     "Jo\u00e3o Pedro"
-    ],
-    [
-     24,
-     81.7,
-     "Jo\u00e3o Pedro"
-    ],
-    [
-     25,
-     13.4,
-     "Jo\u00e3o Pedro"
-    ],
-    [
-     26,
-     15.5,
-     "Jo\u00e3o Pedro"
-    ],
-    [
-     27,
-     42.4,
-     "Jo\u00e3o Pedro"
-    ],
-    [
-     28,
-     33.8,
-     "Mbeumo"
-    ],
-    [
-     29,
-     6.9,
+     7.3,
      "Saka"
     ],
     [
+     21,
+     7.5,
+     "Haaland"
+    ],
+    [
+     22,
+     7.5,
+     "Saka"
+    ],
+    [
+     23,
+     5.7,
+     "Mbeumo"
+    ],
+    [
+     24,
+     7.1,
+     "Haaland"
+    ],
+    [
+     25,
+     8.0,
+     "Saka"
+    ],
+    [
+     26,
+     8.0,
+     "Haaland"
+    ],
+    [
+     27,
+     7.6,
+     "Haaland"
+    ],
+    [
+     28,
+     7.7,
+     "Saka"
+    ],
+    [
+     29,
+     8.3,
+     "Haaland"
+    ],
+    [
      30,
-     14.3,
-     "Jo\u00e3o Pedro"
+     7.7,
+     "Haaland"
     ],
     [
      31,
-     14.3,
-     "Mbeumo"
+     8.0,
+     "Saka"
     ],
     [
      32,
-     12.8,
-     "Mbeumo"
+     8.1,
+     "Haaland"
     ],
     [
      33,
-     93.0,
-     "Mbeumo"
+     7.2,
+     "Haaland"
     ],
     [
      34,
-     28.1,
-     "Jo\u00e3o Pedro"
+     7.9,
+     "Saka"
     ],
     [
      35,
-     34.4,
-     "Mbeumo"
+     7.5,
+     "Haaland"
     ],
     [
      36,
-     15.5,
-     "Mbeumo"
+     8.5,
+     "Haaland"
     ],
     [
      37,
-     38.3,
-     "Jo\u00e3o Pedro"
+     7.7,
+     "Haaland"
     ],
     [
      38,
-     9.8,
-     "Szoboszlai"
+     7.2,
+     "Saka"
     ]
    ],
-   "best_gw": 33,
-   "best": 93.0,
-   "best_name": "Mbeumo",
+   "best_gw": 36,
+   "best": 8.5,
+   "best_name": "Haaland",
    "now": null,
    "now_name": "",
    "play": false,
-   "advice": "Hold. Best week for this one is GW33: Mbeumo (93.0 extra).",
+   "advice": "Hold. Best week for this one is GW36: Haaland (8.5 extra).",
    "anyone": [
-    20,
-    121.5,
-    "Palmer"
+    36,
+    8.2,
+    "Haaland"
    ],
    "last_eligible": 38,
    "later": []
@@ -207,130 +207,130 @@
    "weeks": [
     [
      5,
-     114.0
+     7.3
     ],
     [
      6,
-     140.8
+     4.5
     ],
     [
      7,
-     103.6
+     5.8
     ],
     [
      8,
-     150.2
+     6.0
     ],
     [
      9,
-     277.6
+     6.1
     ],
     [
      10,
-     146.8
+     4.6
     ],
     [
      11,
-     79.9
+     5.4
     ],
     [
      12,
-     38.0
+     7.8
     ],
     [
      13,
-     261.9
+     2.9
     ],
     [
      14,
-     93.3
+     5.7
     ],
     [
      15,
-     186.1
+     4.0
     ],
     [
      16,
-     134.7
+     9.2
     ],
     [
      17,
-     65.0
+     5.7
     ],
     [
      18,
-     115.8
+     6.7
     ],
     [
      19,
-     57.4
+     6.2
     ]
    ],
-   "best_gw": 9,
-   "best": 277.6,
-   "now": 114.0,
+   "best_gw": 16,
+   "best": 9.2,
+   "now": 7.3,
    "play": false,
-   "advice": "Hold. Widest gap left is GW9 (277.6 behind the optimised one-week squad); this week 114.0.",
+   "advice": "Hold. Widest gap left is GW16 (9.2 behind the optimised one-week squad); this week 7.3.",
    "last_eligible": 19
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 34.1,
+   "now": 10.9,
    "gap_trend": [
     [
      5,
-     114.0
+     7.3
     ],
     [
      6,
-     140.8
+     4.5
     ],
     [
      7,
-     103.6
+     5.8
     ],
     [
      8,
-     150.2
+     6.0
     ],
     [
      9,
-     277.6
+     6.1
     ],
     [
      10,
-     146.8
+     4.6
     ],
     [
      11,
-     79.9
+     5.4
     ],
     [
      12,
-     38.0
+     7.8
     ]
    ],
-   "play": true,
-   "advice": "Worth playing now: unlimited transfers are worth 34.1 over the window versus your free transfers.",
+   "play": false,
+   "advice": "Hold. Unlimited transfers now are worth 10.9 over the window. The squad is holding up (gap to the optimised one-week squad 7.3\u20137.8 over the next weeks).",
    "last_eligible": 19
   }
  },
  "gaps": {
-  "5": 114.0,
-  "6": 140.8,
-  "7": 103.6,
-  "8": 150.2,
-  "9": 277.6,
-  "10": 146.8,
-  "11": 79.9,
-  "12": 38.0,
-  "13": 261.9,
-  "14": 93.3,
-  "15": 186.1,
-  "16": 134.7,
-  "17": 65.0,
-  "18": 115.8,
-  "19": 57.4
+  "5": 7.3,
+  "6": 4.5,
+  "7": 5.8,
+  "8": 6.0,
+  "9": 6.1,
+  "10": 4.6,
+  "11": 5.4,
+  "12": 7.8,
+  "13": 2.9,
+  "14": 5.7,
+  "15": 4.0,
+  "16": 9.2,
+  "17": 5.7,
+  "18": 6.7,
+  "19": 6.2
  },
  "method": "Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled."
 }
