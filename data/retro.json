@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-12T09:32:47Z",
- "latest_gw": 3,
+ "generated": "2026-09-17T07:53:48Z",
+ "latest_gw": 4,
  "gws": [
   {
    "gw": 1,
@@ -42,105 +42,125 @@
     "minutes_gain": 16
    },
    "generated": "2026-09-12T09:32:47Z"
+  },
+  {
+   "gw": 4,
+   "n": 382,
+   "counts": {
+    "on_model": 195,
+    "role_change": 15,
+    "unavailable": 33,
+    "variance": 59,
+    "minutes_watch": 40,
+    "minutes_loss": 22,
+    "minutes_gain": 18
+   },
+   "generated": "2026-09-17T07:53:48Z"
   }
  ],
- "classes_graded_gws": 2,
+ "classes_graded_gws": 3,
  "by_class": {
   "on_model": {
-   "n": 387,
-   "gws": 2,
-   "next_start_rate": 0.545,
-   "next_residual_mean": -0.01
+   "n": 605,
+   "gws": 3,
+   "next_start_rate": 0.541,
+   "next_residual_mean": -0.05
   },
   "variance/finishing": {
-   "n": 34,
-   "gws": 2,
-   "next_start_rate": 0.971,
-   "next_residual_mean": 0.49
+   "n": 55,
+   "gws": 3,
+   "next_start_rate": 0.909,
+   "next_residual_mean": 0.54
   },
   "variance": {
-   "n": 128,
-   "gws": 2,
-   "next_start_rate": 0.945,
-   "next_residual_mean": 0.01
+   "n": 184,
+   "gws": 3,
+   "next_start_rate": 0.908,
+   "next_residual_mean": 0.1
   },
   "minutes_loss/cameo": {
-   "n": 52,
-   "gws": 2,
-   "next_start_rate": 0.25,
-   "next_residual_mean": -0.23
+   "n": 72,
+   "gws": 3,
+   "next_start_rate": 0.278,
+   "next_residual_mean": -0.27
   },
   "minutes_loss": {
-   "n": 103,
-   "gws": 2,
-   "next_start_rate": 0.213,
-   "next_residual_mean": -0.47
+   "n": 136,
+   "gws": 3,
+   "next_start_rate": 0.242,
+   "next_residual_mean": -0.45
   },
   "unavailable": {
-   "n": 94,
-   "gws": 2,
-   "next_start_rate": 0.075,
-   "next_residual_mean": -0.34
+   "n": 120,
+   "gws": 3,
+   "next_start_rate": 0.092,
+   "next_residual_mean": -0.35
   },
   "minutes_loss/dnp": {
-   "n": 51,
-   "gws": 2,
-   "next_start_rate": 0.176,
-   "next_residual_mean": -0.71
+   "n": 64,
+   "gws": 3,
+   "next_start_rate": 0.203,
+   "next_residual_mean": -0.66
   },
   "variance/team": {
-   "n": 90,
-   "gws": 2,
-   "next_start_rate": 0.933,
-   "next_residual_mean": -0.12
+   "n": 121,
+   "gws": 3,
+   "next_start_rate": 0.909,
+   "next_residual_mean": -0.1
   },
   "variance/defcon": {
-   "n": 2,
-   "gws": 2,
+   "n": 4,
+   "gws": 3,
    "next_start_rate": 1.0,
-   "next_residual_mean": -1.41
+   "next_residual_mean": 1.1
   },
   "minutes_watch/fringe": {
-   "n": 87,
-   "gws": 2,
-   "next_start_rate": 0.149,
-   "next_residual_mean": -0.22
+   "n": 114,
+   "gws": 3,
+   "next_start_rate": 0.193,
+   "next_residual_mean": -0.02
   },
   "minutes_watch": {
-   "n": 105,
-   "gws": 2,
-   "next_start_rate": 0.19,
-   "next_residual_mean": -0.34
+   "n": 143,
+   "gws": 3,
+   "next_start_rate": 0.252,
+   "next_residual_mean": -0.19
   },
   "minutes_watch/hooked": {
-   "n": 18,
-   "gws": 2,
-   "next_start_rate": 0.389,
-   "next_residual_mean": -0.95
+   "n": 29,
+   "gws": 3,
+   "next_start_rate": 0.483,
+   "next_residual_mean": -0.83
   },
   "minutes_gain": {
-   "n": 54,
-   "gws": 2,
-   "next_start_rate": 0.759,
-   "next_residual_mean": -0.01
+   "n": 70,
+   "gws": 3,
+   "next_start_rate": 0.757,
+   "next_residual_mean": 0.18
   },
   "variance/bonus": {
-   "n": 2,
-   "gws": 1,
-   "next_start_rate": 1.0,
-   "next_residual_mean": -0.52
+   "n": 4,
+   "gws": 2,
+   "next_start_rate": 0.75,
+   "next_residual_mean": -0.96
   },
   "role_change/setpiece": {
-   "n": 6,
-   "gws": 1,
-   "next_start_rate": 0.833,
-   "next_residual_mean": 0.48
+   "n": 12,
+   "gws": 2,
+   "next_start_rate": 0.916,
+   "next_residual_mean": -0.16
   },
   "role_change": {
-   "n": 6,
+   "n": 19,
+   "gws": 2,
+   "next_start_rate": 0.947,
+   "next_residual_mean": -0.16
+  },
+  "role_change/xgi": {
+   "n": 7,
    "gws": 1,
-   "next_start_rate": 0.833,
-   "next_residual_mean": 0.48
+   "next_start_rate": 1.0,
+   "next_residual_mean": -0.15
   }
  },
  "note": "Classes never change a projection or a transfer number; they change what the digest shows first and how it words it."

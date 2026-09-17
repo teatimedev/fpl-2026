@@ -1,22 +1,22 @@
 {
-  "checked_at": "2026-09-12T12:41:55Z",
-  "coverage": 0.6,
+  "checked_at": "2026-09-17T07:49:09Z",
+  "coverage": 0.4,
   "enabled": 20,
   "gw": 5,
-  "healthy": 12,
+  "healthy": 8,
   "official_fpl_ok": true,
   "sources": [
     {
       "article_errors": 0,
       "article_validators": {
         "https://www.arsenal.com/meetings-and-events/conferences": {
-          "etag": "\"gdiaa5rihl2ftz\""
+          "etag": "\"htckv1mnpq2ful\""
         }
       },
       "club": "ARS",
-      "content_hash": "f806fe8b176a479f6e131262f080b428b30644b70d2d16724d059e2a8da94991",
+      "content_hash": "d91f46037cf4f666d797c504cec9b11edf3d8a921332bbd9e4b76071d38cb1f5",
       "documents": 2,
-      "etag": "\"arur8cz9wx2enx\"",
+      "etag": "\"dvsu8ikku72eoj\"",
       "id": "ars-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Arsenal",
@@ -29,9 +29,9 @@
       "club": "AVL",
       "content_hash": "9c7825becb8ff42f8c499d57fe8c1093bd5159607ffeacf1c5ac976ec67ff3f9",
       "documents": 1,
-      "etag": "\"34a1a16d6e1ed6139956fd4f37d4c232\"",
+      "etag": "\"412d5418fc7bb20f72aa990566df6da7\"",
       "id": "avl-news",
-      "last_modified": "Sat, 12 Sep 2026 02:08:06 GMT",
+      "last_modified": "Thu, 17 Sep 2026 02:08:12 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Aston Villa",
       "status": "no_articles",
@@ -41,12 +41,12 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.brightonandhovealbion.com/first-team-men-squad": {
-          "etag": "\"zm0hjf\""
+          "etag": "\"151aoaj\""
         }
       },
       "club": "BHA",
       "content_hash": "1707450c057db10c3465b0248e2167c608b437f115d281de18eeca7f89e8a961",
-      "documents": 2,
+      "documents": 1,
       "etag": "\"6ohn5g\"",
       "id": "bha-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -59,7 +59,7 @@
       "article_validators": {},
       "club": "BOU",
       "content_hash": "acb5dd4aabbdaa586bbf7b20f9dfeaf68da886da33172d6ea44075f8dcbfa100",
-      "documents": 1,
+      "documents": 0,
       "id": "bou-news",
       "last_modified": "Tue, 08 Sep 2026 09:14:34 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -71,14 +71,14 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.brentfordfc.com/en/news/article/match-preview-brentford-v-strasbourg": {
-          "last_modified": "Sat, 12 Sep 2026 12:41:58 GMT"
+          "last_modified": "Thu, 17 Sep 2026 07:49:11 GMT"
         }
       },
       "club": "BRE",
       "content_hash": "23a3b30414e326eba003975d921e741cdfa74cde12cf3623bce6ac32195ec333",
       "documents": 2,
       "id": "bre-news",
-      "last_modified": "Sat, 12 Sep 2026 12:41:58 GMT",
+      "last_modified": "Thu, 17 Sep 2026 07:49:10 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "ok",
@@ -87,10 +87,10 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.chelseafc.com/en/news/article/xabi-alonso-updates-on-marco-palestra-fitness": {}
+        "https://www.chelseafc.com/en/news/article/gallery-behind-the-scenes-at-the-chelsea-squad-photo": {}
       },
       "club": "CHE",
-      "content_hash": "ee77d116930204a7ca314aff68da892f0cd0c574494e5b531fb66bcbfe0ca31a",
+      "content_hash": "b017461d4d2061ff233e3752254167fac58fc20a037d067aa1b6ac57df0a16b0",
       "documents": 2,
       "id": "che-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -104,9 +104,9 @@
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
       "documents": 1,
-      "etag": "\"8e164fac6fa53258cc668058eb8c05a1\"",
+      "etag": "\"2f983d8f0663132ecd79fc612cdccaf1\"",
       "id": "cov-news",
-      "last_modified": "Sat, 12 Sep 2026 02:08:03 GMT",
+      "last_modified": "Thu, 17 Sep 2026 02:06:03 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Coventry City",
       "status": "no_articles",
@@ -118,7 +118,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"v22ufee9rrtr1o\"",
+      "etag": "\"11wd499uas4ti5a\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -131,9 +131,9 @@
       "club": "EVE",
       "content_hash": "54e2021d53c5959c4e3dc30111359c37658673c2e65215e1aaabf24197933129",
       "documents": 1,
-      "etag": "\"a98d9cb30e0e6e9f04ef5ea4d9b0a78d\"",
+      "etag": "\"7d08be9b48cf6234d08e682df022f2fb\"",
       "id": "eve-news",
-      "last_modified": "Sat, 12 Sep 2026 02:05:22 GMT",
+      "last_modified": "Thu, 17 Sep 2026 02:05:15 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Everton",
       "status": "no_articles",
@@ -158,12 +158,13 @@
       "club": "FUL",
       "content_hash": "d337e2ca1152675d3a8a982b54fd0a12a89006f9f93cbc2c282b451076766d3f",
       "documents": 4,
+      "error": "<urlopen error [Errno -3] Temporary failure in name resolution>",
       "etag": "\"da5c16c19ce3139a667df8c2802288ad\"",
       "id": "ful-news",
       "last_modified": "Sat, 12 Sep 2026 12:15:19 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Fulham",
-      "status": "ok",
+      "status": "error",
       "url": "https://www.fulhamfc.com/news/"
     },
     {
@@ -172,9 +173,9 @@
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
       "documents": 1,
-      "etag": "\"c78a691d01e8bf3943f7bc4701fb320c\"",
+      "etag": "\"66e454a520a29787b2567bf13dfe5fc2\"",
       "id": "hul-news",
-      "last_modified": "Sat, 12 Sep 2026 02:08:59 GMT",
+      "last_modified": "Thu, 17 Sep 2026 02:05:59 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Hull City",
       "status": "no_articles",
@@ -183,17 +184,17 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.itfc.co.uk/news/2026/september/10/matchday-guide---crystal-palace--a-/": {
-          "etag": "\"06295bc70c18119eec3e7172aff8d423\"",
-          "last_modified": "Sat, 12 Sep 2026 02:15:00 GMT"
+        "https://www.itfc.co.uk/news/2026/september/16/Exequiel-Palacios-Argentina-squad-international-break/": {
+          "etag": "\"881e0c1bc8cf309adcfd93ac1f368b8d\"",
+          "last_modified": "Thu, 17 Sep 2026 02:15:14 GMT"
         }
       },
       "club": "IPS",
-      "content_hash": "3eadb11a0b60d552c659d1c81d429008e1ef359e320ab46fe4a6132d8c940239",
+      "content_hash": "32ea3c986b196a7301ed8b624fdc0c0dad1ab17f52d6cc018eabf3f3d86aa859",
       "documents": 2,
-      "etag": "\"d1ace54b618226b9c1a456f4e38353ed\"",
+      "etag": "\"77733ddef99ad7056b3ab108ce58b51f\"",
       "id": "ips-news",
-      "last_modified": "Sat, 12 Sep 2026 11:42:50 GMT",
+      "last_modified": "Thu, 17 Sep 2026 02:15:14 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
       "status": "ok",
@@ -201,42 +202,37 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {
-        "https://www.leedsunited.com/en/news/daniel-farke-provides-update-on-duos-fitness-ahead-of-newcastle": {}
-      },
+      "article_validators": {},
       "club": "LEE",
-      "content_hash": "76bbc3c4c99bbcfa915abeeb11b39c5b2d844ff4a7addfaacba4aae77a859bd3",
-      "documents": 2,
+      "content_hash": "cc897d3e6187e0f03959d16ee48ea99bef13145d973f6d30e3df927ecd4bd158",
+      "documents": 1,
       "id": "lee-news",
-      "last_modified": "Sat, 12 Sep 2026 12:42:00 GMT",
+      "last_modified": "Thu, 17 Sep 2026 07:08:26 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
-      "status": "ok",
+      "status": "no_articles",
       "url": "https://www.leedsunited.com/en/news"
     },
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.liverpoolfc.com/news/alexander-isak-his-fitness-and-form-liverpool-fans-and-barcola-excitement": {
-          "etag": "\"236e2-FLNQnR03iPULn/PACEEYkVWWBpI\""
+        "https://www.liverpoolfc.com/news/andoni-iraola-press-conference-carabao-cup-win-contagious-koumas-and-szoboszlai-worldie": {
+          "etag": "\"2003e-eonSkjgd8Idy8awPjc0pwBPD0aQ\""
         },
-        "https://www.liverpoolfc.com/news/andoni-iraola-press-conference-facing-arbeloas-fulham-araujo-isak-koumas-and-more": {
-          "etag": "\"22480-27qEItIoZ+JCkkDu5SsmYpChnOA\""
-        },
-        "https://www.liverpoolfc.com/news/lfc-fitness-update-iraola-provides-latest-gakpo-barcola-and-ekitike": {
-          "etag": "\"1e07b-hJm3BaVWovCQ+9WBzerf46wg3LM\""
-        },
-        "https://www.liverpoolfc.com/news/liverpool-v-fulham-team-news-3": {
-          "etag": "\"219a3-cMaIjQ6+Ne+ZBKtLX5ALCeedMxQ\""
+        "https://www.liverpoolfc.com/news/confirmed-liverpool-line-v-tottenham-hotspur-11": {
+          "etag": "\"1ef92-5VigF9b8ZZg6qv/U06q9OR8EWas\""
         },
         "https://www.liverpoolfc.com/news/liverpools-injury-list-suspensions-and-availability": {
-          "etag": "\"1d5d9-9/1iBAbYczGL35Ck8aNoLfdkpVM\""
+          "etag": "\"1ccb1-1UaZnj3rexYglVeeOfZFWPSt2OE\""
+        },
+        "https://www.liverpoolfc.com/news/press-conference-watch-andoni-iraolas-verdict-liverpool-3-1-spurs": {
+          "etag": "\"1b9b4-BjuK4EADW52ZZxHczbnuLMAWGAo\""
         }
       },
       "club": "LIV",
-      "content_hash": "99e0788d799892b68f5436c91c64c01254da54878d0945023223564df20a6f84",
-      "documents": 6,
-      "etag": "\"33397-/6GybCxZjbYhtO2nZFjIiW8GWKY\"",
+      "content_hash": "f8fd1ed350d76da84718c05d32d88f66c128859f42fe17256a844d205dd46514",
+      "documents": 5,
+      "etag": "\"333ab-84wK8bG4RgyCCEaPuCZnpP6tQPw\"",
       "id": "liv-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
@@ -246,11 +242,12 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/news/mens/man-utd-v-city-match-preview-pl-13-sep-63924475": {}
+        "https://www.mancity.com/news/mens/city-v-norwich-match-preview-carabao-cup-63924970": {},
+        "https://www.mancity.com/news/mens/enzo-maresca-norwich-embargo-preview-63925159": {}
       },
       "club": "MCI",
-      "content_hash": "aa1a1efee6f7f20a591a93e66a1b0ca61ed05873da864d55e6644efa820c31a9",
-      "documents": 2,
+      "content_hash": "d1d4d6158acbf5340edc1150e52aaf0a440b47b152f05bb58c0826fc0a7dd18b",
+      "documents": 3,
       "id": "mci-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
@@ -270,25 +267,24 @@
       "club": "MUN",
       "content_hash": "e677649e5b4b0cd938c60e972c48a604a2da6115e3aa69dfcc3c564d656bb441",
       "documents": 3,
+      "error": "HTTP Error 403: Forbidden",
       "id": "mun-news",
       "last_modified": "Sat, 12 Sep 2026 12:42:01 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester United",
-      "status": "ok",
+      "status": "error",
       "url": "https://www.manutd.com/en/news"
     },
     {
       "article_errors": 0,
-      "article_validators": {
-        "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-fernandez-pardo-and-hall-latest-ahead-of-leeds-trip": {}
-      },
+      "article_validators": {},
       "club": "NEW",
-      "content_hash": "51539eaaaf2d1d9200558549d1fc6bf7acd7f314b23567d4d516842ac9dc8ef8",
-      "documents": 2,
+      "content_hash": "70e3f6063a76020e6954a98871b96c0275f18b9935263d822a9a9f1bd5637562",
+      "documents": 1,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Newcastle United",
-      "status": "ok",
+      "status": "no_articles",
       "url": "https://www.newcastleunited.com/en/news"
     },
     {
@@ -297,9 +293,9 @@
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
       "documents": 1,
-      "etag": "\"11af29fa59f4bd51e46ba9eb36f91e51\"",
+      "etag": "\"4d6771ebbd3c0ed457c8646b7c73ec4f\"",
       "id": "nfo-news",
-      "last_modified": "Sat, 12 Sep 2026 02:08:37 GMT",
+      "last_modified": "Thu, 17 Sep 2026 02:08:11 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -311,9 +307,9 @@
       "club": "SUN",
       "content_hash": "191fbb568fbd24f60eb2575b6a2ad66dbbf72f8961bce0b666fc2a248e2add01",
       "documents": 1,
-      "etag": "\"8e2c472ec2412b6241c5f17e36cc0f84\"",
+      "etag": "\"e695f6096588de30fd193eae8b02a3d3\"",
       "id": "sun-news",
-      "last_modified": "Sat, 12 Sep 2026 02:05:26 GMT",
+      "last_modified": "Thu, 17 Sep 2026 02:04:57 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Sunderland",
       "status": "no_articles",
@@ -325,7 +321,7 @@
         "https://www.tottenhamhotspur.com/teams/mens/squad": {}
       },
       "club": "TOT",
-      "content_hash": "44d17221481e7454cfb448873c94ba0b36a0d91cea28e57c50ff9b6cd2da6f62",
+      "content_hash": "68f403ac6883e4fa3ef83f5b6bdd42fad167f762f217808dab2d1df751d610f6",
       "documents": 2,
       "id": "tot-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -334,6 +330,6 @@
       "url": "https://www.tottenhamhotspur.com/news/"
     }
   ],
-  "status": "amber",
+  "status": "red",
   "version": 1
 }

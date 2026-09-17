@@ -4230,7 +4230,6 @@
     {
       "aliases": [
         "L.Miley",
-        "Miley",
         "Lewis Miley"
       ],
       "canonical": "Lewis Miley",
@@ -6043,6 +6042,34 @@
       "canonical": "Stephen Mfuni",
       "club": "COV",
       "player_id": 656
+    },
+    {
+      "aliases": [
+        "Nunes",
+        "Gustavo Nunes",
+        "Nunes Fernandes Gomes",
+        "Gustavo Nunes Fernandes Gomes"
+      ],
+      "canonical": "Gustavo Nunes Fernandes Gomes",
+      "club": "BRE",
+      "player_id": 657
+    },
+    {
+      "aliases": [
+        "Ibrahim",
+        "Younes Ibrahim"
+      ],
+      "canonical": "Younes Ibrahim",
+      "club": "BHA",
+      "player_id": 658
+    },
+    {
+      "aliases": [
+        "Mason Miley"
+      ],
+      "canonical": "Mason Miley",
+      "club": "NEW",
+      "player_id": 659
     }
   ],
   "version": 1
