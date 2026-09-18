@@ -11,6 +11,18 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class SimulationCliTests(unittest.TestCase):
+    def test_player_added_after_preseason_can_be_simulated(self):
+        player_id = next(iter(simulate.V2_PLAYERS))
+        projection = simulate.V2_PLAYERS[player_id]
+        with patch.dict(simulate.ELEM, {}, clear=True):
+            parameters = simulate.player_params(player_id)
+            gf, ga = simulate.simulate_teams(2)
+            points = simulate.simulate_player(parameters, gf, ga, 2)
+        self.assertEqual(parameters['name'], projection['name'])
+        self.assertEqual(parameters['team'], simulate.TEAM_ID[projection['team']])
+        self.assertEqual(points.shape, (2, simulate.WINDOW))
+        self.assertTrue(simulate.np.isfinite(points).all())
+
     def test_rolling_window_keeps_blank_gameweeks_in_average(self):
         self.assertEqual(simulate.simulation_gameweeks(3, 5), [3, 4, 5])
         self.assertEqual(

@@ -52,7 +52,8 @@ requires ignored local artifacts and is not part of the unit suite.
 ## Refreshing advice
 
 The production workflow is [.github/workflows/weekly.yml](.github/workflows/weekly.yml).
-It scans news, refreshes the numerical model when due, grades finished weeks,
+It scans news and checks prices against the published forecast, rebuilds the
+numerical model when due or prices change, grades finished weeks,
 builds the weekly decision and chip advice, runs bounded scouting, freezes the
 deadline evidence, exports the app bundle and commits the results to `master`.
 The hourly gate selects useful deadline/news windows; it does not rebuild every

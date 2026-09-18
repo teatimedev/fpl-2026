@@ -190,6 +190,20 @@ def _semantic_generated(value: dict) -> list[dict]:
             if row.get("status", "applied") == "applied"]
 
 
+def forecast_price_changes(bootstrap: dict, forecast: dict) -> list[int]:
+    """Keep requesting a rebuild until the exported forecast uses live prices.
+
+    Comparing with the previous news scan would acknowledge a price move even
+    if its rebuild failed. All forecast players matter to transfer affordability,
+    including potential targets outside the owned squad.
+    """
+    prices = {player['id']: round(player['price'] * 10)
+              for player in forecast.get('players', [])}
+    return sorted(element['id'] for element in bootstrap['elements']
+                  if element['id'] in prices and element.get('now_cost') is not None
+                  and element['now_cost'] != prices[element['id']])
+
+
 def materiality(old: dict, new: dict, *, owned_ids: set[int], captain: int | None,
                 vice: int | None, hours_to_deadline: float) -> dict:
     changed = _semantic_generated(old) != _semantic_generated(new)
@@ -335,7 +349,8 @@ def _official_outage(root: Path, now: datetime, stamp: str) -> dict:
     run = {**prior_run, "version": 1, "gw": gw, "deadline": deadline,
            "checked_at": stamp, "status": "red", "official_fpl_ok": False,
            "rebuild_required": False, "notify_required": notify, "urgent": notify,
-           "affected_owned": [], "affected_clubs": [], "notification_key": key}
+           "affected_owned": [], "affected_clubs": [], "price_changed": [],
+           "notification_key": key}
     run.setdefault("coverage", health["coverage"]); run.setdefault("claims", len(evidence.get("claims", [])))
     payload = {"evidence": evidence or {"version": 1, "gw": gw, "deadline": deadline, "claims": [],
                                         "policy": "explicit absences auto-apply; nuanced claims are review candidates"},
@@ -418,6 +433,10 @@ def run(root: Path = ROOT, *, now: datetime | None = None) -> dict:
             impact["urgent"] = impact["urgent"] or (
                 hours <= 3 and bool({captain, vice} & set(official_affected))
             )
+    price_changed = (forecast_price_changes(
+        bootstrap, _read(root / "app/src/data/fpl.json", {})) if official_fpl_ok else [])
+    if price_changed:
+        impact["rebuild_required"] = True
     if not official_fpl_ok:
         impact["rebuild_required"] = False
         transitioned = previous_run.get("official_fpl_ok", True) is not False
@@ -443,6 +462,7 @@ def run(root: Path = ROOT, *, now: datetime | None = None) -> dict:
                 "status": status, "coverage": round(coverage, 3), "claims": len(claims),
                 "official_fpl": official, "official_fpl_ok": official_fpl_ok,
                 "affected_clubs": degraded["affected_clubs"],
+                "price_changed": price_changed,
                 "notification_key": notification_key, **impact},
     }
     payload["evidence"] = _stabilize(root, "data/news/evidence.json", payload["evidence"])

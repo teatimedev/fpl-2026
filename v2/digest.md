@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 5
 
-Deadline **Fri 18 Sep, 17:30 UTC** — 0d 19h away.
+Deadline **Fri 18 Sep, 17:30 UTC** — 0d 6h away.
 Projections cover GW5–10.
 
 ## GW4 in review — what happened, and what it does and does not change
 
-_382 players classified: 34 unavailable, 23 minutes loss, 40 minutes watch, 18 minutes gain, 15 role change, 59 variance, 193 on model. Retrospective classes graded: 3 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_382 players classified: 34 unavailable, 23 minutes loss, 41 minutes watch, 18 minutes gain, 15 role change, 58 variance, 193 on model. Retrospective classes graded: 3 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -100,10 +100,10 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 | Sadiki (SUN) | Bobb (FUL) | +0.6 | +5.3 | +0.8 | **+6.0** | +6.0 |
 | O'Shea (IPS) | Mykolenko (EVE) | +0.5 | +4.0 | -0.0 | **+4.0** | +4.0 |
 | Groß (BHA) | Barnes (NEW) | +0.3 | +3.0 | +0.0 | **+3.0** | +3.0 |
-| Szoboszlai (LIV) | Barnes (NEW) | -1.0 | +1.7 | +0.4 | **+2.2** | +2.2 |
+| Szoboszlai (LIV) | Enzo (MCI) | -0.1 | +1.7 | +0.8 | **+2.5** | +2.5 |
 | Tarkowski (EVE) | Gvardiol (MCI) | -0.4 | +0.7 | +0.7 | **+1.3** | +1.3 |
 | Leno (FUL) | Sels (NFO) | +0.5 | +1.0 | +0.0 | **+1.0** | +1.0 |
-| João Pedro (CHE) | Thiago (BRE) | +0.1 | +1.3 | -0.9 | **+0.3** | +0.3 |
+| João Pedro (CHE) | Thiago (BRE) | +0.0 | +1.3 | -0.9 | **+0.3** | +0.3 |
 
 _Last week, for the names above:_
 - Milenković — unavailable: status i now
@@ -133,18 +133,18 @@ Selected path under the current policy: **403.5** pts (0 hits). Making no move t
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
-| Milenković → Gvardiol | +1.50 | 2.0 | no |
-| Sadiki → Bobb | -2.15 | 2.0 | no |
+| Milenković → Gvardiol | +1.51 | 2.0 | no |
+| Sadiki → Bobb | -2.14 | 2.0 | no |
 | O'Shea → Mykolenko | -0.72 | 2.0 | no |
 | Sadiki, Milenković → Botman, Barnes | +0.01 | 4.0 | no |
-| Sadiki, Milenković → Ballard, Barnes | -0.97 | 4.0 | no |
+| Sadiki, Milenković → Ballard, Barnes | -0.96 | 4.0 | no |
 
 - **GW5** 61.7 pts, C Haaland, 1 FT  hold
 - **GW6** 68.3 pts, C Saka, 2 FT  Milenković → Ballard, Sadiki → Barnes
 - **GW7** 68.4 pts, C Haaland, 1 FT  hold
 - **GW8** 66.7 pts, C Haaland, 2 FT  Raya → Roefs, Groß → Ødegaard
 - **GW9** 67.1 pts, C Haaland, 1 FT  Szoboszlai → Tavernier
-- **GW10** 71.3 pts, C Saka, 1 FT  Leno → Pickford
+- **GW10** 71.3 pts, C Saka, 1 FT  Roefs → Pickford
 
 _The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
 
@@ -156,7 +156,7 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 4.7 | GW8: 9.2 | Hold. Best-looking week for this one is GW8 (9.2 extra points); this week is 4.7. Second copy (GW20–38): best week GW37 (8.7). |
 | Triple Captain | — | GW36: 8.5 (Haaland) | Hold. Best week for this one is GW36: Haaland (8.5 extra). |
-| Free Hit | 7.3 | GW16: 9.2 | Hold. Widest gap left is GW16 (9.2 behind the optimised one-week squad); this week 7.3. |
+| Free Hit | 7.3 | GW16: 9.1 | Hold. Widest gap left is GW16 (9.1 behind the optimised one-week squad); this week 7.3. |
 | Wildcard | +10.9 over the window | — | Hold. Unlimited transfers now are worth 10.9 over the window. The squad is holding up (gap to the optimised one-week squad 7.3–7.8 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
@@ -168,29 +168,29 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Rogers £7.7 | +11.2% | +469,276 | Elanga £6.2 | -41.7% | -352,574 |
-| Gibbs-White £8.0 | +26.9% | +409,107 | Szoboszlai £7.0 ⭑ | -7.7% | -295,749 |
-| Groß £5.7 ⭑ | +17.6% | +381,026 | Shaw £4.4 | -21.5% | -223,572 |
-| Gvardiol £5.7 | +14.2% | +376,903 | Pedro Porro £5.5 | -21.2% | -198,086 |
-| Schade £6.1 | +37.3% | +275,131 | B.Fernandes £12.0 | -4.0% | -176,751 |
-| Belloumi £5.1 | +61.0% | +251,580 | Tzolis £6.4 | -11.4% | -174,250 |
+| Rogers £7.7 | +12.0% | +512,512 | Elanga £6.2 | -53.1% | -415,254 |
+| Gibbs-White £8.0 | +30.1% | +487,208 | Szoboszlai £7.0 ⭑ | -8.5% | -324,652 |
+| Gvardiol £5.7 | +15.6% | +426,179 | Shaw £4.4 | -25.5% | -254,546 |
+| Groß £5.7 ⭑ | +19.0% | +417,395 | Pedro Porro £5.4 | -24.0% | -218,673 |
+| Schade £6.1 | +38.8% | +298,695 | B.Fernandes £12.0 | -4.6% | -204,676 |
+| Belloumi £5.1 | +63.2% | +274,300 | Tzolis £6.4 | -13.1% | -195,857 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Target Gvardiol (net +361k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +361k this event (in 390k / out 29k), sel 24.3% = Q3 (~150k to move), price 5.7 over 11 snaps (+0.2m in window), already +1x0.1m this event]
-- Target Mykolenko (net +126k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +126k this event (in 141k / out 16k), sel 3.3% = Q1 (~77k to move), price 4.5 over 11 snaps (+0.0m in window)]
-- Squad player Mbeumo (net -119k this event) at fall risk (-0.1m hurts the bank) [net -119k this event (in 66k / out 186k), sel 22.3% = Q3 (~150k to move), price 7.9 over 11 snaps (-0.1m in window)]
-- Squad player Szoboszlai (net -288k this event) at fall risk (-0.1m hurts the bank) [net -288k this event (in 63k / out 350k), sel 35.4% = Q3 (~150k to move), price 7.0 over 11 snaps (+0.0m in window)]
-- Squad player Milenković (net -34k this event) at fall risk (-0.1m hurts the bank) [net -34k this event (in 0k / out 34k), sel 1.3% = Q0 (~40k to move), price 5.5 over 11 snaps (+0.0m in window)]
+- Target Gvardiol (net +377k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +377k this event (in 407k / out 30k), sel 24.5% = Q3 (~150k to move), price 5.7 over 11 snaps (+0.2m in window), already +1x0.1m this event]
+- Target Mykolenko (net +132k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +132k this event (in 149k / out 17k), sel 3.4% = Q2 (~113k to move), price 4.5 over 11 snaps (+0.0m in window)]
+- Squad player Mbeumo (net -126k this event) at fall risk (-0.1m hurts the bank) [net -126k this event (in 69k / out 195k), sel 22.2% = Q3 (~150k to move), price 7.9 over 11 snaps (-0.1m in window)]
+- Squad player Szoboszlai (net -296k this event) at fall risk (-0.1m hurts the bank) [net -296k this event (in 66k / out 361k), sel 35.3% = Q3 (~150k to move), price 7.0 over 11 snaps (+0.0m in window)]
+- Squad player Milenković (net -35k this event) at fall risk (-0.1m hurts the bank) [net -35k this event (in 0k / out 35k), sel 1.2% = Q0 (~40k to move), price 5.5 over 11 snaps (+0.0m in window)]
 
 _Based on 11 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-09-17 21:57 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-09-18 10:40 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
 
 ## Scouting
 
-8 sourced observations; 3 API calls. Review these alongside the transfer stress tests in the app.
+6 sourced observations; 5 API calls. Review these alongside the transfer stress tests in the app.

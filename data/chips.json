@@ -211,19 +211,19 @@
     ],
     [
      6,
-     4.5
+     4.7
     ],
     [
      7,
-     5.8
+     5.9
     ],
     [
      8,
-     6.0
+     6.1
     ],
     [
      9,
-     6.1
+     6.2
     ],
     [
      10,
@@ -243,15 +243,15 @@
     ],
     [
      14,
-     5.7
+     6.7
     ],
     [
      15,
-     4.0
+     4.2
     ],
     [
      16,
-     9.2
+     9.1
     ],
     [
      17,
@@ -263,14 +263,14 @@
     ],
     [
      19,
-     6.2
+     6.1
     ]
    ],
    "best_gw": 16,
-   "best": 9.2,
+   "best": 9.1,
    "now": 7.3,
    "play": false,
-   "advice": "Hold. Widest gap left is GW16 (9.2 behind the optimised one-week squad); this week 7.3.",
+   "advice": "Hold. Widest gap left is GW16 (9.1 behind the optimised one-week squad); this week 7.3.",
    "last_eligible": 19
   },
   "wildcard": {
@@ -283,19 +283,19 @@
     ],
     [
      6,
-     4.5
+     4.7
     ],
     [
      7,
-     5.8
+     5.9
     ],
     [
      8,
-     6.0
+     6.1
     ],
     [
      9,
-     6.1
+     6.2
     ],
     [
      10,
@@ -317,20 +317,20 @@
  },
  "gaps": {
   "5": 7.3,
-  "6": 4.5,
-  "7": 5.8,
-  "8": 6.0,
-  "9": 6.1,
+  "6": 4.7,
+  "7": 5.9,
+  "8": 6.1,
+  "9": 6.2,
   "10": 4.6,
   "11": 5.4,
   "12": 7.8,
   "13": 2.9,
-  "14": 5.7,
-  "15": 4.0,
-  "16": 9.2,
+  "14": 6.7,
+  "15": 4.2,
+  "16": 9.1,
   "17": 5.7,
   "18": 6.7,
-  "19": 6.2
+  "19": 6.1
  },
  "method": "Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled."
 }

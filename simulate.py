@@ -196,8 +196,15 @@ def simulate_teams(sims):
 # ----------------------------------------------------------------- players
 def player_params(pid):
     """Per-90 rates and start probability for one player."""
-    p = ELEM[pid]
     projection = V2_PLAYERS[pid]
+    p = ELEM.get(pid)
+    if p is None:
+        # New FPL signings are absent from the frozen preseason bootstrap.
+        # Use their current identity and the existing no-history rate priors.
+        p = dict(element_type=POS_ID[projection['pos']],
+                 team=TEAM_ID[projection['team']], minutes=0, starts=0,
+                 defensive_contribution_per_90=projection.get('dc90', 0.0),
+                 now_cost=round(projection['price'] * 10), web_name=projection['name'])
     et = p['element_type']
     per90 = max(p['minutes'] / 90.0, 1e-9)
 
@@ -497,7 +504,7 @@ def simulate_squad(pids, gf, ga, sims, label):
         for pid in xi_ids:
             total[:, gw_index] += pts[index[pid], :, gw_index]
 
-        clubs = Counter(ELEM[pid]['team'] for pid in xi_ids)
+        clubs = Counter(pars[index[pid]]['team'] for pid in xi_ids)
         top_club = max(top_club, max(clubs.values()) if clubs else 0)
 
         captain_id = lineup.captain['id'] if lineup.captain else None
