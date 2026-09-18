@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-17T21:33:25Z",
+  "checked_at": "2026-09-18T00:29:09Z",
   "coverage": 0.5,
   "enabled": 20,
   "gw": 5,
@@ -71,14 +71,14 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.brentfordfc.com/en/news/article/match-preview-brentford-v-strasbourg": {
-          "last_modified": "Thu, 17 Sep 2026 21:33:27 GMT"
+          "last_modified": "Fri, 18 Sep 2026 00:29:12 GMT"
         }
       },
       "club": "BRE",
       "content_hash": "23a3b30414e326eba003975d921e741cdfa74cde12cf3623bce6ac32195ec333",
       "documents": 2,
       "id": "bre-news",
-      "last_modified": "Thu, 17 Sep 2026 21:33:26 GMT",
+      "last_modified": "Fri, 18 Sep 2026 00:29:10 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "ok",
@@ -205,10 +205,10 @@
         "https://www.leedsunited.com/en/news/anton-stach-named-in-jurgen-klopps-first-germany-squad": {}
       },
       "club": "LEE",
-      "content_hash": "71864547f1ed4b774635fd5c2b4f451205c47c91eacfe9dcb7607b77d4bb454e",
+      "content_hash": "1f89a0ea8134774ba4fe5f7adb2f4ad0357ca036e782383bd1d26e831a283f54",
       "documents": 2,
       "id": "lee-news",
-      "last_modified": "Thu, 17 Sep 2026 21:02:06 GMT",
+      "last_modified": "Fri, 18 Sep 2026 00:29:11 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -218,16 +218,16 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.liverpoolfc.com/news/friday-watch-andoni-iraolas-pre-bournemouth-press-conference-live": {
-          "etag": "\"1b59a-v99ahINoJ7QMLmtr+59LRrF0MuI\""
+          "etag": "\"1b59a-m95h2foETx2tpSiyWSSzXDsVWCg\""
         },
         "https://www.liverpoolfc.com/news/volley-or-half-volley-liverpool-squad-debate-dominik-szoboszlais-spurs-stunner": {
-          "etag": "\"1bb48-5Ri1R7zjPVd4Kf3+5jn1lFrGV/8\""
+          "etag": "\"1bb4a-p40nFt6PxKaoM4I5jEHQPtSyjlA\""
         }
       },
       "club": "LIV",
-      "content_hash": "69c7bd80cb88264bed612404c218972ff5f14d5fd14fadeb3c7e9b7e62982236",
+      "content_hash": "ee8e96de2e9c63127bac58bf8a46417fe079148d770d2a087eeadaba6cdb8273",
       "documents": 3,
-      "etag": "\"33de6-+FZ9c61NRfn7Ll+W/21UoinJM2U\"",
+      "etag": "\"33de7-HRoL6s/w6WpQGlfkzn7V6GocJIs\"",
       "id": "liv-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
@@ -236,18 +236,14 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {
-        "https://www.mancity.com/news/mens/city-v-norwich-match-preview-carabao-cup-63924970": {},
-        "https://www.mancity.com/news/mens/manchester-city-v-norwich-team-news-and-tactics-1-63925262": {}
-      },
+      "article_validators": {},
       "club": "MCI",
-      "content_hash": "669aae477db23bd596a079ad7b8426265d839ad43ff6a711afd0fb3145f8e65c",
-      "documents": 3,
-      "error": "The read operation timed out",
+      "content_hash": "eae1046bdee34e24c08e3add4ef785417aa03821da202a76bbf7256b6ecbbecd",
+      "documents": 1,
       "id": "mci-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
-      "status": "error",
+      "status": "no_articles",
       "url": "https://www.mancity.com/news"
     },
     {
@@ -277,7 +273,7 @@
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-elanga-latest-ahead-of-hull-visit": {}
       },
       "club": "NEW",
-      "content_hash": "fc66b37e08055777e3db6fa889b3cb5e8723831b882753f885cbfad6ce9c94cd",
+      "content_hash": "766d9fdf10b849902dfb298a4372b711acde193b43a08bb16050706f61dc9c77",
       "documents": 2,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
