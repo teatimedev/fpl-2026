@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-18T00:29:09Z",
+  "checked_at": "2026-09-18T06:02:53Z",
   "coverage": 0.5,
   "enabled": 20,
   "gw": 5,
@@ -16,7 +16,7 @@
       "club": "ARS",
       "content_hash": "d91f46037cf4f666d797c504cec9b11edf3d8a921332bbd9e4b76071d38cb1f5",
       "documents": 2,
-      "etag": "\"dvsu8ikku72eoj\"",
+      "etag": "\"cx1u5zo4xn2eoj\"",
       "id": "ars-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Arsenal",
@@ -28,10 +28,10 @@
       "article_validators": {},
       "club": "AVL",
       "content_hash": "9c7825becb8ff42f8c499d57fe8c1093bd5159607ffeacf1c5ac976ec67ff3f9",
-      "documents": 0,
-      "etag": "\"f2a179ea432feec3e1f0cb8540277225\"",
+      "documents": 1,
+      "etag": "\"6aac1a7e17ee81e4a396050652ba6a65\"",
       "id": "avl-news",
-      "last_modified": "Thu, 17 Sep 2026 14:12:57 GMT",
+      "last_modified": "Fri, 18 Sep 2026 02:07:15 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Aston Villa",
       "status": "no_articles",
@@ -71,14 +71,14 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.brentfordfc.com/en/news/article/match-preview-brentford-v-strasbourg": {
-          "last_modified": "Fri, 18 Sep 2026 00:29:12 GMT"
+          "last_modified": "Fri, 18 Sep 2026 06:02:55 GMT"
         }
       },
       "club": "BRE",
       "content_hash": "23a3b30414e326eba003975d921e741cdfa74cde12cf3623bce6ac32195ec333",
       "documents": 2,
       "id": "bre-news",
-      "last_modified": "Fri, 18 Sep 2026 00:29:10 GMT",
+      "last_modified": "Fri, 18 Sep 2026 06:02:54 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "ok",
@@ -103,10 +103,10 @@
       "article_validators": {},
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
-      "documents": 0,
-      "etag": "\"2f983d8f0663132ecd79fc612cdccaf1\"",
+      "documents": 1,
+      "etag": "\"5514243fe79cb65df9511da8590ff8e5\"",
       "id": "cov-news",
-      "last_modified": "Thu, 17 Sep 2026 02:06:03 GMT",
+      "last_modified": "Fri, 18 Sep 2026 02:07:53 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Coventry City",
       "status": "no_articles",
@@ -117,8 +117,8 @@
       "article_validators": {},
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
-      "documents": 0,
-      "etag": "\"11wd499uas4ti5a\"",
+      "documents": 1,
+      "etag": "\"r8pdeh6kggtl3k\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -130,10 +130,10 @@
       "article_validators": {},
       "club": "EVE",
       "content_hash": "54e2021d53c5959c4e3dc30111359c37658673c2e65215e1aaabf24197933129",
-      "documents": 0,
-      "etag": "\"7d08be9b48cf6234d08e682df022f2fb\"",
+      "documents": 1,
+      "etag": "\"82b41df686e86cc1a8aa93e2f270a0f5\"",
       "id": "eve-news",
-      "last_modified": "Thu, 17 Sep 2026 02:05:15 GMT",
+      "last_modified": "Fri, 18 Sep 2026 02:05:08 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Everton",
       "status": "no_articles",
@@ -143,20 +143,20 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.fulhamfc.com/meetings-and-events/meetings-and-conferences": {
-          "etag": "\"c99664ee765db9e0b40393c44b523d04\"",
-          "last_modified": "Thu, 17 Sep 2026 02:36:06 GMT"
+          "etag": "\"1346eaa89b8b6bceaa38df890758ffeb\"",
+          "last_modified": "Fri, 18 Sep 2026 02:42:18 GMT"
         },
         "https://www.fulhamfc.com/riverside-development/artists-impression": {
-          "etag": "\"5087991109b672cebdd00bae7f872088\"",
-          "last_modified": "Thu, 17 Sep 2026 02:37:07 GMT"
+          "etag": "\"ccaca20032ba8e81ace62b856d013d33\"",
+          "last_modified": "Fri, 18 Sep 2026 02:43:26 GMT"
         }
       },
       "club": "FUL",
-      "content_hash": "e9cdc5bee29e5d4ecb7c675fa88a60f4377337bd03f76d485c70e6dd4c3fa321",
-      "documents": 0,
-      "etag": "\"54ee93bfb5879b32c3fc554ac02e21dd\"",
+      "content_hash": "a646806073be86c2176693b0e1adda5e87059093c2746656d4749690cddee4a0",
+      "documents": 3,
+      "etag": "\"c036d815a8fce260d650877d667d36b9\"",
       "id": "ful-news",
-      "last_modified": "Thu, 17 Sep 2026 13:53:31 GMT",
+      "last_modified": "Fri, 18 Sep 2026 02:43:25 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Fulham",
       "status": "ok",
@@ -167,10 +167,10 @@
       "article_validators": {},
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
-      "documents": 0,
-      "etag": "\"466f0f1e7cab7141443628e25e3f7d07\"",
+      "documents": 1,
+      "etag": "\"290e2cc7f4aeb7949f74868a8d5fcbb6\"",
       "id": "hul-news",
-      "last_modified": "Thu, 17 Sep 2026 09:28:06 GMT",
+      "last_modified": "Fri, 18 Sep 2026 02:06:53 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Hull City",
       "status": "no_articles",
@@ -180,20 +180,20 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.itfc.co.uk/news/2026/september/16/Exequiel-Palacios-Argentina-squad-international-break/": {
-          "etag": "\"881e0c1bc8cf309adcfd93ac1f368b8d\"",
-          "last_modified": "Thu, 17 Sep 2026 02:15:14 GMT"
+          "etag": "\"7f10dc7e6790e734f98131f5eeaad7a9\"",
+          "last_modified": "Fri, 18 Sep 2026 02:15:14 GMT"
         },
         "https://www.itfc.co.uk/news/2026/september/17/Daizen-Maeda-named-in-Japan-squad-international/": {
-          "etag": "\"b93702e7e1654ee96d8d370481d2c4c5\"",
-          "last_modified": "Thu, 17 Sep 2026 10:00:34 GMT"
+          "etag": "\"9acf75d442c37a61543c19f41cd1f115\"",
+          "last_modified": "Fri, 18 Sep 2026 02:15:14 GMT"
         }
       },
       "club": "IPS",
-      "content_hash": "ef8b9f7ed76d8b6ab366d67b99b2fd53c85baba551d54ccc27be7d4b65706f2e",
-      "documents": 0,
-      "etag": "\"76a9b440ae27073a2282f69865e9dbe7\"",
+      "content_hash": "0604140aef5ad9b1137151f639f761b9f16507cb82046d060af5a65c7d1390cb",
+      "documents": 3,
+      "etag": "\"0e2a363cc9f7d6628496f0b9fa5d20b6\"",
       "id": "ips-news",
-      "last_modified": "Thu, 17 Sep 2026 13:41:31 GMT",
+      "last_modified": "Fri, 18 Sep 2026 02:15:14 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
       "status": "ok",
@@ -208,7 +208,7 @@
       "content_hash": "1f89a0ea8134774ba4fe5f7adb2f4ad0357ca036e782383bd1d26e831a283f54",
       "documents": 2,
       "id": "lee-news",
-      "last_modified": "Fri, 18 Sep 2026 00:29:11 GMT",
+      "last_modified": "Fri, 18 Sep 2026 06:02:56 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -218,16 +218,16 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.liverpoolfc.com/news/friday-watch-andoni-iraolas-pre-bournemouth-press-conference-live": {
-          "etag": "\"1b59a-m95h2foETx2tpSiyWSSzXDsVWCg\""
+          "etag": "\"1b59a-JSr2tbr+A4fD1tIo6mbUcaimVQ0\""
         },
         "https://www.liverpoolfc.com/news/volley-or-half-volley-liverpool-squad-debate-dominik-szoboszlais-spurs-stunner": {
-          "etag": "\"1bb4a-p40nFt6PxKaoM4I5jEHQPtSyjlA\""
+          "etag": "\"1bb4a-fAHTKbDSlkEJWPmcoI8NIi39ktY\""
         }
       },
       "club": "LIV",
-      "content_hash": "ee8e96de2e9c63127bac58bf8a46417fe079148d770d2a087eeadaba6cdb8273",
+      "content_hash": "3d3807ec395807c7709f1a3f7f372a1808f04bea6fc670c10caaa516e87c84b1",
       "documents": 3,
-      "etag": "\"33de7-HRoL6s/w6WpQGlfkzn7V6GocJIs\"",
+      "etag": "\"33def-OUP9P55FGIVzuaiHK/ztoNCwoL8\"",
       "id": "liv-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
@@ -273,7 +273,7 @@
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-elanga-latest-ahead-of-hull-visit": {}
       },
       "club": "NEW",
-      "content_hash": "766d9fdf10b849902dfb298a4372b711acde193b43a08bb16050706f61dc9c77",
+      "content_hash": "dd34a1b757e208ffba38dcc02a07558e010671db9c08e785d06739532befb3b9",
       "documents": 2,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -286,10 +286,10 @@
       "article_validators": {},
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
-      "documents": 0,
-      "etag": "\"a90cae25fa13fac233708590f6c33ed7\"",
+      "documents": 1,
+      "etag": "\"9cd13a3fc799a43f29ee2b3bca145554\"",
       "id": "nfo-news",
-      "last_modified": "Thu, 17 Sep 2026 15:45:04 GMT",
+      "last_modified": "Fri, 18 Sep 2026 02:07:32 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -300,10 +300,10 @@
       "article_validators": {},
       "club": "SUN",
       "content_hash": "191fbb568fbd24f60eb2575b6a2ad66dbbf72f8961bce0b666fc2a248e2add01",
-      "documents": 0,
-      "etag": "\"269e127aa4a5a6f5a13a26cc3807dc9f\"",
+      "documents": 1,
+      "etag": "\"9088c0cbb8f368350ad5ba7d4eba2319\"",
       "id": "sun-news",
-      "last_modified": "Thu, 17 Sep 2026 14:30:33 GMT",
+      "last_modified": "Fri, 18 Sep 2026 02:04:52 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Sunderland",
       "status": "no_articles",
