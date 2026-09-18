@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-09-18T10:32:48Z",
-  "coverage": 0.6,
+  "checked_at": "2026-09-18T16:33:42Z",
+  "coverage": 0.55,
   "enabled": 20,
   "gw": 5,
-  "healthy": 12,
+  "healthy": 11,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -16,7 +16,7 @@
       "club": "ARS",
       "content_hash": "d91f46037cf4f666d797c504cec9b11edf3d8a921332bbd9e4b76071d38cb1f5",
       "documents": 2,
-      "etag": "\"dvsu8ikku72eoj\"",
+      "etag": "\"cx1u5zo4xn2eoj\"",
       "id": "ars-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Arsenal",
@@ -71,14 +71,14 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.brentfordfc.com/en/news/article/match-preview-brentford-v-strasbourg": {
-          "last_modified": "Fri, 18 Sep 2026 10:32:49 GMT"
+          "last_modified": "Fri, 18 Sep 2026 16:33:44 GMT"
         }
       },
       "club": "BRE",
       "content_hash": "23a3b30414e326eba003975d921e741cdfa74cde12cf3623bce6ac32195ec333",
       "documents": 2,
       "id": "bre-news",
-      "last_modified": "Fri, 18 Sep 2026 10:32:48 GMT",
+      "last_modified": "Fri, 18 Sep 2026 16:33:43 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "ok",
@@ -87,10 +87,10 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.chelseafc.com/en/news/article/blues-duo-selected-in-england-squad": {}
+        "https://www.chelseafc.com/en/news/article/sonia-bompastor-delivers-positive-injury-update-on-key-trio": {}
       },
       "club": "CHE",
-      "content_hash": "7ee3f55a6d1fa0773c85d2c3caa6ebbad660a4bf83481b24d5f5dfd83f4afb24",
+      "content_hash": "ba43efa365beb166d54f6ec444857140ce558e0ed5d47727c7059cf2b05b97df",
       "documents": 2,
       "id": "che-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -118,7 +118,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"6y6mekzh6otij2\"",
+      "etag": "\"whdu8bfp7ptmf4\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -146,17 +146,25 @@
           "etag": "\"6f4149d85e5363a968055fe053dea633\"",
           "last_modified": "Fri, 18 Sep 2026 09:44:52 GMT"
         },
+        "https://www.fulhamfc.com/news/2026/september/18/pre-man-utd-press-conference/": {
+          "etag": "\"ec0eb8e73862cf89885892e2f0b5043b\"",
+          "last_modified": "Fri, 18 Sep 2026 12:03:35 GMT"
+        },
+        "https://www.fulhamfc.com/news/2026/september/18/team-news-concussion-rules-tete-out-but-sessegnon-could-return/": {
+          "etag": "\"5b1fefdc7a6f5450e7c298f6b70d655f\"",
+          "last_modified": "Fri, 18 Sep 2026 11:17:39 GMT"
+        },
         "https://www.fulhamfc.com/riverside-development/artists-impression": {
           "etag": "\"64568db217d1445fe9ed62b8fba59774\"",
           "last_modified": "Fri, 18 Sep 2026 09:45:53 GMT"
         }
       },
       "club": "FUL",
-      "content_hash": "2a02108c5514748d047ba47317389cac0f6c3d7e284dc3d1ca4566f1e6df19e8",
-      "documents": 0,
-      "etag": "\"4f0a3302f605a19f014b4465d894f0eb\"",
+      "content_hash": "6cba7b83550fc75a5d57ac3e21b9fadd589c8aa5489c5223709dfa56e8d58486",
+      "documents": 3,
+      "etag": "\"7bcd5b74449fed4306fa0862514c856f\"",
       "id": "ful-news",
-      "last_modified": "Fri, 18 Sep 2026 09:45:52 GMT",
+      "last_modified": "Fri, 18 Sep 2026 16:09:32 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Fulham",
       "status": "ok",
@@ -167,10 +175,10 @@
       "article_validators": {},
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
-      "documents": 0,
-      "etag": "\"5d2cf69ddb08a82f17b25742c8cacb48\"",
+      "documents": 1,
+      "etag": "\"414dd49285285056f43cf18a954967e5\"",
       "id": "hul-news",
-      "last_modified": "Fri, 18 Sep 2026 08:53:26 GMT",
+      "last_modified": "Fri, 18 Sep 2026 14:31:00 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Hull City",
       "status": "no_articles",
@@ -179,17 +187,25 @@
     {
       "article_errors": 0,
       "article_validators": {
+        "https://www.itfc.co.uk/news/2026/september/18/early-everton-team-news/": {
+          "etag": "\"f90b48c11ee7925563bb23e4535843a0\"",
+          "last_modified": "Fri, 18 Sep 2026 15:35:16 GMT"
+        },
+        "https://www.itfc.co.uk/news/2026/september/18/gary-previews-everton-trip/": {
+          "etag": "\"3bd2f811cdd3e9a7161c1dc8b2b3f0c5\"",
+          "last_modified": "Fri, 18 Sep 2026 15:45:05 GMT"
+        },
         "https://www.itfc.co.uk/news/2026/september/18/matchday-guide---everton--a-/": {
-          "etag": "\"459df34f9570cc753733b659b6892746\"",
-          "last_modified": "Fri, 18 Sep 2026 08:31:40 GMT"
+          "etag": "\"752ab02125b2088c79f97c2a33db73d4\"",
+          "last_modified": "Fri, 18 Sep 2026 13:30:02 GMT"
         }
       },
       "club": "IPS",
-      "content_hash": "3aa461796ee787af153ae357792db9e8f871bb1862f6a40dc8b70ae4cc7e0146",
-      "documents": 0,
-      "etag": "\"9c967cd2eb5ceea68ec505f3cfdef2db\"",
+      "content_hash": "a5aefc0cef9323eedd9141c852fdda635982c7bffed6094ba5fd14d4336b0d8a",
+      "documents": 4,
+      "etag": "\"3be843d751a16907cd6e7fbaefd890a4\"",
       "id": "ips-news",
-      "last_modified": "Fri, 18 Sep 2026 09:40:40 GMT",
+      "last_modified": "Fri, 18 Sep 2026 15:45:05 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
       "status": "ok",
@@ -198,13 +214,15 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.leedsunited.com/en/news/anton-stach-named-in-jurgen-klopps-first-germany-squad": {}
+        "https://www.leedsunited.com/en/news/anton-stachs-nervous-klopp-call-brings-germany-return-after-injury-struggle": {},
+        "https://www.leedsunited.com/en/news/daniel-farke-discusses-fresh-injury-concerns-ahead-of-palace": {},
+        "https://www.leedsunited.com/en/news/watch-daniel-farkes-pre-crystal-palace-press-conference-180926": {}
       },
       "club": "LEE",
-      "content_hash": "98befff9c62f12add89996d7010eaf691b4f9dbcca947c698fdcf83e2b5f22f4",
-      "documents": 1,
+      "content_hash": "99040bda4fd079b7a84c9828db59fb376e119febd9c4e80e162afdb8b095c54d",
+      "documents": 4,
       "id": "lee-news",
-      "last_modified": "Fri, 18 Sep 2026 09:54:52 GMT",
+      "last_modified": "Fri, 18 Sep 2026 16:06:47 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -213,20 +231,26 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.liverpoolfc.com/news/130pm-bst-watch-andoni-iraolas-pre-bournemouth-press-conference-live": {
-          "etag": "\"1bc9e-ERBlP1o3OChzsTFS2JFmDdpl/SY\""
+        "https://www.liverpoolfc.com/news/afc-bournemouth-v-liverpool-team-news-1": {
+          "etag": "\"24825-AeqNgGQ70e/vREZhCoGpDeYCeM8\""
+        },
+        "https://www.liverpoolfc.com/news/demand-watch-andoni-iraolas-pre-bournemouth-press-conference": {
+          "etag": "\"1b989-1PGwkJ5mbSmMBLxMXaz87/SG9O0\""
         },
         "https://www.liverpoolfc.com/news/fantasy-premier-league-spotlight-araujo-how-reds-defence-scoring-and-gameweek-5-tips": {
-          "etag": "\"21f3f-2EqfycACm+weARbFynOxMgT0HTM\""
+          "etag": "\"21d21-4Y3QZwZUWMeic1UFpzMPqhYPmcI\""
+        },
+        "https://www.liverpoolfc.com/news/i-ronald-araujos-spirit-and-im-very-happy-him": {
+          "etag": "\"1e187-P02JbJmwwMAsGXWbZZIFVEt2MhQ\""
         },
         "https://www.liverpoolfc.com/news/volley-or-half-volley-liverpool-squad-debate-dominik-szoboszlais-spurs-stunner": {
-          "etag": "\"1bd68-D7HwkqH1DmL3BIVb0An6GTkcCzQ\""
+          "etag": "\"1bb44-/OYX108k8I+sUtMHbaY924WLcgY\""
         }
       },
       "club": "LIV",
-      "content_hash": "068acd75085679df4f1d11075aeb4cdceba4408019800682fb48219d466f6320",
-      "documents": 0,
-      "etag": "\"33e82-g5PSk9MeiH7NoiJb89668qQ7I08\"",
+      "content_hash": "4d49e6b2c8d042742269187fe47f752800b74dee71a11809b7358ae0235cccaa",
+      "documents": 6,
+      "etag": "\"33b4f-liC2Xk4TV6sQdcHaAzxn25AolW8\"",
       "id": "liv-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
@@ -236,18 +260,14 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/news/mens/city-v-sunderland-match-preview-pl-20-sep-63925242": {
-          "last_modified": "Fri, 18 Sep 2026 10:32:43 GMT"
-        },
-        "https://www.mancity.com/news/mens/three-manchester-city-players-named-in-latest-england-squad-63925319": {
-          "last_modified": "Fri, 18 Sep 2026 10:32:33 GMT"
-        }
+        "https://www.mancity.com/citytv/mens/enzo-maresca-pre-sunderland-press-conference-63925326": {},
+        "https://www.mancity.com/news/mens/city-v-sunderland-match-preview-pl-20-sep-63925242": {},
+        "https://www.mancity.com/news/mens/enzo-maresca-press-conference-preview-man-city-v-sunderland-written-version-63925324": {}
       },
       "club": "MCI",
-      "content_hash": "8bf8118d4436a4f1551e08d90bd190a7674942f6afd927ed2d9b8a711827275f",
-      "documents": 3,
+      "content_hash": "415f1b3b303923be5b8061b8f70ee650e78ac6c909135117464fe9c0b1b0f970",
+      "documents": 4,
       "id": "mci-news",
-      "last_modified": "Fri, 18 Sep 2026 10:32:07 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
       "status": "ok",
@@ -266,21 +286,23 @@
       "club": "MUN",
       "content_hash": "b0caaad59519b8ec00d0e844d88f1c38c9df1daa4530ce027e90a7a8d925a54f",
       "documents": 0,
+      "error": "HTTP Error 403: Forbidden",
       "id": "mun-news",
       "last_modified": "Fri, 18 Sep 2026 10:30:01 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester United",
-      "status": "ok",
+      "status": "error",
       "url": "https://www.manutd.com/en/news"
     },
     {
       "article_errors": 0,
       "article_validators": {
+        "https://www.newcastleunited.com/en/news/international-call-ups-september-october-2026": {},
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-elanga-latest-ahead-of-hull-visit": {}
       },
       "club": "NEW",
-      "content_hash": "1ee3c4158d8b8f8d5a90a4abb60607bee9720163616441d186ec1fc3bcb2d727",
-      "documents": 2,
+      "content_hash": "9687cdb3f75ccd17a1f4f7663c74ed23ed966ae1a62d4059c2b5f93bb1945fa8",
+      "documents": 3,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Newcastle United",
@@ -292,10 +314,10 @@
       "article_validators": {},
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
-      "documents": 0,
-      "etag": "\"e4268f6e5827312e7b879e472c18c790\"",
+      "documents": 1,
+      "etag": "\"36ea932e01a0e169a7640a22dbea2bb3\"",
       "id": "nfo-news",
-      "last_modified": "Fri, 18 Sep 2026 09:08:01 GMT",
+      "last_modified": "Fri, 18 Sep 2026 16:07:16 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -306,10 +328,10 @@
       "article_validators": {},
       "club": "SUN",
       "content_hash": "191fbb568fbd24f60eb2575b6a2ad66dbbf72f8961bce0b666fc2a248e2add01",
-      "documents": 0,
-      "etag": "\"864e647714e2852b4a23b13aa1c794d7\"",
+      "documents": 1,
+      "etag": "\"1fd505d7331158dcd849d46388c9e85f\"",
       "id": "sun-news",
-      "last_modified": "Fri, 18 Sep 2026 09:10:10 GMT",
+      "last_modified": "Fri, 18 Sep 2026 15:06:05 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Sunderland",
       "status": "no_articles",
@@ -321,7 +343,7 @@
         "https://www.tottenhamhotspur.com/teams/mens/squad": {}
       },
       "club": "TOT",
-      "content_hash": "68f403ac6883e4fa3ef83f5b6bdd42fad167f762f217808dab2d1df751d610f6",
+      "content_hash": "d0a7af2946410926d8925dea688cf558b7ca6d08e141363d502c4debe15c9362",
       "documents": 2,
       "id": "tot-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",

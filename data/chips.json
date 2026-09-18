@@ -14,7 +14,7 @@
    "weeks": [
     [
      5,
-     4.7
+     4.3
     ],
     [
      6,
@@ -75,9 +75,9 @@
    ],
    "best_gw": 8,
    "best": 9.2,
-   "now": 4.7,
+   "now": 4.3,
    "play": false,
-   "advice": "Hold. Best-looking week for this one is GW8 (9.2 extra points); this week is 4.7. Second copy (GW20\u201338): best week GW37 (8.7).",
+   "advice": "Hold. Best-looking week for this one is GW8 (9.2 extra points); this week is 4.3. Second copy (GW20\u201338): best week GW37 (8.7).",
    "last_eligible": 19,
    "later": [
     {
@@ -207,11 +207,11 @@
    "weeks": [
     [
      5,
-     7.3
+     6.7
     ],
     [
      6,
-     4.7
+     4.6
     ],
     [
      7,
@@ -243,7 +243,7 @@
     ],
     [
      14,
-     6.7
+     5.7
     ],
     [
      15,
@@ -268,22 +268,22 @@
    ],
    "best_gw": 16,
    "best": 9.1,
-   "now": 7.3,
+   "now": 6.7,
    "play": false,
-   "advice": "Hold. Widest gap left is GW16 (9.1 behind the optimised one-week squad); this week 7.3.",
+   "advice": "Hold. Widest gap left is GW16 (9.1 behind the optimised one-week squad); this week 6.7.",
    "last_eligible": 19
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 10.9,
+   "now": 12.7,
    "gap_trend": [
     [
      5,
-     7.3
+     6.7
     ],
     [
      6,
-     4.7
+     4.6
     ],
     [
      7,
@@ -311,13 +311,13 @@
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 10.9 over the window. The squad is holding up (gap to the optimised one-week squad 7.3\u20137.8 over the next weeks).",
+   "advice": "Hold. Unlimited transfers now are worth 12.7 over the window. The squad is holding up (gap to the optimised one-week squad 6.7\u20137.8 over the next weeks).",
    "last_eligible": 19
   }
  },
  "gaps": {
-  "5": 7.3,
-  "6": 4.7,
+  "5": 6.7,
+  "6": 4.6,
   "7": 5.9,
   "8": 6.1,
   "9": 6.2,
@@ -325,7 +325,7 @@
   "11": 5.4,
   "12": 7.8,
   "13": 2.9,
-  "14": 6.7,
+  "14": 5.7,
   "15": 4.2,
   "16": 9.1,
   "17": 5.7,
