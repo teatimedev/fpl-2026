@@ -134,6 +134,7 @@ START_GW = HORIZON = WINDOW = None
 LAST_GW = 38
 SEASON = {}                       # id -> per-gameweek projection to LAST_GW
 SEASON_PLAY = {}                  # matching chance of appearing in each GW
+SEASON_RATE = {}                  # the rate-component part of SEASON (item 4)
 OUT_SEASON = ROOT / 'v2' / 'projections_season.json'
 AVAILABILITY_OVERRIDES = load_overrides()
 BOOT_CACHE = ROOT / 'v2' / 'cache' / 'bootstrap.json'
@@ -905,6 +906,10 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
         # needs (which week is the bench worth most, where is the double).
         by_gw, total = [0.0] * (START_GW - 1), 0.0
         season_by_gw = [0.0] * (START_GW - 1)
+        # the rate-component points inside each gameweek's total, for a
+        # rates-only calibration scope (CALIBRATION_SCOPE)
+        rate_by_gw = [0.0] * (START_GW - 1)
+        season_rate_by_gw = [0.0] * (START_GW - 1)
         season_play_by_gw = [0.0] * (START_GW - 1)
         start_by_gw = [0.0] * (START_GW - 1)
         p60_shadow_by_gw = [0.0] * (START_GW - 1)
@@ -972,44 +977,57 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
                 ))
             if not fx:
                 season_by_gw.append(0.0)
+                season_rate_by_gw.append(0.0)
                 if gw <= HORIZON:
                     by_gw.append(0.0)
+                    rate_by_gw.append(0.0)
                 continue
-            pts = 0.0
+            pts = rate = 0.0
             for f in fx:                       # handles double gameweeks
                 # attacking, scaled by how many goals this team is expected to
                 # score in THIS fixture relative to its OWN average match: the
                 # club's level is already inside xg90/xa90 (attack_volume.py)
                 vol = attack_volume(f['xg'], club_xg.get(p['team']))
-                pts += (xg90 * minute_share * vol * GOAL_PTS[pos]
-                        + xa90 * minute_share * vol * 3.0)
+                attack = (xg90 * minute_share * vol * GOAL_PTS[pos]
+                          + xa90 * minute_share * vol * 3.0)
+                pts += attack
+                rate += attack
                 # clean sheet: straight from the fitted scoreline distribution
                 if CS_PTS[pos]:
                     pts += CS_PTS[pos] * f['cs'] * p_start * (av.start_minutes >= 60)
                 if pos in ('GKP', 'DEF'):
                     pts -= expected_floor_div(f['xgc'], 2) * p_start
                 if pos == 'GKP':
-                    pts += (expected_floor_div(saves90 * start_share, 3) * p_start
-                            + expected_floor_div(saves90 * cameo_share, 3) * p_cameo)
+                    saves = (expected_floor_div(saves90 * start_share, 3) * p_start
+                             + expected_floor_div(saves90 * cameo_share, 3) * p_cameo)
+                    pts += saves
+                    rate += saves
                 thr = DC_THRESHOLD[pos]
                 if thr and dc90 > 0:
-                    pts += 2.0 * (
+                    defcon = 2.0 * (
                         p_start * defcon_hit_prob(dc90 * start_share, thr, w_dc)
                         + p_cameo * defcon_hit_prob(dc90 * cameo_share, thr, w_dc)
                     )
+                    pts += defcon
+                    rate += defcon
                 # Until a minutes distribution is validated, conditional role
                 # minutes are the model's fixed-duration scenarios. A 45-minute
                 # starter cannot receive 60-minute appearance/clean-sheet points.
                 pts += p_start * (1.0 + (av.start_minutes >= 60)) + p_cameo
                 pts += bonus90 * minute_share * 0.85
+                rate += bonus90 * minute_share * 0.85
                 pts -= yellow90 * minute_share
             pts = round(max(0.0, pts), 3)
+            rate = round(min(max(0.0, rate), pts), 3)
             season_by_gw.append(pts)
+            season_rate_by_gw.append(rate)
             if gw <= HORIZON:
                 by_gw.append(pts)
+                rate_by_gw.append(rate)
                 total += pts
 
         SEASON[p['id']] = season_by_gw
+        SEASON_RATE[p['id']] = season_rate_by_gw
         SEASON_PLAY[p['id']] = season_play_by_gw
         first = START_GW - 1
         current_availability = availability_by_gw[first]
@@ -1018,7 +1036,7 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
             pos=pos, price=p['price'], sel_pct=p['sel_pct'], status=p['status'],
             news=p['news'], chance=p['chance'], joined=p['joined'], pens=p['pens'],
             corners=p['corners'], fk=p['fk'],
-            proj_by_gw=by_gw, proj_6gw=round(total, 2),
+            proj_by_gw=by_gw, rate_by_gw=rate_by_gw, proj_6gw=round(total, 2),
             proj_gw=round(total / WINDOW, 3),
             value=round(total / p['price'], 4) if p['price'] else 0,
             start_rate=start_by_gw[first], mins_proj=round(mins_by_gw[first]),
@@ -1071,6 +1089,19 @@ CAL_STINT_MINS = 900
 
 
 CALIBRATION = ROOT / 'v2' / 'calibration.json'
+# Item 4 (23 Sep 2026; research/model-phase3-2026-09-23.md): k also scales
+# rule-fixed points. The GW1-4 retro puts -0.33 a likely starter a week in
+# its `other` bucket for MID and FWD, which is mostly k x appearance points.
+# Restricting k to the rate components ('rates') was measured two ways and
+# is NOT distinguishable from 'all': season-totals hold-out (as-of clubs)
+# Spearman 0.493 vs 0.492 (2023/24) and 0.471 vs 0.473 (2024/25), same
+# sum p/a; this season's archived forecasts GW2-4 (687 likely starters)
+# squared error MID -0.08 +- 0.09, FWD -0.14 +- 0.14, GKP +0.11 +- 0.21.
+# SHADOW: FPL_CALIBRATION_SCOPE=rates switches it on; every row carries
+# rate_by_gw so a grader can rebuild either scope.
+CALIBRATION_SCOPE = os.environ.get('FPL_CALIBRATION_SCOPE', 'all')
+if CALIBRATION_SCOPE not in ('all', 'rates'):
+    raise SystemExit(f'FPL_CALIBRATION_SCOPE must be all or rates, not {CALIBRATION_SCOPE!r}')
 # A calibration-cohort member whose modelled start probability over the window
 # is below this fraction of his own baseline is being depressed by a status
 # flag or an override (dated injury, suspension, tactical zero). He would drag
@@ -1145,16 +1176,29 @@ def fit_calibration(rows, players):
     return out
 
 
-def apply_calibration(rows, ks):
+def _scaled(values, rates, k, scope):
+    if scope == 'rates' and rates is not None:
+        return [round(max(0.0, v + (k - 1.0) * rt), 3) for v, rt in zip(values, rates)]
+    return [round(v * k, 3) for v in values]
+
+
+def apply_calibration(rows, ks, scope=None):
+    """Scale each position's projection by its k. scope 'all' (production)
+    scales the whole projection; 'rates' scales only the rate components
+    (attack, saves, DefCon, bonus) and leaves appearance points, clean sheets,
+    goals conceded and cards as FPL's rules make them (CALIBRATION_SCOPE)."""
+    scope = scope or CALIBRATION_SCOPE
     for pos, k in ks.items():
         for r in rows:
             if r['pos'] != pos:
                 continue
-            r['proj_by_gw'] = [round(v * k, 3) for v in r['proj_by_gw']]
+            r['proj_by_gw'] = _scaled(r['proj_by_gw'], r.get('rate_by_gw'), k, scope)
+            if r.get('rate_by_gw') is not None:
+                r['rate_by_gw'] = [round(v * k, 3) for v in r['rate_by_gw']]
             r['proj_6gw'] = round(sum(r['proj_by_gw']), 2)
             r['proj_gw'] = round(r['proj_6gw'] / WINDOW, 3)
             if r['id'] in SEASON:
-                SEASON[r['id']] = [round(v * k, 3) for v in SEASON[r['id']]]
+                SEASON[r['id']] = _scaled(SEASON[r['id']], SEASON_RATE.get(r['id']), k, scope)
             r['value'] = round(r['proj_6gw'] / r['price'], 4) if r['price'] else 0
             r['calibration_k'] = round(k, 4)
 

@@ -361,6 +361,20 @@ class CalibrationTests(unittest.TestCase):
         self.assertNotIn("calibration_k", rows[1])
         self.assertEqual(rows[1]["proj_by_gw"], [1.0, 1.0])
 
+    def test_rates_scope_leaves_rule_fixed_points_alone(self):
+        rows = [dict(id=1, pos="MID", proj_by_gw=[0.0, 4.0], rate_by_gw=[0.0, 1.5], price=8.0)]
+        with patch.object(PM, "WINDOW", 1), \
+                patch.dict(PM.SEASON, {1: [0.0, 4.0, 3.0]}, clear=True), \
+                patch.dict(PM.SEASON_RATE, {1: [0.0, 1.5, 1.0]}, clear=True):
+            PM.apply_calibration(rows, {"MID": 1.2}, scope="rates")
+            self.assertEqual(PM.SEASON[1], [0.0, 4.3, 3.2])
+        self.assertEqual(rows[0]["proj_by_gw"], [0.0, 4.3])      # 2.5 fixed + 1.2 x 1.5
+        self.assertEqual(rows[0]["rate_by_gw"], [0.0, 1.8])
+        whole = [dict(id=2, pos="MID", proj_by_gw=[4.0], rate_by_gw=[1.5], price=8.0)]
+        with patch.object(PM, "WINDOW", 1), patch.dict(PM.SEASON, {}, clear=True):
+            PM.apply_calibration(whole, {"MID": 1.2}, scope="all")
+        self.assertEqual(whole[0]["proj_by_gw"], [4.8])
+
     def test_fit_excludes_cohort_members_depressed_by_availability(self):
         players = {}
         rows = []

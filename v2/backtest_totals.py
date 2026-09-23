@@ -227,22 +227,37 @@ def asof_team_view(target):
 
 
 # ------------------------------------------------------------- projection
-def project_totals(players, priors, view, volume='league'):
+def project_totals(players, priors, view, volume='league', club_norm=False):
     """Season-total projection per player, following project()/components.py
     accounting, with everyone fully available (status/news/chance are 2026
     facts and must not reach a historical week). Returns each player's raw
     total plus his attack subtotal separately, because the attenuated variant
     rescales only the club-volume-exposed part. volume='relative' is the
     attack_volume.py rule: the fixture against the club's own season mean,
-    to the power RELATIVE_MU."""
+    to the power RELATIVE_MU. club_norm applies player_model's production
+    eleven-starter constraint to the season start rates of each club's
+    projected players (a partial squad: only players with history).
+    Each row also carries `rate`, the points from the rate components that a
+    rate-only calibration scales (attack, saves, DefCon, bonus)."""
     for pos in POSITIONS:
         prices = sorted(q['price'] for q in players.values() if q['pos'] == pos)
         PM.PRICE_MEDIAN[pos] = prices[len(prices) // 2] if prices else 5.5
 
+    minutes = {p['id']: PM.minutes_model(p, players) for p in players.values()}
+    if club_norm:
+        by_team, pos_of = {}, {p['id']: p['pos'] for p in players.values()}
+        for pid, p in players.items():
+            by_team.setdefault(p['team'], []).append(p['id'])
+        for pids in by_team.values():
+            new = PM.normalise_club_starts(
+                [dict(p=minutes[pid][0], pos=pos_of[pid]) for pid in pids],
+                **dict(PM.CLUB_NORMALISE, two_sided=False))
+            for pid, prob in zip(pids, new):
+                minutes[pid] = (prob, minutes[pid][1])
     out = {}
     for p in players.values():
         pos = p['pos']
-        start_rate, mps = PM.minutes_model(p, players)
+        start_rate, mps = minutes[p['id']]
         p_play = start_rate + (1 - start_rate) * CAMEO_RATE
         frac = mps / 90.0
 
@@ -262,7 +277,7 @@ def project_totals(players, priors, view, volume='league'):
 
         fx_list = view.get(p['team'], [])
         club_xg = (float(np.mean([f['xg'] for f in fx_list])) if fx_list else None)
-        pts = attack = 0.0
+        pts = attack = rate = 0.0
         for f in fx_list:
             vol = AV.attack_volume(f['xg'], club_xg, rule=volume)
             att = ((xg90 * frac * vol * PM.GOAL_PTS[pos]
@@ -274,15 +289,20 @@ def project_totals(players, priors, view, volume='league'):
             if pos in ('GKP', 'DEF'):
                 pts -= PM.expected_floor_div(f['xgc'], 2) * start_rate
             if pos == 'GKP':
-                pts += PM.expected_floor_div(saves90 * frac, 3) * start_rate
+                saves = PM.expected_floor_div(saves90 * frac, 3) * start_rate
+                pts += saves
+                rate += saves
             thr = PM.DC_THRESHOLD[pos]
             if thr and dc90 > 0:
-                pts += 2.0 * PM.defcon_hit_prob(dc90 * frac, thr, w_dc) * p_play
+                dc = 2.0 * PM.defcon_hit_prob(dc90 * frac, thr, w_dc) * p_play
+                pts += dc
+                rate += dc
             pts += start_rate * 2.0 + (p_play - start_rate)
             pts += bonus90 * frac * p_play * 0.85
+            rate += att + bonus90 * frac * p_play * 0.85
             pts -= yellow90 * frac * p_play
         out[p['id']] = dict(
-            code=p['code'], pos=pos, total=max(pts, 0.0), attack=attack,
+            code=p['code'], pos=pos, total=max(pts, 0.0), attack=attack, rate=rate,
             club_vol=(float(np.mean([f['xg'] / 1.45 for f in fx_list]))
                       if fx_list else 1.0))
     return out
@@ -307,7 +327,7 @@ def attenuate(totals):
     return totals
 
 
-def calibrate(totals, rows, target, two_season=False):
+def calibrate(totals, rows, target, two_season=False, rate_only=False):
     """Production-style positional level correction, computed as-of the
     target season instead of at runtime.
 
@@ -322,6 +342,11 @@ def calibrate(totals, rows, target, two_season=False):
     the single-season k — pooling dragged keepers off parity. Targets with
     only one training season behind them fall back to the single anchor,
     which is why 2023/24 is bit-identical between the two variants.
+
+    rate_only=True (item 4, 2026-09-23) fits and applies k to the rate
+    components only (attack, saves, DefCon, bonus): appearance points, clean
+    sheets, goals conceded and cards are rule-fixed consequences of minutes
+    and the team model, so k = (mean actual - mean fixed) / mean rate.
     """
     idx = SEASONS.index(target)
     prev = SEASONS[idx - 1]
@@ -329,13 +354,20 @@ def calibrate(totals, rows, target, two_season=False):
     def fit(actual):
         ks = {}
         for pos in POSITIONS:
-            proj, act = [], []
+            proj, act, rate = [], [], []
             for r in totals.values():
                 if r['pos'] != pos or r['code'] not in actual:
                     continue
                 proj.append(r['total'] / 38.0)
+                rate.append(r['rate'] / 38.0)
                 act.append(actual[r['code']])
             if len(proj) < 6:
+                continue
+            if rate_only:
+                fixed = sum(proj) - sum(rate)
+                if sum(rate) <= 0:
+                    continue
+                ks[pos] = round(max(0.7, min(1.45, (sum(act) - fixed) / sum(rate))), 3)
                 continue
             ratio = (sum(proj) / len(proj)) / (sum(act) / len(act))
             if ratio <= 0:
@@ -345,9 +377,10 @@ def calibrate(totals, rows, target, two_season=False):
 
     ks = fit({code: r[prev]['pts'] / 38.0 for code, r in rows.items()
               if prev in r and r[prev]['mins'] >= 2000})
-    if two_season:
-        if idx < 2:
-            return ks
+    # With one training season there is no second anchor: the single-season
+    # k applies. (This used to `return ks` here, BEFORE applying it, so every
+    # two_season row on the 2023/24 target was silently uncalibrated.)
+    if two_season and idx >= 2:
         older = SEASONS[idx - 2]
         hist = {}
         for code, r in rows.items():
@@ -363,7 +396,12 @@ def calibrate(totals, rows, target, two_season=False):
                 ks[pos] = outfield[pos]
     for r in totals.values():
         k = ks.get(r['pos'], 1.0)
-        r['total'] *= k
+        if rate_only:
+            r['total'] = max(0.0, r['total'] + (k - 1.0) * r['rate'])
+            r['rate'] *= k
+        else:
+            r['total'] *= k
+            r['rate'] *= k
         r['attack'] *= k
     return ks
 
@@ -453,6 +491,15 @@ def run_target(target, meta, rows):
     totals_rel = project_totals(players, priors, view, volume='relative')
     ks_rel = calibrate(totals_rel, rows, target, two_season=True)
     by_variant['relative_vol'] = score(as_scoring(totals_rel), rows, target)
+    # item 4 (2026-09-23): the production stack after items 2-3 (relative
+    # volume + the eleven-starter constraint), k on everything vs k on the
+    # rate components only, both two-season anchored
+    totals_p = project_totals(players, priors, view, volume='relative', club_norm=True)
+    totals_pr = {pid: dict(t) for pid, t in totals_p.items()}
+    ks_p = calibrate(totals_p, rows, target, two_season=True)
+    ks_pr = calibrate(totals_pr, rows, target, two_season=True, rate_only=True)
+    by_variant['prod_k_all'] = score(as_scoring(totals_p), rows, target)
+    by_variant['prod_k_rate'] = score(as_scoring(totals_pr), rows, target)
 
     print(f'\n[{target}] n={len(players)} players scored '
           f'({len(unplaced)} unplaceable, excluded); calibration current: '
@@ -462,7 +509,11 @@ def run_target(target, meta, rows):
           + ' | anchor_2season: '
           + ', '.join(f'{p} {k:.3f}' for p, k in sorted(ks_ts.items()))
           + ' | relative_vol: '
-          + ', '.join(f'{p} {k:.3f}' for p, k in sorted(ks_rel.items())))
+          + ', '.join(f'{p} {k:.3f}' for p, k in sorted(ks_rel.items()))
+          + ' | prod_k_all: '
+          + ', '.join(f'{p} {k:.3f}' for p, k in sorted(ks_p.items()))
+          + ' | prod_k_rate: '
+          + ', '.join(f'{p} {k:.3f}' for p, k in sorted(ks_pr.items())))
     return by_variant
 
 
