@@ -227,7 +227,7 @@ def asof_team_view(target):
 
 
 # ------------------------------------------------------------- projection
-def project_totals(players, priors, view, volume='league', club_norm=False):
+def project_totals(players, priors, view, volume='league', club_norm=False, club_prior=0.0):
     """Season-total projection per player, following project()/components.py
     accounting, with everyone fully available (status/news/chance are 2026
     facts and must not reach a historical week). Returns each player's raw
@@ -254,6 +254,7 @@ def project_totals(players, priors, view, volume='league', club_norm=False):
                 **dict(PM.CLUB_NORMALISE, two_sided=False))
             for pid, prob in zip(pids, new):
                 minutes[pid] = (prob, minutes[pid][1])
+    club_levels = {t: float(np.mean([f['xg'] for f in fx])) for t, fx in view.items() if fx}
     out = {}
     for p in players.values():
         pos = p['pos']
@@ -261,8 +262,10 @@ def project_totals(players, priors, view, volume='league', club_norm=False):
         p_play = start_rate + (1 - start_rate) * CAMEO_RATE
         frac = mps / 90.0
 
-        xg90, w_xg = PM.shrink(p, 'xg90', priors)
-        xa90, _ = PM.shrink(p, 'xa90', priors)
+        attack_priors = PM.club_attack_priors(priors, pos, club_levels.get(p['team']),
+                                              club_levels, gamma=club_prior)
+        xg90, w_xg = PM.shrink(p, 'xg90', attack_priors)
+        xa90, _ = PM.shrink(p, 'xa90', attack_priors)
         dc90, w_dc = PM.shrink(p, 'dc90', priors)
         bonus90, _ = PM.shrink(p, 'bonus90', priors)
         saves90, _ = PM.shrink(p, 'saves90', priors)
@@ -500,6 +503,11 @@ def run_target(target, meta, rows):
     ks_pr = calibrate(totals_pr, rows, target, two_season=True, rate_only=True)
     by_variant['prod_k_all'] = score(as_scoring(totals_p), rows, target)
     by_variant['prod_k_rate'] = score(as_scoring(totals_pr), rows, target)
+    # item 3 follow-up: plus the club-scaled attacking prior
+    totals_cp = project_totals(players, priors, view, volume='relative', club_norm=True,
+                               club_prior=0.5)
+    calibrate(totals_cp, rows, target, two_season=True)
+    by_variant['prod_clubprior'] = score(as_scoring(totals_cp), rows, target)
 
     print(f'\n[{target}] n={len(players)} players scored '
           f'({len(unplaced)} unplaceable, excluded); calibration current: '

@@ -17,6 +17,7 @@ alone when no backtest is possible, and say so.
 | 5b | Pecking-order price ties | Bug fix, shipped; measured: start Brier 0.09641 → 0.09505 |
 | 5c | the-odds-api books averaged as probabilities | Bug fix, shipped (unit test only) |
 | 6 | DefCon stability 0.56 → 0.93 | **PROMOTED** (small hold-out); defender xG 0.29 **rejected** |
+| 3b | Club-aware xG/xA shrinkage target (follow-up) | **PROMOTED** |
 
 Reproduce: `python v2/backtest_inseason.py --club | --volume | --stability`,
 `python v2/backtest_totals.py --asof-club`,
@@ -262,6 +263,63 @@ The xG conservation row is the honest limit of item 3: removing the double
 count removes the strong-club excess, but the club-agnostic positional prior
 now over-sums weak clubs. The harness says that is still the better forecast;
 a club-aware shrinkage target is the natural next experiment.
+
+## Follow-up: club-strength calibration and a club-aware prior (PROMOTED)
+
+**Question.** In GW6, Leeds' and Coventry's players summed to 1.39× their team's xG. Would the
+planner end up buying weak-club attackers because they are over-projected individually?
+
+**Calibration by club strength** (`--volume`, same hold-out 2024/25–2025/26, level constants
+from 2023/24, so the overall level sits near 1.07). Clubs are split into terciles by their
+as-of fitted season-mean xG within each season. Σpred / Σactual:
+
+| rule | cohort | xG weak / mid / strong | xA weak / mid / strong | att. points weak / mid / strong |
+|---|---|---|---|---|
+| old `xG_f/1.45` | all | 0.92 / 1.05 / 1.49 | 0.91 / 1.08 / 1.49 | 0.83 / 1.03 / 1.34 |
+| old `xG_f/1.45` | 60+ min | 0.95 / 1.08 / 1.52 | 0.92 / 1.11 / 1.53 | 0.84 / 1.04 / 1.35 |
+| relative ^0.5 | all | 1.16 / 1.01 / 1.06 | 1.15 / 1.05 / 1.07 | 1.04 / 0.99 / 0.96 |
+| relative ^0.5 | 60+ min | **1.19** / 1.03 / **1.08** | 1.16 / 1.07 / 1.10 | **1.06** / 1.00 / **0.96** |
+| + club prior g=0.5 | all | 1.11 / 1.02 / 1.09 | 1.10 / 1.05 / 1.11 | 1.00 / 0.99 / 0.99 |
+| + club prior g=0.5 | 60+ min | **1.15** / 1.04 / **1.11** | 1.11 / 1.08 / 1.13 | **1.02** / 1.00 / **1.00** |
+| + club prior g=1 | 60+ min | 1.11 / 1.04 / 1.15 | 1.07 / 1.07 / 1.17 | 0.98 / 1.00 / 1.02 |
+
+The old rule was heavily biased *towards* strong clubs. The promoted relative rule reversed
+the bias: regular starters at weak clubs were about 10% over-predicted relative to strong
+clubs on xG, and about 9% on attacking points. That is above the 5% threshold. The cause was
+the club-agnostic shrinkage target: a weak club's attackers are pulled up towards a
+league-average level their club cannot supply.
+
+**Fix.** The xG/90 and xA/90 prior is now scaled by (club mean fixture xG / league mean club)^g,
+where "as-of" means the club level is fitted before the gameweek, with no look-ahead
+(`club_attack_priors()`). Only thinly evidenced players move: a three-season regular's rate
+shifts by about 3%. The exponent g was chosen on 2023/24 from {0.5, 1} by xG deviance
+(0.17552 vs 0.17588) and judged once on the hold-out:
+
+| hold-out | xG dev | xG MAE | xG ρ | xA dev | att-pts MAE | between-player att-pts ρ (GW2-38) |
+|---|---|---|---|---|---|---|
+| relative ^0.5 (promoted earlier) | 0.16506 | 0.09661 | 0.546 | 0.09291 | 1.0139 | 0.853 |
+| **+ club prior g=0.5** | **0.16472** | **0.09653** | **0.547** | **0.09261** | **1.0125** | **0.854** |
+
+- The new rule is better in each hold-out season.
+- Paired gameweek-block 95% intervals: xG deviance −0.00034 (−0.00060 to −0.00009); xA deviance −0.00030 (−0.00045 to −0.00015).
+- The weak-vs-strong gap for 60+ minute xG shrinks from about 10% to 3%, and for attacking points to 2%.
+- Season totals (`backtest_totals.py --asof-club`) are neutral: ALL Spearman 0.524 → 0.521 and 0.474 → 0.472, and the ratio of summed projections to summed actuals is unchanged. Those totals use only preseason rates, where most players are well evidenced.
+
+**Verdict: PROMOTED.** `FPL_CLUB_PRIOR=off` reverts it.
+
+**GW6, per-club Σ player xG / team xG.** A single fixture mixes club bias with the ^0.5
+damping of extreme fixtures. Leeds is away at Arsenal (fixture xG 0.69 against a club mean of
+1.32), so its GW6 ratio stays at 1.39 purely from that damping. The GW6–11 window shows
+the club effect more clearly:
+
+| | per-club Σ player xG / team xG, GW6–11 window |
+|---|---|
+| before phase 3 | MCI 1.45, LIV 1.35, BHA 1.31 … HUL 0.89, EVE 0.89, SUN 0.84 |
+| items 1–6 | COV 1.65, IPS 1.28, HUL 1.15 … SUN 0.95, ARS 0.89, AVL 0.84 |
+| + club prior | COV 1.43, IPS 1.21, BRE 1.14 … SUN 0.93, ARS 0.91, AVL 0.85 |
+
+GW6 alone, after the club prior: LEE 1.39, IPS 1.20, BRE 1.19, COV 1.18 … MUN 0.89, AVL 0.83
+(before phase 3: MCI 1.34 … COV 0.70). Coventry, a promoted club, remains the outlier.
 
 ## Open items
 
