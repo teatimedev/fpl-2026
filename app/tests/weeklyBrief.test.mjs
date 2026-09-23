@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { weeklyTransferSummary, lineupChanges, plainPlayerCheck } from '../src/weeklyActions.ts'
+import { weeklyTransferSummary, lineupChanges, plainPlayerCheck, decisionReason } from '../src/weeklyActions.ts'
 
 const xi = Array.from({ length: 11 }, (_, i) => i + 1)
 const lineup = { xi, bench: [12, 13, 14, 15], captain: 1, vice: 2 }
@@ -62,4 +62,40 @@ test('a positive attacking-role signal does not become a false playing-time warn
   const text = plainPlayerCheck({ status: 'a', news: '' }, { flags: ['role: last 3 starts: 2.78 xGI vs 1.86 expected, above the 80% band'] })
   assert.match(text, /higher than expected/)
   assert.doesNotMatch(text, /playing time|may not start/i)
+})
+
+const nameOf = id => `P${id}`
+const sampledPlan = (best, chosen) => ({ weeks: [], diff: chosen.gain, decision: {
+  method: 'sampled act-versus-hold', samples: 24, rule: 'one-SE', chosen, best_move: best } })
+
+test('a sampled hold explains the best move against saving, not a points bar', () => {
+  const best = { out: [11], in_: [16], gain: -1.4, se: 0.4, p_beats_hold: 0.19 }
+  const hold = { in_: [], out: [], gain: 0, se: 0, p_beats_hold: null }
+  const text = decisionReason({ ...weekly, horizon: 9, plan: sampledPlan(best, hold) }, nameOf)
+  assert.match(text, /P11 → P16/)
+  assert.match(text, /-1\.4 pts against holding/)
+  assert.match(text, /19% of 24 forecast scenarios/)
+  assert.doesNotMatch(text, /bar/)
+})
+
+test('a small positive best move under a sampled hold is described as noise', () => {
+  const best = { out: [11], in_: [16], gain: 0.3, se: 0.5, p_beats_hold: 0.55 }
+  const hold = { in_: [], out: [], gain: 0, se: 0, p_beats_hold: null }
+  const text = decisionReason({ ...weekly, horizon: 9, plan: sampledPlan(best, hold) }, nameOf)
+  assert.match(text, /\+0\.3 ± 0\.5 pts/)
+  assert.match(text, /within the noise/)
+})
+
+test('a sampled transfer states its expected gain and how often it won', () => {
+  const chosen = { out: [11], in_: [16], gain: 2.1, se: 0.5, p_beats_hold: 1 }
+  const w = { ...weekly, horizon: 9, plan: sampledPlan(chosen, chosen),
+    decision: { kind: 'transfer', moves: [{ out: 11, in_: 16 }] } }
+  const text = decisionReason(w, nameOf)
+  assert.match(text, /\+2\.1 pts compared with saving/)
+  assert.match(text, /100% of 24 forecast scenarios/)
+})
+
+test('legacy bundles without a sampled decision still explain a hold', () => {
+  const plan = { weeks: [], diff: 0, candidates: [{ status: 'scored', in_: [16], out: [11], gain: 1.2, move_bar: 2 }] }
+  assert.match(decisionReason({ ...weekly, horizon: 9, plan }, nameOf), /2\.0-point bar/)
 })

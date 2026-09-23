@@ -92,6 +92,20 @@ def captain_options(xi, gw, points=gw_points, play=play_probability):
                   -points(row['captain'], gw)))
 
 
+def _complete(squad):
+    return (len(squad) == 15
+            and all(sum(p['pos'] == pos for p in squad) == n
+                    for pos, n in SQUAD_SHAPE.items()))
+
+
+def _search(squad, gw):
+    try:
+        from .lineup_search import search
+    except ImportError:
+        from lineup_search import search
+    return search(squad, gw)
+
+
 def pick_lineup(squad: Sequence[Mapping], gw: int,
                 points: Callable[[Mapping, int], float] = gw_points):
     """Maximise XI, captain fallback and autosubs for a complete squad.
@@ -99,14 +113,8 @@ def pick_lineup(squad: Sequence[Mapping], gw: int,
     Arbitrary candidate pools and custom linear objectives retain the greedy
     positional selector used to construct solver proxies.
     """
-    if (points is gw_points and len(squad) == 15
-            and all(sum(p['pos'] == pos for p in squad) == n
-                    for pos, n in SQUAD_SHAPE.items())):
-        try:
-            from .lineup_search import search
-        except ImportError:
-            from lineup_search import search
-        return search(squad, gw)[1]
+    if points is gw_points and _complete(squad):
+        return _search(squad, gw)[1]
     key = lambda p: points(p, gw)
     by_pos = {pos: [] for pos in POS_ORDER}
     for player in squad:
@@ -289,7 +297,8 @@ def evaluate_week(squad: Sequence[Mapping], gw: int):
     expectation enumerates the independent DNP states and applies bench order
     and formation legality, while remaining fast enough for the transfer engine.
     """
-    lineup = pick_lineup(squad, gw)
+    searched = _search(squad, gw) if _complete(squad) else None
+    lineup = searched[1] if searched else pick_lineup(squad, gw)
     xi_points = sum(gw_points(p, gw) for p in lineup.xi)
     captain_points = 0.0
     if lineup.captain:
@@ -299,6 +308,14 @@ def evaluate_week(squad: Sequence[Mapping], gw: int):
                 (1.0 - play_probability(lineup.captain, gw))
                 * gw_points(lineup.vice, gw)
             )
+    if searched:
+        # The exhaustive search already scored the chosen lineup with the
+        # same exact autosub expectation (vectorised); reuse it rather than
+        # re-enumerating the absence states in Python.
+        total = searched[0]
+        return WeekEvaluation(gw=gw, xi_points=xi_points, captain_points=captain_points,
+                              autosub_points=total - xi_points - captain_points,
+                              total=total, lineup=lineup)
 
     autosub_points = 0.0
     starting_keeper = next((p for p in lineup.xi if p["pos"] == "GKP"), None)
