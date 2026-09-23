@@ -2,9 +2,10 @@ name: Refresh
 
 # Fires hourly; v2/should_refresh.py decides whether this hour is one of the
 # moments worth rebuilding for — about 24 hours before the next deadline (odds
-# are out, pressers still to come), about 2 hours before it (last word), and a
-# guaranteed Thursday-morning refresh for blank weeks and international breaks.
-# Every other hour exits in seconds. Runnable by hand from the Actions tab.
+# are out, pressers still to come), about 2 hours before it (last word), once
+# the previous deadline's picks are public, once that gameweek is graded, and
+# daily after FPL's overnight price changes. Every other hour exits in seconds.
+# Runnable by hand from the Actions tab.
 on:
   schedule:
     - cron: '23 * * * *'
@@ -133,7 +134,11 @@ jobs:
         run: |
           TEAM_ARG=""
           if [ -n "${{ vars.FPL_ENTRY_ID }}" ]; then TEAM_ARG="--team ${{ vars.FPL_ENTRY_ID }}"; fi
-          python v2/weekly.py --no-refresh --plan --chips --scout --snapshot --price-log --push-file --json $TEAM_ARG
+          # Paid scouting runs for the deadline windows and the first plan of each
+          # gameweek; the routine daily price refresh reuses that gameweek's scouting.
+          SCOUT_ARG="--scout"
+          if [ "${{ needs.gate.outputs.reason }}" = "daily" ]; then SCOUT_ARG=""; fi
+          python v2/weekly.py --no-refresh --plan --chips $SCOUT_ARG --snapshot --price-log --push-file --json $TEAM_ARG
           python v2/movers.py
 
       - name: Export for the app
@@ -152,7 +157,7 @@ jobs:
         run: |
           git config user.name  "fpl-bot"
           git config user.email "actions@github.com"
-          git add data/ app/src/data/ v2/team_ratings.json v2/season_view.json \
+          git add data/ app/public/data/ v2/team_ratings.json v2/season_view.json \
                   v2/projections_v2.json v2/digest.md v2/availability.generated.json \
                   v2/player_aliases.json
           # the frozen calibration (P4) exists only after the first full
@@ -171,14 +176,15 @@ jobs:
       - name: Push the digest to your phone
         # ntfy.sh needs no account: subscribe to the topic in the ntfy app and
         # every deadline-window refresh lands as a notification. NTFY_TOPIC is a
-        # repository secret. Only the deadline windows and manual runs push —
-        # Thursday's routine refresh would just be noise.
+        # repository secret. Only the deadline windows, news changes and manual
+        # runs push — the routine daily, post-deadline and grading rebuilds
+        # would just be noise.
         #
         # Commit first: it is the durable artefact; this push is derived output.
         # continue-on-error keeps a flaky ntfy from failing the job after a
         # rebuild already succeeded, and api-unreachable never pushes (the gate
         # never learned the real GW id, so the title would read GW0).
-        if: needs.gate.outputs.reason != 'weekly' && needs.gate.outputs.reason != 'api-unreachable' && ((needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true') || steps.news.outputs.notify_required == 'true')
+        if: needs.gate.outputs.reason != 'daily' && needs.gate.outputs.reason != 'graded' && needs.gate.outputs.reason != 'post-deadline' && needs.gate.outputs.reason != 'api-unreachable' && ((needs.gate.outputs.mode == 'full' && steps.news.outputs.official_fpl_ok == 'true') || steps.news.outputs.notify_required == 'true')
         continue-on-error: true
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}

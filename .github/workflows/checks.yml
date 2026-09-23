@@ -6,7 +6,7 @@ on:
       - '**.py'
       - 'tests/**'
       - 'app/**'
-      - '!app/src/data/**'
+      - '!app/public/data/**'
       - 'requirements*.txt'
       - '.github/workflows/**'
   pull_request:

@@ -1469,10 +1469,9 @@ def main():
                     elif not unlimited:
                         action_kind = 'hold'
                         recommendation = (
-                            '**Recommended: hold.** None of the action paths tested '
-                            'beats holding this week by the current 2-point-per-move '
-                            'buffer. That buffer is an unvalidated policy choice, '
-                            'not a measured value of saving a transfer. '
+                            '**Recommended: hold.** No transfer path tested beats '
+                            f'saving by the {HOLD_THRESHOLD:.1f}-point-per-move bar '
+                            f'over GW{gw}–{horizon}. '
                             + (f'You would have {ft + 1} free transfers next week.' if ft < MAX_FT else
                                'Your bank stays at five; holding forfeits the next weekly transfer. '
                                'Holding does not gain another transfer.')

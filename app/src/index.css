@@ -1236,3 +1236,48 @@ details[open].news-health > summary::before,
      fixed tab bar (it pinned to the header's bottom edge, over the title). */
   .topbar { backdrop-filter: none; background: rgba(7, 21, 15, 0.98); }
 }
+
+/* ---------------------------------------------------------- weekly status
+   One freshness chip beside the deadline, and at most one callout: red when
+   the plan is withheld, amber when it stands but something moved since. */
+.week-heading {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 8px 12px; margin: 0 0 12px;
+}
+.week-heading .week-deadline { margin: 0; }
+.fresh-chip {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
+  padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor;
+  white-space: nowrap;
+}
+.fresh-good { color: var(--ok); background: rgba(74, 222, 128, 0.07); }
+.fresh-warn { color: var(--flood-soft); background: rgba(255, 158, 27, 0.08); }
+.fresh-bad { color: var(--alert); background: rgba(255, 90, 90, 0.08); }
+
+.callout {
+  margin: 0 0 14px; padding: 12px 14px;
+  border-radius: 0 var(--r) var(--r) 0; line-height: 1.5;
+}
+.callout h2 { font-size: 17px; margin: 0 0 4px; text-transform: none; letter-spacing: 0.01em; }
+.callout p { margin: 0; color: var(--chalk-dim); font-size: 13px; }
+.callout ul { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--chalk-dim); }
+.callout li + li { margin-top: 3px; }
+.callout-bad { background: rgba(255, 90, 90, 0.07); border-left: 3px solid var(--alert); }
+.callout-bad h2 { color: var(--chalk); }
+.callout-warn { background: rgba(255, 158, 27, 0.07); border-left: 3px solid var(--flood); }
+.callout-warn h2 { color: var(--flood-soft); }
+
+.last-result {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px;
+  margin: 14px 0 0; padding: 10px 14px; border: var(--line); border-radius: var(--r);
+  background: var(--turf-1);
+}
+.last-result .k { font-family: var(--display); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--chalk-dim); }
+.last-result .v { font-size: 16px; font-weight: 600; color: var(--chalk); }
+.last-result .s { color: var(--chalk-dim); font-size: 13px; }
+.last-result .up { color: var(--ok); }
+.last-result .down { color: var(--alert); }
+.last-result .plink { margin-left: auto; }
+
+.boot { padding: 32px 16px; }
+.boot-msg { color: var(--chalk-dim); margin-top: 16px; }

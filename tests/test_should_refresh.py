@@ -19,41 +19,75 @@ class RefreshModeTests(unittest.TestCase):
 
     def test_news_every_three_hours_from_t30_to_t6(self):
         done = ("T-24h",)   # the news cadence assumes the T-24h rebuild happened
-        self.assertEqual(decide_mode(20, datetime(2026, 8, 21, 9, tzinfo=UTC), done), ("news", "news-3h"))
-        self.assertEqual(decide_mode(20, datetime(2026, 8, 21, 10, tzinfo=UTC), done), ("noop", "news-cadence"))
+        fresh = datetime(2026, 8, 21, 2, tzinfo=UTC)
+        self.assertEqual(decide_mode(20, datetime(2026, 8, 21, 9, tzinfo=UTC), done, last_full_at=fresh), ("news", "news-3h"))
+        self.assertEqual(decide_mode(20, datetime(2026, 8, 21, 10, tzinfo=UTC), done, last_full_at=fresh), ("noop", "news-cadence"))
 
     def test_news_hourly_inside_six_hours(self):
         self.assertEqual(decide_mode(5, datetime(2026, 8, 21, 10, tzinfo=UTC), ("T-24h",)), ("news", "news-hourly"))
         # ...and with no rebuild at all this gameweek, the cheap tick becomes the late T-24h
         self.assertEqual(decide_mode(5, datetime(2026, 8, 21, 10, tzinfo=UTC)), ("full", "T-24h"))
 
+    def test_t2_starts_early_enough_to_publish(self):
+        # a full run takes up to ~30 minutes; starting at 1.2h would publish too close to the lock
+        self.assertEqual(decide_mode(1.2, datetime(2026, 8, 21, 16, tzinfo=UTC), ("T-24h",)), ("news", "news-hourly"))
+
     def test_stops_at_forty_five_minutes(self):
         self.assertEqual(decide_mode(0.5, datetime(2026, 8, 21, 10, tzinfo=UTC)), ("noop", "deadline-lock"))
 
-    # Thu 27 Aug 2026: GitHub dropped every hourly run between 23:46 and
-    # 10:00 UTC and the 06:00-09:00 weekly slot was never taken. Any Thursday
-    # hour now qualifies until the marker says it ran.
-    def test_weekly_catches_up_any_thursday_hour(self):
-        thu = datetime(2026, 8, 27, 10, tzinfo=UTC)          # 31.5h to deadline
-        self.assertEqual(decide_mode(31.5, thu), ("full", "weekly"))
-        self.assertEqual(decide_mode(31.5, thu.replace(hour=6)), ("full", "weekly"))
-        self.assertEqual(decide_mode(31.5, thu.replace(hour=23)), ("full", "weekly"))
-        self.assertEqual(decide_mode(31.5, thu.replace(hour=5)), ("noop", "outside-windows"))
-        fri = datetime(2026, 8, 28, 10, tzinfo=UTC)
-        self.assertEqual(decide_mode(31.5, fri), ("noop", "outside-windows"))
+    def test_daily_rebuild_after_overnight_prices(self):
+        wed = datetime(2026, 9, 23, 6, tzinfo=UTC)          # 412h to the GW6 deadline
+        yesterday = datetime(2026, 9, 22, 18, tzinfo=UTC)
+        self.assertEqual(decide_mode(412, wed, last_full_at=yesterday), ("full", "daily"))
+        self.assertEqual(decide_mode(412, wed, last_full_at=None), ("full", "daily"))
+        # already rebuilt since 01:00 today: nothing to do far from a deadline
+        self.assertEqual(decide_mode(412, wed, last_full_at=wed.replace(hour=2)), ("noop", "outside-windows"))
+        # before 01:00 the price day still belongs to yesterday
+        early = datetime(2026, 9, 23, 0, 30, tzinfo=UTC)
+        self.assertEqual(decide_mode(412, early, last_full_at=datetime(2026, 9, 22, 3, tzinfo=UTC)),
+                         ("noop", "outside-windows"))
 
-    def test_done_weekly_falls_through_to_news_cadence(self):
+    def test_daily_rebuild_falls_through_to_news_cadence(self):
         thu = datetime(2026, 8, 27, 12, tzinfo=UTC)
-        self.assertEqual(decide_mode(29.5, thu, done=("weekly",)), ("news", "news-3h"))
-        self.assertEqual(decide_mode(29.5, thu.replace(hour=13), done=("weekly",)), ("noop", "news-cadence"))
+        fresh = thu.replace(hour=7)
+        self.assertEqual(decide_mode(29.5, thu, last_full_at=fresh), ("news", "news-3h"))
+        self.assertEqual(decide_mode(29.5, thu.replace(hour=13), last_full_at=fresh), ("noop", "news-cadence"))
+
+    def test_post_deadline_rebuild_reads_published_picks(self):
+        sat = datetime(2026, 9, 18, 19, tzinfo=UTC)          # GW5 deadline 17:30
+        fresh = sat.replace(hour=16)
+        early = {"hours_since": 1.0, "finished": False, "data_checked": False}
+        ready = {"hours_since": 1.5, "finished": False, "data_checked": False}
+        self.assertEqual(decide_mode(500, sat, previous=early, last_full_at=fresh), ("noop", "outside-windows"))
+        self.assertEqual(decide_mode(500, sat, previous=ready, last_full_at=fresh), ("full", "post-deadline"))
+        self.assertEqual(decide_mode(500, sat, ("post-deadline",), previous=ready, last_full_at=fresh),
+                         ("noop", "outside-windows"))
+
+    def test_graded_rebuild_once_gameweek_is_final(self):
+        tue = datetime(2026, 9, 22, 9, tzinfo=UTC)
+        fresh = tue.replace(hour=2)
+        final = {"hours_since": 87.5, "finished": True, "data_checked": True}
+        self.assertEqual(decide_mode(400, tue, ("post-deadline",), final, fresh), ("full", "graded"))
+        self.assertEqual(decide_mode(400, tue, ("post-deadline", "graded"), final, fresh), ("noop", "outside-windows"))
+        # grading covers the picks too, so a missed post-deadline run is not repeated
+        self.assertEqual(decide_mode(400, tue, ("graded",), final, fresh), ("noop", "outside-windows"))
+        self.assertEqual(decide_mode(400, tue, (), final, fresh), ("full", "graded"))
+
+    def test_catch_up_windows_never_run_inside_t2(self):
+        final = {"hours_since": 150, "finished": True, "data_checked": True}
+        self.assertEqual(decide_mode(3.0, datetime(2026, 9, 18, 14, tzinfo=UTC), ("T-24h",), final),
+                         ("full", "T-2h"))
+        self.assertEqual(decide_mode(1.0, datetime(2026, 9, 18, 16, tzinfo=UTC), ("T-24h", "T-2h"), final),
+                         ("news", "news-hourly"))
 
     def test_missed_t24_is_taken_late(self):
         thu = datetime(2026, 8, 27, 22, tzinfo=UTC)          # 19.5h out, window was 22.5-26.5
         self.assertEqual(decide_mode(19.5, thu), ("full", "T-24h"))    # catch-up outranks the weekly slot
         fri = datetime(2026, 8, 28, 2, tzinfo=UTC)
         self.assertEqual(decide_mode(15.5, fri), ("full", "T-24h"))
-        self.assertEqual(decide_mode(15.5, fri, done=("T-24h",)), ("noop", "news-cadence"))
-        self.assertEqual(decide_mode(15.5, fri.replace(hour=3), done=("T-24h",)), ("news", "news-3h"))
+        fresh = datetime(2026, 8, 28, 1, 30, tzinfo=UTC)
+        self.assertEqual(decide_mode(15.5, fri, done=("T-24h",), last_full_at=fresh), ("noop", "news-cadence"))
+        self.assertEqual(decide_mode(15.5, fri.replace(hour=3), done=("T-24h",), last_full_at=fresh), ("news", "news-3h"))
         # never inside the T-2h window or after lock
         self.assertEqual(decide_mode(3.0, fri), ("full", "T-2h"))
         self.assertEqual(decide_mode(0.5, fri), ("noop", "deadline-lock"))

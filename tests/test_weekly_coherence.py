@@ -15,7 +15,7 @@ def _weekly():
 
 
 def _player_ids_by_name():
-    data = json.loads((ROOT / "app" / "src" / "data" / "fpl.json").read_text())
+    data = json.loads((ROOT / "app" / "public" / "data" / "fpl.json").read_text())
     return {player["name"]: player["id"] for player in data["players"]}
 
 
@@ -69,7 +69,7 @@ class WeeklyCoherenceTests(unittest.TestCase):
         weekly_data = _weekly()
         weekly_data.pop("digest_md", None)
         app_data = json.loads(
-            (ROOT / "app" / "src" / "data" / "fpl.json").read_text()
+            (ROOT / "app" / "public" / "data" / "fpl.json").read_text()
         )
 
         self.assertEqual(app_data["weekly"], weekly_data)

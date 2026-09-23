@@ -47,3 +47,42 @@ export function plainPlayerCheck(player: Player | undefined, check: WeeklyCheck)
     : 'Recent chance involvement is lower than expected. Check whether his attacking role has changed.'
   return 'Review the flagged change before the deadline.'
 }
+
+/** The numbers behind the transfer decision, in one plain sentence. */
+export function decisionReason(w: Weekly, name: (id: number) => string) {
+  const plan = w.plan
+  const hold = w.decision?.kind === 'hold'
+  const window = `Gameweeks ${w.gw}–${w.horizon}`
+  const scored = (plan?.candidates ?? []).filter(c => c.status === 'scored'
+    && (c.in_?.length ?? 0) > 0 && Number.isFinite(c.gain))
+  if (hold) {
+    const best = scored.sort((a, b) => (b.gain ?? 0) - (a.gain ?? 0))[0]
+    if (!best) return `No transfer improves your team over ${window}.`
+    const move = (best.out ?? []).map((out, i) => `${name(out)} → ${name(best.in_![i])}`).join(', ')
+    const gain = best.gain ?? 0
+    return gain <= 0
+      ? `No transfer beats saving it: the best tested (${move}) is ${gain.toFixed(1)} pts over ${window}.`
+      : `The best move tested (${move}) adds only ${gain.toFixed(1)} pts over ${window} compared with saving the transfer — below the ${(best.move_bar ?? 0).toFixed(1)}-point bar for spending it.`
+  }
+  if (plan && Number.isFinite(plan.diff) && (w.decision?.moves?.length ?? 0) > 0)
+    return `Expected to gain ${plan.diff >= 0 ? '+' : ''}${plan.diff.toFixed(1)} pts over ${window} compared with saving your transfers, after any hits.`
+  return ''
+}
+
+export function ageLabel(hours: number | null) {
+  if (hours == null) return 'build time unknown'
+  if (hours < 1) return 'updated just now'
+  if (hours < 24) return `updated ${Math.floor(hours)}h ago`
+  const days = Math.floor(hours / 24)
+  return `updated ${days} day${days === 1 ? '' : 's'} ago`
+}
+
+/** A check is worth a deadline action only if it could cost points: an
+ *  availability flag, a start doubt or a falling attacking role. A player
+ *  getting more chances than expected is good news, not a check. */
+export function needsDeadlineCheck(player: Player | undefined, check: WeeklyCheck) {
+  if (player && player.status !== 'a') return true
+  return check.flags.some(flag => !/^role:.*above/i.test(flag))
+}
+
+export const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`

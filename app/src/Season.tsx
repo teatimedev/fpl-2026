@@ -4,7 +4,7 @@ import { BarSpark, LineSpark } from './components'
 import { csTone, xgTone } from './weekly'
 import { signed } from './squad'
 import type { LinkedTeam } from './useLinkedTeam'
-import { recommendationState } from './coherence'
+import { adviceStatus } from './coherence'
 
 /**
  * The season view: when to play each chip, how every club's fixtures swing
@@ -33,8 +33,8 @@ export default function Season({
   openPlayer: (id: number) => void
 }) {
   const gw = linked.live?.gw ?? D.meta.start_gw ?? 1
-  const ready = recommendationState(D, linked.live, linked.team?.ids ?? [],
-    linked.team?.bank ?? NaN, linked.ft, linked.entryId).digestReady
+  const ready = adviceStatus(D, linked.live, linked.team?.ids ?? D.weekly?.squad.ids ?? [],
+    linked.team?.bank ?? NaN, linked.team ? linked.ft : NaN, linked.entryId).planUsable
   const chips = ready && D.weekly?.chips?.gw === gw ? D.weekly.chips : null
   const movers = D.movers ?? null
   const ticker = D.ticker ?? null

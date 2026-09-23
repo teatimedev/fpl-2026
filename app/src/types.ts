@@ -462,7 +462,7 @@ export interface NewsData {
 
 export interface Data {
   /** The window rolls: start_gw is the next gameweek, horizon the last one modelled. */
-  meta: { horizon: number; start_gw?: number; deadline: string; budget: number; generated: string; forecast_id?: string; decision_version?: string }
+  meta: { horizon: number; start_gw?: number; deadline: string; budget: number; generated: string; forecast_id?: string; decision_version?: string; exported?: string }
   teams: Record<string, Team>
   schedule: Record<string, (Fixture | null)[]>
   players: Player[]

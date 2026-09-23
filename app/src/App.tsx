@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import raw from './data/fpl.json'
 import type { Data, Player } from './types'
 import { analyse, blockReason } from './squad'
 import ThisWeek from './ThisWeek'
@@ -9,16 +8,18 @@ import Scorecard from './Scorecard'
 import PlayerDrawer from './PlayerDrawer'
 import { useLinkedTeam } from './useLinkedTeam'
 
-const D = raw as unknown as Data
-const byId = new Map(D.players.map(p => [p.id, p]))
-const builtAt = new Date(D.meta.generated.replace(' ', 'T').replace(/ UTC$/, 'Z'))
-const builtLabel = Number.isNaN(builtAt.getTime()) ? 'unknown' : builtAt.toLocaleString('en-GB', {
-  day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
-})
-
 type Tab = 'week' | 'season' | 'squad' | 'score'
 
-export default function App() {
+function buildLabel(D: Data) {
+  const builtAt = new Date(D.meta.generated.replace(' ', 'T').replace(/ UTC$/, 'Z'))
+  return Number.isNaN(builtAt.getTime()) ? 'unknown' : builtAt.toLocaleString('en-GB', {
+    day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+  })
+}
+
+export default function App({ D }: { D: Data }) {
+  const byId = useMemo(() => new Map(D.players.map(p => [p.id, p])), [D.players])
+  const builtLabel = buildLabel(D)
   // Open on whichever tab is actually useful. With no squad drafted and no FPL
   // team linked there is nothing for the weekly view to talk about, so start on
   // My squad; once either exists, the weekly decision is the reason to open
@@ -140,7 +141,7 @@ export default function App() {
 
       {tab === 'week' && (
         <ThisWeek D={D} linked={linked} builtSquad={picks} openPlayer={openPlayer}
-          loadSquad={ids => { setPresetXI(null); setPicks(ids.map(id => byId.get(id)).filter((p): p is Player => !!p)) }} />
+          goResults={() => go('score')} />
       )}
       {tab === 'season' && <Season D={D} linked={linked} openPlayer={openPlayer} />}
       {tab === 'score' && <Scorecard sc={D.scorecard ?? null} linked={linked} />}
@@ -156,10 +157,12 @@ export default function App() {
           <summary>How this works · model last built {builtLabel}</summary>
           <p>
             Prices, injuries and your squad are read live from the official Fantasy
-            Premier League API each time you open this. Projections are rebuilt about
-            24 hours and 2 hours before every deadline (and each Thursday); public
-            official club news is scanned in the run-up, and a change to one of your
-            players triggers another rebuild. Bookmaker odds are blended in where posted.
+            Premier League API while this page is open. The forecast and plan are
+            rebuilt every morning after FPL’s price changes, soon after each deadline,
+            once a gameweek’s scores are final, and about 24 and 2 hours before the
+            next deadline. Official club news is scanned in the run-up, and a change to
+            one of your players triggers another rebuild. Bookmaker odds are blended in
+            where posted.
           </p>
           <p>
             Attack and defence ratings learn from four seasons of results and

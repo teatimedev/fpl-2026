@@ -77,3 +77,126 @@ export function recommendationState(D: Data, live: LiveState | null, ids: number
     reason.push('Prices moved after this analysis. Transfer affordability needs refreshing.')
   return { gw, projectionsReady, digestReady: reason.length === 0, reasons: reason }
 }
+
+export type AdviceLevel = 'ready' | 'warn' | 'blocked'
+
+export interface AdviceStatus {
+  gw: number
+  level: AdviceLevel
+  /** The published plan applies to this gameweek, account and squad. */
+  planUsable: boolean
+  /** The projections cover the upcoming gameweek, even if the plan does not. */
+  projectionsUsable: boolean
+  /** Why the weekly instruction is withheld: it would be wrong, not merely dated. */
+  blockers: string[]
+  /** Things that changed since the plan was built but do not invalidate it. */
+  warnings: string[]
+  /** Hours since the model was built, or null when unknown. */
+  ageHours: number | null
+}
+
+const STALE_WARNING_HOURS = 72
+const DOUBTFUL = new Set(['i', 's', 'u', 'n'])
+
+function builtAt(D: Data) {
+  const t = Date.parse((D.meta.generated ?? '').replace(' ', 'T').replace(/ UTC$/, 'Z'))
+  return Number.isFinite(t) ? t : null
+}
+
+/**
+ * Severity-graded replacement for `recommendationState`.
+ *
+ * A plan is withheld only when following it could be wrong: it belongs to a
+ * different gameweek, account, squad or decision algorithm, the deadline has
+ * passed, or a recommended signing is now flagged or unaffordable. Everything
+ * else that drifts between rebuilds — news about a squad player, a price move
+ * that still fits the budget, an unreachable live feed, an older build — is a
+ * visible warning beside the plan instead of a reason to show nothing.
+ */
+export function adviceStatus(D: Data, live: LiveState | null, ids: number[],
+  bank: number, ft: number, entryId: string, now = Date.now()): AdviceStatus {
+  const w = D.weekly
+  const gw = live?.gw ?? w?.gw ?? D.meta.start_gw ?? 1
+  const blockers: string[] = []
+  const warnings: string[] = []
+  const built = builtAt(D)
+  const ageHours = built == null ? null : Math.max(0, (now - built) / 3600000)
+  const byId = new Map(D.players.map(p => [p.id, p]))
+  const name = (id: number) => byId.get(id)?.name ?? `Player ${id}`
+
+  const projectionsUsable = D.meta.start_gw != null && D.meta.start_gw <= gw
+    && gw <= (D.meta.horizon ?? 0) && ids.length === 15
+    && ids.every(id => byId.has(id))
+
+  if (!w) blockers.push('No weekly plan has been published yet.')
+  else if (w.gw !== gw) blockers.push(`The Gameweek ${gw} plan has not been built yet. The last plan was for Gameweek ${w.gw}.`)
+  else if (!D.meta.forecast_id || w.forecast_id !== D.meta.forecast_id
+      || w.decision_version !== DECISION_VERSION || D.meta.decision_version !== DECISION_VERSION)
+    blockers.push('The published plan and forecast are out of step. The next automatic rebuild fixes this.')
+
+  const deadline = Date.parse(live?.deadline ?? w?.deadline ?? D.meta.deadline)
+  if (!Number.isFinite(deadline) || now >= deadline)
+    blockers.push('This deadline has passed. The next plan is built automatically.')
+
+  if (w?.squad.entry_id && entryId && String(w.squad.entry_id) !== entryId)
+    blockers.push('The plan was built for a different FPL team.')
+  if (w && w.gw === gw && ids.length === 15
+      && (w.squad.ids.length !== 15 || !ids.every(id => w.squad.ids.includes(id))))
+    blockers.push('Your squad has changed since the plan was built.')
+
+  const moves = w?.gw === gw ? w.decision?.moves ?? [] : []
+  if (live) {
+    for (const move of moves) {
+      const e = live.elements.get(move.in_)
+      const planned = byId.get(move.in_)
+      if (!e) blockers.push(`${name(move.in_)} is missing from the live FPL player list.`)
+      else if (DOUBTFUL.has(e.status) || (e.chance_of_playing_next_round != null && e.chance_of_playing_next_round <= 50))
+        blockers.push(`${name(move.in_)}, a recommended signing, is now flagged${e.news ? `: ${e.news}` : '.'}`)
+      else if (planned && (planned.status !== e.status || (planned.news || '') !== (e.news || '')
+          || (planned.chance ?? null) !== (e.chance_of_playing_next_round ?? null)))
+        // A new doubt (e.g. 75%) is not disqualifying, but the plan never saw it.
+        warnings.push(`${name(move.in_)}, a recommended signing, has new FPL news${e.news ? `: ${e.news}` : '.'} Check before buying.`)
+    }
+    const sell = w?.squad.sell_prices
+    if (moves.length && sell && Number.isFinite(w?.squad.bank)) {
+      // Saved sale proceeds used the price at build time. A later fall lowers
+      // the real proceeds by at most the fall; a rise never lowers them.
+      const saleNow = (id: number) => {
+        const livePrice = (live.elements.get(id)?.now_cost ?? NaN) / 10
+        const builtPrice = byId.get(id)?.price ?? NaN
+        return (sell[id] ?? NaN) - Math.max(0, builtPrice - livePrice)
+      }
+      const proceeds = moves.reduce((sum, m) => sum + saleNow(m.out), 0)
+      const cost = moves.reduce((sum, m) => sum + (live.elements.get(m.in_)?.now_cost ?? NaN) / 10, 0)
+      const planned = moves.reduce((sum, m) => sum + (byId.get(m.in_)?.price ?? NaN), 0)
+      const left = w!.squad.bank + proceeds - cost
+      if (!Number.isFinite(left)) warnings.push('Could not recheck the transfer budget against live prices.')
+      else if (left < -0.001) blockers.push(`The recommended transfer${moves.length > 1 ? 's are' : ' is'} no longer affordable at today's prices (short by £${(-left).toFixed(1)}m).`)
+      else if (Math.abs(cost - planned) > 0.001) warnings.push(`Prices of the recommended signings moved since the plan was built. Still affordable, with £${left.toFixed(1)}m left.`)
+    }
+  } else {
+    warnings.push('Live FPL data is unavailable, so news and prices could not be rechecked. Showing the plan as built.')
+  }
+
+  if (live) {
+    const changed = ids.filter(id => {
+      const p = byId.get(id), e = live.elements.get(id)
+      return p && e && (p.status !== e.status || (p.news || '') !== (e.news || '')
+        || (p.chance ?? null) !== (e.chance_of_playing_next_round ?? null))
+    })
+    if (changed.length) warnings.push(`News changed since the plan was built: ${changed.slice(0, 4).map(name).join(', ')}${changed.length > 4 ? ` and ${changed.length - 4} more` : ''}. The plan does not include it yet.`)
+  }
+  if (w && w.gw === gw && Number.isFinite(bank) && Number.isFinite(ft)
+      && (Math.abs(w.squad.bank - bank) > 0.001 || w.squad.ft !== ft))
+    warnings.push(`FPL now shows ${ft} free transfer${ft === 1 ? '' : 's'} and £${bank.toFixed(1)}m in the bank; the plan used ${w.squad.ft} and £${w.squad.bank.toFixed(1)}m.`)
+  if (w?.squad.selling_prices_unknown?.length)
+    warnings.push('Some selling prices are unknown, so the transfer budget is approximate.')
+  if (ageHours != null && ageHours > STALE_WARNING_HOURS)
+    warnings.push(`The plan is ${Math.floor(ageHours / 24)} days old. The automatic refresh may have stalled.`)
+
+  const planUsable = blockers.length === 0
+  return {
+    gw, planUsable, projectionsUsable, blockers, warnings, ageHours,
+    level: !planUsable ? 'blocked' : warnings.length ? 'warn' : 'ready',
+  }
+}

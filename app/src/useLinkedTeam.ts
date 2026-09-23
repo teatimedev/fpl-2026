@@ -71,16 +71,23 @@ export function useLinkedTeam(defaultEntryId = '', weekly?: Weekly | null): Link
     return () => clearTimeout(timer)
   }, [live])
 
+  // A different entry must never show the previous entry's squad; a periodic
+  // refresh of the same entry keeps the last good state on screen until the new
+  // one arrives, so the page does not blank out every five minutes or on focus.
+  const [loadedFor, setLoadedFor] = useState(entryId)
+  if (loadedFor !== entryId) {
+    setLoadedFor(entryId)
+    setTeam(null); setSummary(null); setHistory(null)
+  }
+
   useEffect(() => {
     let cancelled = false
-    setBusy(true); setErr(null)
-    setLive(null)
-    setTeam(null); setSummary(null); setHistory(null)
+    setBusy(true)
     loadLive()
       .then(async l => {
         if (cancelled) return
         setLive(l)
-        if (!entryId) return
+        if (!entryId) { setErr(null); return }
         const id = Number(entryId)
         try {
           let [t, s, h] = await Promise.all([
@@ -94,7 +101,7 @@ export function useLinkedTeam(defaultEntryId = '', weekly?: Weekly | null): Link
             t = await loadTeam(id, l.gw, h)
             if (cancelled) return
           }
-          setTeam(t); setHistory(h)
+          setTeam(t); setHistory(h); setErr(null)
         } catch (error) {
           // Account publication can lag the deadline calendar. Preserve the
           // independently verified GW/player feed when that happens.
@@ -102,7 +109,9 @@ export function useLinkedTeam(defaultEntryId = '', weekly?: Weekly | null): Link
         }
       })
       .catch(e => {
-        if (!cancelled) { setLive(null); setErr(String(e?.message ?? e)) }
+        // Keep the last verified feed (its deadline and prices are minutes old
+        // at worst); the error is still surfaced beside it.
+        if (!cancelled) setErr(String(e?.message ?? e))
       })
       .finally(() => !cancelled && setBusy(false))
     return () => { cancelled = true }

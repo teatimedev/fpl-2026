@@ -125,7 +125,7 @@ out = {
                 'picks': [{'id': int(p['id']), 'starting': p['starting']}
                           for p in s['squad']]} for s in squads],
 }
-target = Path('app/src/data/fpl.json')
+target = Path('app/public/data/fpl.json')
 temporary = target.with_suffix('.json.tmp')
 temporary.write_text(json.dumps(out, separators=(',', ':'), allow_nan=False))
 temporary.replace(target)
