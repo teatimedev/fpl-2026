@@ -42,6 +42,22 @@ test('an affordable price rise on a signing warns; an unaffordable one blocks', 
   assert.match(tooDear.blockers[0], /no longer affordable/)
 })
 
+test('a new doubt on a recommended signing is surfaced without withholding the plan', () => {
+  const s = status(data, withEl(20, { status: 'd', news: 'Knock - 75% chance of playing', chance_of_playing_next_round: 75 }))
+  assert.equal(s.level, 'warn')
+  assert.match(s.warnings.join(' '), /Player20, a recommended signing, has new FPL news/)
+})
+
+test('a fall in the outgoing player lowers the sale proceeds used for affordability', () => {
+  // bank 0.5 + sell 5.0 - buy 5.4 = 0.1 left; the sold player falling 0.2 leaves -0.1
+  const moved = { ...live, elements: new Map([...live.elements, [20, el({ now_cost: 54 })], [1, el({ now_cost: 48 })]]) }
+  const s = status(data, moved)
+  assert.equal(s.planUsable, false)
+  assert.match(s.blockers[0], /no longer affordable/)
+  const rose = { ...live, elements: new Map([...live.elements, [20, el({ now_cost: 54 })], [1, el({ now_cost: 52 })]]) }
+  assert.equal(status(data, rose).planUsable, true)
+})
+
 test('a recommended signing who is now injured blocks the plan', () => {
   const s = status(data, withEl(20, { status: 'i', news: 'Hamstring', chance_of_playing_next_round: 0 }))
   assert.equal(s.level, 'blocked')

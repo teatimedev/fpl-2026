@@ -43,7 +43,7 @@ export default function ThisWeek(
   // The real squad once the account is read. The plan's own squad stands in
   // only when the account cannot be read, never while it is still loading.
   const accountFailed = !!err && !linked.team
-  const loadingAccount = !!entryId && !linked.team && !accountFailed
+  const loadingAccount = !!entryId && !linked.team && !accountFailed && linked.busy
   const squadIds = linked.team?.ids
     ?? (accountFailed && weekly && String(weekly.squad.entry_id) === entryId ? weekly.squad.ids : null)
   const squad: Player[] = useMemo(() => squadIds

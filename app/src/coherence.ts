@@ -148,13 +148,25 @@ export function adviceStatus(D: Data, live: LiveState | null, ids: number[],
   if (live) {
     for (const move of moves) {
       const e = live.elements.get(move.in_)
+      const planned = byId.get(move.in_)
       if (!e) blockers.push(`${name(move.in_)} is missing from the live FPL player list.`)
       else if (DOUBTFUL.has(e.status) || (e.chance_of_playing_next_round != null && e.chance_of_playing_next_round <= 50))
         blockers.push(`${name(move.in_)}, a recommended signing, is now flagged${e.news ? `: ${e.news}` : '.'}`)
+      else if (planned && (planned.status !== e.status || (planned.news || '') !== (e.news || '')
+          || (planned.chance ?? null) !== (e.chance_of_playing_next_round ?? null)))
+        // A new doubt (e.g. 75%) is not disqualifying, but the plan never saw it.
+        warnings.push(`${name(move.in_)}, a recommended signing, has new FPL news${e.news ? `: ${e.news}` : '.'} Check before buying.`)
     }
     const sell = w?.squad.sell_prices
     if (moves.length && sell && Number.isFinite(w?.squad.bank)) {
-      const proceeds = moves.reduce((sum, m) => sum + (sell[m.out] ?? NaN), 0)
+      // Saved sale proceeds used the price at build time. A later fall lowers
+      // the real proceeds by at most the fall; a rise never lowers them.
+      const saleNow = (id: number) => {
+        const livePrice = (live.elements.get(id)?.now_cost ?? NaN) / 10
+        const builtPrice = byId.get(id)?.price ?? NaN
+        return (sell[id] ?? NaN) - Math.max(0, builtPrice - livePrice)
+      }
+      const proceeds = moves.reduce((sum, m) => sum + saleNow(m.out), 0)
       const cost = moves.reduce((sum, m) => sum + (live.elements.get(m.in_)?.now_cost ?? NaN) / 10, 0)
       const planned = moves.reduce((sum, m) => sum + (byId.get(m.in_)?.price ?? NaN), 0)
       const left = w!.squad.bank + proceeds - cost
