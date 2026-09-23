@@ -711,6 +711,11 @@ def snapshot(gw, deadline, players, squad, model, yours, elem=None, props=None,
                          bonus90=p.get('bonus90'), saves90=p.get('saves90'),
                          yellow90=p.get('yellow90'), evidence=p.get('evidence'),
                          dc_evidence=p.get('dc_evidence'), k=p.get('calibration_k'),
+                         # the club level the relative attack volume divided by,
+                         # and the rate-only share the calibration shadow scales
+                         club_xg=p.get('club_xg'),
+                         rate_pts=(round((p.get('rate_by_gw') or [])[idx], 3)
+                                   if idx < len(p.get('rate_by_gw') or []) else None),
                          pens=p.get('pens'), corners=p.get('corners'), fk=p.get('fk'),
                          ep_next=ep_next,
                          p_goal_model=(props.get(p['id']) or {}).get('p_goal_model'),
