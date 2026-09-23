@@ -88,6 +88,16 @@ class DecompositionIdentity(unittest.TestCase):
         self.assertLess(abs(comps["chance"]), 1.0)          # xG was about par
         self.assertGreater(comps["minutes"], 0.0)           # he started and played 90
 
+    def test_sixty_minute_rules_match_the_projection(self):
+        row = snap_row(pos="DEF", xg90=0.0, xa90=0.0, dc90=0.0, bonus90=0.0, yellow90=0.0)
+        fx = [dict(xg=1.5, xgc=0.0, cs=0.5)]
+        short = retro.expected_components(row, fx, 1.0, 0.0, 45.0, 25.0, 1.0)
+        full = retro.expected_components(row, fx, 1.0, 0.0, 90.0, 25.0, 1.0)
+        long_cameo = retro.expected_components(row, fx, 0.0, 1.0, 0.0, 70.0, 1.0)
+        self.assertEqual((short["appearance"], short["cs"]), (1.0, 0.0))
+        self.assertEqual((full["appearance"], full["cs"]), (2.0, 2.0))
+        self.assertEqual((long_cameo["appearance"], long_cameo["cs"]), (2.0, 2.0))
+
     def test_identity_holds_for_a_non_appearance(self):
         comps, _, actual = self._check(snap_row(id=106, name="Thiago", proj=5.24,
                                                 p_start=0.97, expected_minutes=88.7),
