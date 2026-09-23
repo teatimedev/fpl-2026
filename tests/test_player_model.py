@@ -393,7 +393,7 @@ class CalibrationTests(unittest.TestCase):
         with patch.multiple(PM, START_GW=1, HORIZON=6, LAST_GW=6, WINDOW=6,
                             CALIBRATION=cal, GW_DEADLINES={}, AVAILABILITY_OVERRIDES=[],
                             OVERLAY=overlay or {}, PRESEASON_FORM={}, MINUTES_RULE="aggregate",
-                            GW_ROWS_LOADED=False), \
+                            GW_ROWS_LOADED=False, CLUB_NORMALISE=None), \
                 patch.dict(PM.SEASON, {}, clear=True), \
                 patch.dict(PM.GAMES_PLAYED, {}, clear=True), \
                 patch.dict(PM.TEAM_FIXTURES, {}, clear=True), \
@@ -436,7 +436,7 @@ class ScoringEligibilityTests(unittest.TestCase):
     def project_scenario(self, minutes, fixtures, start=1.):
         p = make_player(pos='DEF')
         with patch.multiple(PM, START_GW=1, HORIZON=1, LAST_GW=1, WINDOW=1,
-                            AVAILABILITY_OVERRIDES=[], GW_DEADLINES={}), \
+                            AVAILABILITY_OVERRIDES=[], GW_DEADLINES={}, CLUB_NORMALISE=None), \
                 patch.object(PM, 'minutes_model', return_value=(start, minutes)), \
                 patch.object(PM, 'shrink', return_value=(0.0, 0.0)), \
                 patch.object(PM, 'calibrate'):
@@ -457,7 +457,7 @@ class ScoringEligibilityTests(unittest.TestCase):
         p.update(status='i', chance=0, news='Back injury - Unknown return date')
         fx = {str(gw): [dict(xg=1.4, xgc=1.2, cs=.3)] for gw in range(6, 12)}
         with patch.multiple(PM, START_GW=6, HORIZON=11, LAST_GW=11, WINDOW=6,
-                            AVAILABILITY_OVERRIDES=[], GW_DEADLINES={}), \
+                            AVAILABILITY_OVERRIDES=[], GW_DEADLINES={}, CLUB_NORMALISE=None), \
                 patch.object(PM, 'minutes_model', return_value=(.9, 88)), \
                 patch.object(PM, 'shrink', return_value=(0.0, 0.0)), \
                 patch.object(PM, 'calibrate'):
@@ -478,6 +478,67 @@ class ScoringEligibilityTests(unittest.TestCase):
         self.assertAlmostEqual(double['mins_by_gw'][0], 2 * single['mins_by_gw'][0], delta=.1)
         self.assertEqual(double['availability_by_gw'][0]['fixtures'], 2)
         self.assertIsNone(double['p60_shadow_by_gw'][0])
+
+
+class ClubStartConstraintTests(unittest.TestCase):
+    def club(self, outfield, keepers):
+        return ([dict(p=p, pos='MID') for p in outfield]
+                + [dict(p=p, pos='GKP') for p in keepers])
+
+    def test_over_full_club_sums_to_eleven_with_one_keeper(self):
+        entries = self.club([.95] * 8 + [.6] * 6, [.95, .3])
+        out = PM.normalise_club_starts(entries, mode='logit', two_sided=True)
+        self.assertAlmostEqual(sum(out[:14]), 10.0, places=6)
+        self.assertAlmostEqual(sum(out[14:]), 1.0, places=6)
+        # a near-certain starter gives up far less than a rotation option
+        self.assertGreater(out[0] / .95, out[8] / .6)
+        self.assertGreater(out[0], .9)
+
+    def test_proportional_mode_scales_everyone_alike(self):
+        entries = self.club([.9] * 12, [1.0])
+        out = PM.normalise_club_starts(entries, mode='proportional')
+        self.assertAlmostEqual(out[0], .9 * 10 / 10.8)
+        self.assertEqual(out[-1], 1.0)
+
+    def test_short_club_is_lifted_only_when_two_sided(self):
+        entries = self.club([.9] * 9 + [.3, .3, 0.0], [.5, .2])
+        capped = PM.normalise_club_starts(entries, two_sided=False)
+        self.assertEqual(capped, [e['p'] for e in entries])
+        lifted = PM.normalise_club_starts(entries, two_sided=True)
+        self.assertAlmostEqual(sum(lifted[:12]), 10.0, places=6)
+        self.assertAlmostEqual(sum(lifted[12:]), 1.0, places=6)
+        self.assertEqual(lifted[11], 0.0)            # an absentee stays absent
+
+    def test_fixed_rows_keep_their_value_and_the_rest_share_what_is_left(self):
+        entries = self.club([.95] * 12, [])
+        entries[0]['fixed'] = True
+        entries[0]['p'] = 1.0
+        out = PM.normalise_club_starts(entries, split_gk=False, two_sided=True)
+        self.assertEqual(out[0], 1.0)
+        self.assertAlmostEqual(sum(out), 11.0, places=6)
+
+    def test_project_constrains_each_club_gameweek(self):
+        players = {}
+        for i in range(14):
+            p = make_player(pid=5000 + i, pos='DEF' if i < 13 else 'GKP')
+            players[p['id']] = p
+        backup = make_player(pid=6000, pos='GKP')
+        players[backup['id']] = backup
+        rates = {pid: ((.9, 90) if pid != 6000 else (.4, 90)) for pid in players}
+        fx = {'1': [dict(xg=1.4, xgc=1.2, cs=.3)], '2': [dict(xg=1.4, xgc=1.2, cs=.3)] * 2}
+        with patch.multiple(PM, START_GW=1, HORIZON=2, LAST_GW=2, WINDOW=2,
+                            AVAILABILITY_OVERRIDES=[], GW_DEADLINES={}), \
+                patch.object(PM, 'minutes_model', side_effect=lambda p, _, rule=None: rates[p['id']]), \
+                patch.object(PM, 'shrink', return_value=(0.0, 0.0)), \
+                patch.object(PM, 'calibrate'):
+            rows = PM.project(players, {'view': {'MCI': fx}}, {})
+        for gw in (0, 1):
+            per_fixture = [r['availability_by_gw'][gw]['p_start'] for r in rows]
+            keepers = [r['availability_by_gw'][gw]['p_start'] for r in rows if r['pos'] == 'GKP']
+            self.assertAlmostEqual(sum(per_fixture), 11.0, places=3)
+            self.assertAlmostEqual(sum(keepers), 1.0, places=3)
+        # the rule-comparison shadows stay unconstrained
+        self.assertAlmostEqual(rows[0]['start_recency_by_gw'][0], .9)
 
 
 # ---------------------------------------------------------------------- P5

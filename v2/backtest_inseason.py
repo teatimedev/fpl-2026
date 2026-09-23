@@ -32,6 +32,10 @@ scorecard settles the availability-conditioned versions.
     --mps       Compare the preseason player minutes-per-start prior with
                 manager/club-position blends on started rows. Manager evidence
                 is strictly before the target GW and excludes the target player.
+    --club      Club-level "eleven start" constraint on the production start
+                rule: variants chosen on 2022/23-2023/24, judged once on
+                2024/25-2025/26 (start Brier/log-loss, minutes MAE), plus the
+                same constraint on this season's archived deadline forecasts.
 
     python v2/backtest_inseason.py --minutes --rates --retro
 """
@@ -266,6 +270,199 @@ def run_minutes(panel, hist_rows, meta, seasons):
     print('Read: the recency K/HALF_LIFE pair with the lowest Brier among regulars '
           '(band >=0.7) is the one to quote in player_model.py; if the aggregate '
           'rule wins there, keep it and report why.')
+
+
+# --------------------------------------------------------------- --club
+CLUB_VARIANTS = {
+    'none': None,
+    'logit cap split': dict(mode='logit', two_sided=False, split_gk=True),
+    'logit cap total': dict(mode='logit', two_sided=False, split_gk=False),
+    'logit 2-sided split': dict(mode='logit', two_sided=True, split_gk=True),
+    'logit 2-sided total': dict(mode='logit', two_sided=True, split_gk=False),
+    'prop cap split': dict(mode='proportional', two_sided=False, split_gk=True),
+    'prop cap total': dict(mode='proportional', two_sided=False, split_gk=False),
+    'prop 2-sided split': dict(mode='proportional', two_sided=True, split_gk=True),
+    'prop 2-sided total': dict(mode='proportional', two_sided=True, split_gk=False),
+    'gk only': dict(mode='logit', two_sided=False, split_gk=True, gk_only=True),
+}
+CLUB_SELECT = ('2022/23', '2023/24')     # choose the variant here...
+CLUB_HOLDOUT = ('2024/25', '2025/26')    # ...and judge it here, once
+
+
+def club_predictions(season, rows_by_code, hist_rows, meta):
+    """{(n, fixture_id, team): [(code, pos, p_start, mps, row)]}: every
+    player with a row in a club's GW n+1 fixture, with the production start
+    rule (recency K=1, HL=3 over the club's fixtures through GW n) — or the
+    preseason prior for a player with no row yet (a new signing is still in
+    the club's list). Prices/pecking order as of round 1, as in --retro."""
+    players = asof_players(season, rows_by_code, hist_rows, meta)
+    peers = {c: p for c, p in players.items() if rows_by_code[c][0]['round'] <= 1}
+    for pos in POSITIONS:
+        prices = sorted(q['price'] for q in peers.values() if q['pos'] == pos)
+        PM.PRICE_MEDIAN[pos] = prices[len(prices) // 2] if prices else 5.5
+    priors = {code: PM.minutes_prior(p, peers) for code, p in players.items()}
+    seqs = team_sequences(rows_by_code)
+    fixtures = defaultdict(list)
+    for code, rows in rows_by_code.items():
+        by_fixture = {r['fixture_id']: r for r in rows}
+        for t in rows:
+            n = t['round'] - 1
+            if n < 2:
+                continue
+            seq = [x for x in seqs.get(t['team'], []) if x[2] <= n]
+            prior_rate, mps = priors[code]
+            evidence = []
+            for games_ago, (_, fid, _) in enumerate(reversed(seq)):
+                r = by_fixture.get(fid)
+                if r is not None:
+                    evidence.append((games_ago, r['started'], r['mins']))
+            p, mps = PM.recency_update(players[code], prior_rate, mps, evidence=evidence)
+            fixtures[(n, t['fixture_id'], t['team'])].append(
+                (code, t['pos'] or 'MID', p, mps, t))
+    return fixtures
+
+
+def run_club(panel, hist_rows, meta, seasons):
+    """Item 2 (2026-09-23): does a club-level constraint on start
+    probabilities (Σ ≤ 11, keepers ≤ 1) improve per-player start Brier /
+    log-loss and minutes MAE? Variants are chosen on CLUB_SELECT and scored
+    once on CLUB_HOLDOUT. Availability is unknown here, exactly as in
+    --minutes: every club fixture counts as evidence."""
+    print('\n' + '=' * 78)
+    print('CLUB  start probabilities constrained to 11 per club fixture')
+    print('=' * 78)
+    scores = defaultdict(lambda: defaultdict(list))   # variant -> season -> [(p, y, e_min, min)]
+    sums = defaultdict(list)                           # season -> raw club sums
+    gk_sums = defaultdict(list)
+    for season in seasons:
+        rows_by_code = panel[season]
+        if not rows_by_code:
+            continue
+        for key, entries in club_predictions(season, rows_by_code, hist_rows, meta).items():
+            raw = [dict(p=p, pos=pos) for _, pos, p, _, _ in entries]
+            sums[season].append(sum(e['p'] for e in raw))
+            gk_sums[season].append(sum(e['p'] for e in raw if e['pos'] == 'GKP'))
+            for name, cfg in CLUB_VARIANTS.items():
+                if cfg is None:
+                    probs = [e['p'] for e in raw]
+                elif cfg.get('gk_only'):
+                    probs = PM.normalise_club_starts(
+                        [dict(e, fixed=e['pos'] != 'GKP') for e in raw], mode='logit')
+                else:
+                    probs = PM.normalise_club_starts(raw, **cfg)
+                for (code, pos, _, mps, row), p in zip(entries, probs):
+                    if not row['starts_observed']:
+                        continue
+                    cameo = 0.0 if pos == 'GKP' else 0.2
+                    e_min = p * mps + (1 - p) * cameo * 25.0
+                    scores[name][season].append((p, row['started'], e_min, row['mins'], row['round']))
+    for season in seasons:
+        if sums[season]:
+            arr, gk = np.array(sums[season]), np.array(gk_sums[season])
+            print(f'{season}: raw Σ P(start) per club fixture mean {arr.mean():.2f} '
+                  f'(p10 {np.percentile(arr, 10):.2f}, p90 {np.percentile(arr, 90):.2f}, '
+                  f'share > 11 {np.mean(arr > 11):.0%}); keepers mean {gk.mean():.2f}, '
+                  f'share > 1 {np.mean(gk > 1):.0%}')
+
+    def block(label, pick):
+        print(f'\n--- {label} ---')
+        print(f"{'variant':<22}{'n':>8}{'Brier':>9}{'log-loss':>10}{'min MAE':>9}")
+        rows = []
+        for name in CLUB_VARIANTS:
+            obs = [o for s in pick for o in scores[name].get(s, [])]
+            if not obs:
+                continue
+            rows.append((name, len(obs), brier([(o[0], o[1]) for o in obs]),
+                         logloss([(o[0], o[1]) for o in obs]),
+                         float(np.mean([abs(o[2] - o[3]) for o in obs]))))
+        best = min(r[2] for r in rows)
+        for name, n, b, ll, mae in rows:
+            print(f'{name:<22}{n:>8}{b:>9.5f}{ll:>10.5f}{mae:>9.3f}'
+                  + ('  <-- best Brier' if b == best else ''))
+        return {r[0]: r for r in rows}
+
+    select = block('SELECT on ' + ', '.join(CLUB_SELECT), [s for s in CLUB_SELECT if s in seasons])
+    chosen = min((r for r in select.values() if r[0] != 'none'), key=lambda r: r[2])[0]
+    print(f'\nchosen on the selection seasons: {chosen}')
+    for season in CLUB_HOLDOUT:
+        if season in seasons:
+            block(f'HOLD-OUT {season}', [season])
+    held = block('HOLD-OUT pooled ' + ', '.join(CLUB_HOLDOUT),
+                 [s for s in CLUB_HOLDOUT if s in seasons])
+    if chosen in held and 'none' in held:
+        c, b = held[chosen], held['none']
+        print(f'\n{chosen} vs none on the hold-out: Brier {c[2] - b[2]:+.5f}, '
+              f'log-loss {c[3] - b[3]:+.5f}, minutes MAE {c[4] - b[4]:+.3f}')
+        # paired gameweek-block bootstrap of the Brier difference: resample
+        # whole (season, gameweek) blocks, the unit the club constraint acts on
+        blocks = defaultdict(lambda: [0.0, 0])
+        for s in CLUB_HOLDOUT:
+            for a, z in zip(scores[chosen].get(s, []), scores['none'].get(s, [])):
+                blk = blocks[(s, a[4])]
+                blk[0] += (a[0] - a[1]) ** 2 - (z[0] - z[1]) ** 2
+                blk[1] += 1
+        keys = list(blocks)
+        rng = np.random.default_rng(20260923)
+        boot = []
+        for _ in range(2000):
+            pick = rng.integers(0, len(keys), len(keys))
+            tot = sum(blocks[keys[i]][0] for i in pick)
+            cnt = sum(blocks[keys[i]][1] for i in pick)
+            boot.append(tot / cnt)
+        lo, hi = np.percentile(boot, [2.5, 97.5])
+        print(f'Brier difference 95% gameweek-block interval [{lo:+.5f}, {hi:+.5f}] '
+              f'over {len(keys)} blocks')
+    club_forward_check(chosen)
+    return chosen
+
+
+def club_forward_check(chosen, history=None):
+    """The same constraint on this season's ARCHIVED deadline forecasts
+    (data/history/gw{n}.json: availability flags and overrides included,
+    written before each deadline) against 2026/27 gw_stat starts. Rows whose
+    availability came from a flag or override are held fixed."""
+    import json
+    history = history or (HERE.parent / 'data' / 'history')
+    boot = HERE / 'cache' / 'bootstrap.json'
+    if not boot.exists():
+        return
+    code_of = {e['id']: e['code'] for e in json.loads(boot.read_text())['elements']}
+    cx = sqlite3.connect(DB)
+    started = defaultdict(dict)
+    for code, rnd, st in cx.execute(
+            "SELECT code, round, starts FROM gw_stat WHERE season = '2026/27'"):
+        if st is not None:
+            started[code][rnd] = max(started[code].get(rnd, 0), int(st > 0))
+    cx.close()
+    out = defaultdict(list)
+    sums = []
+    for path in sorted(history.glob('gw*.json')):
+        if not path.stem[2:].isdigit():
+            continue
+        snap = json.loads(path.read_text())
+        gw = int(snap['gw'])
+        by_team = defaultdict(list)
+        for r in snap['players']:
+            code = code_of.get(r['id'])
+            if code is None or gw not in started.get(code, {}) or r.get('fixture_count', 1) != 1:
+                continue
+            by_team[r['team']].append((r, started[code][gw]))
+        for team, rows in by_team.items():
+            raw = [dict(p=r['p_start'], pos=r['pos'],
+                        fixed=r.get('availability_source') != 'model baseline') for r, _ in rows]
+            sums.append(sum(e['p'] for e in raw))
+            cfg = dict(CLUB_VARIANTS[chosen])
+            cfg.pop('gk_only', None)
+            for name, probs in (('none', [e['p'] for e in raw]),
+                                (chosen, PM.normalise_club_starts(raw, **cfg))):
+                out[name].extend((p, y) for p, (_, y) in zip(probs, rows))
+    if not sums:
+        return
+    print(f'\n--- FORWARD 2026/27 archived deadline forecasts (GW1-{gw}, availability-aware) ---')
+    print(f'raw Σ P(start) per club fixture mean {np.mean(sums):.2f} '
+          f'(min {min(sums):.2f}, max {max(sums):.2f})')
+    for name, pairs in out.items():
+        print(f'{name:<22}{len(pairs):>8}{brier(pairs):>9.5f}{logloss(pairs):>10.5f}')
 
 
 # --------------------------------------------------------------- --mps
@@ -779,12 +976,13 @@ def main():
     ap.add_argument('--rates', action='store_true')
     ap.add_argument('--retro', action='store_true')
     ap.add_argument('--mps', action='store_true')
+    ap.add_argument('--club', action='store_true')
     ap.add_argument('--seasons', nargs='*', default=SEASONS)
     args = ap.parse_args()
-    if not (args.minutes or args.rates or args.retro or args.mps):
+    if not (args.minutes or args.rates or args.retro or args.mps or args.club):
         args.minutes = args.rates = args.retro = True
     global BT, TM
-    if args.minutes or args.rates or args.retro:
+    if args.minutes or args.rates or args.retro or args.club:
         import backtest_totals as backtest_totals
         import teams_model as teams_model
         BT, TM = backtest_totals, teams_model
@@ -803,6 +1001,8 @@ def main():
         run_rates(panel, hist_rows, meta, seasons)
     if args.mps:
         run_mps(panel, hist_rows, meta, seasons)
+    if args.club:
+        run_club(panel, hist_rows, meta, seasons)
     if args.retro:
         run_retro(panel, hist_rows, meta, seasons)
 

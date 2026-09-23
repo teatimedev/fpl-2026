@@ -35,6 +35,7 @@ import re
 import sqlite3
 import sys
 from collections import defaultdict
+from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -631,6 +632,158 @@ def minutes_model(p, players, rule=None):
     return manager_minutes_blend(p, updated)
 
 
+# ------------------------------------------------------- club starts
+# Eleven players start every match, one of them in goal. Player-by-player
+# start probabilities do not know that: in the GW6 forecast of 23 Sep 2026
+# Hull's summed to 12.1 per fixture and Bournemouth's keepers to 1.22, and in
+# the walk-forward panel 100% of club fixtures summed above 11 (mean 12.1).
+# normalise_club_starts() is the joint constraint.
+#
+# MEASURED 23 Sep 2026 (backtest_inseason.py --club; research/
+# model-phase3-2026-09-23.md, item 2), production recency rule, next-GW
+# starts. Chosen on 2022/23-2023/24 among logit/proportional x capped/
+# two-sided x keeper-split/total-only; judged once on 2024/25-2025/26
+# (54,392 player-fixtures):
+#   none                        Brier 0.09641  log-loss 0.31244  minutes MAE 17.74
+#   logit, two-sided, GK split        0.09548            0.30733              17.38
+# Brier -0.00093 (95% gameweek-block interval -0.00123 to -0.00067). On this
+# season's archived, availability-aware deadline forecasts (GW1-5, 3,183
+# player-fixtures) it is 0.1021 -> 0.0979. Proportional scaling barely
+# helps (0.09629): it takes as much off a 0.97 starter as off a squad player.
+# FPL_CLUB_NORMALISE=off reverts to the unconstrained probabilities.
+CLUB_STARTERS = 11
+CLUB_NORMALISE = (None if os.environ.get('FPL_CLUB_NORMALISE', '').lower() in ('off', '0', 'none')
+                  else dict(mode='logit', two_sided=True, split_gk=True))
+
+
+def _logit(p):
+    p = min(1 - 1e-6, max(1e-6, p))
+    return math.log(p / (1 - p))
+
+
+def _shift_to_total(probs, target, mode):
+    """Rescale `probs` so they sum to `target`. 'logit' adds one constant to
+    every log-odds (a 0.97 starter barely moves, a 0.5 rotation option moves
+    most); 'proportional' multiplies, redistributing anything pushed past 1.
+    Zeros stay zero either way."""
+    live = [i for i, p in enumerate(probs) if p > 0]
+    out = list(probs)
+    if not live or target <= 0:
+        return [0.0] * len(probs) if target <= 0 else out
+    if target >= len(live):
+        for i in live:
+            out[i] = 1.0
+        return out
+    if mode == 'proportional':
+        fixed, free = 0.0, list(live)
+        for _ in range(len(live)):
+            scale = (target - fixed) / max(sum(probs[i] for i in free), 1e-12)
+            over = [i for i in free if probs[i] * scale >= 1.0]
+            if not over:
+                for i in free:
+                    out[i] = probs[i] * scale
+                break
+            for i in over:
+                out[i] = 1.0
+                fixed += 1.0
+            free = [i for i in free if i not in over]
+        return out
+    base = {i: _logit(probs[i]) for i in live}
+    lo, hi = -30.0, 30.0
+    for _ in range(80):
+        mid = (lo + hi) / 2
+        total = sum(1 / (1 + math.exp(-(base[i] + mid))) for i in live)
+        lo, hi = (mid, hi) if total < target else (lo, mid)
+    shift = (lo + hi) / 2
+    for i in live:
+        out[i] = 1 / (1 + math.exp(-(base[i] + shift)))
+    return out
+
+
+def normalise_club_starts(entries, mode='logit', two_sided=False, split_gk=True):
+    """Joint start probabilities for ONE club fixture.
+
+    entries: [dict(p=start probability, pos=..., fixed=bool)]. Rows marked
+    `fixed` (a flag, a confirmed line-up, an override) keep their value and
+    the rest share what is left of the eleven. With split_gk the keepers are
+    held to one start and the outfielders to ten; otherwise only the total is.
+    One-sided (two_sided=False) only pulls an over-full club DOWN; two-sided
+    also lifts a club whose injuries leave it short, since somebody still has
+    to start. Production uses two-sided (CLUB_NORMALISE): the panel could not
+    tell the two apart, and it was the better of them on this season's
+    availability-aware forecasts. Returns the new probabilities in input order.
+    """
+    out = [float(e['p']) for e in entries]
+    groups = ([([i for i, e in enumerate(entries) if e['pos'] == 'GKP'], 1),
+               ([i for i, e in enumerate(entries) if e['pos'] != 'GKP'], CLUB_STARTERS - 1)]
+              if split_gk else [(list(range(len(entries))), CLUB_STARTERS)])
+    for idx, target in groups:
+        free = [i for i in idx if not entries[i].get('fixed')]
+        room = target - sum(out[i] for i in idx if entries[i].get('fixed'))
+        total = sum(out[i] for i in free)
+        if not free or (total <= room and not two_sided) or abs(total - room) < 1e-9:
+            continue
+        new = _shift_to_total([out[i] for i in free], max(0.0, room), mode)
+        for i, p in zip(free, new):
+            out[i] = p
+    return out
+
+
+def gameweek_availability(p, gw, rate, mps):
+    """The deadline/flag/override layer for one player, gameweek and base
+    start rate: FPL's chance at the flagged deadline, the dated/undated
+    return rules after it, and any manual or generated override."""
+    effective_status, fit_probability = availability_for_gameweek(
+        p['status'], gw, START_GW, chance=p['chance'], news=p['news'],
+        gw_deadline=GW_DEADLINES.get(gw),
+        flag_deadline=GW_DEADLINES.get(START_GW),
+    )
+    return availability_forecast(
+        player_id=p['id'], gw=gw, base_start=rate,
+        base_start_minutes=mps, position=p['pos'], status=effective_status,
+        overrides=AVAILABILITY_OVERRIDES,
+        availability_probability=fit_probability,
+    )
+
+
+def with_start_probability(av, p_start):
+    """`av` with a new start probability; cameo stays conditional on not
+    starting, and appearance probability and minutes follow."""
+    p_start = max(0.0, min(1.0, p_start))
+    return replace(
+        av, p_start=round(p_start, 6),
+        p_play=round(p_start + (1.0 - p_start) * av.p_cameo, 6),
+        expected_minutes=round(p_start * av.start_minutes
+                               + (1.0 - p_start) * av.p_cameo * av.cameo_minutes, 3))
+
+
+def club_start_adjustments(players, view, minutes, config=None):
+    """{(player id, gw): joint start probability} for every club fixture in
+    START_GW..LAST_GW, from the per-player probabilities after the
+    availability layer. Flag- and override-driven rows are held fixed (they
+    are external information); model-baseline rows share what is left.
+    Every fixture of a double gets the same per-fixture probability, so one
+    normalisation per club and gameweek covers it."""
+    config = CLUB_NORMALISE if config is None else config
+    if not config:
+        return {}
+    out = {}
+    for gw in range(START_GW, LAST_GW + 1):
+        by_team = defaultdict(list)
+        for pid, p in players.items():
+            if not (view['view'].get(p['team'], {}).get(str(gw)) or []):
+                continue
+            rate, mps = minutes[pid]
+            av = gameweek_availability(p, gw, rate, mps)
+            by_team[p['team']].append((pid, dict(
+                p=av.p_start, pos=p['pos'], fixed=av.source != 'model baseline')))
+        for rows in by_team.values():
+            new = normalise_club_starts([e for _, e in rows], **config)
+            for (pid, _), prob in zip(rows, new):
+                out[(pid, gw)] = prob
+    return out
+
+
 def poisson_at_least(mean, k):
     if mean <= 0:
         return 0.0
@@ -714,9 +867,13 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
 
     out = []
     shadow_rule = 'recency' if MINUTES_RULE == 'aggregate' else 'aggregate'
+    minutes = {pid: minutes_model(p, players) for pid, p in players.items()}
+    # the joint "eleven start" constraint, per club and gameweek, applied on
+    # top of each player's availability-adjusted probability (item 2)
+    club_starts = club_start_adjustments(players, view, minutes)
     for p in players.values():
         pos = p['pos']
-        base_start_rate, mps = minutes_model(p, players)
+        base_start_rate, mps = minutes[p['id']]
         # the other minutes rule, archived for side-by-side grading (P2)
         shadow_start_rate, _ = minutes_model(p, players, rule=shadow_rule)
         rate_recency = shadow_start_rate if shadow_rule == 'recency' else base_start_rate
@@ -755,22 +912,14 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
         start_aggregate_by_gw = [0.0] * (START_GW - 1)
         for gw in range(START_GW, LAST_GW + 1):
             fx = fixtures.get(str(gw)) or []
+
             # the flagged deadline takes FPL's chance; later gameweeks keep a
             # dated absence to its date and ramp an undated one back in
-            effective_status, fit_probability = availability_for_gameweek(
-                p['status'], gw, START_GW, chance=p['chance'], news=p['news'],
-                gw_deadline=GW_DEADLINES.get(gw),
-                flag_deadline=GW_DEADLINES.get(START_GW),
-            )
-
             def deadline_forecast(rate):
-                return availability_forecast(
-                    player_id=p['id'], gw=gw, base_start=rate,
-                    base_start_minutes=mps, position=pos, status=effective_status,
-                    overrides=AVAILABILITY_OVERRIDES,
-                    availability_probability=fit_probability,
-                )
-            av = deadline_forecast(base_start_rate)
+                return gameweek_availability(p, gw, rate, mps)
+            av = raw_av = deadline_forecast(base_start_rate)
+            if (p['id'], gw) in club_starts:
+                av = with_start_probability(av, club_starts[(p['id'], gw)])
             p_start = av.p_start
             p_cameo = (1.0 - p_start) * av.p_cameo
             p_play = av.p_play
@@ -790,14 +939,17 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
                 start_by_gw.append(round(any_fixture(p_start), 3))
                 play_by_gw.append(round(any_fixture(p_play), 3))
                 mins_by_gw.append(round(av.expected_minutes * len(fx), 1))
+                # the rule comparison stays on the unconstrained probabilities:
+                # the club constraint would move both rules alike
+                own_p_start = raw_av.p_start if fx else 0.0
                 if shadow_start_rate == base_start_rate:
-                    shadow_p_start = p_start
+                    shadow_p_start = own_p_start
                 else:
                     shadow_p_start = deadline_forecast(shadow_start_rate).p_start if fx else 0.0
                 start_recency_by_gw.append(round(
-                    any_fixture(shadow_p_start if shadow_rule == 'recency' else p_start), 3))
+                    any_fixture(shadow_p_start if shadow_rule == 'recency' else own_p_start), 3))
                 start_aggregate_by_gw.append(round(
-                    any_fixture(shadow_p_start if shadow_rule == 'aggregate' else p_start), 3))
+                    any_fixture(shadow_p_start if shadow_rule == 'aggregate' else own_p_start), 3))
                 availability_by_gw.append(dict(
                     source=av.source, confidence=av.confidence, note=av.note,
                     fixtures=len(fx), p_start=round(p_start, 6), p_play=round(p_play, 6),
