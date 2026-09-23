@@ -38,6 +38,17 @@ def freeze(players, squad, gw, elements, review=None, ft=1, plan=None):
                 act = moves > 0 and margin > 0 and margin >= buffer*moves
                 rows.append(policy(f'planner_buffer_{buffer:g}', [players[i] for i in sorted(ids)] if act else squad,
                                    hit=4*week['hits'] if act else 0))
+    # Phase 4: the sampled decision and the best move it rejected (or took),
+    # frozen so the scorecard accumulates paired realised evidence.
+    decision = (plan or {}).get('decision') or {}
+    for label, row in (('sampled_act_or_hold', decision.get('chosen')),
+                       ('sampled_best_move', decision.get('best_move'))):
+        if not row:
+            continue
+        ids = [p['id'] for p in squad if p['id'] not in row['out']] + list(row['in_'])
+        if len(set(ids)) == 15 and all(i in players for i in ids):
+            rows.append(policy(label, [players[i] for i in ids],
+                               hit=4 * max(0, len(row['in_']) - ft)))
     return rows
 
 
