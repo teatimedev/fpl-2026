@@ -143,8 +143,15 @@ def expected_components(row, fixtures, p_start, p_cameo, start_minutes, cameo_mi
         c['xg'] += exg
         c['xa'] += exa
         c['attack'] += exg * GOAL_PTS[pos] + exa * 3.0
+        # FPL's 60-minute rules, as project() applies them to the forecast's
+        # fixed-duration scenarios: a start or a cameo under an hour earns one
+        # appearance point and no clean sheet. (This used to credit every
+        # start with two points and a clean sheet whatever its minutes, so a
+        # 45-minute start was 'explained' as a one-point shortfall.)
+        start_60 = 1.0 if start_minutes >= FULL_MATCH else 0.0
+        cameo_60 = 1.0 if cameo_minutes >= FULL_MATCH else 0.0
         if CS_PTS[pos]:
-            c['cs'] += CS_PTS[pos] * _f(f.get('cs')) * p_start
+            c['cs'] += CS_PTS[pos] * _f(f.get('cs')) * (p_start * start_60 + p_cameo * cameo_60)
         if pos in ('GKP', 'DEF'):
             c['gc'] -= expected_floor_div(_f(f.get('xgc')), 2) * p_start
         if pos == 'GKP':
@@ -154,7 +161,7 @@ def expected_components(row, fixtures, p_start, p_cameo, start_minutes, cameo_mi
         if thr and dc90 > 0:
             c['defcon'] += 2.0 * (p_start * poisson_hit(dc90 * start_share, thr, w_dc)
                                   + p_cameo * poisson_hit(dc90 * cameo_share, thr, w_dc))
-        c['appearance'] += p_start * 2.0 + p_cameo
+        c['appearance'] += p_start * (1.0 + start_60) + p_cameo * (1.0 + cameo_60)
         c['bonus'] += bonus90 * minute_share * 0.85
         c['yellow'] -= yellow90 * minute_share
     for key in c:
