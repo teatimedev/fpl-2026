@@ -1,6 +1,6 @@
 import type { Data, Player, Weekly, WeeklyLineup } from './types'
 import { Pitch } from './components'
-import { decisionReason, lineupChanges, plainPlayerCheck, weeklyTransferSummary } from './weeklyActions'
+import { decisionReason, lineupChanges, needsDeadlineCheck, plainPlayerCheck, plural, weeklyTransferSummary } from './weeklyActions'
 
 export function WeeklyBrief({ D, W, poolById, currentLineup, openPlayer }: {
   D: Data; W: Weekly; poolById: Map<number, Player>; currentLineup: WeeklyLineup | null
@@ -15,7 +15,8 @@ export function WeeklyBrief({ D, W, poolById, currentLineup, openPlayer }: {
   const outfieldBench = bench.filter(p => p.pos !== 'GKP')
   const spareKeeper = bench.find(p => p.pos === 'GKP')
   const shape = ['DEF', 'MID', 'FWD'].map(pos => xi.filter(p => p.pos === pos).length).join('–')
-  const checks = (W.checks ?? []).filter(c => !action.moves.some(m => m.out === c.id))
+  const checks = (W.checks ?? []).filter(c => !action.moves.some(m => m.out === c.id)
+    && needsDeadlineCheck(poolById.get(c.id), c))
   const incomingChecks = action.moves.flatMap(move => {
     const p = poolById.get(move.in_)
     return p && (p.status !== 'a' || (p.start_by_gw?.[W.gw - 1] ?? p.start_rate) < .8)
@@ -48,8 +49,8 @@ export function WeeklyBrief({ D, W, poolById, currentLineup, openPlayer }: {
             </li>)}</ul>}
           {action.hits > 0 && <p className="brief-hit">This costs {action.hits} points.</p>}
           <p className="step-detail">{action.unlimited ? 'Transfers are free before Gameweek 1.'
-            : W.gw === 38 ? `${W.squad.ft} free transfers available for the final gameweek.`
-            : <><strong>{W.squad.ft} free transfers now → {action.next} next week.</strong>
+            : W.gw === 38 ? `${plural(W.squad.ft, 'free transfer')} available for the final gameweek.`
+            : <><strong>{plural(W.squad.ft, 'free transfer')} now → {action.next} next week.</strong>
               {action.lost > 0
                 ? ' Your bank is full: making no move means losing the next new transfer. Using one would still leave five next week.'
                 : action.hold && W.squad.ft < 5

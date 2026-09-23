@@ -76,3 +76,13 @@ export function ageLabel(hours: number | null) {
   const days = Math.floor(hours / 24)
   return `updated ${days} day${days === 1 ? '' : 's'} ago`
 }
+
+/** A check is worth a deadline action only if it could cost points: an
+ *  availability flag, a start doubt or a falling attacking role. A player
+ *  getting more chances than expected is good news, not a check. */
+export function needsDeadlineCheck(player: Player | undefined, check: WeeklyCheck) {
+  if (player && player.status !== 'a') return true
+  return check.flags.some(flag => !/^role:.*above/i.test(flag))
+}
+
+export const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`

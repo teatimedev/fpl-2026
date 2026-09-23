@@ -81,3 +81,12 @@ test('unrelated player news changes nothing', () => {
   const s = status(data, withEl(99, { status: 'i', news: 'Out' }))
   assert.equal(s.level, 'ready')
 })
+
+import { needsDeadlineCheck } from '../src/weeklyActions.ts'
+test('good-news attacking signals are not deadline checks; doubts and drops are', () => {
+  const fit = { status: 'a' }
+  assert.equal(needsDeadlineCheck(fit, { flags: ['role: last 3 starts: 3.53 xGI vs 2.60 expected, above the 80% band'] }), false)
+  assert.equal(needsDeadlineCheck(fit, { flags: ['role: last 3 starts: 0.4 xGI vs 1.9 expected, below the 80% band'] }), true)
+  assert.equal(needsDeadlineCheck({ status: 'd' }, { flags: ['role: above'] }), true)
+  assert.equal(needsDeadlineCheck(fit, { flags: ['starts only 60%'] }), true)
+})
