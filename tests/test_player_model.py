@@ -513,6 +513,22 @@ class ScoringEligibilityTests(unittest.TestCase):
         self.assertIsNone(double['p60_shadow_by_gw'][0])
 
 
+class PeckingOrderTests(unittest.TestCase):
+    def test_tied_prices_share_the_slots_they_occupy(self):
+        a = make_player(pid=1, pos="GKP", price=5.0)
+        b = make_player(pid=2, pos="GKP", price=5.0)
+        c = make_player(pid=3, pos="GKP", price=4.0)
+        players = {p["id"]: p for p in (a, b, c)}
+        with patch.dict(PM.OVERLAY, {}, clear=True):
+            rate_a, _ = PM.minutes_prior(a, players)
+            rate_b, _ = PM.minutes_prior(b, players)
+            rate_c, _ = PM.minutes_prior(c, players)
+        # no history: 0.9 x the pecking-order rate; the tied pair splits #1/#2
+        self.assertAlmostEqual(rate_a, 0.9 * (0.92 + 0.09) / 2)
+        self.assertEqual(rate_a, rate_b)
+        self.assertAlmostEqual(rate_c, 0.9 * 0.03)
+
+
 class ClubStartConstraintTests(unittest.TestCase):
     def club(self, outfield, keepers):
         return ([dict(p=p, pos='MID') for p in outfield]

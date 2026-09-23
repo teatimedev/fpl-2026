@@ -463,7 +463,12 @@ def minutes_prior(p, players):
              'DEF': [0.85, 0.80, 0.73, 0.63, 0.46, 0.29, 0.16, 0.08],
              'MID': [0.85, 0.78, 0.68, 0.56, 0.40, 0.25, 0.14, 0.07],
              'FWD': [0.82, 0.52, 0.28, 0.14, 0.07]}[p['pos']]
-    rank_rate = table[min(rank, len(table) - 1)]
+    # Players on the same price share the slots they jointly occupy: two
+    # 5.0 keepers are each half the #1 and half the #2, not both the #1
+    # (peers.index() used to hand every tied player the higher rank).
+    tied = max(1, peers.count(p['price']))
+    rank_rate = sum(table[min(r, len(table) - 1)]
+                    for r in range(rank, rank + tied)) / tied
 
     if observed is None:
         start_rate = rank_rate * 0.9
@@ -653,6 +658,11 @@ def minutes_model(p, players, rule=None):
 # season's archived, availability-aware deadline forecasts (GW1-5, 3,183
 # player-fixtures) it is 0.1021 -> 0.0979. Proportional scaling barely
 # helps (0.09629): it takes as much off a 0.97 starter as off a squad player.
+# After the pecking-order tie fix in minutes_prior() (which on its own took
+# the unconstrained hold-out Brier to 0.09505 and the mean club sum from
+# 12.1 to 11.4) the same variant is still chosen and still wins: 0.09505 ->
+# 0.09494 (interval -0.00021 to -0.00004), log-loss 0.30609 -> 0.30503,
+# minutes MAE 17.26 -> 17.17.
 # FPL_CLUB_NORMALISE=off reverts to the unconstrained probabilities.
 CLUB_STARTERS = 11
 CLUB_NORMALISE = (None if os.environ.get('FPL_CLUB_NORMALISE', '').lower() in ('off', '0', 'none')
