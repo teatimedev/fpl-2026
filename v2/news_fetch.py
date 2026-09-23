@@ -12,7 +12,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 UA = "fpl-2026-team-news/1.0 (+https://github.com/teatimedev/fpl-2026)"
 RELEVANT = re.compile(r"team.news|injur|fitness|press|conference|squad|availability|preview", re.I)
-EXCLUDE = re.compile(r'\b(?:women|womens|wsl|academy|u18s?|u21s?|under-18|under-21|b-team|tickets?|hospitality)\b', re.I)
+EXCLUDE = re.compile(r'\b(?:women|womens|wsl|academy|u18s?|u21s?|under-18|under-21|b-team|tickets?|hospitality|venue|meetings|conferencing)\b', re.I)
 
 
 try:
@@ -22,7 +22,7 @@ except ImportError:
     from public_article import PageParser, ScoutingPage, parse_article
     from news_extract import EXTRACTION_VERSION
 
-PARSER_VERSION = 'public-article-v2+' + EXTRACTION_VERSION
+PARSER_VERSION = 'public-article-v3+' + EXTRACTION_VERSION
 
 
 def _request(url: str, *, timeout: int = 18, attempts: int = 3,
@@ -59,7 +59,28 @@ def _request(url: str, *, timeout: int = 18, attempts: int = 3,
 
 
 def _same_site(base: str, target: str) -> bool:
-    return urllib.parse.urlparse(base).netloc == urllib.parse.urlparse(target).netloc
+    host = lambda url: urllib.parse.urlparse(url).netloc.lower().removeprefix('www.')
+    return host(base) == host(target)
+
+
+ARTICLE_PATH = re.compile(r'(?:https?://[a-z0-9.-]+)?(/(?:[a-z0-9-]+/){0,5}[a-z0-9]+(?:-[a-z0-9]+){2,}/?)', re.I)
+
+
+def embedded_links(body: str, base: str) -> list[tuple[str, str]]:
+    """Article paths a script-rendered index embeds as data instead of anchors.
+
+    Some club sites ship their listing as JSON (often with escaped slashes).
+    The slug is the only label available, so it doubles as the relevance text.
+    """
+    text = body.replace('\\u002F', '/').replace('\\/', '/')
+    links = []
+    for match in ARTICLE_PATH.finditer(text):
+        path = match.group(1)
+        absolute = match.group(0) if match.group(0).startswith('http') else path
+        full = urllib.parse.urljoin(base, absolute)
+        if _same_site(base, full):
+            links.append((absolute, path.rstrip('/').rsplit('/', 1)[-1].replace('-', ' ')))
+    return list(dict.fromkeys(links))
 
 
 def fetch_source(source: dict, *, article_limit: int = 5,
@@ -84,7 +105,10 @@ def fetch_source(source: dict, *, article_limit: int = 5,
         else:
             parser = ScoutingPage(); parser.feed(body)
             urls = []
-            for href, label in parser.links:
+            candidates = parser.links
+            if not any(relevant.search(label + ' ' + href) for href, label in candidates):
+                candidates = candidates + embedded_links(body, source["url"])
+            for href, label in candidates:
                 absolute = urllib.parse.urljoin(source["url"], href).split("#", 1)[0]
                 context = label + ' ' + urllib.parse.urlparse(absolute).path
                 if (absolute != source['url'] and _same_site(source["url"], absolute)
