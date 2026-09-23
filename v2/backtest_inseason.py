@@ -36,6 +36,9 @@ scorecard settles the availability-conditioned versions.
                 rule: variants chosen on 2022/23-2023/24, judged once on
                 2024/25-2025/26 (start Brier/log-loss, minutes MAE), plus the
                 same constraint on this season's archived deadline forecasts.
+    --volume    How fixture team xG scales a player's xG/xA: per player-fixture
+                given actual minutes, variants chosen on 2023/24 and judged
+                once on 2024/25-2025/26 (deviance, MAE, rank, conservation).
 
     python v2/backtest_inseason.py --minutes --rates --retro
 """
@@ -463,6 +466,302 @@ def club_forward_check(chosen, history=None):
           f'(min {min(sums):.2f}, max {max(sums):.2f})')
     for name, pairs in out.items():
         print(f'{name:<22}{len(pairs):>8}{brier(pairs):>9.5f}{logloss(pairs):>10.5f}')
+
+
+# ------------------------------------------------------------ --volume
+VOLUME_SELECT = ('2023/24',)             # tune lambda / level constants here...
+VOLUME_HOLDOUT = ('2024/25', '2025/26')  # ...and judge the variants here, once
+VOLUME_LAMBDAS = (0.0, 0.25, 0.4, 0.5, 0.56, 0.6, 0.75, 1.0)
+LEAGUE_XG = 1.45                          # project()'s league-average divisor
+
+
+def poisson_deviance(pred, act):
+    pred = np.maximum(np.asarray(pred, float), 1e-9)
+    act = np.asarray(act, float)
+    term = np.where(act > 0, act * np.log(np.where(act > 0, act, 1) / pred), 0.0)
+    return float(np.mean(2 * (term - (act - pred))))
+
+
+def team_fixture_actuals(panel, seasons):
+    """{(season, fixture_id, team): (Σ player xG, Σ player xA)} — the club's
+    realised chance volume in that match, from every player row."""
+    out = defaultdict(lambda: [0.0, 0.0])
+    for s in seasons:
+        for rows in panel.get(s, {}).values():
+            for r in rows:
+                if r['xg'] is None:
+                    continue
+                t = out[(s, r['fixture_id'], r['team'])]
+                t[0] += r['xg'] or 0.0
+                t[1] += r['xa'] or 0.0
+    return out
+
+
+def run_volume(panel, hist_rows, meta, seasons):
+    """Item 3 (2026-09-23): is a club's fixture xG counted twice?
+
+    Per player-fixture, predict the player's xG and xA GIVEN his actual
+    minutes (the attack formula is the question, not the minutes model), with
+    rates as of the end of the previous gameweek and team xG from the as-of
+    Dixon-Coles fit:
+
+      current     xg90 * m/90 * xG_f / 1.45           (project() today)
+      lambda=L    xg90 * m/90 * (xG_f / 1.45) ** L     (L tuned on VOLUME_SELECT)
+      rate-share  xG_f * (xg90_i m_i) / Σ_club (xg90_j m_j): the same rates,
+                  reconciled so the club's players sum to its fixture xG
+      share       xG_f * s_i * m/90 with s_i the player's shrunk share of his
+                  club's xG while on the pitch, from per-fixture rows
+      share-rec   the same, reconciled to the club total
+
+    Each variant gets one level constant per metric fitted on VOLUME_SELECT
+    (ratio of sums), so the hold-out compares shape, not an arbitrary level.
+    Scores: Poisson deviance and MAE per player-fixture, Spearman, the
+    attacking-points MAE (goals x position points + 3 x assists), and club
+    conservation (Σ predicted player xG / predicted team xG by club tier).
+    """
+    print('\n' + '=' * 78)
+    print('VOLUME  per player-fixture xG / xA, conditioned on actual minutes')
+    print('=' * 78)
+    all_seasons = [s for s in SEASONS if s in panel]
+    team_act = team_fixture_actuals(panel, all_seasons)
+    preds = defaultdict(lambda: defaultdict(list))   # variant -> season -> rows
+    conserve = defaultdict(list)                     # (variant, tier) -> ratios
+    for season in seasons:
+        if season not in (*VOLUME_SELECT, *VOLUME_HOLDOUT):
+            continue
+        rows_by_code = panel[season]
+        idx = season_index(season)
+        try:
+            params = asof_fixture_params(season)
+        except Exception as ex:
+            print(f'  {season}: no team fit ({ex}); skipped')
+            continue
+        pos_prior = {m: positional_prior_asof(season, hist_rows, m) for m in ('xg90', 'xa90')}
+        # each club's average fixture xG over the season (the fixture list is
+        # known at the deadline): the level its players' rates already carry
+        club_fx = defaultdict(list)
+        for (home, away), f in params.items():
+            club_fx[home].append(f['lam'])
+            club_fx[away].append(f['mu'])
+        club_mean = {t: float(np.mean(v)) for t, v in club_fx.items()}
+        # positional share prior and per-player past shares from earlier
+        # seasons' per-fixture rows (xG recorded only)
+        share_prior = defaultdict(lambda: [0.0, 0.0, 0.0, 0.0])
+        past_share = defaultdict(lambda: defaultdict(lambda: [0.0, 0.0, 0.0, 0.0]))
+        for s in SEASONS[:idx]:
+            dist = idx - SEASONS.index(s)
+            for code, rows in panel.get(s, {}).items():
+                for r in rows:
+                    if r['xg'] is None or r['mins'] <= 0:
+                        continue
+                    tx, ta = team_act[(s, r['fixture_id'], r['team'])]
+                    exp = r['mins'] / 90.0
+                    pos = r['pos'] or 'MID'
+                    sp = share_prior[pos]
+                    sp[0] += r['xg'] or 0.0
+                    sp[1] += (r['xa'] or 0.0)
+                    sp[2] += tx * exp
+                    sp[3] += ta * exp
+                    ps = past_share[code][dist]
+                    ps[0] += r['xg'] or 0.0
+                    ps[1] += r['xa'] or 0.0
+                    ps[2] += tx * exp
+                    ps[3] += ta * exp
+        pos_share = {pos: (v[0] / v[2] if v[2] else 0.0, v[1] / v[3] if v[3] else 0.0)
+                     for pos, v in share_prior.items()}
+        # running current-season sums per player, updated after each round
+        cur = defaultdict(lambda: [0.0, 0.0, 0.0, 0.0, 0.0])  # mins, xg, xa, team_xg_exp, team_xa_exp
+        by_round = defaultdict(list)
+        for code, rows in rows_by_code.items():
+            for r in rows:
+                by_round[r['round']].append((code, r))
+        for rnd in sorted(by_round):
+            fixtures = defaultdict(list)
+            for code, r in by_round[rnd]:
+                if rnd < 2 or r['mins'] <= 0 or r['xg'] is None:
+                    continue
+                pos = r['pos'] or 'MID'
+                c = cur[code]
+                past = [(d, h['mins'], h) for s in SEASONS[:idx]
+                        for d, h in [(idx - SEASONS.index(s), hist_rows.get(code, {}).get(s))]
+                        if h and h['mins'] >= 200]
+                rate = {}
+                for m, j in (('xg90', 1), ('xa90', 2)):
+                    cur_rate = c[j] / c[0] * 90 if c[0] >= 90 else 0.0
+                    rate[m] = blend_rate([(d, mn, h[m]) for d, mn, h in past],
+                                         c[0] if c[0] >= 90 else 0, cur_rate, 1,
+                                         pos_prior[m].get(pos, 0.0),
+                                         PM.STABILITY.get(m, 0.9))
+                shares = []
+                for j, (stab, prior_s) in enumerate(((PM.STABILITY['xg90'], pos_share.get(pos, (0, 0))[0]),
+                                                     (PM.STABILITY['xa90'], pos_share.get(pos, (0, 0))[1]))):
+                    num = den = 0.0
+                    for d, ps in past_share.get(code, {}).items():
+                        w = LADDER.get(d, 0.3)
+                        num += w * ps[j]
+                        den += w * ps[2 + j]
+                    num += c[1 + j]
+                    den += c[3 + j]
+                    # exposure in shrink()'s units: FULL_SEASON_MINS of an
+                    # average club's xG
+                    n_eff = den / (LEAGUE_XG * FULL_SEASON_MINS / 90.0)
+                    k = max(0.15, (1 - stab) / max(stab, 0.05))
+                    w_own = n_eff / (n_eff + k) if den > 0 else 0.0
+                    own = num / den if den > 0 else prior_s
+                    shares.append(w_own * own + (1 - w_own) * prior_s)
+                f = fixture_view(params, r)
+                fixtures[(r['fixture_id'], r['team'])].append(dict(
+                    code=code, pos=pos, mins=r['mins'], xg=r['xg'] or 0.0, xa=r['xa'] or 0.0,
+                    goals=r['goals'] or 0, assists=r['assists'] or 0, team=r['team'],
+                    xg90=rate['xg90'], xa90=rate['xa90'], share_g=shares[0], share_a=shares[1],
+                    fxg=f['xg'], club_mean=club_mean.get(r['team'], LEAGUE_XG)))
+            for (fid, team), plist in fixtures.items():
+                fxg = plist[0]['fxg']
+                vol = fxg / LEAGUE_XG
+                tot_g = sum(p['xg90'] * p['mins'] for p in plist)
+                tot_a = sum(p['xa90'] * p['mins'] for p in plist)
+                sh_g = sum(p['share_g'] * p['mins'] / 90 for p in plist)
+                sh_a = sum(p['share_a'] * p['mins'] / 90 for p in plist)
+                tier = 'strong' if fxg >= 1.7 else ('weak' if fxg < 1.2 else 'mid')
+                for p in plist:
+                    e = p['mins'] / 90.0
+                    out = {'current': (p['xg90'] * e * vol, p['xa90'] * e * vol)}
+                    for lam in VOLUME_LAMBDAS:
+                        out[f'lambda={lam:g}'] = (p['xg90'] * e * vol ** lam, p['xa90'] * e * vol ** lam)
+                    rel = fxg / p['club_mean']
+                    for mu in (0.5, 1.0):
+                        out[f'relative mu={mu:g}'] = (p['xg90'] * e * rel ** mu,
+                                                      p['xa90'] * e * rel ** mu)
+                    out['rate-share'] = (fxg * p['xg90'] * p['mins'] / tot_g if tot_g else 0.0,
+                                         fxg * p['xa90'] * p['mins'] / tot_a if tot_a else 0.0)
+                    out['share'] = (p['share_g'] * e * fxg, p['share_a'] * e * fxg)
+                    out['share-rec'] = (fxg * p['share_g'] * e / sh_g if sh_g else 0.0,
+                                        fxg * p['share_a'] * e / sh_a if sh_a else 0.0)
+                    for name, (pg, pa) in out.items():
+                        preds[name][season].append((pg, pa, p['xg'], p['xa'], p['pos'],
+                                                    p['goals'], p['assists'], (fid, team), tier, fxg,
+                                                    p['code'], rnd, p['mins']))
+            # the round is over: fold its rows into the running sums
+            for code, r in by_round[rnd]:
+                if r['xg'] is None or r['mins'] <= 0:
+                    continue
+                tx, ta = team_act[(season, r['fixture_id'], r['team'])]
+                c = cur[code]
+                c[0] += r['mins']
+                c[1] += r['xg'] or 0.0
+                c[2] += r['xa'] or 0.0
+                c[3] += tx * r['mins'] / 90.0
+                c[4] += ta * r['mins'] / 90.0
+
+    names = list(preds)
+    # level constants on the selection season(s)
+    level = {}
+    for name in names:
+        sel = [o for s in VOLUME_SELECT for o in preds[name].get(s, [])]
+        if not sel:
+            continue
+        level[name] = (sum(o[2] for o in sel) / max(sum(o[0] for o in sel), 1e-9),
+                       sum(o[3] for o in sel) / max(sum(o[1] for o in sel), 1e-9))
+
+    def table(label, pick, lams=True, best=None):
+        print(f'\n--- {label} ---')
+        print(f"{'variant':<17}{'n':>7}{'xG dev':>9}{'shape':>9}{'xG MAE':>9}{'xG rho':>8}"
+              f"{'xA dev':>9}{'shape':>9}{'att-pts MAE':>13}{'Σp/Σa xG':>10}")
+        res = {}
+        for name in names:
+            if not lams and name.startswith('lambda') and name not in ('lambda=0', 'lambda=0.56', best):
+                continue
+            obs = [o for s in pick for o in preds[name].get(s, [])]
+            if not obs or name not in level:
+                continue
+            kg, ka = level[name]
+            pg = np.array([o[0] * kg for o in obs])
+            pa = np.array([o[1] * ka for o in obs])
+            ag = np.array([o[2] for o in obs])
+            aa = np.array([o[3] for o in obs])
+            gp = np.array([PM.GOAL_PTS.get(o[4], 5) for o in obs])
+            pts_pred = pg * gp + pa * 3
+            pts_act = np.array([o[5] for o in obs]) * gp + np.array([o[6] for o in obs]) * 3
+            # "shape": the same deviance with each season's level set to the
+            # truth (an oracle constant), so only who-gets-how-much is scored
+            seas = np.array([s for s in pick for _ in preds[name].get(s, [])])
+            sg, sa = pg.copy(), pa.copy()
+            for s in pick:
+                m = seas == s
+                if m.any():
+                    sg[m] *= ag[m].sum() / max(pg[m].sum(), 1e-9)
+                    sa[m] *= aa[m].sum() / max(pa[m].sum(), 1e-9)
+            res[name] = (poisson_deviance(pg, ag), float(np.mean(np.abs(pg - ag))),
+                         poisson_deviance(sg, ag), poisson_deviance(sa, aa))
+            print(f'{name:<17}{len(obs):>7}{res[name][0]:>9.5f}{res[name][2]:>9.5f}'
+                  f'{res[name][1]:>9.5f}'
+                  f'{spearman(pg, ag):>8.3f}{poisson_deviance(pa, aa):>9.5f}'
+                  f'{res[name][3]:>9.5f}'
+                  f'{float(np.mean(np.abs(pts_pred - pts_act))):>13.4f}'
+                  f'{pg.sum() / max(ag.sum(), 1e-9):>10.3f}')
+        return res
+
+    sel = table('SELECT ' + ', '.join(VOLUME_SELECT) + ' (level constants fitted here)',
+                list(VOLUME_SELECT))
+    best_lam = min((n for n in sel if n.startswith('lambda')), key=lambda n: sel[n][0])
+    print(f'\nlambda chosen on the selection season (xG deviance): {best_lam}')
+    for s in VOLUME_HOLDOUT:
+        table(f'HOLD-OUT {s}', [s], lams=False, best=best_lam)
+    table('HOLD-OUT pooled', list(VOLUME_HOLDOUT))
+
+    # conservation: Σ predicted player xG per club fixture / predicted team xG,
+    # before any level constant, by fixture-xG tier
+    print('\n--- club conservation on the hold-out: Σ player xG / fixture team xG '
+          '(raw, before level constants) ---')
+    print(f"{'variant':<17}" + ''.join(f'{t:>9}' for t in ('weak', 'mid', 'strong', 'all')))
+    for name in ('current', best_lam, 'relative mu=1', 'rate-share', 'share', 'share-rec'):
+        agg = defaultdict(lambda: defaultdict(lambda: [0.0, 0.0]))
+        for s in VOLUME_HOLDOUT:
+            for o in preds[name].get(s, []):
+                a = agg[o[8]][(s, o[7])]
+                a[0] += o[0]
+                a[1] = o[9]
+        cells = []
+        for tier in ('weak', 'mid', 'strong', 'all'):
+            fx = ([v for t in ('weak', 'mid', 'strong') for v in agg[t].values()]
+                  if tier == 'all' else list(agg[tier].values()))
+            cells.append(np.mean([v[0] / v[1] for v in fx if v[1] > 0]) if fx else float('nan'))
+        print(f'{name:<17}' + ''.join(f'{c:>9.3f}' for c in cells))
+    print('(players on the pitch cover ~990 of 990 team minutes, so a conserving '
+          'rule reads 1.00 in every tier)')
+
+    # Between players, which is what squad selection ranks: sum each player's
+    # predictions and outcomes over a window (level constants applied), then
+    # rank players against each other. Minutes are still the actual ones.
+    print('\n--- between players on the hold-out: per-player window totals '
+          '(>= 450 minutes in the window) ---')
+    print(f"{'variant':<17}{'window':<9}{'n':>6}{'xG rho':>8}{'xGI rho':>9}"
+          f"{'att-pts rho':>12}{'xG dev':>9}")
+    for name in ('current', best_lam, 'lambda=0', 'relative mu=0.5', 'relative mu=1', 'share'):
+        kg, ka = level[name]
+        for label, lo, hi in (('GW2-8', 2, 8), ('GW2-38', 2, 38)):
+            tot = defaultdict(lambda: [0.0] * 7)
+            for s in VOLUME_HOLDOUT:
+                for o in preds[name].get(s, []):
+                    if not lo <= o[11] <= hi:
+                        continue
+                    t = tot[(s, o[10])]
+                    gp = PM.GOAL_PTS.get(o[4], 5)
+                    t[0] += o[0] * kg
+                    t[1] += o[2]
+                    t[2] += o[0] * kg + o[1] * ka
+                    t[3] += o[2] + o[3]
+                    t[4] += o[0] * kg * gp + o[1] * ka * 3
+                    t[5] += o[5] * gp + o[6] * 3
+                    t[6] += o[12]
+            v = [t for t in tot.values() if t[6] >= 450]
+            if len(v) < 20:
+                continue
+            col = lambda i: np.array([t[i] for t in v])
+            print(f'{name:<17}{label:<9}{len(v):>6}{spearman(col(0), col(1)):>8.3f}'
+                  f'{spearman(col(2), col(3)):>9.3f}{spearman(col(4), col(5)):>12.3f}'
+                  f'{poisson_deviance(col(0), col(1)):>9.4f}')
+    return best_lam
 
 
 # --------------------------------------------------------------- --mps
@@ -977,12 +1276,13 @@ def main():
     ap.add_argument('--retro', action='store_true')
     ap.add_argument('--mps', action='store_true')
     ap.add_argument('--club', action='store_true')
+    ap.add_argument('--volume', action='store_true')
     ap.add_argument('--seasons', nargs='*', default=SEASONS)
     args = ap.parse_args()
-    if not (args.minutes or args.rates or args.retro or args.mps or args.club):
+    if not (args.minutes or args.rates or args.retro or args.mps or args.club or args.volume):
         args.minutes = args.rates = args.retro = True
     global BT, TM
-    if args.minutes or args.rates or args.retro or args.club:
+    if args.minutes or args.rates or args.retro or args.club or args.volume:
         import backtest_totals as backtest_totals
         import teams_model as teams_model
         BT, TM = backtest_totals, teams_model
@@ -1003,6 +1303,8 @@ def main():
         run_mps(panel, hist_rows, meta, seasons)
     if args.club:
         run_club(panel, hist_rows, meta, seasons)
+    if args.volume:
+        run_volume(panel, hist_rows, meta, seasons)
     if args.retro:
         run_retro(panel, hist_rows, meta, seasons)
 

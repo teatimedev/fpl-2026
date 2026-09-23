@@ -41,6 +41,10 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(HERE))
+from attack_volume import attack_volume  # noqa: E402
+# The first snapshot whose projection used the club-relative attack volume
+# (attack_volume.py). Rows before it keep the league rule they were built on.
+RELATIVE_VOLUME_FROM_GW = 6
 HISTORY = ROOT / 'data' / 'history'
 OUT = ROOT / 'data' / 'retro.json'
 PROJ = HERE / 'projections_v2.json'
@@ -133,7 +137,7 @@ def expected_components(row, fixtures, p_start, p_cameo, start_minutes, cameo_mi
     c = dict(attack=0.0, xg=0.0, xa=0.0, cs=0.0, gc=0.0, saves=0.0, defcon=0.0,
              appearance=0.0, bonus=0.0, yellow=0.0)
     for f in fixtures or []:
-        vol = _f(f.get('xg'), 1.45) / 1.45
+        vol = attack_volume(_f(f.get('xg'), 1.45), row.get('club_xg'))
         exg = xg90 * minute_share * vol
         exa = xa90 * minute_share * vol
         c['xg'] += exg
@@ -533,6 +537,10 @@ def review(gw, snap, actuals, boot_elements, new_proj, calibration, gw_rows, pre
             row_eff['pens'] = newp.get('pens')
             row_eff['corners'] = newp.get('corners')
             row_eff['fk'] = newp.get('fk')
+        if row_eff.get('club_xg') is None and gw >= RELATIVE_VOLUME_FROM_GW:
+            # snapshot rows do not carry the club level yet: this run's is
+            # the same full-season average, give or take a week of ratings
+            row_eff['club_xg'] = newp.get('club_xg')
         fixtures = team_cs.get(row['team']) or []
         comps, proj_recon, actual_total = decompose(row_eff, fixtures, stats, explain)
         rows_for_player = gw_rows.get(code_of.get(pid), []) if gw_rows else []

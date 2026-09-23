@@ -379,14 +379,18 @@ class CalibrationTests(unittest.TestCase):
         self.assertAlmostEqual(fit["FWD"]["ratio"], 2.0 / 4.0, places=4)
         self.assertAlmostEqual(fit["FWD"]["k"], 1.45, places=4)   # clipped
 
-    def _project(self, xg_scale, calibration_dir, overlay=None):
+    def _project(self, xg_scale, calibration_dir, overlay=None, rest_scale=1.0):
         p = make_player(pid=999_101, hist=[season_row("2025/26", 3000, 34, pts=200,
                                                        xg=20.0, xa=5.0)])
         players = {p["id"]: p}
         priors = {"FWD": dict(xg90=0.4, xa90=0.15, dc90=0.0, bonus90=0.2,
                               saves90=0.0, yellow90=0.1)}
-        fx = {str(gw): [dict(opp="X", home=True, xg=1.5 * xg_scale, xgc=1.2, cs=0.3)]
-              for gw in range(1, 7)}
+        # the window (GW1-6) plus the rest of the season, which sets the
+        # club's average level for the relative attack volume
+        fx = {str(gw): [dict(opp="X", home=True,
+                             xg=1.5 * (xg_scale if gw <= 6 else rest_scale),
+                             xgc=1.2, cs=0.3)]
+              for gw in range(1, 39)}
         view = {"view": {"MCI": fx}}
         cal = Path(calibration_dir) / "calibration.json"
         cal.write_text(json.dumps({"fitted_at": "test", "k": {"FWD": {"k": 1.0}}}))
@@ -400,6 +404,19 @@ class CalibrationTests(unittest.TestCase):
                 patch.dict(PM.SNAPSHOT_STATUS, {}, clear=True):
             rows = PM.project(players, view, priors)
         return rows[0]
+
+    def test_club_level_is_not_counted_twice(self):
+        # a club that is 20% stronger in EVERY fixture: its players' xG/90
+        # already carries that, so the relative rule leaves them unchanged;
+        # the old league rule scaled them up again
+        with tempfile.TemporaryDirectory() as tmp:
+            base = self._project(1.0, tmp)
+            strong = self._project(1.2, tmp, rest_scale=1.2)
+            with patch('attack_volume.RULE', 'league'):
+                league_base = self._project(1.0, tmp)
+                league_strong = self._project(1.2, tmp, rest_scale=1.2)
+        self.assertAlmostEqual(strong["proj_6gw"], base["proj_6gw"], places=1)
+        self.assertGreater(league_strong["proj_6gw"], league_base["proj_6gw"] * 1.08)
 
     def test_archived_role_boost_cannot_change_live_attack_rates(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -421,10 +438,12 @@ class CalibrationTests(unittest.TestCase):
             up = self._project(1.1, tmp)
         self.assertEqual(base["calibration_k"], 1.0)
         ratio = up["proj_6gw"] / base["proj_6gw"]
-        # +10% on every fixture's xG lifts a forward's total by his attack
-        # share of that — well clear of the ~0% a re-fitting k produced
-        self.assertGreater(ratio, 1.03)
+        # +10% on the window's fixtures, against an unchanged season, lifts a
+        # forward's total by his attack share of the (attenuated) relative
+        # volume — clear of the ~0% a re-fitting k produced
+        self.assertGreater(ratio, 1.015)
         self.assertLess(ratio, 1.10)
+        self.assertEqual(base["club_xg"], round((6 * 1.5 + 32 * 1.5) / 38, 4))
         # and the new P2/P3 fields are on the row
         for key in ("baseline_start_rate", "start_rate_recency", "start_rate_aggregate",
                     "bonus90", "saves90", "yellow90", "dc_evidence", "minutes_rule"):

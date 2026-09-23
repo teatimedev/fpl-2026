@@ -121,6 +121,8 @@ GW_ROWS_LOADED = False
 # hold a zero. HORIZON is the last gameweek covered, START_GW the first.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gwclock import window as _gw_window          # noqa: E402
+from attack_volume import RULE as ATTACK_VOLUME_RULE  # noqa: E402
+from attack_volume import attack_volume, club_mean_xg  # noqa: E402
 from availability import (  # noqa: E402
     availability_for_gameweek,
     availability_forecast,
@@ -871,6 +873,9 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
     # the joint "eleven start" constraint, per club and gameweek, applied on
     # top of each player's availability-adjusted probability (item 2)
     club_starts = club_start_adjustments(players, view, minutes)
+    # each club's season-average fixture xG: the level its players' rates
+    # already carry (attack_volume.py, item 3)
+    club_xg = club_mean_xg(view['view'])
     for p in players.values():
         pos = p['pos']
         base_start_rate, mps = minutes[p['id']]
@@ -973,8 +978,9 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
             pts = 0.0
             for f in fx:                       # handles double gameweeks
                 # attacking, scaled by how many goals this team is expected to
-                # score in THIS fixture relative to a league-average match
-                vol = f['xg'] / 1.45
+                # score in THIS fixture relative to its OWN average match: the
+                # club's level is already inside xg90/xa90 (attack_volume.py)
+                vol = attack_volume(f['xg'], club_xg.get(p['team']))
                 pts += (xg90 * minute_share * vol * GOAL_PTS[pos]
                         + xa90 * minute_share * vol * 3.0)
                 # clean sheet: straight from the fitted scoreline distribution
@@ -1033,6 +1039,10 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
             start_recency_by_gw=start_recency_by_gw,
             start_aggregate_by_gw=start_aggregate_by_gw,
             n_match_evidence=len(match_evidence(p)),
+            # the club level attack_volume() divides by, so consumers that
+            # rebuild the attack term (retro, player_props, transfer_review)
+            # reproduce it exactly
+            club_xg=(round(club_xg[p['team']], 4) if p['team'] in club_xg else None),
             xg90=round(xg90, 4), xa90=round(xa90, 4), dc90=round(dc90, 3),
             # the remaining shrunk rates, so a snapshot can reconstruct the
             # projection's components after the fact (P3 retro)
@@ -1303,6 +1313,7 @@ if __name__ == '__main__':
     json.dump({'players': rows, 'horizon': HORIZON, 'start_gw': START_GW,
                'generated': datetime.now(timezone.utc).isoformat(),
                'window': WINDOW, 'minutes_rule': MINUTES_RULE,
+               'attack_volume': ATTACK_VOLUME_RULE,
                'manager_mps_weight': (MANAGER_MPS_WEIGHT
                                       if MANAGER_MPS_TABLE else 0.0),
                'calibration': {r['pos']: r.get('calibration_k') for r in rows
