@@ -121,10 +121,9 @@ GW_ROWS_LOADED = False
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gwclock import window as _gw_window          # noqa: E402
 from availability import (  # noqa: E402
+    availability_for_gameweek,
     availability_forecast,
-    deadline_start_probability,
     load_overrides,
-    status_for_gameweek,
 )
 # Importing statistical helpers must not access a live calendar. Production
 # configures the window below; replay/library callers must supply their own.
@@ -756,15 +755,15 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
         start_aggregate_by_gw = [0.0] * (START_GW - 1)
         for gw in range(START_GW, LAST_GW + 1):
             fx = fixtures.get(str(gw)) or []
-            effective_status = status_for_gameweek(
-                p['status'], gw, START_GW, news=p['news'],
+            # the flagged deadline takes FPL's chance; later gameweeks keep a
+            # dated absence to its date and ramp an undated one back in
+            effective_status, fit_probability = availability_for_gameweek(
+                p['status'], gw, START_GW, chance=p['chance'], news=p['news'],
                 gw_deadline=GW_DEADLINES.get(gw),
+                flag_deadline=GW_DEADLINES.get(START_GW),
             )
 
             def deadline_forecast(rate):
-                fit_probability = (deadline_start_probability(
-                    1.0, effective_status, p['chance'], p['news']
-                ) if effective_status != 'a' else 1.0)
                 return availability_forecast(
                     player_id=p['id'], gw=gw, base_start=rate,
                     base_start_minutes=mps, position=pos, status=effective_status,

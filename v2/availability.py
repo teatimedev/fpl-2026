@@ -68,15 +68,99 @@ def _dated_return(news, season_year=2026):
 
 def status_for_gameweek(status, gw, deadline_gw, *, news="", gw_deadline=None,
                         season_year=2026):
-    """Expire next-round flags, while retaining explicitly dated absences."""
+    """Expire next-round flags, while retaining explicitly dated absences.
+
+    An UNDATED injury ('i' with no parseable return) is not expired: it stays
+    'i' and availability_for_gameweek() puts a return ramp on it. Treating it
+    as fully fit from the following gameweek had Saliba (back) and Ekitiké
+    (Achilles), both "Unknown return date", at 84% and 54% to start a week
+    after a zero. An undated 's' is a one-match ban served at the flagged
+    deadline (FPL dates every longer suspension), so it still expires.
+    """
     if status == "u" or gw == deadline_gw:
         return status
     returned = _dated_return(news, season_year)
     if status in {"i", "s"} and returned and gw_deadline:
-        deadline = datetime.fromisoformat(gw_deadline.replace("Z", "+00:00")).date()
+        deadline = _parse_deadline(gw_deadline).date()
         if deadline < returned:
             return status
+    if status == "i" and not returned:
+        return "i"
     return "a"
+
+
+# Return ramp for an UNDATED injury, in days after the flagged deadline:
+#   P(fit) = 1 - exp(-max(0, days - LAG) / TAU)
+# MEASURED 23 Sep 2026 (research/model-phase3-2026-09-23.md, item 1) on the
+# 2026/27 status/news series: every refresh commit of data/projections.json
+# (47 snapshots, 6 Aug - 23 Sep) against GW1-5 starts. First-choice players
+# (deadline baseline >= 0.5) flagged "Unknown return date" at the deadline of
+# GW n started GW n+1 / n+2 / n+3 at 0.04 / 0.16 / 0.28 of what equally rated
+# available players did (n = 41 / 31 / 18 player-weeks, 20 players). The
+# maximum-likelihood fit is LAG 5 d, TAU 50 d (profile 95% band 30-120 d);
+# flags themselves clear with a median of ~34 days (Kaplan-Meier over 50
+# episodes). Beyond ~3 weeks the curve is extrapolation, so it is a floor on
+# how long "unknown" lasts, not a medical forecast: at +7/+14/+21/+28/+42
+# days it gives 0.04/0.16/0.27/0.37/0.52.
+UNDATED_RETURN_LAG_DAYS = 5.0
+UNDATED_RETURN_TAU_DAYS = 50.0
+# A doubtful flag's chance is about the NEXT round, but the doubt does not
+# vanish at that deadline: regulars flagged 'd' with a stated chance started
+# the following gameweek at ~0.7 of the available-player rate (n = 9, so a
+# documented judgement, not a fit). The missing fitness halves every 14 days:
+# a 75% flag is 0.82 a week later, a 50% flag 0.65.
+DOUBT_HALF_LIFE_DAYS = 14.0
+DAYS_PER_GAMEWEEK = 7.0
+
+
+def _parse_deadline(value):
+    return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+
+
+def _days_after_flag(gw, deadline_gw, gw_deadline=None, flag_deadline=None):
+    """Calendar days from the flagged deadline to this gameweek's deadline,
+    or a week per gameweek when either calendar entry is missing (an
+    international break makes the real gap longer, never shorter)."""
+    if gw_deadline and flag_deadline:
+        seconds = (_parse_deadline(gw_deadline)
+                   - _parse_deadline(flag_deadline)).total_seconds()
+        return max(0.0, seconds / 86400.0)
+    return max(0.0, (gw - deadline_gw) * DAYS_PER_GAMEWEEK)
+
+
+def undated_return_probability(days):
+    """P(an undated injury is over, `days` after the flagged deadline)."""
+    return 1.0 - math.exp(-max(0.0, days - UNDATED_RETURN_LAG_DAYS)
+                          / UNDATED_RETURN_TAU_DAYS)
+
+
+def availability_for_gameweek(status, gw, deadline_gw, *, chance=None, news="",
+                              gw_deadline=None, flag_deadline=None,
+                              season_year=2026):
+    """(effective status, probability of being fit) for one gameweek.
+
+    The flagged deadline uses FPL's own chance (deadline_start_probability).
+    Later gameweeks: a dated absence holds until its date and then clears; an
+    undated injury returns along undated_return_probability(); a doubtful
+    player's missing fitness decays with DOUBT_HALF_LIFE_DAYS. The fit
+    probability multiplies starts and cameos alike (availability_forecast).
+    """
+    effective = status_for_gameweek(status, gw, deadline_gw, news=news,
+                                    gw_deadline=gw_deadline,
+                                    season_year=season_year)
+    if gw == deadline_gw or effective in {"u", "s"}:
+        fit = (deadline_start_probability(1.0, effective, chance, news)
+               if effective != "a" else 1.0)
+        return effective, fit
+    days = _days_after_flag(gw, deadline_gw, gw_deadline, flag_deadline)
+    if effective == "i":
+        if _dated_return(news, season_year):
+            return effective, deadline_start_probability(1.0, effective, chance, news)
+        return effective, undated_return_probability(days)
+    if status == "d" and chance is not None:
+        missing = 1.0 - _clamp_probability(float(chance) / 100.0)
+        return "d", 1.0 - missing * 0.5 ** (days / DOUBT_HALF_LIFE_DAYS)
+    return effective, 1.0
 
 
 def deadline_start_probability(base_start, status, chance=None, news=""):

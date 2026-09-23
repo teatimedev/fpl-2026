@@ -452,6 +452,22 @@ class ScoringEligibilityTests(unittest.TestCase):
         for key in ('proj_by_gw', 'play_by_gw', 'start_by_gw', 'mins_by_gw'):
             self.assertEqual(p[key], [0.0])
 
+    def test_undated_injury_ramps_back_across_the_window(self):
+        p = make_player(pos='DEF')
+        p.update(status='i', chance=0, news='Back injury - Unknown return date')
+        fx = {str(gw): [dict(xg=1.4, xgc=1.2, cs=.3)] for gw in range(6, 12)}
+        with patch.multiple(PM, START_GW=6, HORIZON=11, LAST_GW=11, WINDOW=6,
+                            AVAILABILITY_OVERRIDES=[], GW_DEADLINES={}), \
+                patch.object(PM, 'minutes_model', return_value=(.9, 88)), \
+                patch.object(PM, 'shrink', return_value=(0.0, 0.0)), \
+                patch.object(PM, 'calibrate'):
+            row = PM.project({p['id']: p}, {'view': {'MCI': fx}}, {})[0]
+        starts = row['start_by_gw'][5:]
+        self.assertEqual(starts[0], 0.0)
+        self.assertLess(starts[1], .1)             # was .9: fit the week after a zero
+        self.assertEqual(starts, sorted(starts))   # monotone return
+        self.assertLess(starts[-1], .9 * .5)
+
     def test_double_gameweek_exports_any_appearance_and_total_minutes(self):
         fx = [dict(xg=0, xgc=0, cs=1)]
         single = self.project_scenario(90, fx, start=.5)
