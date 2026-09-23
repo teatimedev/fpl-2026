@@ -9,7 +9,7 @@ stability.py rather than from judgement. The headline findings that shaped it:
   xGI/90            0.91    the most repeatable attacking signal there is
   xG/90             0.90    and it beats goals/90 (0.82) at predicting goals
   xA/90             0.84    beats assists/90 (0.59) everywhere, hugely for FWDs
-  DefCon/90         0.56    a real, persistent skill, but needs real shrinkage
+  DefCon/90         0.93    a real, persistent skill (0.56 before the unrecorded seasons were dropped)
   starts            0.46    only moderately repeatable
   clean sheets/90   0.21    ALMOST NO SIGNAL -- 0.09 for MID and FWD
   bonus/90 (DEF)    0.14    defender bonus is close to pure noise
@@ -147,7 +147,19 @@ else:
 # Measured year-over-year stability, used as the empirical-Bayes reliability of
 # a full season of evidence. A metric at 0.90 keeps nearly all of a player's own
 # number; one at 0.21 is pulled almost entirely to the positional average.
-STABILITY = {'xg90': 0.90, 'xa90': 0.84, 'dc90': 0.56, 'bonus90': 0.54,
+#
+# DefCon was 0.56, measured before the unrecorded pre-2024/25 zeros were
+# excluded; on recorded seasons it repeats at 0.93 (system audit, 12 Sep).
+# MEASURED PREDICTIVELY 23 Sep 2026 (backtest_inseason.py --stability;
+# research/model-phase3-2026-09-23.md, item 6): rest-of-season DefCon/90 for
+# outfielders, chosen on 2025/26 (the only imported season with per-fixture
+# DefCon; 0.93 best at every n, wMAE 1.31 -> 1.18 pooled) and judged on this
+# season's GW1-2 -> GW3-5 (169 players): wMAE 1.929 -> 1.814, Spearman
+# 0.669 -> 0.706. At 0.93 the k floor of 0.15 binds, so 0.87-0.93 are one
+# setting. Defender xG (audit: 0.29) was tested the same way and REJECTED:
+# 0.29, chosen on 2023/24, ties 0.90 on 2024/25-2025/26 wMAE (0.0276) and
+# ranks worse (Spearman 0.263 vs 0.316); xg90 stays pooled at 0.90.
+STABILITY = {'xg90': 0.90, 'xa90': 0.84, 'dc90': 0.93, 'bonus90': 0.54,
              'saves90': 0.70, 'yellow90': 0.45}
 STABILITY_DEF_BONUS = 0.14      # defender bonus specifically is near-noise
 

@@ -513,6 +513,17 @@ class ScoringEligibilityTests(unittest.TestCase):
         self.assertIsNone(double['p60_shadow_by_gw'][0])
 
 
+class DefconStabilityTests(unittest.TestCase):
+    def test_a_full_recorded_season_of_defcon_is_mostly_believed(self):
+        row = season_row("2025/26", 2700, 30)
+        row["dc90"] = 11.0
+        p = make_player(pos="DEF", hist=[row])
+        est, w = PM.shrink(p, "dc90", {"DEF": dict(dc90=7.5)})
+        # k = max(0.15, 0.07/0.93): w = 1.23 / 1.38 ~ 0.89 (it was 0.61 at 0.56)
+        self.assertGreater(w, 0.88)
+        self.assertGreater(est, 10.5)
+
+
 class PeckingOrderTests(unittest.TestCase):
     def test_tied_prices_share_the_slots_they_occupy(self):
         a = make_player(pid=1, pos="GKP", price=5.0)

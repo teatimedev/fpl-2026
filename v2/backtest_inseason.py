@@ -39,6 +39,9 @@ scorecard settles the availability-conditioned versions.
     --volume    How fixture team xG scales a player's xG/xA: per player-fixture
                 given actual minutes, variants chosen on 2023/24 and judged
                 once on 2024/25-2025/26 (deviance, MAE, rank, conservation).
+    --stability shrink()'s stability constants on a grid, rest-of-season rates
+                (DefCon: chosen on 2025/26, judged on 2026/27 GW1-2 -> 3-5;
+                defender xG: chosen on 2023/24, judged on 2024/25-2025/26).
 
     python v2/backtest_inseason.py --minutes --rates --retro
 """
@@ -764,6 +767,127 @@ def run_volume(panel, hist_rows, meta, seasons):
     return best_lam
 
 
+# --------------------------------------------------------- --stability
+# Item 6 (2026-09-23): are shrink()'s stability constants the predictive
+# ones? The audit re-measured year-over-year correlations (DefCon 0.93 on
+# recorded seasons against the 0.56 in STABILITY; defender xG 0.29 against
+# 0.90 pooled), but a correlation is not a shrinkage weight. Predict each
+# player's REST-OF-SEASON rate from prior seasons plus the first n
+# gameweeks, with the stability constant on a grid, exactly as --rates does.
+# Per-fixture DefCon exists only from 2025/26 (FPL scored it from then; the
+# imported 2024/25 rows carry none), so DefCon is chosen on 2025/26 and
+# judged on this season's first five gameweeks: GW1-2 predict GW3-5.
+STABILITY_CASES = (
+    # (metric, row key, positions, grid, selection seasons, hold-out seasons)
+    ('dc90', 'defcon', ('DEF', 'MID', 'FWD'), (0.56, 0.75, 0.85, 0.93),
+     ('2025/26',), ('2026/27',)),
+    ('xg90', 'xg', ('DEF',), (0.29, 0.5, 0.75, 0.90), ('2023/24',), ('2024/25', '2025/26')),
+)
+CURRENT_N = (2,)             # in-season hold-out: rows through GW2
+CURRENT_MIN_REST = 180       # two full matches of the three that follow
+
+
+def run_stability(panel, hist_rows, meta, seasons):
+    print('\n' + '=' * 78)
+    print('STABILITY  rest-of-season rates under shrink() with the constant on a grid')
+    print('=' * 78)
+    for metric, key, positions, grid, select, hold in STABILITY_CASES:
+        first = PM.METRIC_FIRST_SEASON.get(metric, '0000/00')
+        res = defaultdict(list)          # (season, n, stab) -> [(pred, actual, w)]
+        for season in (*select, *hold):
+            if season not in panel or season < first:
+                continue
+            ext = SEASONS + [PM.CURRENT]
+            idx = ext.index(season)
+            prior_seasons = [s for s in ext[:idx] if s >= first and s in SEASONS]
+            pos_prior = {}
+            if prior_seasons:
+                acc = defaultdict(lambda: [0.0, 0.0])
+                for by in hist_rows.values():
+                    for s in prior_seasons:
+                        h = by.get(s)
+                        if h and h['mins'] >= 450:
+                            acc[h['pos']][0] += h[metric] * h['mins']
+                            acc[h['pos']][1] += h['mins']
+                pos_prior = {p: v[0] / v[1] if v[1] else 0.0 for p, v in acc.items()}
+            rows_by_code = panel[season]
+            current = season == PM.CURRENT
+            for n in (CURRENT_N if current else RATE_N):
+                # with no recorded prior season (DefCon in 2024/25) the
+                # positional target is this season's own pooled rate through
+                # GW n, which a deadline could see
+                if not prior_seasons:
+                    acc = defaultdict(lambda: [0.0, 0.0])
+                    for rows in rows_by_code.values():
+                        for r in rows:
+                            if r['round'] <= n and r['mins'] > 0 and r[key] is not None:
+                                acc[r['pos'] or 'MID'][0] += r[key]
+                                acc[r['pos'] or 'MID'][1] += r['mins']
+                    pos_prior = {p: v[0] / v[1] * 90 if v[1] else 0.0 for p, v in acc.items()}
+                for code, rows in rows_by_code.items():
+                    pos = rows[0]['pos'] or 'MID'
+                    if pos not in positions:
+                        continue
+                    through = [r for r in rows if r['round'] <= n]
+                    rest = [r for r in rows if r['round'] > n]
+                    if any(r[key] is None and r['mins'] > 0 for r in through + rest):
+                        continue
+                    mins_t = sum(r['mins'] for r in through)
+                    mins_r = sum(r['mins'] for r in rest)
+                    if mins_r < (CURRENT_MIN_REST if current else 450):
+                        continue
+                    actual = sum(r[key] or 0 for r in rest) / mins_r * 90.0
+                    cur = sum(r[key] or 0 for r in through) / mins_t * 90.0 if mins_t else 0.0
+                    past = [(idx - ext.index(s), h['mins'], h[metric])
+                            for s in prior_seasons
+                            for h in [hist_rows.get(code, {}).get(s)]
+                            if h and h['mins'] >= 200]
+                    for stab in grid:
+                        pred = blend_rate(past, mins_t if mins_t >= 90 else 0, cur, 1,
+                                          pos_prior.get(pos, 0.0), stab)
+                        res[(season, n, stab)].append((pred, actual, mins_r))
+        label = f'{metric} ({"/".join(positions)})'
+        print(f'\n--- {label}: select {", ".join(select)}, hold-out {", ".join(hold)} ---')
+        print(f"{'seasons':<10}{'n':>3}" + ''.join(f'{"stab " + format(g, "g"):>13}' for g in grid)
+              + '   (weighted MAE; Spearman on the hold-out row)')
+        chosen = None
+        for group, names in (('select', select), ('hold-out', hold)):
+            for n in (CURRENT_N if PM.CURRENT in names else RATE_N):
+                cells, rhos = [], []
+                for stab in grid:
+                    obs = [o for s in names for o in res.get((s, n, stab), [])]
+                    if len(obs) < 20:
+                        cells.append(float('nan'))
+                        rhos.append(float('nan'))
+                        continue
+                    pred = np.array([o[0] for o in obs])
+                    act = np.array([o[1] for o in obs])
+                    w = np.array([o[2] for o in obs], float)
+                    cells.append(float(np.average(np.abs(pred - act), weights=w)))
+                    rhos.append(spearman(pred, act))
+                print(f'{group:<10}{n:>3}' + ''.join(f'{c:>13.4f}' for c in cells)
+                      + ('   rho ' + ' '.join(f'{r:.3f}' for r in rhos) if group == 'hold-out' else ''))
+            if group == 'select':
+                totals = {}
+                for stab in grid:
+                    obs = [o for s in names for n in (*RATE_N, *CURRENT_N)
+                           for o in res.get((s, n, stab), [])]
+                    if obs:
+                        totals[stab] = float(np.average(
+                            [abs(o[0] - o[1]) for o in obs], weights=[o[2] for o in obs]))
+                chosen = min(totals, key=totals.get) if totals else None
+                print(f'chosen on the selection season(s): stab {chosen}')
+        for stab in grid:
+            obs = [o for s in hold for n in (*RATE_N, *CURRENT_N) for o in res.get((s, n, stab), [])]
+            if obs:
+                mae = float(np.average([abs(o[0] - o[1]) for o in obs], weights=[o[2] for o in obs]))
+                rho = spearman(np.array([o[0] for o in obs]), np.array([o[1] for o in obs]))
+                print(f'  hold-out pooled, stab {stab:g}: n {len(obs)}, wMAE {mae:.4f}, '
+                      f'Spearman {rho:.3f}'
+                      + ('  <- chosen' if stab == chosen else '')
+                      + ('  <- production' if stab == PM.STABILITY[metric] else ''))
+
+
 # --------------------------------------------------------------- --mps
 def run_mps(panel, hist_rows, meta, seasons):
     """Walk-forward minutes-per-start comparison on started player-GW rows.
@@ -1277,12 +1401,14 @@ def main():
     ap.add_argument('--mps', action='store_true')
     ap.add_argument('--club', action='store_true')
     ap.add_argument('--volume', action='store_true')
+    ap.add_argument('--stability', action='store_true')
     ap.add_argument('--seasons', nargs='*', default=SEASONS)
     args = ap.parse_args()
-    if not (args.minutes or args.rates or args.retro or args.mps or args.club or args.volume):
+    if not (args.minutes or args.rates or args.retro or args.mps or args.club or args.volume
+            or args.stability):
         args.minutes = args.rates = args.retro = True
     global BT, TM
-    if args.minutes or args.rates or args.retro or args.club or args.volume:
+    if args.minutes or args.rates or args.retro or args.club or args.volume or args.stability:
         import backtest_totals as backtest_totals
         import teams_model as teams_model
         BT, TM = backtest_totals, teams_model
@@ -1305,6 +1431,9 @@ def main():
         run_club(panel, hist_rows, meta, seasons)
     if args.volume:
         run_volume(panel, hist_rows, meta, seasons)
+    if args.stability:
+        panel.update(load_gw_panel([PM.CURRENT]))
+        run_stability(panel, hist_rows, meta, seasons)
     if args.retro:
         run_retro(panel, hist_rows, meta, seasons)
 
