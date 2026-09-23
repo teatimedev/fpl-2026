@@ -134,7 +134,11 @@ jobs:
         run: |
           TEAM_ARG=""
           if [ -n "${{ vars.FPL_ENTRY_ID }}" ]; then TEAM_ARG="--team ${{ vars.FPL_ENTRY_ID }}"; fi
-          python v2/weekly.py --no-refresh --plan --chips --scout --snapshot --price-log --push-file --json $TEAM_ARG
+          # Paid scouting runs for the deadline windows and the first plan of each
+          # gameweek; the routine daily price refresh reuses that gameweek's scouting.
+          SCOUT_ARG="--scout"
+          if [ "${{ needs.gate.outputs.reason }}" = "daily" ]; then SCOUT_ARG=""; fi
+          python v2/weekly.py --no-refresh --plan --chips $SCOUT_ARG --snapshot --price-log --push-file --json $TEAM_ARG
           python v2/movers.py
 
       - name: Export for the app
