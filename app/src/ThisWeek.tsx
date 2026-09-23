@@ -1,28 +1,24 @@
 import { useMemo } from 'react'
-import type { Data, NewsClaim, Player, Pos, Weekly } from './types'
-import { withLive, priceMovers } from './weekly'
-import {
-  xiForGw, thisGw, lineupIssues, HIT_COST, captainOptions,
-  type TransferOption,
-} from './model'
+import type { Data, NewsClaim, Player, Weekly } from './types'
+import { withLive } from './weekly'
+import { xiForGw, thisGw, lineupIssues, HIT_COST, captainOptions, type Lineup } from './model'
 import { signed } from './squad'
 import { Pitch } from './components'
 import { LastWeek } from './LastWeek'
 import type { LinkedTeam } from './useLinkedTeam'
-import { recommendationState, planForInstruction, canReadSavedReview } from './coherence'
+import { adviceStatus, planForInstruction, type AdviceStatus } from './coherence'
+import { ageLabel } from './weeklyActions'
 import { DecisionReview } from './DecisionReview'
 import { WeeklyBrief } from './WeeklyBrief'
 
 /**
  * The weekly view: what to actually do before this deadline.
  *
- * Projections are baked in at build time and refreshed by the scheduled job.
- * Prices, injuries and your real squad are fetched live on every visit, because
- * those are exactly what moves between deploys.
- *
- * When the squad on screen is the one the refresh analysed (weekly.squad.ids),
- * the deep digest — two-move combos, six-week plan, availability checks — is
- * rendered instead of the browser's own quick pass.
+ * The plan (transfers, captain, lineup, chips) is computed by the scheduled
+ * refresh and published with the forecast. Prices, injuries and your real
+ * squad are fetched live, and `adviceStatus` grades any drift: the plan is
+ * withheld only when following it could be wrong, and otherwise shown with
+ * plain notes about what changed since it was built.
  */
 
 function splitRiskEvidence(line: string): { message: string; evidence: string | null } {
@@ -31,321 +27,165 @@ function splitRiskEvidence(line: string): { message: string; evidence: string | 
 }
 
 export default function ThisWeek(
-  { D, linked, builtSquad, openPlayer }: {
+  { D, linked, builtSquad, openPlayer, goResults }: {
     D: Data; linked: LinkedTeam; builtSquad: Player[]; openPlayer: (id: number) => void
-    loadSquad?: (ids: number[]) => void
+    goResults?: () => void
   },
 ) {
-  const { entryId, live, busy, err } = linked
-  const squadIds = linked.team?.ids ?? null
+  const { entryId, live, err } = linked
   const lineup = linked.team?.lineup ?? null
-  const bank = linked.team?.bank ?? 0
-  const fromGw = linked.team?.fromGw ?? null
-
-  const gw = live?.gw ?? D.meta.start_gw ?? D.weekly?.gw ?? 1
-  const horizon = D.meta.horizon
+  const bank = linked.team?.bank ?? NaN
+  const weekly: Weekly | null = D.weekly ?? null
 
   const pool = useMemo(() => D.players.map(p => withLive(p, live)), [D.players, live])
   const poolById = useMemo(() => new Map(pool.map(p => [p.id, p])), [pool])
 
+  // The real squad once the account is read. The plan's own squad stands in
+  // only when the account cannot be read, never while it is still loading.
+  const accountFailed = !!err && !linked.team
+  const loadingAccount = !!entryId && !linked.team && !accountFailed
+  const squadIds = linked.team?.ids
+    ?? (accountFailed && weekly && String(weekly.squad.entry_id) === entryId ? weekly.squad.ids : null)
   const squad: Player[] = useMemo(() => squadIds
     ? squadIds.map(i => poolById.get(i)).filter((p): p is Player => !!p)
     : builtSquad.map(p => poolById.get(p.id) ?? p), [squadIds, builtSquad, poolById])
-
-  const usingReal = !!squadIds
   const ready = squad.length === 15
 
-  // The digest applies only to the exact 15 the refresh saw.
-  const weekly: Weekly | null = D.weekly ?? null
-  const ft = linked.ft
-  const state = recommendationState(D, live, squad.map(p => p.id), bank, ft, entryId)
-  const digest = ready && state.digestReady
-  const savedReview = !busy && !live && !!err && !digest && canReadSavedReview(D, entryId)
+  const status = adviceStatus(D, live, squad.map(p => p.id),
+    linked.team ? bank : NaN, linked.team ? linked.ft : NaN, entryId)
+  const gw = status.gw
+  const showPlan = ready && status.planUsable && !!weekly
+  const provisional = ready && !showPlan && status.projectionsUsable
 
-  const { xi, bench } = ready ? xiForGw(squad, gw) : { xi: [], bench: [] }
-  const pairs = captainOptions(xi, gw)
-  const captain = pairs[0]?.captain
-  const vice = pairs[0]?.vice
-  const ranked = [vice, ...pairs.map(row => row.captain).filter(p => p.id !== captain?.id && p.id !== vice?.id)]
-    .filter((p): p is Player => !!p)
-  const flagged = squad.filter(p => p.status !== 'a')
-  // Only meaningful for a real team: the lineup you have set, against the model's.
-  const issues = ready && usingReal && lineup
-    ? lineupIssues(lineup, squad, xi, bench, gw) : null
-  // A client price merge cannot reconstruct purchase lots or a new forecast.
-  const options: TransferOption[] = []
-  const movers = priceMovers(live, pool)
-
-  const dl = live ? new Date(live.deadline) : new Date(D.meta.deadline)
-  const msLeft = dl.getTime() - Date.now()
-  const days = Math.floor(msLeft / 86400000)
-  const hours = Math.floor(msLeft / 3600000) % 24
-
-  // Stale-model guard: projections are baked at deploy time by the scheduled
-  // refresh; live prices/injuries keep moving between deploys, so if the
-  // pipeline stops landing this must be visible, not silent.
-  // 72h, not less: legitimate cadence gaps exceed two days whenever the
-  // next deadline sits more than a day past the guaranteed Thursday build
-  // (midweek gameweeks, international breaks). Alerting earlier would cry
-  // wolf weekly; a truly stalled pipeline grows this number without bound.
-  const generatedAt = D.meta.generated
-    ? new Date(D.meta.generated.replace(' ', 'T').replace(/ UTC$/, 'Z'))
-    : null
-  const dataAgeH = generatedAt && !isNaN(generatedAt.getTime())
-    ? Math.floor((Date.now() - generatedAt.getTime()) / 3600000)
-    : null
-  const staleData = dataAgeH != null && dataAgeH > 72
-
+  const deadlineIso = live?.deadline ?? (weekly?.gw === gw ? weekly.deadline : null)
   const nameOf = (id: number) => poolById.get(id)?.name ?? `#${id}`
+  const lastRow = linked.history?.current.filter(r => r.event < gw).at(-1) ?? null
+
+  if (!ready) {
+    return <div className="week">
+      <WeekHeading gw={gw} deadline={deadlineIso} status={status} />
+      <section className="panel" style={{ marginTop: 16 }}>
+        <div className="empty-state">
+          {loadingAccount ? 'Loading your team from FPL…'
+            : <>No squad yet. Link your FPL team in <strong>My squad</strong>, or draft one there.</>}
+        </div>
+      </section>
+    </div>
+  }
 
   return (
     <div className="week">
-      {staleData && (
-        <p
-          role="alert"
-          /* Same treatment as .drawer-news: alert colour on a soft red strip. */
-          style={{
-            margin: '0 0 12px', padding: '7px 10px', fontSize: 12,
-            color: 'var(--alert)', background: 'rgba(255, 90, 90, 0.09)',
-            borderLeft: '2px solid var(--alert)', lineHeight: 1.5,
-            borderRadius: '0 var(--r) var(--r) 0',
-          }}
-        >
-          This analysis is over three days old. It needs updating before you act on it.
-        </p>
-      )}
-      <p className="week-deadline">
-        Gameweek {gw} · deadline {dl.toLocaleString('en-GB', {
-          weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
-        })}{msLeft > 0 && <> · <strong>{days}d {hours}h</strong> to go</>}
-        {!entryId && builtSquad.length === 15 && <> · drafted squad</>}
-      </p>
+      <WeekHeading gw={gw} deadline={deadlineIso} status={status} />
+      <StatusCallout status={status} err={err} showPlan={showPlan} provisional={provisional} />
 
-      {busy && !digest && <p className="week-refresh" role="status">Checking your team and the latest player news…</p>}
-
-      {!ready && (
-        <section className="panel" style={{ marginTop: 16 }}>
-          <div className="empty-state">
-            No squad yet. Draft one in the <strong>My squad</strong> tab, or link an
-            FPL team id above once the season has started.
-          </div>
-        </section>
+      {showPlan && (
+        <WeeklyBrief D={D} W={weekly!} poolById={poolById}
+          currentLineup={lineup} openPlayer={openPlayer} />
       )}
 
-      {ready && !digest && !busy && (
-        <section className="panel" role="status" style={{ marginTop: 12 }}>
-          <div className="panel-hd"><h2>{err ? (live ? 'Your FPL account needs checking' : 'Live FPL checks are unavailable') : 'Your weekly advice needs updating'}</h2></div>
-          <p className="week-refresh">{err
-            ? (live ? 'The player feed is available, but your squad and free transfers could not be verified. Account updates can lag behind the deadline.'
-              : 'The live feed could not be checked. Current advice will return when the FPL checks succeed.')
-            : 'Your team or the latest information no longer matches this analysis. Fresh advice is needed before making transfers.'}</p>
-          <details className="scenario-details"><summary>What needs updating?</summary>
-            <ul className="problems soft" style={{ margin: 14 }}>
-              {(live ? state.reasons : state.reasons.slice(0, 1)).map(reason => <li key={reason}>{reason}</li>)}
-            </ul>
-          </details>
-        </section>
+      {provisional && (
+        <ProvisionalLineup D={D} squad={squad} gw={gw} lineup={lineup} openPlayer={openPlayer} />
       )}
 
-      {savedReview && weekly && (
-        <details className="weekly-more" open>
-          <summary>Saved GW{weekly.gw} review · live checks unavailable</summary>
-          <div className="weekly-more-body">
-            <p>This is the saved report for entry {weekly.squad.entry_id}, analysed {new Date(weekly.generated).toLocaleString('en-GB')}.</p>
-            <p>At that analysis: {weekly.squad.ft} free transfers and £{weekly.squad.bank.toFixed(1)}m in the bank. {weekly.squad.account_basis}</p>
-            <p>Squad recorded: {weekly.squad.ids.map(nameOf).join(', ')}.</p>
-            <Digest D={D} W={weekly} gw={weekly.gw} horizon={weekly.horizon} poolById={poolById}
-              nameOf={nameOf} openPlayer={openPlayer} />
-          </div>
-        </details>
-      )}
+      {lastRow && <LastResult row={lastRow} prev={linked.history?.current.find(r => r.event === lastRow.event - 1) ?? null}
+        onOpen={goResults} />}
 
-      {ready && digest && weekly && (
-        <>
-          <WeeklyBrief D={D} W={weekly} poolById={poolById} currentLineup={lineup} openPlayer={openPlayer} />
-          <details className="weekly-more">
-            <summary>Why this recommendation?</summary>
-            <div className="weekly-more-body"><Digest D={D} W={weekly} gw={gw} horizon={horizon} poolById={poolById}
-              nameOf={nameOf} openPlayer={openPlayer} /></div>
-          </details>
-        </>
-      )}
-
-      {ready && !digest && state.projectionsReady && captain && (
+      {weekly && (showPlan || status.projectionsUsable) && (
         <details className="weekly-more">
-          <summary>See the last available lineup and estimates</summary>
-          <div className="weekly-more-body">
-          <section className="panel accent" style={{ marginTop: 16 }}>
-            <div className="panel-hd">
-              <h2>Captain</h2>
-              <span className="sub">doubles this week</span>
-            </div>
-            <div className="captain">
-              <div className="pick">
-                <button className="big plink-big" onClick={() => openPlayer(captain.id)}>{captain.name}</button>
-                <span className="meta">
-                  {D.teams[captain.team]?.name} · projected{' '}
-                  <strong>{thisGw(captain, gw).toFixed(1)}</strong>, doubled to{' '}
-                  <strong>{(thisGw(captain, gw) * 2).toFixed(1)}</strong>
-                </span>
-              </div>
-              <ol className="alts">
-                {ranked.slice(0, 3).map((p, i) => (
-                  <li key={p.id}>
-                    <span className="n">{i === 0 ? 'vice' : `#${i + 2}`}</span>
-                    <button className="plink" onClick={() => openPlayer(p.id)}>{p.name}</button>
-                    <span className="mono">{thisGw(p, gw).toFixed(1)}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </section>
-
-          <section className="panel" style={{ marginTop: 16 }}>
-            <div className="panel-hd">
-              <h2>Your recommended lineup</h2>
-              <span className="sub">
-                {['DEF', 'MID', 'FWD'].map(k =>
-                  xi.filter(p => p.pos === k).length).join('-')}
-              </span>
-            </div>
-            <Pitch D={D} xi={xi} bench={bench} captain={captain.id}
-              vice={vice?.id ?? null} openPlayer={openPlayer} />
-          </section>
-
-          {issues && (
-            <section className="panel" style={{ marginTop: 16 }}>
-              <div className="panel-hd">
-                <h2>Your lineup vs the model</h2>
-                <span className="sub">picks from GW{fromGw}</span>
-              </div>
-              {issues.length === 0 ? (
-                <div style={{ padding: '2px 14px 14px' }}>
-                  <div className="ready">
-                    Your captain, vice, XI and bench order all match the model. ✓
-                  </div>
-                </div>
-              ) : (
-                <ul className="problems" style={{ margin: 14 }}>
-                  {issues.map((it, i) => (
-                    <li key={i}><strong>{it.head}</strong> {it.body}</li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          )}
-
-          <section className="panel" style={{ marginTop: 16 }}>
-            <div className="panel-hd"><h2>Check before the deadline</h2></div>
-            {flagged.length === 0 ? (
-              <div style={{ padding: '2px 14px 14px' }}>
-                <div className="ready">Nobody flagged. All 15 are available as far as the FPL feed knows.</div>
-              </div>
-            ) : (
-              <ul className="problems" style={{ margin: 14 }}>
-                {flagged.map(p => (
-                  <li key={p.id}>
-                    <strong>{p.name}</strong> — {p.news || `status ${p.status}`}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-
-          <section className="panel" style={{ marginTop: 16 }}>
-            <div className="panel-hd">
-              <h2>Transfers</h2>
-              <span className="sub">
-                {ft >= 15 ? 'unlimited' : ft} free · £{bank.toFixed(1)}m banked
-              </span>
-            </div>
-            {options.length === 0 ? (
-              <div className="empty-state">
-                Transfer analysis needs a refresh for this account and current prices.
-              </div>
-            ) : (
-              <>
-                <div className="tbl-scroll">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th className="l">Out</th><th className="l">In</th>
-                        <th>Cost</th><th>Gain</th><th>Net</th><th className="l">Verdict</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {options.map(o => (
-                        <tr key={o.out.id}>
-                          <td className="l">
-                            <button className="plink" onClick={() => openPlayer(o.out.id)}>{o.out.name}</button>
-                            {' '}<span className="s">{o.out.team}</span>
-                          </td>
-                          <td className="l">
-                            <button className="plink" onClick={() => openPlayer(o.in.id)}>{o.in.name}</button>
-                            {' '}<span className="s">{o.in.team}</span>
-                          </td>
-                          <td>{signed(o.costChange)}</td>
-                          <td style={{ color: 'var(--flood-soft)' }}>+{o.gain.toFixed(1)}</td>
-                          <td style={{ color: o.net > 0 ? 'var(--ok)' : 'var(--chalk-faint)' }}>
-                            {signed(o.net)}
-                          </td>
-                          <td className="l">
-                            {o.worthAHit
-                              ? <span style={{ color: 'var(--ok)' }}>worth a −{HIT_COST} hit</span>
-                              : <span style={{ color: 'var(--chalk-faint)' }}>free transfer only</span>}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <p className="hint" style={{ padding: '10px 14px 14px' }}>
-                  Gain is the lift to your best XI over GW{gw}–{horizon}, captain
-                  included; net takes off {HIT_COST} if the move is not free.
-                </p>
-              </>
-            )}
-          </section>
-
-          <section className="panel" style={{ marginTop: 16 }}>
-            <div className="panel-hd">
-              <h2>Price watch</h2>
-              <span className="sub">net transfers this gameweek</span>
-            </div>
-            {!movers.active ? (
-              <div className="empty-state">
-                Prices are locked until the Gameweek 1 deadline, so there is no
-                transfer flow to read yet.
-              </div>
-            ) : (
-              <div className="spread">
-                {movers.rising.map(({ p, net }) => (
-                  <button className="club-chip plainbtn full" key={`r${p.id}`} onClick={() => openPlayer(p.id)}>
-                    ▲ {p.name} <span className="mono">{net > 0 ? '+' : ''}{net.toLocaleString()}</span>
-                  </button>
-                ))}
-                {movers.falling.map(({ p, net }) => (
-                  <button className="club-chip plainbtn" key={`f${p.id}`} onClick={() => openPlayer(p.id)}>
-                    ▼ {p.name} <span className="mono">{net.toLocaleString()}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </section>
-          </div>
+          <summary>{showPlan ? 'Why this plan?' : `Last plan (Gameweek ${weekly.gw})`}</summary>
+          <div className="weekly-more-body"><PlanDetails D={D} W={weekly} gw={weekly.gw} horizon={weekly.horizon}
+            poolById={poolById} nameOf={nameOf} openPlayer={openPlayer} /></div>
         </details>
       )}
-
-      {ready && <details className="weekly-more">
-        <summary>Review a player: keep or sell?</summary>
-        <div className="weekly-more-body"><DecisionReview D={D} gw={gw} ids={squad.map(p => p.id)} current={digest} openPlayer={openPlayer} /></div>
+      {status.projectionsUsable && <details className="weekly-more">
+        <summary>Keep or sell a player?</summary>
+        <div className="weekly-more-body"><DecisionReview D={D} gw={gw} ids={squad.map(p => p.id)} current={showPlan} openPlayer={openPlayer} /></div>
       </details>}
       <details className="weekly-more">
-        <summary>Club news and sources</summary>
+        <summary>Club news</summary>
         <div className="weekly-more-body"><NewsStatus D={D} gw={gw} squadIds={squad.map(p => p.id)} openPlayer={openPlayer} /></div>
       </details>
     </div>
   )
+}
+
+const fmtDeadline = (iso: string) => new Date(iso).toLocaleString('en-GB', {
+  weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+})
+
+function WeekHeading({ gw, deadline, status }: { gw: number; deadline: string | null; status: AdviceStatus }) {
+  const tone = status.level === 'blocked' ? 'bad' : status.level === 'warn' ? 'warn' : 'good'
+  return <div className="week-heading">
+    <p className="week-deadline">
+      <strong>Gameweek {gw}</strong>{deadline && <> · deadline {fmtDeadline(deadline)}</>}
+    </p>
+    <span className={`fresh-chip fresh-${tone}`} title="When the forecast and plan were last rebuilt">
+      {status.level === 'blocked' ? 'Plan not ready' : status.level === 'warn' ? 'Plan · check notes' : 'Plan ready'}
+      {' · '}{ageLabel(status.ageHours)}
+    </span>
+  </div>
+}
+
+function StatusCallout({ status, err, showPlan, provisional }: {
+  status: AdviceStatus; err: string | null; showPlan: boolean; provisional: boolean
+}) {
+  if (status.level === 'ready' && !err) return null
+  if (!showPlan) {
+    // Notes about the withheld plan's drift would only add noise; keep the
+    // other blockers and a stalled-pipeline warning.
+    const notes = [...status.blockers.slice(1), ...status.warnings.filter(w => /days old/.test(w)),
+      ...(err ? [`FPL account check: ${err}`] : [])]
+    return <section className="callout callout-bad" role="status">
+      <h2>{status.blockers[0] ?? 'Your plan is not ready.'}</h2>
+      <p>{provisional ? 'Showing a provisional lineup from the latest projections. ' : ''}
+        Transfer advice returns when the plan rebuilds: automatically each morning, after each deadline, and 24h and 2h before the next.</p>
+      {notes.length > 0 && <ul>{notes.map(line => <li key={line}>{line}</li>)}</ul>}
+    </section>
+  }
+  const notes = [...status.warnings, ...(err ? [`FPL account check: ${err}`] : [])]
+  return <section className="callout callout-warn" role="status">
+    <h2>Check before you act</h2>
+    <ul>{notes.map(line => <li key={line}>{line}</li>)}</ul>
+  </section>
+}
+
+function ProvisionalLineup({ D, squad, gw, lineup, openPlayer }: {
+  D: Data; squad: Player[]; gw: number; lineup: Lineup | null; openPlayer: (id: number) => void
+}) {
+  const { xi, bench } = xiForGw(squad, gw)
+  const pairs = captainOptions(xi, gw)
+  const captain = pairs[0]?.captain
+  const vice = pairs[0]?.vice
+  if (!captain) return null
+  const issues = lineup ? lineupIssues(lineup, squad, xi, bench, gw) : null
+  const expected = xi.reduce((sum, p) => sum + thisGw(p, gw), 0) + thisGw(captain, gw)
+  return <section className="panel brief-lineup" style={{ marginTop: 12 }}>
+    <div className="panel-hd"><h2>Provisional lineup · Gameweek {gw}</h2>
+      <span className="sub">{expected.toFixed(0)} pts expected</span></div>
+    <p className="step-detail" style={{ padding: '0 14px' }}>
+      Captain <button className="plink" onClick={() => openPlayer(captain.id)}>{captain.name}</button>
+      {' '}({thisGw(captain, gw).toFixed(1)}){vice && <>, vice <button className="plink" onClick={() => openPlayer(vice.id)}>{vice.name}</button></>}.
+      {' '}From your current squad, before any transfers.
+    </p>
+    <Pitch D={D} xi={xi} bench={bench} captain={captain.id} vice={vice?.id ?? null} simple openPlayer={openPlayer} />
+    {issues && issues.length > 0 && <ul className="problems soft" style={{ margin: 14 }}>
+      {issues.map((it, i) => <li key={i}><strong>{it.head}</strong> {it.body}</li>)}
+    </ul>}
+  </section>
+}
+
+function LastResult({ row, prev, onOpen }: {
+  row: { event: number; points: number; overall_rank: number | null; event_transfers_cost: number }
+  prev: { overall_rank: number | null } | null; onOpen?: () => void
+}) {
+  const move = row.overall_rank != null && prev?.overall_rank != null ? prev.overall_rank - row.overall_rank : null
+  return <section className="last-result">
+    <span className="k">Gameweek {row.event}</span>
+    <span className="v mono">{row.points - row.event_transfers_cost} pts</span>
+    {row.overall_rank != null && <span className="s">rank {row.overall_rank.toLocaleString('en-GB')}
+      {move != null && move !== 0 && <span className={move > 0 ? 'up' : 'down'}> {move > 0 ? '▲' : '▼'} {Math.abs(move).toLocaleString('en-GB')}</span>}</span>}
+    {onOpen && <button className="plink" onClick={onOpen}>Results →</button>}
+  </section>
 }
 
 function NewsStatus({ D, gw, squadIds, openPlayer }: {
@@ -429,9 +269,11 @@ function NewsClaimRow({ claim, applied = false, openPlayer }: {
   )
 }
 
-/* ---------------------------------------------------------------- digest
-   The CI-computed analysis, rendered when the loaded squad is the one it saw. */
-function Digest({
+/* ------------------------------------------------------------ plan details
+   The CI-computed analysis behind the weekly plan: how the transfer decision
+   was reached, the captain comparison, alternatives, future path and last
+   week's review. The instruction itself lives in WeeklyBrief. */
+function PlanDetails({
   D, W, gw, horizon, poolById, nameOf, openPlayer,
 }: {
   D: Data
@@ -446,14 +288,8 @@ function Digest({
   const cap = poolById.get(m.captain)
   const vice = poolById.get(m.vice)
   const price = (id: number) => poolById.get(id)?.price ?? 0
-  const posOf = (id: number): Pos | undefined => poolById.get(id)?.pos
   const teamOf = (id: number) => poolById.get(id)?.team ?? ''
-  const shape = (['DEF', 'MID', 'FWD'] as Pos[])
-    .map(k => m.xi.filter(id => posOf(id) === k).length).join('-')
-  const xiPlayers = m.xi.map(id => poolById.get(id)).filter((p): p is Player => !!p)
-  const benchPlayers = m.bench.map(id => poolById.get(id)).filter((p): p is Player => !!p)
 
-  const checks = W.checks ?? []
   const tr = W.transfers
   const plan = W.plan ?? null
   const sim = plan?.this_week_sim ?? null
@@ -466,7 +302,6 @@ function Digest({
       && /nothing compelling|\bhold\b|nothing to change|close enough|no single transfer improves/i.test(tr.advice))
   const pathWeeks = planForInstruction(plan, noTransfer)
   const pathHits = pathWeeks.reduce((sum, week) => sum + week.hits, 0)
-  const capGameweek = gw + Math.max(0, 5 - W.squad.ft)
   const stamp = new Date(W.generated)
   const stampStr = isNaN(stamp.getTime()) ? W.generated
     : stamp.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
@@ -498,7 +333,6 @@ function Digest({
         {W.squad.source.includes('user-confirmed') ? 'public picks + your confirmed transfers' : 'latest public FPL picks'} · analysed {stampStr}
         {W.squad.ft > 0 && ` · ${W.squad.ft >= 15 ? 'unlimited' : W.squad.ft} free transfer${W.squad.ft === 1 ? '' : 's'}`}
         {' '}· £{W.squad.bank.toFixed(1)}m banked
-        {checks.length === 0 && ' · nobody flagged'}
       </p>
 
       <section className="panel decision" style={{ marginTop: 10 }}>
@@ -511,9 +345,9 @@ function Digest({
           {!!plan?.candidates?.length && (
             <details className="sync-details">
               <summary>Transfers compared with holding</summary>
-              <p className="hint">Each option includes future transfers and hit costs over GW{gw}–{horizon}. The two-point buffer per move is an unvalidated policy rule.</p>
+              <p className="hint">Each option includes the future transfers and hit costs it leads to over GW{gw}–{horizon}. A move must beat saving by the bar shown.</p>
               <div className="tbl-scroll"><table>
-                <thead><tr><th className="l">Out → In</th><th>Gain vs hold</th><th>Buffer</th><th>Clears it?</th></tr></thead>
+                <thead><tr><th className="l">Out → In</th><th>Gain vs saving</th><th>Bar</th><th>Worth it?</th></tr></thead>
                 <tbody>{plan.candidates.filter(row => row.status === 'scored').map((row, index) => (
                   <tr key={index}>
                     <td className="l">{names(row.out ?? [])} → {names(row.in_ ?? [])}</td>
@@ -532,12 +366,9 @@ function Digest({
               {' '}and gained <strong className="mono">{signed(sim.mean_delta)} pts</strong>
               {' '}on average this gameweek, after transfer hits. {noTransfer && moveCount > 0 ? (
                 <>Over the full planning window, acting now instead of waiting gains
-                  {' '}<strong className="mono">{signed(plan?.diff ?? 0)}</strong>.
-                  The legacy policy requires <strong className="mono">+{moveBar.toFixed(1)}</strong> for {moveCount} moves.
-                  This threshold has not been validated; it is shown as an assumption.</>
-              ) : (
-                <>This measures match-outcome uncertainty under fixed forecasts; it does not prove a transfer is the right decision.</>
-              )}
+                  {' '}<strong className="mono">{signed(plan?.diff ?? 0)}</strong>, short of the
+                  {' '}<strong className="mono">+{moveBar.toFixed(1)}</strong> bar for {moveCount} move{moveCount === 1 ? '' : 's'}.</>
+              ) : null}
             </p>
           )}
           {(W.squad.changes?.length ?? 0) > 0 && (
@@ -629,36 +460,11 @@ function Digest({
         </div>
       </section>
 
-      {checks.length > 0 && (
-        <section className="panel" style={{ marginTop: 16 }}>
-          <div className="panel-hd">
-            <h2>Check before the deadline</h2>
-            <span className="sub">{`${checks.length} to watch`}</span>
-          </div>
-          <ul className="problems soft" style={{ margin: 14 }}>
-            {checks.map(c => (
-              <li key={c.id}>
-                <button className="plink strong" onClick={() => openPlayer(c.id)}>{nameOf(c.id)}</button>
-                <span className="s"> {c.xi ? 'XI' : 'bench'}</span> — {c.flags.join('; ')}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
       <section className="panel" style={{ marginTop: 16 }}>
         <div className="panel-hd">
           <h2>Transfers</h2>
           <span className="sub">GW{gw}–{horizon} window</span>
         </div>
-        {decisionInstruction && <p className="lede-sm">{decisionInstruction}</p>}
-        {W.squad.ft < 15 && <p style={{ padding: '0 14px' }}>
-          You have <strong>{W.squad.ft} free transfers for GW{gw}</strong>.
-          {W.squad.ft < 5
-            ? <> Rolling every week would reach the five-transfer cap at GW{capGameweek}.</>
-            : <> Your transfer bank is full.</>}
-          {' '}At five, using one transfer leaves five available the following week;
-          making none forfeits that week’s new transfer. Reassess each deadline.
-        </p>}
         {holdRisk && holdRisk.lines.length > 0 && (
           <details className="scenario-details price-risk-details">
             <summary>Price timing if you wait · experimental</summary>
@@ -687,7 +493,7 @@ function Digest({
           </div>
         ) : (
           <details className="scenario-details">
-            <summary>Compare optional alternatives (not instructions)</summary>
+            <summary>Other transfers considered</summary>
             <div className="scenario-body">
             {tr.singles.length > 0 && (
               <div className="tbl-scroll">
@@ -750,7 +556,7 @@ function Digest({
         )}
         {plan && pathWeeks.length > 0 && (
           <details className="scenario-details">
-            <summary>Explore future weeks · plans can change{pathHits > 0 ? ` (${pathHits * HIT_COST} points in transfer costs)` : ''}</summary>
+            <summary>Planned path for the coming weeks{pathHits > 0 ? ` (${pathHits * HIT_COST} points in transfer costs)` : ''}</summary>
             <div className="scenario-body tbl-scroll">
               <table>
               <thead>
@@ -792,14 +598,6 @@ function Digest({
         <LastWeek retro={W.retro} poolById={poolById} openPlayer={openPlayer} />
       )}
 
-      <section className="panel" style={{ marginTop: 16 }}>
-        <div className="panel-hd">
-          <h2>Your recommended lineup</h2>
-          <span className="sub">{shape}</span>
-        </div>
-        <Pitch D={D} xi={xiPlayers} bench={benchPlayers} captain={m.captain}
-          vice={m.vice} openPlayer={openPlayer} />
-      </section>
       </div>
       </div>
 

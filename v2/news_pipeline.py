@@ -434,7 +434,7 @@ def run(root: Path = ROOT, *, now: datetime | None = None) -> dict:
                 hours <= 3 and bool({captain, vice} & set(official_affected))
             )
     price_changed = (forecast_price_changes(
-        bootstrap, _read(root / "app/src/data/fpl.json", {})) if official_fpl_ok else [])
+        bootstrap, _read(root / "app/public/data/fpl.json", {})) if official_fpl_ok else [])
     if price_changed:
         impact["rebuild_required"] = True
     if not official_fpl_ok:

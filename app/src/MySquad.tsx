@@ -11,7 +11,7 @@ import {
 import MarketTable from './MarketTable'
 import SquadBuilder from './SquadBuilder'
 import type { LinkedTeam } from './useLinkedTeam'
-import { recommendationState, canReadSavedReview } from './coherence'
+import { adviceStatus, canReadSavedReview } from './coherence'
 import { accountSellingValues, bankAfterMoves, type SellingValues } from './transferBudget'
 import { useTransferSuggestions } from './useTransferSuggestions'
 
@@ -96,10 +96,12 @@ export default function MySquad({
   const squad = useMemo(() => source
     ? source.ids.map(id => poolById.get(id)).filter((p): p is Player => !!p)
     : [], [source, poolById])
-  const coherence = recommendationState(D, linked.live, source?.ids ?? [],
+  const coherence = adviceStatus(D, linked.live, source?.ids ?? [],
     source?.bank ?? NaN, source?.ft ?? NaN, entryId)
-  const ready = squad.length === 15 && coherence.projectionsReady
-    && (source?.kind === 'linked' || canReadSavedReview(D, entryId))
+  // Projections for the upcoming gameweek are enough to show the squad and
+  // its forecasts; the transfer sandbox separately needs reconciled sale values.
+  const ready = squad.length === 15 && coherence.projectionsUsable
+    && (source?.kind === 'linked' || source?.kind === 'digest' || canReadSavedReview(D, entryId))
   const sellingValues = useMemo(() => accountSellingValues(D, linked.live,
     source?.ids ?? [], source?.bank ?? NaN, source?.ft ?? NaN, entryId),
     [D, linked.live, source, entryId])
@@ -192,7 +194,7 @@ export default function MySquad({
         <section className="panel" style={{ marginTop: 16 }}>
           <div className="empty-state">
             {busy ? 'Loading live data…' : source ? (
-              <>Current squad forecasts are unavailable. {coherence.reasons[0]}</>
+              <>Current squad forecasts are unavailable. {coherence.blockers[0] ?? 'The forecast does not cover this gameweek yet.'}</>
             ) : (
               <>
                 Nothing to show yet. Link your FPL team id above once the first

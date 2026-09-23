@@ -13,19 +13,21 @@ stopped at the user's request; the system is not certified globally optimal.
 
 ## Using the app
 
-Start with **This week**. It gives four plain instructions: transfer or hold,
-captain and vice, starting team, and checks before the deadline. The pitch and
-bench order show the recommended team. Transfer instructions include the chosen
-moves, any points cost and next week's free-transfer balance. A hold applies to
-this week; future plans are conditional scenarios.
+Start with **This week**. Beside the deadline, one chip says whether the plan is
+ready and when it was last rebuilt. The plan gives four instructions: transfer
+or save, captain and vice, starting team with bench order, and checks before the
+deadline (including chips). **Why this plan?** holds the numbers, alternatives
+and the planned path; **Keep or sell a player?** and **Club news** sit below.
 
-Expand **Why this recommendation?** for the numbers, **Review a player: keep or
-sell?** for replacements and evidence, or **Club news and sources** for the
-collection record. My squad, Season and Scorecard provide the other views.
+Advice is withheld only when following it could be wrong: the plan is for
+another gameweek, account or squad, the deadline has passed, or a recommended
+signing is now flagged or no longer affordable at live prices. In that case a
+provisional lineup from the latest projections is shown instead. Other drift
+since the rebuild (news about a squad player, an affordable price move, an
+unreachable FPL feed, an older build) appears as a note beside the plan.
 
-Public FPL data shows the last published lineup, not unpublished changes made
-since a deadline. Weekly instructions are withheld when the deadline, forecast,
-account, prices or squad news do not match. Missing chip advice is stated.
+The forecast and plan are published as `app/public/data/fpl.json` and loaded at
+runtime; an open tab picks up a newer build on focus or within ten minutes.
 
 ## Run locally
 
@@ -56,7 +58,9 @@ It scans news and checks prices against the published forecast, rebuilds the
 numerical model when due or prices change, grades finished weeks,
 builds the weekly decision and chip advice, runs bounded scouting, freezes the
 deadline evidence, exports the app bundle and commits the results to `master`.
-The hourly gate selects useful deadline/news windows; it does not rebuild every
+The hourly gate rebuilds once the previous deadline's picks are public, once that
+gameweek is final, daily after FPL's overnight price changes, and 24 and 2 hours
+before the next deadline, with news scans in between; it does not rebuild every
 hour. Existing notification steps run separately from the deployment.
 
 For a local full model and weekly refresh, with no phone notification:

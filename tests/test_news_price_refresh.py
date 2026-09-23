@@ -30,7 +30,7 @@ class NewsPriceRefreshTests(unittest.TestCase):
         self.fixtures = [{'event': 5, 'team_h': 1, 'team_a': 2,
                           'kickoff_time': '2026-09-19T14:00:00Z'}]
         self.forecast = {'players': [{'id': 411, 'price': 15.5}, {'id': 106, 'price': 7.9}]}
-        self.write('app/src/data/fpl.json', self.forecast)
+        self.write('app/public/data/fpl.json', self.forecast)
         self.write('data/weekly.json', {'squad': {'ids': [411]}, 'model': {'captain': 411}})
         self.write('data/news/latest_run.json', {
             'official_fpl_ok': True,
@@ -68,7 +68,7 @@ class NewsPriceRefreshTests(unittest.TestCase):
         self.assertTrue(self.scan()['rebuild_required'])
         self.forecast['players'][0]['price'] = 15.6
         self.forecast['players'][1]['price'] = 7.8
-        self.write('app/src/data/fpl.json', self.forecast)
+        self.write('app/public/data/fpl.json', self.forecast)
         result = self.scan()
         self.assertFalse(result['rebuild_required'])
         self.assertEqual(result['price_changed'], [])
