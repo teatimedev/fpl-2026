@@ -400,6 +400,36 @@ def context_multiplier(p):
     return CONTEXT_CURRENT_MULT if context_changed(p) else 1.0
 
 
+# The positional prior is club-agnostic, so shrinkage pulls a weak club's
+# attackers UP towards a league-average level their club cannot supply (and a
+# strong club's down). Under the relative volume rule that left weak-club
+# regulars over-predicted: on the 2024/25-2025/26 hold-out, xG
+# Σpred/Σactual for 60+ minute player-fixtures was 1.19 in the weakest
+# tercile of clubs against 1.08 in the strongest (attacking points 1.06 vs
+# 0.96). Scaling the xG/xA prior by (club mean xG / league mean) ** GAMMA
+# closes that to 1.15 vs 1.11 (points 1.02 vs 1.00). MEASURED 23 Sep 2026
+# (backtest_inseason.py --volume; research/model-phase3-2026-09-23.md, item
+# 3 follow-up): GAMMA chosen on 2023/24 from {0.5, 1}; on 2024/25-2025/26
+# xG deviance 0.16506 -> 0.16472 (gameweek-block interval -0.00060 to
+# -0.00009), xA 0.09291 -> 0.09261 (-0.00045 to -0.00015), better in both
+# seasons. FPL_CLUB_PRIOR=off reverts.
+CLUB_PRIOR_GAMMA = (0.0 if os.environ.get('FPL_CLUB_PRIOR', '').lower() in ('off', '0', 'none')
+                    else 0.5)
+
+
+def club_attack_priors(priors, pos, club_level, club_levels, gamma=None):
+    """`priors` with this position's xG/90 and xA/90 targets scaled by the
+    club's mean fixture xG against the league's mean club, ** gamma."""
+    gamma = CLUB_PRIOR_GAMMA if gamma is None else gamma
+    if not gamma or not club_level or not club_levels:
+        return priors
+    league = sum(club_levels.values()) / len(club_levels)
+    scale = (club_level / league) ** gamma
+    base = priors.get(pos, {})
+    scaled = dict(base, **{m: base[m] * scale for m in ('xg90', 'xa90') if m in base})
+    return dict(priors, **{pos: scaled})
+
+
 def shrink(p, metric, priors, current_mult=None):
     """Empirical-Bayes estimate of a player's true rate for one metric.
 
@@ -907,8 +937,11 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
         rate_recency = shadow_start_rate if shadow_rule == 'recency' else base_start_rate
         rate_aggregate = shadow_start_rate if shadow_rule == 'aggregate' else base_start_rate
 
-        xg90, w_xg = shrink(p, 'xg90', priors)
-        xa90, _ = shrink(p, 'xa90', priors)
+        # attacking rates shrink towards the positional prior scaled by the
+        # club's attacking level (club_attack_priors, item 3 follow-up)
+        attack_priors = club_attack_priors(priors, p['pos'], club_xg.get(p['team']), club_xg)
+        xg90, w_xg = shrink(p, 'xg90', attack_priors)
+        xa90, _ = shrink(p, 'xa90', attack_priors)
         dc90, w_dc = shrink(p, 'dc90', priors)
         bonus90, _ = shrink(p, 'bonus90', priors)
         saves90, _ = shrink(p, 'saves90', priors)

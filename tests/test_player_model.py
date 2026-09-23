@@ -513,6 +513,32 @@ class ScoringEligibilityTests(unittest.TestCase):
         self.assertIsNone(double['p60_shadow_by_gw'][0])
 
 
+class ClubAttackPriorTests(unittest.TestCase):
+    def test_prior_scales_with_club_level_and_leaves_other_metrics(self):
+        priors = {"FWD": dict(xg90=0.4, xa90=0.1, dc90=4.0)}
+        levels = {"MCI": 2.0, "COV": 0.8, "MID": 1.4}      # league mean 1.4
+        weak = PM.club_attack_priors(priors, "FWD", 0.8, levels, gamma=0.5)
+        strong = PM.club_attack_priors(priors, "FWD", 2.0, levels, gamma=0.5)
+        self.assertAlmostEqual(weak["FWD"]["xg90"], 0.4 * math.sqrt(0.8 / 1.4))
+        self.assertAlmostEqual(strong["FWD"]["xa90"], 0.1 * math.sqrt(2.0 / 1.4))
+        self.assertEqual(weak["FWD"]["dc90"], 4.0)
+        self.assertEqual(priors["FWD"]["xg90"], 0.4)           # not mutated
+        self.assertIs(PM.club_attack_priors(priors, "FWD", 0.8, levels, gamma=0.0), priors)
+
+    def test_prior_only_moves_thin_evidence(self):
+        levels = {"A": 2.0, "B": 1.0}
+        priors = {"FWD": dict(xg90=0.4)}
+        veteran = make_player(hist=[season_row("2025/26", 3000, 34, xg=20.0)])
+        rookie = make_player(hist=[])
+        rookie["price"] = 5.5
+        v_weak, _ = PM.shrink(veteran, "xg90", PM.club_attack_priors(priors, "FWD", 1.0, levels, 0.5))
+        v_strong, _ = PM.shrink(veteran, "xg90", PM.club_attack_priors(priors, "FWD", 2.0, levels, 0.5))
+        r_weak, _ = PM.shrink(rookie, "xg90", PM.club_attack_priors(priors, "FWD", 1.0, levels, 0.5))
+        r_strong, _ = PM.shrink(rookie, "xg90", PM.club_attack_priors(priors, "FWD", 2.0, levels, 0.5))
+        self.assertLess(v_strong / v_weak, 1.05)          # ~8% prior weight x 41%
+        self.assertAlmostEqual(r_strong / r_weak, math.sqrt(2.0))
+
+
 class DefconStabilityTests(unittest.TestCase):
     def test_a_full_recorded_season_of_defcon_is_mostly_believed(self):
         row = season_row("2025/26", 2700, 30)

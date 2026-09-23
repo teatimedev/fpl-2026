@@ -475,6 +475,8 @@ def club_forward_check(chosen, history=None):
 VOLUME_SELECT = ('2023/24',)             # tune lambda / level constants here...
 VOLUME_HOLDOUT = ('2024/25', '2025/26')  # ...and judge the variants here, once
 VOLUME_LAMBDAS = (0.0, 0.25, 0.4, 0.5, 0.56, 0.6, 0.75, 1.0)
+# club-aware shrinkage target: positional prior x (club mean xG / league mean) ** g
+CLUB_PRIOR_GAMMAS = (0.5, 1.0)
 LEAGUE_XG = 1.45                          # project()'s league-average divisor
 
 
@@ -547,6 +549,12 @@ def run_volume(panel, hist_rows, meta, seasons):
             club_fx[home].append(f['lam'])
             club_fx[away].append(f['mu'])
         club_mean = {t: float(np.mean(v)) for t, v in club_fx.items()}
+        league_mean = float(np.mean(list(club_mean.values())))
+        # club-strength terciles as of the deadline (the fitted club level)
+        order = sorted(club_mean, key=club_mean.get)
+        third = len(order) / 3.0
+        tercile = {t: ('weak' if i < third else 'mid' if i < 2 * third else 'strong')
+                   for i, t in enumerate(order)}
         # positional share prior and per-player past shares from earlier
         # seasons' per-fixture rows (xG recorded only)
         share_prior = defaultdict(lambda: [0.0, 0.0, 0.0, 0.0])
@@ -589,12 +597,17 @@ def run_volume(panel, hist_rows, meta, seasons):
                         for d, h in [(idx - SEASONS.index(s), hist_rows.get(code, {}).get(s))]
                         if h and h['mins'] >= 200]
                 rate = {}
+                club_scale = club_mean.get(r['team'], league_mean) / league_mean
                 for m, j in (('xg90', 1), ('xa90', 2)):
                     cur_rate = c[j] / c[0] * 90 if c[0] >= 90 else 0.0
-                    rate[m] = blend_rate([(d, mn, h[m]) for d, mn, h in past],
-                                         c[0] if c[0] >= 90 else 0, cur_rate, 1,
-                                         pos_prior[m].get(pos, 0.0),
-                                         PM.STABILITY.get(m, 0.9))
+                    for g in (0.0, *CLUB_PRIOR_GAMMAS):
+                        # g = 0 is production's positional prior; g > 0 scales
+                        # it by the club's attacking level (item 3 follow-up)
+                        rate[(m, g)] = blend_rate([(d, mn, h[m]) for d, mn, h in past],
+                                                  c[0] if c[0] >= 90 else 0, cur_rate, 1,
+                                                  pos_prior[m].get(pos, 0.0) * club_scale ** g,
+                                                  PM.STABILITY.get(m, 0.9))
+                    rate[m] = rate[(m, 0.0)]
                 shares = []
                 for j, (stab, prior_s) in enumerate(((PM.STABILITY['xg90'], pos_share.get(pos, (0, 0))[0]),
                                                      (PM.STABILITY['xa90'], pos_share.get(pos, (0, 0))[1]))):
@@ -617,7 +630,10 @@ def run_volume(panel, hist_rows, meta, seasons):
                     code=code, pos=pos, mins=r['mins'], xg=r['xg'] or 0.0, xa=r['xa'] or 0.0,
                     goals=r['goals'] or 0, assists=r['assists'] or 0, team=r['team'],
                     xg90=rate['xg90'], xa90=rate['xa90'], share_g=shares[0], share_a=shares[1],
-                    fxg=f['xg'], club_mean=club_mean.get(r['team'], LEAGUE_XG)))
+                    fxg=f['xg'], club_mean=club_mean.get(r['team'], LEAGUE_XG),
+                    tercile=tercile.get(r['team'], 'mid'),
+                    club_rates={g: (rate[('xg90', g)], rate[('xa90', g)])
+                                for g in CLUB_PRIOR_GAMMAS}))
             for (fid, team), plist in fixtures.items():
                 fxg = plist[0]['fxg']
                 vol = fxg / LEAGUE_XG
@@ -635,6 +651,8 @@ def run_volume(panel, hist_rows, meta, seasons):
                     for mu in (0.5, 1.0):
                         out[f'relative mu={mu:g}'] = (p['xg90'] * e * rel ** mu,
                                                       p['xa90'] * e * rel ** mu)
+                    for g, (cg, ca) in p['club_rates'].items():
+                        out[f'rel+clubprior g={g:g}'] = (cg * e * rel ** 0.5, ca * e * rel ** 0.5)
                     out['rate-share'] = (fxg * p['xg90'] * p['mins'] / tot_g if tot_g else 0.0,
                                          fxg * p['xa90'] * p['mins'] / tot_a if tot_a else 0.0)
                     out['share'] = (p['share_g'] * e * fxg, p['share_a'] * e * fxg)
@@ -643,7 +661,7 @@ def run_volume(panel, hist_rows, meta, seasons):
                     for name, (pg, pa) in out.items():
                         preds[name][season].append((pg, pa, p['xg'], p['xa'], p['pos'],
                                                     p['goals'], p['assists'], (fid, team), tier, fxg,
-                                                    p['code'], rnd, p['mins']))
+                                                    p['code'], rnd, p['mins'], p['tercile']))
             # the round is over: fold its rows into the running sums
             for code, r in by_round[rnd]:
                 if r['xg'] is None or r['mins'] <= 0:
@@ -740,7 +758,8 @@ def run_volume(panel, hist_rows, meta, seasons):
           '(>= 450 minutes in the window) ---')
     print(f"{'variant':<17}{'window':<9}{'n':>6}{'xG rho':>8}{'xGI rho':>9}"
           f"{'att-pts rho':>12}{'xG dev':>9}")
-    for name in ('current', best_lam, 'lambda=0', 'relative mu=0.5', 'relative mu=1', 'share'):
+    for name in ('current', best_lam, 'lambda=0', 'relative mu=0.5', 'relative mu=1', 'share',
+                 *(f'rel+clubprior g={g:g}' for g in CLUB_PRIOR_GAMMAS)):
         kg, ka = level[name]
         for label, lo, hi in (('GW2-8', 2, 8), ('GW2-38', 2, 38)):
             tot = defaultdict(lambda: [0.0] * 7)
@@ -764,6 +783,65 @@ def run_volume(panel, hist_rows, meta, seasons):
             print(f'{name:<17}{label:<9}{len(v):>6}{spearman(col(0), col(1)):>8.3f}'
                   f'{spearman(col(2), col(3)):>9.3f}{spearman(col(4), col(5)):>12.3f}'
                   f'{poisson_deviance(col(0), col(1)):>9.4f}')
+
+    # Calibration by club strength (as-of fitted club level, terciles within
+    # each season), level constants from VOLUME_SELECT applied: does the rule
+    # over-predict weak clubs' players relative to strong clubs'?
+    print('\n--- hold-out calibration by club-strength tercile: Σpred / Σactual ---')
+    print(f"{'variant':<22}{'cohort':<10}" + ''.join(
+        f'{m + " " + t:>12}' for m in ('xG', 'xA', 'pts') for t in ('weak', 'mid', 'strong')))
+    club_names = ['current', 'relative mu=0.5'] + [f'rel+clubprior g={g:g}' for g in CLUB_PRIOR_GAMMAS]
+    for name in club_names:
+        kg, ka = level[name]
+        for cohort, keep in (('all', lambda o: True), ('60+ min', lambda o: o[12] >= 60)):
+            acc = defaultdict(lambda: [0.0] * 6)
+            for s in VOLUME_HOLDOUT:
+                for o in preds[name].get(s, []):
+                    if not keep(o):
+                        continue
+                    a = acc[o[13]]
+                    gp = PM.GOAL_PTS.get(o[4], 5)
+                    a[0] += o[0] * kg
+                    a[1] += o[2]
+                    a[2] += o[1] * ka
+                    a[3] += o[3]
+                    a[4] += o[0] * kg * gp + o[1] * ka * 3
+                    a[5] += o[5] * gp + o[6] * 3
+            cells = []
+            for i in (0, 2, 4):
+                for t in ('weak', 'mid', 'strong'):
+                    a = acc[t]
+                    cells.append(a[i] / a[i + 1] if a[i + 1] else float('nan'))
+            print(f'{name:<22}{cohort:<10}' + ''.join(f'{c:>12.3f}' for c in cells))
+
+    # the club-aware prior against production's relative rule: g chosen on
+    # VOLUME_SELECT by xG deviance, paired gameweek-block bootstrap on the
+    # hold-out (resampling whole (season, round) blocks)
+    sel_dev = {g: sel[f'rel+clubprior g={g:g}'][0] for g in CLUB_PRIOR_GAMMAS}
+    g_best = min(sel_dev, key=sel_dev.get)
+    name = f'rel+clubprior g={g_best:g}'
+    print(f'\nclub-aware prior chosen on {", ".join(VOLUME_SELECT)}: {name}')
+    for metric, i_p, i_a, lv in (('xG', 0, 2, 0), ('xA', 1, 3, 1)):
+        blocks = defaultdict(lambda: [0.0, 0])
+        for s in VOLUME_HOLDOUT:
+            for a, b in zip(preds[name].get(s, []), preds['relative mu=0.5'].get(s, [])):
+                pa_ = max(a[i_p] * level[name][lv], 1e-9)
+                pb_ = max(b[i_p] * level['relative mu=0.5'][lv], 1e-9)
+                y = a[i_a]
+                dev = lambda p: 2 * ((y * math.log(y / p) if y > 0 else 0.0) - (y - p))
+                blk = blocks[(s, a[11])]
+                blk[0] += dev(pa_) - dev(pb_)
+                blk[1] += 1
+        keys = list(blocks)
+        rng = np.random.default_rng(20260923)
+        boot = []
+        for _ in range(2000):
+            pick = rng.integers(0, len(keys), len(keys))
+            boot.append(sum(blocks[keys[j]][0] for j in pick) / sum(blocks[keys[j]][1] for j in pick))
+        total = sum(v[0] for v in blocks.values()) / sum(v[1] for v in blocks.values())
+        lo, hi = np.percentile(boot, [2.5, 97.5])
+        print(f'  {metric} deviance vs relative mu=0.5: {total:+.5f} '
+              f'(95% gameweek-block interval {lo:+.5f} to {hi:+.5f}, {len(keys)} blocks)')
     return best_lam
 
 
