@@ -6070,6 +6070,78 @@
       "canonical": "Mason Miley",
       "club": "NEW",
       "player_id": 659
+    },
+    {
+      "aliases": [
+        "Fredrick",
+        "Benjamin Fredrick"
+      ],
+      "canonical": "Benjamin Fredrick",
+      "club": "BRE",
+      "player_id": 660
+    },
+    {
+      "aliases": [
+        "Balcombe",
+        "Ellery Balcombe"
+      ],
+      "canonical": "Ellery Balcombe",
+      "club": "BRE",
+      "player_id": 661
+    },
+    {
+      "aliases": [
+        "Nicoll-Jazuli",
+        "Mahdi Nicoll-Jazuli"
+      ],
+      "canonical": "Mahdi Nicoll-Jazuli",
+      "club": "CHE",
+      "player_id": 662
+    },
+    {
+      "aliases": [
+        "Pivas",
+        "Miodrag Pivas"
+      ],
+      "canonical": "Miodrag Pivas",
+      "club": "NEW",
+      "player_id": 663
+    },
+    {
+      "aliases": [
+        "Salia",
+        "Vakhtang Salia"
+      ],
+      "canonical": "Vakhtang Salia",
+      "club": "NEW",
+      "player_id": 664
+    },
+    {
+      "aliases": [
+        "Mills",
+        "Michael Mills"
+      ],
+      "canonical": "Michael Mills",
+      "club": "NEW",
+      "player_id": 665
+    },
+    {
+      "aliases": [
+        "Thompson",
+        "Kyran Thompson"
+      ],
+      "canonical": "Kyran Thompson",
+      "club": "NEW",
+      "player_id": 666
+    },
+    {
+      "aliases": [
+        "Wright",
+        "James Wright"
+      ],
+      "canonical": "James Wright",
+      "club": "AVL",
+      "player_id": 667
     }
   ],
   "version": 1
