@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 6
 
-Deadline **Sat 10 Oct, 10:00 UTC** — 16d 22h away.
+Deadline **Sat 10 Oct, 10:00 UTC** — 16d 4h away.
 Projections cover GW6–11.
 
 ## GW5 in review — what happened, and what it does and does not change
@@ -125,7 +125,7 @@ Selected path under the current policy: **407.4** pts (0 hits). Making no move t
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
-| Szoboszlai → Barnes | +0.18 | 2.0 | no |
+| Szoboszlai → Barnes | -0.61 | 2.0 | no |
 | Szoboszlai → Enzo | +0.37 | 2.0 | no |
 | Sadiki → Gomez | +0.14 | 2.0 | no |
 | Tarkowski → Guéhi | -1.92 | 2.0 | no |
@@ -160,28 +160,23 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Groß £5.8 ⭑ | +22.2% | +676,423 | João Pedro £7.7 ⭑ | -4.0% | -287,687 |
-| Schade £6.2 | +26.2% | +310,210 | Szoboszlai £7.0 ⭑ | -4.1% | -149,380 |
-| Kostoulas £5.6 | +64.1% | +245,796 | Elanga £6.1 | -28.7% | -148,044 |
-| De Cuyper £4.9 | +7.5% | +224,691 | B.Fernandes £11.9 | -3.2% | -137,546 |
-| Hall £5.3 | +10.4% | +193,210 | M.Sangaré £5.6 | -10.5% | -116,196 |
-| Tarkowski £6.1 ⭑ | +9.3% | +162,861 | Tzolis £6.3 | -8.5% | -114,050 |
+| Groß £5.8 ⭑ | +22.7% | +695,904 | João Pedro £7.7 ⭑ | -4.1% | -297,001 |
+| Schade £6.2 | +26.8% | +319,765 | Szoboszlai £7.0 ⭑ | -4.3% | -154,290 |
+| Kostoulas £5.6 | +63.9% | +252,342 | Elanga £6.1 | -29.4% | -151,343 |
+| De Cuyper £4.9 | +7.8% | +232,936 | B.Fernandes £11.9 | -3.3% | -140,951 |
+| Hall £5.3 | +10.7% | +199,510 | M.Sangaré £5.6 | -10.8% | -118,924 |
+| Tarkowski £6.1 ⭑ | +9.7% | +169,931 | Tzolis £6.3 | -8.6% | -116,636 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Target Gomez (net -63k this event) is drifting towards a fall; no rush — waiting could save 0.1m [net -63k this event (in 13k / out 76k), sel 4.1% = Q2 (~113k to move), price 5.0 over 12 snaps (+0.0m in window)]
-- Squad player Mbeumo (net -189k this event) at fall risk (-0.1m hurts the bank) [net -189k this event (in 91k / out 280k), sel 21.6% = Q3 (~150k to move), price 7.9 over 12 snaps (-0.1m in window)]
-- Squad player Szoboszlai (net -383k this event) at fall risk (-0.1m hurts the bank) [net -383k this event (in 87k / out 470k), sel 34.2% = Q3 (~150k to move), price 7.0 over 12 snaps (+0.0m in window)]
-- Squad player João Pedro (net -378k this event) at fall risk (-0.1m hurts the bank) [net -378k this event (in 257k / out 635k), sel 68.4% = Q3 (~150k to move), price 7.8 over 12 snaps (+0.3m in window), already +1x0.1m this event]
+- Squad player Mbeumo (net -83k this event) at fall risk (-0.1m hurts the bank) [net -83k this event (in 26k / out 109k), sel 20.7% = Q3 (~150k to move), price 7.9 over 13 snaps (-0.1m in window)]
+- Squad player Szoboszlai (net -149k this event) at fall risk (-0.1m hurts the bank) [net -149k this event (in 28k / out 177k), sel 33.1% = Q3 (~150k to move), price 7.0 over 13 snaps (+0.0m in window)]
+- Squad player João Pedro (net -288k this event) at fall risk (-0.1m hurts the bank) [net -288k this event (in 45k / out 332k), sel 65.7% = Q3 (~150k to move), price 7.7 over 13 snaps (+0.2m in window), already -1x0.1m this event]
 
-_Based on 12 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
+_Based on 13 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-09-23 12:13 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
-
-## Scouting
-
-5 sourced observations; 2 API calls. Review these alongside the transfer stress tests in the app.
+_Generated 2026-09-24 05:21 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
