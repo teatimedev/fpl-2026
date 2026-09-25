@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 6
 
-Deadline **Sat 10 Oct, 10:00 UTC** — 16d 4h away.
+Deadline **Sat 10 Oct, 10:00 UTC** — 15d 8h away.
 Projections cover GW6–11.
 
 ## GW5 in review — what happened, and what it does and does not change
 
-_359 players classified: 26 unavailable, 20 minutes loss, 31 minutes watch, 20 minutes gain, 7 role change, 65 variance, 190 on model. Retrospective classes graded: 4 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_359 players classified: 29 unavailable, 20 minutes loss, 31 minutes watch, 20 minutes gain, 6 role change, 64 variance, 189 on model. Retrospective classes graded: 4 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -42,7 +42,7 @@ _359 players classified: 26 unavailable, 20 minutes loss, 31 minutes watch, 20 m
 - breakout minutes (started at <= 40%): Ndiaye (MCI, 0.1 xG, 5 pts; GW6–11 18.7), Solanke (TOT, 0.1 xG, 2 pts; GW6–11 14.2), Willock (NEW, 0.2 xG, 10 pts; GW6–11 14.1), Manzambi (AVL, 0.4 xG, 13 pts; GW6–11 13.7), Schuster (BRE, 0.0 xG, 14 pts; GW6–11 13.5)
 - lost their place — benched while healthy: M.Sangaré (BRE, 0.0 xG, 0 pts; GW6–11 17.9), Mosquera (ARS, 0.0 xG, 0 pts; GW6–11 17.1), George (EVE, 0.0 xG, 1 pts; GW6–11 15.9), Yalcouyé (BHA, 0.0 xG, 1 pts; GW6–11 15.8), Barkley (AVL, 0.0 xG, 1 pts; GW6–11 15.0)
 - hauled on low xG — do not chase: Cunha (MUN, 0.1 xG, 10 pts; GW6–11 29.8), Schade (BRE, 0.5 xG, 9 pts; GW6–11 28.4), Buendía (AVL, 0.1 xG, 12 pts; GW6–11 24.7), Kostoulas (BHA, 0.2 xG, 10 pts; GW6–11 23.7), Hall (NEW, 0.2 xG, 13 pts; GW6–11 21.5)
-- blanked on good xG — unchanged as targets: Havertz (ARS, 0.8 xG, 2 pts; GW6–11 28.1), Wissa (NEW, 0.8 xG, 0 pts; GW6–11 26.4), Calvert-Lewin (LEE, 0.5 xG, 2 pts; GW6–11 24.0), Gakpo (LIV, 0.2 xG, 3 pts; GW6–11 23.8)
+- blanked on good xG — unchanged as targets: Wissa (NEW, 0.8 xG, 0 pts; GW6–11 26.4), Calvert-Lewin (LEE, 0.5 xG, 2 pts; GW6–11 24.0), Gakpo (LIV, 0.2 xG, 3 pts; GW6–11 23.8)
 
 ## Captain: **Saka** (ARS)
 
@@ -125,7 +125,7 @@ Selected path under the current policy: **407.4** pts (0 hits). Making no move t
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
-| Szoboszlai → Barnes | -0.61 | 2.0 | no |
+| Szoboszlai → Barnes | +0.18 | 2.0 | no |
 | Szoboszlai → Enzo | +0.37 | 2.0 | no |
 | Sadiki → Gomez | +0.14 | 2.0 | no |
 | Tarkowski → Guéhi | -1.92 | 2.0 | no |
@@ -148,8 +148,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 8.1 | GW8: 9.4 | Hold. Best-looking week for this one is GW8 (9.4 extra points); this week is 8.1. Second copy (GW20–38): best week GW37 (9.1). |
 | Triple Captain | — | GW36: 8.8 (Haaland) | Hold. Best week for this one is GW36: Haaland (8.8 extra). |
-| Free Hit | 2.6 | GW16: 7.3 | Hold. Widest gap left is GW16 (7.3 behind the optimised one-week squad); this week 2.6. |
-| Wildcard | +4.8 over the window | — | Hold. Unlimited transfers now are worth 4.8 over the window. The squad is holding up (gap to the optimised one-week squad 2.6–7.1 over the next weeks). |
+| Free Hit | 4.1 | GW16: 7.3 | Hold. Widest gap left is GW16 (7.3 behind the optimised one-week squad); this week 4.1. |
+| Wildcard | +3.9 over the window | — | Hold. Unlimited transfers now are worth 3.9 over the window. The squad is holding up (gap to the optimised one-week squad 4.1–7.1 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -160,23 +160,23 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Groß £5.8 ⭑ | +22.7% | +695,904 | João Pedro £7.7 ⭑ | -4.1% | -297,001 |
-| Schade £6.2 | +26.8% | +319,765 | Szoboszlai £7.0 ⭑ | -4.3% | -154,290 |
-| Kostoulas £5.6 | +63.9% | +252,342 | Elanga £6.1 | -29.4% | -151,343 |
-| De Cuyper £4.9 | +7.8% | +232,936 | B.Fernandes £11.9 | -3.3% | -140,951 |
-| Hall £5.3 | +10.7% | +199,510 | M.Sangaré £5.6 | -10.8% | -118,924 |
-| Tarkowski £6.1 ⭑ | +9.7% | +169,931 | Tzolis £6.3 | -8.6% | -116,636 |
+| Groß £5.8 ⭑ | +23.1% | +715,700 | João Pedro £7.7 ⭑ | -4.3% | -306,332 |
+| Schade £6.2 | +27.1% | +329,969 | Szoboszlai £7.0 ⭑ | -4.4% | -159,197 |
+| Kostoulas £5.6 | +64.0% | +259,954 | Elanga £6.1 | -30.7% | -154,761 |
+| De Cuyper £4.9 | +8.3% | +249,815 | B.Fernandes £11.9 | -3.4% | -144,197 |
+| Hall £5.3 | +11.0% | +205,793 | M.Sangaré £5.6 | -11.1% | -121,738 |
+| Tarkowski £6.1 ⭑ | +10.0% | +176,726 | Tzolis £6.3 | -8.8% | -119,085 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Squad player Mbeumo (net -83k this event) at fall risk (-0.1m hurts the bank) [net -83k this event (in 26k / out 109k), sel 20.7% = Q3 (~150k to move), price 7.9 over 13 snaps (-0.1m in window)]
-- Squad player Szoboszlai (net -149k this event) at fall risk (-0.1m hurts the bank) [net -149k this event (in 28k / out 177k), sel 33.1% = Q3 (~150k to move), price 7.0 over 13 snaps (+0.0m in window)]
-- Squad player João Pedro (net -288k this event) at fall risk (-0.1m hurts the bank) [net -288k this event (in 45k / out 332k), sel 65.7% = Q3 (~150k to move), price 7.7 over 13 snaps (+0.2m in window), already -1x0.1m this event]
+- Squad player Mbeumo (net -85k this event) at fall risk (-0.1m hurts the bank) [net -85k this event (in 28k / out 113k), sel 20.7% = Q3 (~150k to move), price 7.9 over 14 snaps (-0.1m in window)]
+- Squad player Szoboszlai (net -154k this event) at fall risk (-0.1m hurts the bank) [net -154k this event (in 29k / out 183k), sel 33.0% = Q3 (~150k to move), price 7.0 over 14 snaps (+0.0m in window)]
+- Squad player João Pedro (net -297k this event) at fall risk (-0.1m hurts the bank) [net -297k this event (in 47k / out 344k), sel 65.6% = Q3 (~150k to move), price 7.7 over 14 snaps (+0.2m in window), already -1x0.1m this event]
 
-_Based on 13 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
+_Based on 14 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-09-24 05:21 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-09-25 01:58 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
