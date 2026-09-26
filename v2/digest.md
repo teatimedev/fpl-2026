@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 6
 
-Deadline **Sat 10 Oct, 10:00 UTC** — 15d 8h away.
+Deadline **Sat 10 Oct, 10:00 UTC** — 14d 8h away.
 Projections cover GW6–11.
 
 ## GW5 in review — what happened, and what it does and does not change
 
-_359 players classified: 29 unavailable, 20 minutes loss, 31 minutes watch, 20 minutes gain, 6 role change, 64 variance, 189 on model. Retrospective classes graded: 4 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_359 players classified: 30 unavailable, 20 minutes loss, 31 minutes watch, 20 minutes gain, 6 role change, 64 variance, 188 on model. Retrospective classes graded: 4 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -125,18 +125,18 @@ Selected path under the current policy: **407.4** pts (0 hits). Making no move t
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
-| Szoboszlai → Barnes | +0.18 | 2.0 | no |
-| Szoboszlai → Enzo | +0.37 | 2.0 | no |
-| Sadiki → Gomez | +0.14 | 2.0 | no |
-| Tarkowski → Guéhi | -1.92 | 2.0 | no |
-| Sadiki, Szoboszlai → Schade, Barnes | -2.73 | 4.0 | no |
+| Szoboszlai → Barnes | +0.24 | 2.0 | no |
+| Szoboszlai → Enzo | +0.01 | 2.0 | no |
+| Sadiki → Gomez | +0.19 | 2.0 | no |
+| Tarkowski → Guéhi | -1.87 | 2.0 | no |
+| Sadiki, Szoboszlai → Schade, Barnes | -2.50 | 4.0 | no |
 
 - **GW6** 65.5 pts, C Saka, 1 FT  hold
 - **GW7** 72.0 pts, C Haaland, 2 FT  Tarkowski → Robinson, Szoboszlai → Cherki
 - **GW8** 67.0 pts, C Haaland, 1 FT  Obi → Emersonn
 - **GW9** 64.8 pts, C Haaland, 1 FT  Sadiki → Gomez
 - **GW10** 70.1 pts, C Saka, 1 FT  Thiaw → Mykolenko
-- **GW11** 68.0 pts, C Haaland, 1 FT  Robinson → De Cuyper
+- **GW11** 68.0 pts, C Haaland, 1 FT  Mykolenko → De Cuyper
 
 _The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
 
@@ -148,8 +148,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 8.1 | GW8: 9.4 | Hold. Best-looking week for this one is GW8 (9.4 extra points); this week is 8.1. Second copy (GW20–38): best week GW37 (9.1). |
 | Triple Captain | — | GW36: 8.8 (Haaland) | Hold. Best week for this one is GW36: Haaland (8.8 extra). |
-| Free Hit | 4.1 | GW16: 7.3 | Hold. Widest gap left is GW16 (7.3 behind the optimised one-week squad); this week 4.1. |
-| Wildcard | +3.9 over the window | — | Hold. Unlimited transfers now are worth 3.9 over the window. The squad is holding up (gap to the optimised one-week squad 4.1–7.1 over the next weeks). |
+| Free Hit | 2.7 | GW16: 7.4 | Hold. Widest gap left is GW16 (7.4 behind the optimised one-week squad); this week 2.7. |
+| Wildcard | +4.8 over the window | — | Hold. Unlimited transfers now are worth 4.8 over the window. The squad is holding up (gap to the optimised one-week squad 2.7–7.2 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -160,23 +160,23 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Groß £5.8 ⭑ | +23.1% | +715,700 | João Pedro £7.7 ⭑ | -4.3% | -306,332 |
-| Schade £6.2 | +27.1% | +329,969 | Szoboszlai £7.0 ⭑ | -4.4% | -159,197 |
-| Kostoulas £5.6 | +64.0% | +259,954 | Elanga £6.1 | -30.7% | -154,761 |
-| De Cuyper £4.9 | +8.3% | +249,815 | B.Fernandes £11.9 | -3.4% | -144,197 |
-| Hall £5.3 | +11.0% | +205,793 | M.Sangaré £5.6 | -11.1% | -121,738 |
-| Tarkowski £6.1 ⭑ | +10.0% | +176,726 | Tzolis £6.3 | -8.8% | -119,085 |
+| Groß £5.8 ⭑ | +23.5% | +733,351 | João Pedro £7.7 ⭑ | -4.4% | -314,226 |
+| Schade £6.2 | +27.6% | +339,940 | Szoboszlai £7.0 ⭑ | -4.5% | -164,021 |
+| Kostoulas £5.6 | +64.6% | +269,373 | Elanga £6.1 | -31.2% | -157,790 |
+| De Cuyper £5.0 | +8.6% | +261,204 | B.Fernandes £11.9 | -3.5% | -146,764 |
+| Hall £5.3 | +11.3% | +211,320 | M.Sangaré £5.6 | -11.3% | -124,250 |
+| Tarkowski £6.1 ⭑ | +10.3% | +183,146 | Tzolis £6.3 | -9.0% | -121,117 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Squad player Mbeumo (net -85k this event) at fall risk (-0.1m hurts the bank) [net -85k this event (in 28k / out 113k), sel 20.7% = Q3 (~150k to move), price 7.9 over 14 snaps (-0.1m in window)]
-- Squad player Szoboszlai (net -154k this event) at fall risk (-0.1m hurts the bank) [net -154k this event (in 29k / out 183k), sel 33.0% = Q3 (~150k to move), price 7.0 over 14 snaps (+0.0m in window)]
-- Squad player João Pedro (net -297k this event) at fall risk (-0.1m hurts the bank) [net -297k this event (in 47k / out 344k), sel 65.6% = Q3 (~150k to move), price 7.7 over 14 snaps (+0.2m in window), already -1x0.1m this event]
+- Squad player Mbeumo (net -87k this event) at fall risk (-0.1m hurts the bank) [net -87k this event (in 29k / out 117k), sel 20.6% = Q3 (~150k to move), price 7.9 over 15 snaps (-0.1m in window)]
+- Squad player Szoboszlai (net -159k this event) at fall risk (-0.1m hurts the bank) [net -159k this event (in 30k / out 189k), sel 33.0% = Q3 (~150k to move), price 7.0 over 15 snaps (+0.0m in window)]
+- Squad player João Pedro (net -306k this event) at fall risk (-0.1m hurts the bank) [net -306k this event (in 50k / out 356k), sel 65.5% = Q3 (~150k to move), price 7.7 over 15 snaps (+0.2m in window), already -1x0.1m this event]
 
-_Based on 14 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
+_Based on 15 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-09-25 01:58 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-09-26 02:03 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
