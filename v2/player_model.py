@@ -9,7 +9,7 @@ stability.py rather than from judgement. The headline findings that shaped it:
   xGI/90            0.91    the most repeatable attacking signal there is
   xG/90             0.90    and it beats goals/90 (0.82) at predicting goals
   xA/90             0.84    beats assists/90 (0.59) everywhere, hugely for FWDs
-  DefCon/90         0.56    a real, persistent skill, but needs real shrinkage
+  DefCon/90         0.93    a real, persistent skill (0.56 before the unrecorded seasons were dropped)
   starts            0.46    only moderately repeatable
   clean sheets/90   0.21    ALMOST NO SIGNAL -- 0.09 for MID and FWD
   bonus/90 (DEF)    0.14    defender bonus is close to pure noise
@@ -35,6 +35,7 @@ import re
 import sqlite3
 import sys
 from collections import defaultdict
+from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -120,11 +121,12 @@ GW_ROWS_LOADED = False
 # hold a zero. HORIZON is the last gameweek covered, START_GW the first.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gwclock import window as _gw_window          # noqa: E402
+from attack_volume import RULE as ATTACK_VOLUME_RULE  # noqa: E402
+from attack_volume import attack_volume, club_mean_xg  # noqa: E402
 from availability import (  # noqa: E402
+    availability_for_gameweek,
     availability_forecast,
-    deadline_start_probability,
     load_overrides,
-    status_for_gameweek,
 )
 # Importing statistical helpers must not access a live calendar. Production
 # configures the window below; replay/library callers must supply their own.
@@ -132,6 +134,7 @@ START_GW = HORIZON = WINDOW = None
 LAST_GW = 38
 SEASON = {}                       # id -> per-gameweek projection to LAST_GW
 SEASON_PLAY = {}                  # matching chance of appearing in each GW
+SEASON_RATE = {}                  # the rate-component part of SEASON (item 4)
 OUT_SEASON = ROOT / 'v2' / 'projections_season.json'
 AVAILABILITY_OVERRIDES = load_overrides()
 BOOT_CACHE = ROOT / 'v2' / 'cache' / 'bootstrap.json'
@@ -144,7 +147,19 @@ else:
 # Measured year-over-year stability, used as the empirical-Bayes reliability of
 # a full season of evidence. A metric at 0.90 keeps nearly all of a player's own
 # number; one at 0.21 is pulled almost entirely to the positional average.
-STABILITY = {'xg90': 0.90, 'xa90': 0.84, 'dc90': 0.56, 'bonus90': 0.54,
+#
+# DefCon was 0.56, measured before the unrecorded pre-2024/25 zeros were
+# excluded; on recorded seasons it repeats at 0.93 (system audit, 12 Sep).
+# MEASURED PREDICTIVELY 23 Sep 2026 (backtest_inseason.py --stability;
+# research/model-phase3-2026-09-23.md, item 6): rest-of-season DefCon/90 for
+# outfielders, chosen on 2025/26 (the only imported season with per-fixture
+# DefCon; 0.93 best at every n, wMAE 1.31 -> 1.18 pooled) and judged on this
+# season's GW1-2 -> GW3-5 (169 players): wMAE 1.929 -> 1.814, Spearman
+# 0.669 -> 0.706. At 0.93 the k floor of 0.15 binds, so 0.87-0.93 are one
+# setting. Defender xG (audit: 0.29) was tested the same way and REJECTED:
+# 0.29, chosen on 2023/24, ties 0.90 on 2024/25-2025/26 wMAE (0.0276) and
+# ranks worse (Spearman 0.263 vs 0.316); xg90 stays pooled at 0.90.
+STABILITY = {'xg90': 0.90, 'xa90': 0.84, 'dc90': 0.93, 'bonus90': 0.54,
              'saves90': 0.70, 'yellow90': 0.45}
 STABILITY_DEF_BONUS = 0.14      # defender bonus specifically is near-noise
 
@@ -385,6 +400,36 @@ def context_multiplier(p):
     return CONTEXT_CURRENT_MULT if context_changed(p) else 1.0
 
 
+# The positional prior is club-agnostic, so shrinkage pulls a weak club's
+# attackers UP towards a league-average level their club cannot supply (and a
+# strong club's down). Under the relative volume rule that left weak-club
+# regulars over-predicted: on the 2024/25-2025/26 hold-out, xG
+# Σpred/Σactual for 60+ minute player-fixtures was 1.19 in the weakest
+# tercile of clubs against 1.08 in the strongest (attacking points 1.06 vs
+# 0.96). Scaling the xG/xA prior by (club mean xG / league mean) ** GAMMA
+# closes that to 1.15 vs 1.11 (points 1.02 vs 1.00). MEASURED 23 Sep 2026
+# (backtest_inseason.py --volume; research/model-phase3-2026-09-23.md, item
+# 3 follow-up): GAMMA chosen on 2023/24 from {0.5, 1}; on 2024/25-2025/26
+# xG deviance 0.16506 -> 0.16472 (gameweek-block interval -0.00060 to
+# -0.00009), xA 0.09291 -> 0.09261 (-0.00045 to -0.00015), better in both
+# seasons. FPL_CLUB_PRIOR=off reverts.
+CLUB_PRIOR_GAMMA = (0.0 if os.environ.get('FPL_CLUB_PRIOR', '').lower() in ('off', '0', 'none')
+                    else 0.5)
+
+
+def club_attack_priors(priors, pos, club_level, club_levels, gamma=None):
+    """`priors` with this position's xG/90 and xA/90 targets scaled by the
+    club's mean fixture xG against the league's mean club, ** gamma."""
+    gamma = CLUB_PRIOR_GAMMA if gamma is None else gamma
+    if not gamma or not club_level or not club_levels:
+        return priors
+    league = sum(club_levels.values()) / len(club_levels)
+    scale = (club_level / league) ** gamma
+    base = priors.get(pos, {})
+    scaled = dict(base, **{m: base[m] * scale for m in ('xg90', 'xa90') if m in base})
+    return dict(priors, **{pos: scaled})
+
+
 def shrink(p, metric, priors, current_mult=None):
     """Empirical-Bayes estimate of a player's true rate for one metric.
 
@@ -460,7 +505,12 @@ def minutes_prior(p, players):
              'DEF': [0.85, 0.80, 0.73, 0.63, 0.46, 0.29, 0.16, 0.08],
              'MID': [0.85, 0.78, 0.68, 0.56, 0.40, 0.25, 0.14, 0.07],
              'FWD': [0.82, 0.52, 0.28, 0.14, 0.07]}[p['pos']]
-    rank_rate = table[min(rank, len(table) - 1)]
+    # Players on the same price share the slots they jointly occupy: two
+    # 5.0 keepers are each half the #1 and half the #2, not both the #1
+    # (peers.index() used to hand every tied player the higher rank).
+    tied = max(1, peers.count(p['price']))
+    rank_rate = sum(table[min(r, len(table) - 1)]
+                    for r in range(rank, rank + tied)) / tied
 
     if observed is None:
         start_rate = rank_rate * 0.9
@@ -632,6 +682,163 @@ def minutes_model(p, players, rule=None):
     return manager_minutes_blend(p, updated)
 
 
+# ------------------------------------------------------- club starts
+# Eleven players start every match, one of them in goal. Player-by-player
+# start probabilities do not know that: in the GW6 forecast of 23 Sep 2026
+# Hull's summed to 12.1 per fixture and Bournemouth's keepers to 1.22, and in
+# the walk-forward panel 100% of club fixtures summed above 11 (mean 12.1).
+# normalise_club_starts() is the joint constraint.
+#
+# MEASURED 23 Sep 2026 (backtest_inseason.py --club; research/
+# model-phase3-2026-09-23.md, item 2), production recency rule, next-GW
+# starts. Chosen on 2022/23-2023/24 among logit/proportional x capped/
+# two-sided x keeper-split/total-only; judged once on 2024/25-2025/26
+# (54,392 player-fixtures):
+#   none                        Brier 0.09641  log-loss 0.31244  minutes MAE 17.74
+#   logit, two-sided, GK split        0.09548            0.30733              17.38
+# Brier -0.00093 (95% gameweek-block interval -0.00123 to -0.00067). On this
+# season's archived, availability-aware deadline forecasts (GW1-5, 3,183
+# player-fixtures) it is 0.1021 -> 0.0979. Proportional scaling barely
+# helps (0.09629): it takes as much off a 0.97 starter as off a squad player.
+# After the pecking-order tie fix in minutes_prior() (which on its own took
+# the unconstrained hold-out Brier to 0.09505 and the mean club sum from
+# 12.1 to 11.4) the same variant is still chosen and still wins: 0.09505 ->
+# 0.09494 (interval -0.00021 to -0.00004), log-loss 0.30609 -> 0.30503,
+# minutes MAE 17.26 -> 17.17.
+# FPL_CLUB_NORMALISE=off reverts to the unconstrained probabilities.
+CLUB_STARTERS = 11
+CLUB_NORMALISE = (None if os.environ.get('FPL_CLUB_NORMALISE', '').lower() in ('off', '0', 'none')
+                  else dict(mode='logit', two_sided=True, split_gk=True))
+
+
+def _logit(p):
+    p = min(1 - 1e-6, max(1e-6, p))
+    return math.log(p / (1 - p))
+
+
+def _shift_to_total(probs, target, mode):
+    """Rescale `probs` so they sum to `target`. 'logit' adds one constant to
+    every log-odds (a 0.97 starter barely moves, a 0.5 rotation option moves
+    most); 'proportional' multiplies, redistributing anything pushed past 1.
+    Zeros stay zero either way."""
+    live = [i for i, p in enumerate(probs) if p > 0]
+    out = list(probs)
+    if not live or target <= 0:
+        return [0.0] * len(probs) if target <= 0 else out
+    if target >= len(live):
+        for i in live:
+            out[i] = 1.0
+        return out
+    if mode == 'proportional':
+        fixed, free = 0.0, list(live)
+        for _ in range(len(live)):
+            scale = (target - fixed) / max(sum(probs[i] for i in free), 1e-12)
+            over = [i for i in free if probs[i] * scale >= 1.0]
+            if not over:
+                for i in free:
+                    out[i] = probs[i] * scale
+                break
+            for i in over:
+                out[i] = 1.0
+                fixed += 1.0
+            free = [i for i in free if i not in over]
+        return out
+    base = {i: _logit(probs[i]) for i in live}
+    lo, hi = -30.0, 30.0
+    for _ in range(80):
+        mid = (lo + hi) / 2
+        total = sum(1 / (1 + math.exp(-(base[i] + mid))) for i in live)
+        lo, hi = (mid, hi) if total < target else (lo, mid)
+    shift = (lo + hi) / 2
+    for i in live:
+        out[i] = 1 / (1 + math.exp(-(base[i] + shift)))
+    return out
+
+
+def normalise_club_starts(entries, mode='logit', two_sided=False, split_gk=True):
+    """Joint start probabilities for ONE club fixture.
+
+    entries: [dict(p=start probability, pos=..., fixed=bool)]. Rows marked
+    `fixed` (a flag, a confirmed line-up, an override) keep their value and
+    the rest share what is left of the eleven. With split_gk the keepers are
+    held to one start and the outfielders to ten; otherwise only the total is.
+    One-sided (two_sided=False) only pulls an over-full club DOWN; two-sided
+    also lifts a club whose injuries leave it short, since somebody still has
+    to start. Production uses two-sided (CLUB_NORMALISE): the panel could not
+    tell the two apart, and it was the better of them on this season's
+    availability-aware forecasts. Returns the new probabilities in input order.
+    """
+    out = [float(e['p']) for e in entries]
+    groups = ([([i for i, e in enumerate(entries) if e['pos'] == 'GKP'], 1),
+               ([i for i, e in enumerate(entries) if e['pos'] != 'GKP'], CLUB_STARTERS - 1)]
+              if split_gk else [(list(range(len(entries))), CLUB_STARTERS)])
+    for idx, target in groups:
+        free = [i for i in idx if not entries[i].get('fixed')]
+        room = target - sum(out[i] for i in idx if entries[i].get('fixed'))
+        total = sum(out[i] for i in free)
+        if not free or (total <= room and not two_sided) or abs(total - room) < 1e-9:
+            continue
+        new = _shift_to_total([out[i] for i in free], max(0.0, room), mode)
+        for i, p in zip(free, new):
+            out[i] = p
+    return out
+
+
+def gameweek_availability(p, gw, rate, mps):
+    """The deadline/flag/override layer for one player, gameweek and base
+    start rate: FPL's chance at the flagged deadline, the dated/undated
+    return rules after it, and any manual or generated override."""
+    effective_status, fit_probability = availability_for_gameweek(
+        p['status'], gw, START_GW, chance=p['chance'], news=p['news'],
+        gw_deadline=GW_DEADLINES.get(gw),
+        flag_deadline=GW_DEADLINES.get(START_GW),
+    )
+    return availability_forecast(
+        player_id=p['id'], gw=gw, base_start=rate,
+        base_start_minutes=mps, position=p['pos'], status=effective_status,
+        overrides=AVAILABILITY_OVERRIDES,
+        availability_probability=fit_probability,
+    )
+
+
+def with_start_probability(av, p_start):
+    """`av` with a new start probability; cameo stays conditional on not
+    starting, and appearance probability and minutes follow."""
+    p_start = max(0.0, min(1.0, p_start))
+    return replace(
+        av, p_start=round(p_start, 6),
+        p_play=round(p_start + (1.0 - p_start) * av.p_cameo, 6),
+        expected_minutes=round(p_start * av.start_minutes
+                               + (1.0 - p_start) * av.p_cameo * av.cameo_minutes, 3))
+
+
+def club_start_adjustments(players, view, minutes, config=None):
+    """{(player id, gw): joint start probability} for every club fixture in
+    START_GW..LAST_GW, from the per-player probabilities after the
+    availability layer. Flag- and override-driven rows are held fixed (they
+    are external information); model-baseline rows share what is left.
+    Every fixture of a double gets the same per-fixture probability, so one
+    normalisation per club and gameweek covers it."""
+    config = CLUB_NORMALISE if config is None else config
+    if not config:
+        return {}
+    out = {}
+    for gw in range(START_GW, LAST_GW + 1):
+        by_team = defaultdict(list)
+        for pid, p in players.items():
+            if not (view['view'].get(p['team'], {}).get(str(gw)) or []):
+                continue
+            rate, mps = minutes[pid]
+            av = gameweek_availability(p, gw, rate, mps)
+            by_team[p['team']].append((pid, dict(
+                p=av.p_start, pos=p['pos'], fixed=av.source != 'model baseline')))
+        for rows in by_team.values():
+            new = normalise_club_starts([e for _, e in rows], **config)
+            for (pid, _), prob in zip(rows, new):
+                out[(pid, gw)] = prob
+    return out
+
+
 def poisson_at_least(mean, k):
     if mean <= 0:
         return 0.0
@@ -715,16 +922,26 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
 
     out = []
     shadow_rule = 'recency' if MINUTES_RULE == 'aggregate' else 'aggregate'
+    minutes = {pid: minutes_model(p, players) for pid, p in players.items()}
+    # the joint "eleven start" constraint, per club and gameweek, applied on
+    # top of each player's availability-adjusted probability (item 2)
+    club_starts = club_start_adjustments(players, view, minutes)
+    # each club's season-average fixture xG: the level its players' rates
+    # already carry (attack_volume.py, item 3)
+    club_xg = club_mean_xg(view['view'])
     for p in players.values():
         pos = p['pos']
-        base_start_rate, mps = minutes_model(p, players)
+        base_start_rate, mps = minutes[p['id']]
         # the other minutes rule, archived for side-by-side grading (P2)
         shadow_start_rate, _ = minutes_model(p, players, rule=shadow_rule)
         rate_recency = shadow_start_rate if shadow_rule == 'recency' else base_start_rate
         rate_aggregate = shadow_start_rate if shadow_rule == 'aggregate' else base_start_rate
 
-        xg90, w_xg = shrink(p, 'xg90', priors)
-        xa90, _ = shrink(p, 'xa90', priors)
+        # attacking rates shrink towards the positional prior scaled by the
+        # club's attacking level (club_attack_priors, item 3 follow-up)
+        attack_priors = club_attack_priors(priors, p['pos'], club_xg.get(p['team']), club_xg)
+        xg90, w_xg = shrink(p, 'xg90', attack_priors)
+        xa90, _ = shrink(p, 'xa90', attack_priors)
         dc90, w_dc = shrink(p, 'dc90', priors)
         bonus90, _ = shrink(p, 'bonus90', priors)
         saves90, _ = shrink(p, 'saves90', priors)
@@ -744,6 +961,10 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
         # needs (which week is the bench worth most, where is the double).
         by_gw, total = [0.0] * (START_GW - 1), 0.0
         season_by_gw = [0.0] * (START_GW - 1)
+        # the rate-component points inside each gameweek's total, for a
+        # rates-only calibration scope (CALIBRATION_SCOPE)
+        rate_by_gw = [0.0] * (START_GW - 1)
+        season_rate_by_gw = [0.0] * (START_GW - 1)
         season_play_by_gw = [0.0] * (START_GW - 1)
         start_by_gw = [0.0] * (START_GW - 1)
         p60_shadow_by_gw = [0.0] * (START_GW - 1)
@@ -756,22 +977,14 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
         start_aggregate_by_gw = [0.0] * (START_GW - 1)
         for gw in range(START_GW, LAST_GW + 1):
             fx = fixtures.get(str(gw)) or []
-            effective_status = status_for_gameweek(
-                p['status'], gw, START_GW, news=p['news'],
-                gw_deadline=GW_DEADLINES.get(gw),
-            )
 
+            # the flagged deadline takes FPL's chance; later gameweeks keep a
+            # dated absence to its date and ramp an undated one back in
             def deadline_forecast(rate):
-                fit_probability = (deadline_start_probability(
-                    1.0, effective_status, p['chance'], p['news']
-                ) if effective_status != 'a' else 1.0)
-                return availability_forecast(
-                    player_id=p['id'], gw=gw, base_start=rate,
-                    base_start_minutes=mps, position=pos, status=effective_status,
-                    overrides=AVAILABILITY_OVERRIDES,
-                    availability_probability=fit_probability,
-                )
-            av = deadline_forecast(base_start_rate)
+                return gameweek_availability(p, gw, rate, mps)
+            av = raw_av = deadline_forecast(base_start_rate)
+            if (p['id'], gw) in club_starts:
+                av = with_start_probability(av, club_starts[(p['id'], gw)])
             p_start = av.p_start
             p_cameo = (1.0 - p_start) * av.p_cameo
             p_play = av.p_play
@@ -791,14 +1004,17 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
                 start_by_gw.append(round(any_fixture(p_start), 3))
                 play_by_gw.append(round(any_fixture(p_play), 3))
                 mins_by_gw.append(round(av.expected_minutes * len(fx), 1))
+                # the rule comparison stays on the unconstrained probabilities:
+                # the club constraint would move both rules alike
+                own_p_start = raw_av.p_start if fx else 0.0
                 if shadow_start_rate == base_start_rate:
-                    shadow_p_start = p_start
+                    shadow_p_start = own_p_start
                 else:
                     shadow_p_start = deadline_forecast(shadow_start_rate).p_start if fx else 0.0
                 start_recency_by_gw.append(round(
-                    any_fixture(shadow_p_start if shadow_rule == 'recency' else p_start), 3))
+                    any_fixture(shadow_p_start if shadow_rule == 'recency' else own_p_start), 3))
                 start_aggregate_by_gw.append(round(
-                    any_fixture(shadow_p_start if shadow_rule == 'aggregate' else p_start), 3))
+                    any_fixture(shadow_p_start if shadow_rule == 'aggregate' else own_p_start), 3))
                 availability_by_gw.append(dict(
                     source=av.source, confidence=av.confidence, note=av.note,
                     fixtures=len(fx), p_start=round(p_start, 6), p_play=round(p_play, 6),
@@ -816,43 +1032,57 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
                 ))
             if not fx:
                 season_by_gw.append(0.0)
+                season_rate_by_gw.append(0.0)
                 if gw <= HORIZON:
                     by_gw.append(0.0)
+                    rate_by_gw.append(0.0)
                 continue
-            pts = 0.0
+            pts = rate = 0.0
             for f in fx:                       # handles double gameweeks
                 # attacking, scaled by how many goals this team is expected to
-                # score in THIS fixture relative to a league-average match
-                vol = f['xg'] / 1.45
-                pts += (xg90 * minute_share * vol * GOAL_PTS[pos]
-                        + xa90 * minute_share * vol * 3.0)
+                # score in THIS fixture relative to its OWN average match: the
+                # club's level is already inside xg90/xa90 (attack_volume.py)
+                vol = attack_volume(f['xg'], club_xg.get(p['team']))
+                attack = (xg90 * minute_share * vol * GOAL_PTS[pos]
+                          + xa90 * minute_share * vol * 3.0)
+                pts += attack
+                rate += attack
                 # clean sheet: straight from the fitted scoreline distribution
                 if CS_PTS[pos]:
                     pts += CS_PTS[pos] * f['cs'] * p_start * (av.start_minutes >= 60)
                 if pos in ('GKP', 'DEF'):
                     pts -= expected_floor_div(f['xgc'], 2) * p_start
                 if pos == 'GKP':
-                    pts += (expected_floor_div(saves90 * start_share, 3) * p_start
-                            + expected_floor_div(saves90 * cameo_share, 3) * p_cameo)
+                    saves = (expected_floor_div(saves90 * start_share, 3) * p_start
+                             + expected_floor_div(saves90 * cameo_share, 3) * p_cameo)
+                    pts += saves
+                    rate += saves
                 thr = DC_THRESHOLD[pos]
                 if thr and dc90 > 0:
-                    pts += 2.0 * (
+                    defcon = 2.0 * (
                         p_start * defcon_hit_prob(dc90 * start_share, thr, w_dc)
                         + p_cameo * defcon_hit_prob(dc90 * cameo_share, thr, w_dc)
                     )
+                    pts += defcon
+                    rate += defcon
                 # Until a minutes distribution is validated, conditional role
                 # minutes are the model's fixed-duration scenarios. A 45-minute
                 # starter cannot receive 60-minute appearance/clean-sheet points.
                 pts += p_start * (1.0 + (av.start_minutes >= 60)) + p_cameo
                 pts += bonus90 * minute_share * 0.85
+                rate += bonus90 * minute_share * 0.85
                 pts -= yellow90 * minute_share
             pts = round(max(0.0, pts), 3)
+            rate = round(min(max(0.0, rate), pts), 3)
             season_by_gw.append(pts)
+            season_rate_by_gw.append(rate)
             if gw <= HORIZON:
                 by_gw.append(pts)
+                rate_by_gw.append(rate)
                 total += pts
 
         SEASON[p['id']] = season_by_gw
+        SEASON_RATE[p['id']] = season_rate_by_gw
         SEASON_PLAY[p['id']] = season_play_by_gw
         first = START_GW - 1
         current_availability = availability_by_gw[first]
@@ -861,7 +1091,7 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
             pos=pos, price=p['price'], sel_pct=p['sel_pct'], status=p['status'],
             news=p['news'], chance=p['chance'], joined=p['joined'], pens=p['pens'],
             corners=p['corners'], fk=p['fk'],
-            proj_by_gw=by_gw, proj_6gw=round(total, 2),
+            proj_by_gw=by_gw, rate_by_gw=rate_by_gw, proj_6gw=round(total, 2),
             proj_gw=round(total / WINDOW, 3),
             value=round(total / p['price'], 4) if p['price'] else 0,
             start_rate=start_by_gw[first], mins_proj=round(mins_by_gw[first]),
@@ -882,6 +1112,10 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
             start_recency_by_gw=start_recency_by_gw,
             start_aggregate_by_gw=start_aggregate_by_gw,
             n_match_evidence=len(match_evidence(p)),
+            # the club level attack_volume() divides by, so consumers that
+            # rebuild the attack term (retro, player_props, transfer_review)
+            # reproduce it exactly
+            club_xg=(round(club_xg[p['team']], 4) if p['team'] in club_xg else None),
             xg90=round(xg90, 4), xa90=round(xa90, 4), dc90=round(dc90, 3),
             # the remaining shrunk rates, so a snapshot can reconstruct the
             # projection's components after the fact (P3 retro)
@@ -910,6 +1144,19 @@ CAL_STINT_MINS = 900
 
 
 CALIBRATION = ROOT / 'v2' / 'calibration.json'
+# Item 4 (23 Sep 2026; research/model-phase3-2026-09-23.md): k also scales
+# rule-fixed points. The GW1-4 retro puts -0.33 a likely starter a week in
+# its `other` bucket for MID and FWD, which is mostly k x appearance points.
+# Restricting k to the rate components ('rates') was measured two ways and
+# is NOT distinguishable from 'all': season-totals hold-out (as-of clubs)
+# Spearman 0.493 vs 0.492 (2023/24) and 0.471 vs 0.473 (2024/25), same
+# sum p/a; this season's archived forecasts GW2-4 (687 likely starters)
+# squared error MID -0.08 +- 0.09, FWD -0.14 +- 0.14, GKP +0.11 +- 0.21.
+# SHADOW: FPL_CALIBRATION_SCOPE=rates switches it on; every row carries
+# rate_by_gw so a grader can rebuild either scope.
+CALIBRATION_SCOPE = os.environ.get('FPL_CALIBRATION_SCOPE', 'all')
+if CALIBRATION_SCOPE not in ('all', 'rates'):
+    raise SystemExit(f'FPL_CALIBRATION_SCOPE must be all or rates, not {CALIBRATION_SCOPE!r}')
 # A calibration-cohort member whose modelled start probability over the window
 # is below this fraction of his own baseline is being depressed by a status
 # flag or an override (dated injury, suspension, tactical zero). He would drag
@@ -984,16 +1231,29 @@ def fit_calibration(rows, players):
     return out
 
 
-def apply_calibration(rows, ks):
+def _scaled(values, rates, k, scope):
+    if scope == 'rates' and rates is not None:
+        return [round(max(0.0, v + (k - 1.0) * rt), 3) for v, rt in zip(values, rates)]
+    return [round(v * k, 3) for v in values]
+
+
+def apply_calibration(rows, ks, scope=None):
+    """Scale each position's projection by its k. scope 'all' (production)
+    scales the whole projection; 'rates' scales only the rate components
+    (attack, saves, DefCon, bonus) and leaves appearance points, clean sheets,
+    goals conceded and cards as FPL's rules make them (CALIBRATION_SCOPE)."""
+    scope = scope or CALIBRATION_SCOPE
     for pos, k in ks.items():
         for r in rows:
             if r['pos'] != pos:
                 continue
-            r['proj_by_gw'] = [round(v * k, 3) for v in r['proj_by_gw']]
+            r['proj_by_gw'] = _scaled(r['proj_by_gw'], r.get('rate_by_gw'), k, scope)
+            if r.get('rate_by_gw') is not None:
+                r['rate_by_gw'] = [round(v * k, 3) for v in r['rate_by_gw']]
             r['proj_6gw'] = round(sum(r['proj_by_gw']), 2)
             r['proj_gw'] = round(r['proj_6gw'] / WINDOW, 3)
             if r['id'] in SEASON:
-                SEASON[r['id']] = [round(v * k, 3) for v in SEASON[r['id']]]
+                SEASON[r['id']] = _scaled(SEASON[r['id']], SEASON_RATE.get(r['id']), k, scope)
             r['value'] = round(r['proj_6gw'] / r['price'], 4) if r['price'] else 0
             r['calibration_k'] = round(k, 4)
 
@@ -1152,6 +1412,7 @@ if __name__ == '__main__':
     json.dump({'players': rows, 'horizon': HORIZON, 'start_gw': START_GW,
                'generated': datetime.now(timezone.utc).isoformat(),
                'window': WINDOW, 'minutes_rule': MINUTES_RULE,
+               'attack_volume': ATTACK_VOLUME_RULE,
                'manager_mps_weight': (MANAGER_MPS_WEIGHT
                                       if MANAGER_MPS_TABLE else 0.0),
                'calibration': {r['pos']: r.get('calibration_k') for r in rows

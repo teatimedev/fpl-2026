@@ -3,7 +3,7 @@ import unittest
 import urllib.error
 from unittest.mock import patch
 
-from v2.news_fetch import _request, fetch_source, PARSER_VERSION
+from v2.news_fetch import _request, embedded_links, fetch_source, PARSER_VERSION
 
 
 SOURCE = {"id": "ars-news", "club": "ARS", "publisher": "Arsenal",
@@ -25,6 +25,24 @@ class NewsFetchTests(unittest.TestCase):
             documents, health = fetch_source(SOURCE)
         self.assertEqual(documents, [])
         self.assertEqual(health["status"], "error")
+
+    def test_script_rendered_index_finds_embedded_article_paths(self):
+        index = ('<script type="application/ld+json">{"itemListElement":['
+                 '{"url":"https:\\/\\/www.arsenal.com\\/news\\/first-team\\/team-news-arsenal-v-leeds"},'
+                 '{"url":"\\u002Fnews\\u002Fwomen\\u002Fteam-news-women-v-city"},'
+                 '{"url":"https://other.example/news/team-news-elsewhere-today"}]}</script>')
+        article = '<article><h1>Team news</h1><p>Saka is fit.</p></article>'
+        with patch('v2.news_fetch._request', side_effect=[(index, {}), (article, {})]) as request:
+            documents, health = fetch_source(SOURCE)
+        self.assertEqual(health['status'], 'ok')
+        self.assertEqual(request.call_args_list[1].args[0],
+                         'https://www.arsenal.com/news/first-team/team-news-arsenal-v-leeds')
+        self.assertEqual(request.call_count, 2)   # women's article excluded, other site ignored
+
+    def test_embedded_links_accept_bare_and_www_hosts(self):
+        links = embedded_links('"https://avfc.co.uk/news/2026/september/22/pre-match-press-conference-emery/"',
+                               'https://www.avfc.co.uk/news/')
+        self.assertEqual(links[0][1], 'pre match press conference emery')
 
     def test_index_without_articles_is_not_complete_news_coverage(self):
         with patch('v2.news_fetch._request', return_value=('<title>News</title>', {})):

@@ -87,3 +87,18 @@ Deadline forecasts live in `data/history/forecasts/gwN/`; `gwN.json` points to t
 latest revision saved before that deadline. Submitted picks are archived separately
 under `data/history/submitted/ENTRY/`. Future scorecards compare shadow P60 and
 frozen policy baselines with outcomes without rewriting past forecasts.
+
+## Club source coverage (23 September 2026)
+
+Script-rendered club indexes that embed their article list as JSON (Crystal
+Palace) are now read through `news_fetch.embedded_links`, which scans the raw
+page for same-site article paths when ordinary links find nothing relevant.
+
+Six clubs (Aston Villa, Bournemouth, Coventry, Everton, Hull, Nottingham Forest)
+and Sunderland use a client-rendered platform: neither the index nor the article
+pages contain server-rendered text, and their content API needs a key taken
+from the site's frontend. They stay `no_articles` under the public-page policy;
+their `/sitemap.xml` lists dated article URLs, but the articles themselves are
+unreadable without executing the site. Manchester United's index answers 403 to
+the collector. FPL's own status and news feed remains the primary availability
+source for these clubs.

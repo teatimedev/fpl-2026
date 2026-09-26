@@ -87,7 +87,11 @@ XI_MAX = {'GKP': 1, 'DEF': 5, 'MID': 5, 'FWD': 3}
 POS_ORDER = ('GKP', 'DEF', 'MID', 'FWD')
 HIT = 4.0
 MAX_FT = 5
-HOLD_THRESHOLD = 2.0     # unvalidated uncertainty buffer, not an FT cost
+# Legacy per-move buffer. In season the transfer decision is the sampled
+# act-versus-hold comparison (act_or_hold.py); this bar survives only for the
+# pre-season wholesale rebuild and the single-move fallback text when --plan
+# is not run.
+HOLD_THRESHOLD = 2.0
 
 
 def worth_rebuilding(diff, n_moves):
@@ -100,13 +104,15 @@ def worth_rebuilding(diff, n_moves):
 
 
 def choose_plan(paths, hold):
-    """Apply the policy to each exact-scored path, always including hold.
+    """Nominal fallback when the sampler cannot run: best objective, no buffer.
 
-    A solver optimises a linear bench proxy; rescoring can reverse its
-    ordering. A weaker unconstrained result is not evidence against acting.
-    Nor should a large package below its buffer suppress a qualifying single.
+    Paths are compared on the planner objective (decayed points, hits and
+    terminal value) when present; a solver optimises a linear bench proxy and
+    rescoring can reverse its ordering, so hold is always a candidate and a
+    weaker unconstrained result is not evidence against a better single.
+    Ties go to fewer moves.
     """
-    score = lambda p: p.get('total_unrounded', p['total'])
+    score = lambda p: p.get('objective', p.get('total_unrounded', p['total']))
     hold = max([hold] + [p for _, p in paths if p and not p['weeks'][0]['in']], key=score)
     baseline = score(hold)
     eligible = [hold]
@@ -118,14 +124,106 @@ def choose_plan(paths, hold):
         week = path['weeks'][0]
         n = len(week['in'])
         gain = score(path) - baseline
-        qualifies = worth_rebuilding(gain, n)
         comparisons.append(dict(source=label, status='scored', total=score(path),
-                                gain=gain, n_now=n, move_bar=HOLD_THRESHOLD * n,
-                                qualifies=qualifies, in_=week['in'], out=week['out']))
-        if qualifies:
+                                gain=gain, n_now=n, in_=week['in'], out=week['out'],
+                                hold=n == 0))
+        if n > 0 and gain > 0:
             eligible.append(path)
     chosen = max(eligible, key=lambda p: (score(p), -len(p['weeks'][0]['in'])))
+    for row, (_, path) in zip(comparisons, paths):
+        row['qualifies'] = path is chosen
     return chosen, hold, comparisons
+
+
+def pair_moves(players, outgoing, incoming):
+    """(out, in) pairs matched by position."""
+    paired = []
+    for pos in POS_ORDER:
+        paired.extend(zip([o for o in outgoing if players[o]['pos'] == pos],
+                          [i for i in incoming if players[i]['pos'] == pos]))
+    return paired
+
+
+def annotate_vs_hold(transfers, ids, nominal, sampled):
+    """Add act-versus-wait values to the static one- and two-move tables.
+
+    `gain`/`net` stay what they always were — the move alone against keeping
+    today's 15 with no further transfers — which overstates a move's value
+    because the hold path would transfer too. `vs_hold` is the decision
+    basis: the sampled expected objective gain over saving the transfer with
+    every later week re-planned; `vs_hold_nominal` the same without sampling.
+    """
+    from act_or_hold import nominal_gain
+    rows = {r['key']: r for r in (sampled or {}).get('rows', [])}
+    for kind in ('singles', 'pairs'):
+        for move in transfers.get(kind, []):
+            outs = move['out'] if isinstance(move['out'], list) else [move['out']]
+            ins = move['in_'] if isinstance(move['in_'], list) else [move['in_']]
+            squad = [i for i in ids if i not in outs] + ins
+            base = nominal_gain(nominal, ids, squad)
+            move['vs_hold_nominal'] = round(base, 2) if base is not None else None
+            row = rows.get(frozenset(squad))
+            move['vs_hold'] = round(row['gain'], 2) if row else None
+    transfers['gain_basis'] = (
+        'gain and net: this move alone versus keeping today\'s squad with no further '
+        'transfers over the window. vs_hold: expected decision-objective gain versus '
+        'saving the transfer, with every later week re-planned (sampled where tested, '
+        'otherwise vs_hold_nominal is the unsampled value).')
+
+
+def vs_hold_lines(transfers, players):
+    """Digest sentence restating tested one/two-move gains against holding."""
+    tested = [m for m in transfers.get('singles', []) + transfers.get('pairs', [])
+              if m.get('vs_hold') is not None or m.get('vs_hold_nominal') is not None]
+    if not tested:
+        return []
+
+    def label(m):
+        outs = m['out'] if isinstance(m['out'], list) else [m['out']]
+        ins = m['in_'] if isinstance(m['in_'], list) else [m['in_']]
+        return ' + '.join(f"{players[o]['name']}→{players[i]['name']}" for o, i in zip(outs, ins))
+
+    parts = []
+    for m in tested:
+        sampled = m.get('vs_hold') is not None
+        value = m['vs_hold'] if sampled else m['vs_hold_nominal']
+        parts.append(f'{label(m)} {value:+.1f}' + ('' if sampled else ' (unsampled)'))
+    return ['The one- and two-move tables above compare each move with keeping '
+            "today's squad and never transferring again. Against saving the "
+            'transfer and re-planning, they are worth: ' + '; '.join(parts) + '.', '']
+
+
+def wildcard_by_week(players, ids, bank, ft, gw, horizon, sell_prices, valuation,
+                     history, pool_size=80, time_limit=10):
+    """{gw: objective gain of a wildcard that week over the best normal path}.
+
+    Only weeks where an unused wildcard copy can be played are solved; one
+    shared smaller-pool model basis keeps the comparison like for like.
+    """
+    from planner import PathModel
+    try:
+        import chips as CH
+        windows = CH.chip_windows().get('wildcard', [])
+        used = CH.used_chips(history).get('wildcard', [])
+        first = min((r['event'] for r in (history or {}).get('current', [])), default=1)
+    except Exception:
+        return None
+    weeks = [g for g in range(gw, horizon + 1) if g > first and any(
+        lo <= g <= hi and not any(lo <= e <= hi for e in used) for lo, hi in windows)]
+    if not weeks:
+        return None
+    kw = dict(sell_prices=sell_prices, valuation=valuation, pool_size=pool_size)
+    base = PathModel(players, ids, bank, ft, gw, horizon, **kw).solve(
+        time_limit=time_limit, refit=False)
+    if base is None:
+        return None
+    out = {}
+    for g in weeks:
+        res = PathModel(players, ids, bank, ft, gw, horizon, wildcard_week=g, **kw).solve(
+            time_limit=time_limit, refit=False)
+        if res is not None:
+            out[g] = round(res['objective'] - base['objective'], 1)
+    return out
 
 
 def first_action_candidates(ids, engine, action_moves):
@@ -477,6 +575,14 @@ def transfer_engine(squad, players, bank, ft, gw, horizon, pool_size=60, sell_pr
                                                          - base_eval.autosub_points, 1),
                                       out=(o1, o2), in_=(n1, n2), moves=2))
     pairs.sort(key=lambda t: -t['net'])
+    # Two outs in the same position generate each incoming pair twice.
+    seen_pairs, unique = set(), []
+    for pr in pairs:
+        key = (frozenset(p['id'] for p in pr['out']), frozenset(p['id'] for p in pr['in_']))
+        if key not in seen_pairs:
+            seen_pairs.add(key)
+            unique.append(pr)
+    pairs = unique
     unavailable = deadline_unavailable(squad, gw)
     unavailable_moves = []
     for player in unavailable:
@@ -605,6 +711,11 @@ def snapshot(gw, deadline, players, squad, model, yours, elem=None, props=None,
                          bonus90=p.get('bonus90'), saves90=p.get('saves90'),
                          yellow90=p.get('yellow90'), evidence=p.get('evidence'),
                          dc_evidence=p.get('dc_evidence'), k=p.get('calibration_k'),
+                         # the club level the relative attack volume divided by,
+                         # and the rate-only share the calibration shadow scales
+                         club_xg=p.get('club_xg'),
+                         rate_pts=(round((p.get('rate_by_gw') or [])[idx], 3)
+                                   if idx < len(p.get('rate_by_gw') or []) else None),
                          pens=p.get('pens'), corners=p.get('corners'), fk=p.get('fk'),
                          ep_next=ep_next,
                          p_goal_model=(props.get(p['id']) or {}).get('p_goal_model'),
@@ -1311,14 +1422,26 @@ def main():
 
         # ---- multi-week path
         wc_now = None
+        wc_weeks = None
+        chip_path = None
         if args.plan:
             try:
-                from planner import plan, describe
+                from planner import plan, describe, production_valuation, season_tail
                 L.append('## The next six weeks, planned')
                 L.append('')
-                free = plan(players, ids, bank, ft, gw, horizon, sell_prices=sell_prices)
+                season_players = None
+                try:
+                    import chips as CH
+                    season_players, _, _ = CH.load_season()
+                except Exception as ex:          # the tail falls back to late-window rates
+                    print(f'  season projection unavailable for the planner tail ({ex})')
+                valuation = production_valuation(
+                    tail=season_tail(season_players) if season_players else None)
+                unlimited = ft >= 15
+                free = plan(players, ids, bank, ft, gw, horizon, sell_prices=sell_prices,
+                            valuation=None if unlimited else valuation)
                 hold = plan(players, ids, bank, ft, gw, horizon, freeze_this_week=True,
-                            sell_prices=sell_prices)
+                            sell_prices=sell_prices, valuation=None if unlimited else valuation)
                 free_source = 'planner'
                 # Before GW1, compare the approximate transfer path with the
                 # exact-scored best static build produced by optimise.py. The
@@ -1358,56 +1481,119 @@ def main():
                                     free = exact_plan
                                     free_source = 'exact static build'
                 comparisons = []
-                if hold and ft < 15:
-                    paths = [('unconstrained planner', free)]
-                    seen = {frozenset(free['weeks'][0]['squad'])} if free else set()
-                    for label, first_squad in first_action_candidates(ids, eng, action_moves):
-                        if frozenset(first_squad) in seen:
-                            continue
-                        seen.add(frozenset(first_squad))
-                        candidate = plan(players, ids, bank, ft, gw, horizon,
-                                         sell_prices=sell_prices,
-                                         first_week_squad=first_squad, time_limit=15)
-                        paths.append((label, candidate))
-                    free, hold, comparisons = choose_plan(paths, hold)
-                    free_source = 'hold path' if free is hold else 'compared action paths'
-                if args.chips and free and ft < 15 and gw >= 2:
-                    # What a wildcard would add: unlimited moves ONLY in the
-                    # WC week itself — later weeks accrue normally from the
-                    # bank the chip preserves (planner Contract P1), so the
-                    # solve is seeded with the REAL bank; seeding 15 would
-                    # model five free transfers the week after the wildcard.
-                    wc = plan(players, ids, bank, ft, gw, horizon,
-                              wildcard_week=gw, sell_prices=sell_prices)
-                    if wc:
-                        wc_now = round(wc['total'] - free['total'], 1)
+                sampled = None
+                nominal = {}
+                if hold and not unlimited:
+                    # Act versus hold (act_or_hold.py): every candidate first
+                    # week, and hold, re-planned in the same sampled forecast
+                    # revisions; the best expected objective wins, with the
+                    # one-standard-error rule against Monte Carlo noise. No
+                    # per-move buffer: holding earns its option value (and
+                    # loses it at the five-transfer cap) inside the model.
+                    import act_or_hold as AOH
+                    candidates = []
+                    if free and free['weeks'][0]['in']:
+                        candidates.append(('unconstrained planner', free['weeks'][0]['squad']))
+                    candidates += first_action_candidates(ids, eng, action_moves)
+                    seed = AOH.seed_for(J['forecast_id'], st.get('entry_id'), gw, ft,
+                                        round(bank, 1), sorted(ids))
+                    try:
+                        sampled, nominal = AOH.run(players, ids, bank, ft, gw, horizon,
+                                                   sell_prices, valuation, candidates, seed=seed)
+                    except Exception as ex:     # the nominal comparison still stands
+                        print(f'  act-or-hold sampler failed ({type(ex).__name__}: {ex})')
+                        sampled = None
+                    if sampled:
+                        comparisons = AOH.public_rows(sampled)
+                        chosen = sampled['chosen']
+                        if not chosen['in_']:
+                            selected = hold
+                        elif free and set(free['weeks'][0]['squad']) == set(chosen['squad']):
+                            selected = free
+                        else:
+                            selected = plan(players, ids, bank, ft, gw, horizon,
+                                            sell_prices=sell_prices, valuation=valuation,
+                                            first_week_squad=chosen['squad'])
+                        free = selected or hold
+                        free_source = 'sampled act-versus-hold'
+                    else:
+                        paths = [('unconstrained planner', free)]
+                        seen = {frozenset(free['weeks'][0]['squad'])} if free else set()
+                        for label, first_squad in first_action_candidates(ids, eng, action_moves):
+                            if frozenset(first_squad) in seen:
+                                continue
+                            seen.add(frozenset(first_squad))
+                            paths.append((label, plan(players, ids, bank, ft, gw, horizon,
+                                                      sell_prices=sell_prices, valuation=valuation,
+                                                      first_week_squad=first_squad,
+                                                      time_limit=15)))
+                        free, hold, comparisons = choose_plan(paths, hold)
+                        free_source = 'nominal objective (sampler unavailable)'
+                    # Honest alternatives: express the one- and two-move
+                    # diagnostics against the hold path, not a squad that never
+                    # transfers again (GW2 2026/27: +9.7 static, +1.75 act-vs-wait).
+                    annotate_vs_hold(J['transfers'], ids, nominal, sampled)
+                    L.extend(vs_hold_lines(J['transfers'], players))
+                if args.chips and free and not unlimited and gw >= 2:
+                    # What a wildcard would add in each planned week: unlimited
+                    # moves ONLY in the WC week — later weeks accrue normally
+                    # from the bank the chip preserves (planner Contract P1).
+                    wc_weeks = wildcard_by_week(players, ids, bank, ft, gw, horizon,
+                                                sell_prices, valuation, st.get('history'))
+                    wc_now = (wc_weeks or {}).get(gw)
                 if free and hold:
-                    diff = (free.get('total_unrounded', free['total'])
-                            - hold.get('total_unrounded', hold['total']))
-
+                    score = lambda p: p.get('objective', p.get('total_unrounded', p['total']))
                     n_now = len(free['weeks'][0]['in'])
-                    # Judge the value of acting now PER MOVE: four changes for
-                    # +3 is churn, one change for +3 is a transfer. Unlimited
-                    # transfers remove the points cost, not the uncertainty of
-                    # overturning a settled and manually confirmed squad.
-                    unlimited = ft >= 15
-                    worth_it = worth_rebuilding(diff, n_now)
+                    if sampled:
+                        chosen = sampled['chosen']
+                        diff = chosen['gain']
+                        best_move = max((r for r in sampled['rows'] if r['in_']),
+                                        key=lambda r: r['gain'], default=None)
+                    else:
+                        diff = score(free) - score(hold)
+                        best_move = None
+                    # Pre-season keeps its churn bar for a wholesale rebuild;
+                    # in season the sampled decision already chose the action.
+                    worth_it = (worth_rebuilding(diff, n_now) if unlimited else n_now > 0)
+                    week_rows = lambda path: [dict(gw=w['gw'], pts=w['pts'], hits=w['hits'],
+                                                   captain=w['captain'], ft=w['ft'],
+                                                   ft_next=w.get('ft_next'), ft_lost=w.get('ft_lost', 0),
+                                                   in_=w['in'], out=w['out']) for w in path['weeks']]
                     J['plan'] = dict(total=free['total'], hold_total=hold['total'],
+                                     objective=round(score(free), 2),
+                                     hold_objective=round(score(hold), 2),
                                      solver=free.get('solver'), hold_solver=hold.get('solver'),
-                                     policy_status='Unvalidated 2-point-per-move heuristic',
+                                     policy_status=('Sampled act-versus-hold over forecast revisions '
+                                                    '(one-standard-error rule); not yet validated on realised points'
+                                                    if sampled else
+                                                    'Pre-season 2-point-per-move rebuild heuristic'
+                                                    if unlimited else
+                                                    'Nominal planner objective; sampler unavailable'),
                                      candidates=comparisons,
                                      diff=round(diff, 1), hits=free['hits'],
-                                     diff_unrounded=free.get('total_unrounded', free['total'])-hold.get('total_unrounded', hold['total']),
+                                     diff_unrounded=diff,
+                                     nominal_diff=round(score(free) - score(hold), 2),
                                      n_now=n_now, worth_it=worth_it,
-                                     move_bar=round(HOLD_THRESHOLD * n_now, 1),
-                                     weeks=[dict(gw=w['gw'], pts=w['pts'], hits=w['hits'],
-                                                 captain=w['captain'], ft=w['ft'],
-                                                 ft_next=w.get('ft_next'), ft_lost=w.get('ft_lost', 0),
-                                                 in_=w['in'], out=w['out']) for w in free['weeks']],
-                                     hold_weeks=[dict(gw=w['gw'], pts=w['pts'], hits=w['hits'],
-                                                      captain=w['captain'], ft=w['ft'],
-                                                      ft_next=w.get('ft_next'), ft_lost=w.get('ft_lost', 0),
-                                                      in_=w['in'], out=w['out']) for w in hold['weeks']])
+                                     valuation=None if unlimited else valuation.describe(),
+                                     terminal=free.get('terminal'),
+                                     weeks=week_rows(free), hold_weeks=week_rows(hold))
+                    if unlimited:
+                        J['plan']['move_bar'] = round(HOLD_THRESHOLD * n_now, 1)
+                    if sampled:
+                        J['plan']['decision'] = dict(
+                            method='sampled act-versus-hold', samples=sampled['samples'],
+                            discovery=sampled['discovery'], seed=sampled['seed'],
+                            runtime_s=sampled['runtime_s'], noise=sampled['noise'],
+                            rule=sampled['rule'],
+                            chosen=dict(in_=chosen['in_'], out=chosen['out'],
+                                        gain=round(chosen['gain'], 2), se=round(chosen['se'], 2),
+                                        p_beats_hold=(round(chosen['p_beats_hold'], 3)
+                                                      if chosen['p_beats_hold'] is not None else None)),
+                            best_move=(dict(in_=best_move['in_'], out=best_move['out'],
+                                            gain=round(best_move['gain'], 2),
+                                            se=round(best_move['se'], 2),
+                                            p_beats_hold=round(best_move['p_beats_hold'], 3))
+                                       if best_move else None))
                     this_week_sim = None
                     if n_now > 0 and not unlimited:
                         move_squad = free['weeks'][0].get('squad')
@@ -1458,49 +1644,49 @@ def main():
                             f"{players[o]['name']}→{players[i]['name']}"
                             for o, i in paired
                         )
-                        recommendation = (
-                            f'**Recommended:** {plan_text} this week '
-                            f'({diff:+.1f} versus holding/re-planning).'
-                        )
+                        evidence = (f'{diff:+.1f} expected versus holding'
+                                    + (f'; ahead in {chosen["p_beats_hold"] * 100:.0f}% of '
+                                       f'{sampled["samples"]} forecast scenarios'
+                                       if sampled else '')
+                                    + (' — holding would waste a transfer at the five-transfer cap'
+                                       if ft >= MAX_FT else ''))
+                        recommendation = f'**Recommended:** {plan_text} this week ({evidence}).'
                         _supersede_transfer_recommendation(
                             L, P, J['transfers'], recommendation,
                             f'Plan this week: {plan_text}',
                         )
                     elif not unlimited:
                         action_kind = 'hold'
+                        if best_move:
+                            names = ', '.join(f"{players[o]['name']}→{players[i]['name']}"
+                                              for o, i in pair_moves(players, best_move['out'],
+                                                                     best_move['in_']))
+                            why = (f'The best move tested, {names}, is {best_move["gain"]:+.1f} '
+                                   f'versus saving the transfer (ahead in '
+                                   f'{best_move["p_beats_hold"] * 100:.0f}% of '
+                                   f'{sampled["samples"]} forecast scenarios)')
+                            why += ('; within Monte Carlo noise, so the simpler action stands. '
+                                    if best_move['gain'] > 0 else '. ')
+                        else:
+                            why = 'No transfer path tested beats saving. '
                         recommendation = (
-                            '**Recommended: hold.** No transfer path tested beats '
-                            f'saving by the {HOLD_THRESHOLD:.1f}-point-per-move bar '
-                            f'over GW{gw}–{horizon}. '
+                            '**Recommended: hold.** ' + why
                             + (f'You would have {ft + 1} free transfers next week.' if ft < MAX_FT else
-                               'Your bank stays at five; holding forfeits the next weekly transfer. '
-                               'Holding does not gain another transfer.')
+                               'Your bank stays at five, so holding forfeits next week\'s transfer — '
+                               'but no move tested is worth making.')
                         )
                         _supersede_transfer_recommendation(
                             L, P, J['transfers'], recommendation,
-                            'Transfers: HOLD under the current heuristic; no tested path clears its buffer',
+                            'Transfers: HOLD — saving beats every move tested',
                         )
                     if this_week_sim:
                         wins = this_week_sim['p_b_wins'] * 100
                         mean_delta = this_week_sim['mean_delta']
-                        move_bar = HOLD_THRESHOLD * n_now
-                        if wins >= 60 and mean_delta >= move_bar:
-                            interpretation = (
-                                f'The advantage is both likely and large enough to clear '
-                                f'the {move_bar:.1f}-point bar for {n_now} move'
-                                f'{"s" if n_now != 1 else ""}.'
-                            )
-                        elif wins >= 60 and mean_delta > 0:
-                            interpretation = (
-                                f'There is probably a points edge, but its {mean_delta:+.1f} '
-                                f'average does not clear the {move_bar:.1f}-point bar for '
-                                f'spending {n_now} transfer{"s" if n_now != 1 else ""} now.'
-                            )
+                        if wins >= 60 and mean_delta > 0:
+                            interpretation = 'This gameweek alone probably favours the change.'
                         else:
-                            interpretation = (
-                                'The proposed change does not have a reliable points edge '
-                                'this week.'
-                            )
+                            interpretation = ('The proposed change does not have a reliable '
+                                              'points edge this gameweek.')
                         L.append('')
                         L.append(
                             f'**GW{gw} simulation:** the selected '
@@ -1510,30 +1696,53 @@ def main():
                             'This covers one gameweek; the transfer decision compares the full window.'
                         )
                     lead = ('Best exact-scored pre-season build'
-                            if free_source == 'exact static build' else 'Selected path under the current policy')
-                    L.append(f'{lead}: **{free["total"]:.1f}** pts '
+                            if free_source == 'exact static build' else 'Selected path')
+                    L.append(f'{lead}: **{free["total"]:.1f}** pts over GW{gw}–{horizon} '
                              f'({free["hits"]} hit{"s" if free["hits"] != 1 else ""}). '
                              f'Making no move this week and re-planning: '
-                             f'{hold["total"]:.1f}. Selected path versus holding: **{diff:+.1f}**'
-                             + (f' across {n_now} moves' if n_now > 1 else '')
-                             + (' — use the free pre-GW1 rebuild.'
-                                if worth_it and unlimited else
-                                '.' if worth_it else ' — not enough; hold.'))
+                             f'{hold["total"]:.1f}.'
+                             + ((f' Expected value of the selected action versus holding: '
+                                 f'**{diff:+.1f}** (decision objective).' if n_now else
+                                 ' Holding is the selected action.') if not unlimited else
+                                f' Selected path versus holding: **{diff:+.1f}**'
+                                + (f' across {n_now} moves' if n_now > 1 else '')
+                                + (' — use the free pre-GW1 rebuild.' if worth_it else ' — not enough; hold.')))
                     L.append('')
+                    if not unlimited:
+                        L.append('_Decision objective: points with each later week weighted '
+                                 f'{valuation.decay:g}^k, minus hits, plus what carries past '
+                                 f'GW{horizon} — the squad\'s next {valuation.tail_weeks} weeks '
+                                 '(decayed), banked free transfers and money in the bank._')
+                        L.append('')
                     if comparisons:
-                        L.append('| action tested now | window gain vs hold | policy buffer | clears buffer |')
-                        L.append('|---|---|---|---|')
-                        for row in comparisons:
-                            if row['status'] != 'scored':
-                                continue
-                            names = ', '.join(players[i]['name'] for i in row['out']) + ' → ' + ', '.join(players[i]['name'] for i in row['in_'])
-                            L.append(f'| {names} | {row["gain"]:+.2f} | {row["move_bar"]:.1f} | {"yes" if row["qualifies"] else "no"} |')
+                        if sampled:
+                            L.append(f'Each action below was re-planned in the same '
+                                     f'{sampled["samples"]} sampled forecast revisions '
+                                     '(what next week\'s projections could look like).')
+                            L.append('')
+                            L.append('| action tested now | expected vs hold | ± s.e. | beats hold | chosen |')
+                            L.append('|---|---|---|---|---|')
+                            for row in comparisons:
+                                if row['hold']:
+                                    continue
+                                names = ', '.join(players[i]['name'] for i in row['out']) + ' → ' + ', '.join(players[i]['name'] for i in row['in_'])
+                                L.append(f'| {names} | {row["gain"]:+.2f} | {row["se"]:.2f} | '
+                                         f'{row["p_beats_hold"] * 100:.0f}% | {"yes" if row["qualifies"] else "no"} |')
+                        else:
+                            L.append('| action tested now | objective gain vs hold | chosen |')
+                            L.append('|---|---|---|')
+                            for row in comparisons:
+                                if row['status'] != 'scored':
+                                    continue
+                                names = ', '.join(players[i]['name'] for i in row['out']) + ' → ' + ', '.join(players[i]['name'] for i in row['in_'])
+                                L.append(f'| {names} | {row["gain"]:+.2f} | {"yes" if row["qualifies"] else "no"} |')
                         L.append('')
                     L.extend(describe(free, players))
                     L.append('')
                     L.append('_The multiweek planner uses a linear bench proxy and small '
                              'fixture swings can cause churn; treat future moves as '
                              'directional rather than scripted._')
+                    chip_path = free
                 else:
                     L.append('Planner timed out; single-move advice above stands.')
                 L.append('')
@@ -1549,6 +1758,7 @@ def main():
                 res = CH.evaluate(season, ids, bank, gw, last_gw, CH.chip_windows(),
                                   CH.used_chips(st.get('history')), wc_now=wc_now,
                                   sell_prices=sell_prices,
+                                  path=CH.planned_squads(chip_path, ids), wc_weeks=wc_weeks,
                                   first_gw=min((r['event'] for r in st.get('history', {}).get('current', [])), default=1))
                 J['chips'] = res
                 L.append('## Chips')
