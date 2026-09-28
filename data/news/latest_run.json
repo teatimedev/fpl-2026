@@ -1,7 +1,7 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-09-27T01:35:04Z",
+  "checked_at": "2026-09-28T07:04:01Z",
   "claims": 0,
   "coverage": 0.35,
   "deadline": "2026-10-10T10:00:00Z",
@@ -1495,9 +1495,9 @@
       "status": "a"
     },
     "367": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Ankle injury - 75% chance of playing",
+      "status": "d"
     },
     "368": {
       "chance": null,
@@ -1560,9 +1560,9 @@
       "status": "a"
     },
     "379": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Thigh injury - 75% chance of playing",
+      "status": "d"
     },
     "38": {
       "chance": null,
@@ -1765,9 +1765,9 @@
       "status": "i"
     },
     "415": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Hamstring injury - 75% chance of playing",
+      "status": "d"
     },
     "416": {
       "chance": 0,
@@ -3347,7 +3347,8 @@
   },
   "official_fpl_ok": true,
   "price_changed": [
-    626
+    170,
+    249
   ],
   "rebuild_required": true,
   "state_changed": false,
