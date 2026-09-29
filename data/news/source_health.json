@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-09-28T07:04:01Z",
-  "coverage": 0.35,
+  "checked_at": "2026-09-29T02:04:39Z",
+  "coverage": 0.3,
   "enabled": 20,
   "gw": 6,
-  "healthy": 7,
+  "healthy": 6,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -28,7 +28,7 @@
       "article_validators": {},
       "club": "AVL",
       "content_hash": "9c7825becb8ff42f8c499d57fe8c1093bd5159607ffeacf1c5ac976ec67ff3f9",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"845c2ee2133baa090ef42ed7bcf5c304\"",
       "id": "avl-news",
       "last_modified": "Mon, 28 Sep 2026 02:08:31 GMT",
@@ -74,7 +74,7 @@
       "content_hash": "dce59cdf6b8963e9a97ea55fed950746389dbaf8e3a6920bf3126805b782a30e",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Mon, 28 Sep 2026 06:32:32 GMT",
+      "last_modified": "Tue, 29 Sep 2026 01:50:33 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "no_articles",
@@ -82,16 +82,14 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {
-        "https://www.chelseafc.com/en/news/article/sonia-bompastor-on-lauren-james-fitness-and-being-strong-and-together-after": {}
-      },
+      "article_validators": {},
       "club": "CHE",
-      "content_hash": "395e263fe659a07a3dbbb0af7e182171093cb345c742658453b64e103046d650",
-      "documents": 2,
+      "content_hash": "b61979eb5d84aea6da30811bd26cc4492be453c08e8d767845d335a66edebdf9",
+      "documents": 1,
       "id": "che-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Chelsea",
-      "status": "ok",
+      "status": "no_articles",
       "url": "https://www.chelseafc.com/en/news"
     },
     {
@@ -99,7 +97,7 @@
       "article_validators": {},
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"5afe03df6c13847edf92243351d18237\"",
       "id": "cov-news",
       "last_modified": "Mon, 28 Sep 2026 02:05:44 GMT",
@@ -113,7 +111,7 @@
       "article_validators": {},
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"39kceu4njju6j4\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -127,9 +125,9 @@
       "club": "EVE",
       "content_hash": "54e2021d53c5959c4e3dc30111359c37658673c2e65215e1aaabf24197933129",
       "documents": 1,
-      "etag": "\"bcfa5d43a9959bc91f601cc4d8bd76ec\"",
+      "etag": "\"534ab215aca1dbcb6b16bd644da3461c\"",
       "id": "eve-news",
-      "last_modified": "Mon, 28 Sep 2026 02:05:29 GMT",
+      "last_modified": "Mon, 28 Sep 2026 14:16:05 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Everton",
       "status": "no_articles",
@@ -139,20 +137,20 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.fulhamfc.com/meetings-and-events/meetings-and-conferences": {
-          "etag": "\"e58265e1ff378089c43417d1aa208710\"",
-          "last_modified": "Mon, 28 Sep 2026 02:36:38 GMT"
+          "etag": "\"b5895c9a615c000ce491f675fabcc49b\"",
+          "last_modified": "Mon, 28 Sep 2026 15:36:31 GMT"
         },
         "https://www.fulhamfc.com/riverside-development/artists-impression": {
-          "etag": "\"804638a114d44f7f03a5fa1ed556cbd9\"",
-          "last_modified": "Mon, 28 Sep 2026 02:37:38 GMT"
+          "etag": "\"2bbe8e8858e32e8d0200de341b268184\"",
+          "last_modified": "Mon, 28 Sep 2026 15:37:32 GMT"
         }
       },
       "club": "FUL",
-      "content_hash": "734293b6c46e16af33f2cb3c48b81eb9c69a6923e0c232000007241f2ff62c28",
+      "content_hash": "659365cbc706013852c1b11e7c9d352f96815f8dcc54a072b0df8073ca682120",
       "documents": 3,
-      "etag": "\"4e253bc9aab394bfcd194288a2dbe4f7\"",
+      "etag": "\"bbf895a6ad12915bb53f7f9a46b8c3d8\"",
       "id": "ful-news",
-      "last_modified": "Mon, 28 Sep 2026 02:37:37 GMT",
+      "last_modified": "Mon, 28 Sep 2026 15:58:58 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Fulham",
       "status": "ok",
@@ -164,9 +162,9 @@
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
       "documents": 1,
-      "etag": "\"1599dcf9f49a9ea1653c3e70f2866c3c\"",
+      "etag": "\"dc094150ff3e3af484ffb00f7f58567c\"",
       "id": "hul-news",
-      "last_modified": "Mon, 28 Sep 2026 02:08:11 GMT",
+      "last_modified": "Mon, 28 Sep 2026 13:58:05 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Hull City",
       "status": "no_articles",
@@ -176,11 +174,11 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "IPS",
-      "content_hash": "d645c3d28c164604a5a28b82924a11e4ee8145e8b5ddb4570be9768327ec876d",
+      "content_hash": "1083b2b1b0ecb6556ea71464f8fd2eb61e8137ca87fd45375ff4c42d9e157e5d",
       "documents": 1,
-      "etag": "\"c1ca31a85018bc7c299d6276df26184b\"",
+      "etag": "\"36eb6526427a8c8a4661936fa411e1fd\"",
       "id": "ips-news",
-      "last_modified": "Mon, 28 Sep 2026 02:14:31 GMT",
+      "last_modified": "Mon, 28 Sep 2026 15:57:16 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
       "status": "no_articles",
@@ -189,14 +187,13 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.leedsunited.com/en/news/anton-stachs-nervous-klopp-call-brings-germany-return-after-injury-struggle": {},
         "https://www.leedsunited.com/en/news/muharemovic-impresses-in-nations-league-opener": {}
       },
       "club": "LEE",
-      "content_hash": "a7a7d4aad5e948d5d9818fb68d0d97053c0c36133e91c99dc38e0e9415a8f6dc",
-      "documents": 3,
+      "content_hash": "1519fb119561ddd083bf4c56ec65664a00f5896b77bc3891dea179300733b685",
+      "documents": 2,
       "id": "lee-news",
-      "last_modified": "Mon, 28 Sep 2026 06:08:26 GMT",
+      "last_modified": "Tue, 29 Sep 2026 01:42:16 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -206,16 +203,16 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.liverpoolfc.com/news/alexander-isak-return-international-duty": {
-          "etag": "\"1b82a-KadJpaWBwOkNVAE7mW5XsO2JXBY\""
+          "etag": "\"1b826-fOltTf/9+m/x46lGqo0hqZLdGik\""
         },
-        "https://www.liverpoolfc.com/news/watch-gareth-taylors-pre-merseyside-derby-press-conference-0": {
-          "etag": "\"1a6d4-gL/d5K4hEHaw4rlss6fTPzGo3sQ\""
+        "https://www.liverpoolfc.com/news/cody-gakpo-withdraws-international-duty": {
+          "etag": "\"1bc30-9I1MQT0j6H8qc6jfv+9CEP64J7k\""
         }
       },
       "club": "LIV",
-      "content_hash": "a4a974e902f238f262410ddfbc031efb3ce9690a49d2776e55a6dfd1fbd7fe1b",
+      "content_hash": "23cea8d43a7b0f4be928c520e9293cf0c4f12685516577d8d2d344a899ba4aa4",
       "documents": 3,
-      "etag": "\"33c06-lL3T03jHXK5nmb3bhpo9ZZk13WE\"",
+      "etag": "\"338ff-SP95isU/wOyi+yKKqB2E7CqEehA\"",
       "id": "liv-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
@@ -226,7 +223,7 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "MCI",
-      "content_hash": "e8326bbb3852acf8ba764136a7548d92f75759bd8d3a107a42b053b8169e614f",
+      "content_hash": "a5000028348d68b3cb38437d006b3776cce37c9f77efdb101e057efe5c03e93b",
       "documents": 1,
       "id": "mci-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -259,7 +256,7 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "NEW",
-      "content_hash": "d0a3328bb8612128b4dbced6370699ce738a4a64b0603a26907fb1644a05614b",
+      "content_hash": "e498e3b1cfb70478aeb032bbc3073c0c0a3641559a1a851ffc11294b62d26706",
       "documents": 1,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -273,9 +270,9 @@
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
       "documents": 1,
-      "etag": "\"b0dae500c4d886ea6cf752c467176713\"",
+      "etag": "\"d2f44bb50a10ecb04b7e748e35ee4c2c\"",
       "id": "nfo-news",
-      "last_modified": "Mon, 28 Sep 2026 02:08:22 GMT",
+      "last_modified": "Mon, 28 Sep 2026 15:04:33 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -287,9 +284,9 @@
       "club": "SUN",
       "content_hash": "191fbb568fbd24f60eb2575b6a2ad66dbbf72f8961bce0b666fc2a248e2add01",
       "documents": 1,
-      "etag": "\"ef64d7d87dc582a0daf5bc04d3dd8331\"",
+      "etag": "\"30857c2e2ce63e5b49f5cfcdb5644859\"",
       "id": "sun-news",
-      "last_modified": "Mon, 28 Sep 2026 02:05:08 GMT",
+      "last_modified": "Mon, 28 Sep 2026 15:49:03 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Sunderland",
       "status": "no_articles",
