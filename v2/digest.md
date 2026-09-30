@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 6
 
-Deadline **Sat 10 Oct, 10:00 UTC** — 11d 7h away.
+Deadline **Sat 10 Oct, 10:00 UTC** — 10d 3h away.
 Projections cover GW6–11.
 
 ## GW5 in review — what happened, and what it does and does not change
@@ -161,23 +161,23 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Groß £5.8 ⭑ | +24.1% | +759,951 | João Pedro £7.7 ⭑ | -4.5% | -323,962 |
-| Schade £6.2 | +28.4% | +356,062 | Szoboszlai £7.0 ⭑ | -4.7% | -170,314 |
-| Kostoulas £5.6 | +64.5% | +283,732 | Elanga £6.1 | -32.2% | -162,671 |
-| De Cuyper £5.0 | +8.9% | +271,517 | B.Fernandes £11.9 | -3.6% | -150,543 |
-| Hall £5.3 | +11.5% | +219,557 | M.Sangaré £5.6 | -11.7% | -127,862 |
-| Tarkowski £6.1 ⭑ | +10.9% | +196,974 | Tzolis £6.3 | -9.3% | -124,468 |
+| Groß £5.8 ⭑ | +24.2% | +767,772 | João Pedro £7.7 ⭑ | -4.6% | -326,733 |
+| Schade £6.2 | +28.5% | +360,783 | Szoboszlai £7.0 ⭑ | -4.8% | -172,784 |
+| Kostoulas £5.6 | +63.9% | +288,192 | Elanga £6.1 | -33.1% | -164,062 |
+| De Cuyper £5.0 | +9.0% | +274,363 | B.Fernandes £11.9 | -3.6% | -151,546 |
+| Hall £5.3 | +11.7% | +221,791 | M.Sangaré £5.6 | -11.8% | -128,911 |
+| Tarkowski £6.1 ⭑ | +11.4% | +206,687 | Tzolis £6.3 | -9.3% | -125,418 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Squad player Mbeumo (net -91k this event) at fall risk (-0.1m hurts the bank) [net -91k this event (in 33k / out 124k), sel 20.6% = Q3 (~150k to move), price 7.9 over 18 snaps (-0.1m in window)]
-- Squad player Szoboszlai (net -169k this event) at fall risk (-0.1m hurts the bank) [net -169k this event (in 33k / out 202k), sel 32.9% = Q3 (~150k to move), price 7.0 over 18 snaps (+0.0m in window)]
-- Squad player João Pedro (net -322k this event) at fall risk (-0.1m hurts the bank) [net -322k this event (in 57k / out 379k), sel 65.3% = Q3 (~150k to move), price 7.7 over 18 snaps (+0.2m in window), already -1x0.1m this event]
+- Squad player Mbeumo (net -91k this event) at fall risk (-0.1m hurts the bank) [net -91k this event (in 34k / out 126k), sel 20.6% = Q3 (~150k to move), price 7.9 over 19 snaps (-0.1m in window)]
+- Squad player Szoboszlai (net -170k this event) at fall risk (-0.1m hurts the bank) [net -170k this event (in 34k / out 204k), sel 32.8% = Q3 (~150k to move), price 7.0 over 19 snaps (+0.0m in window)]
+- Squad player João Pedro (net -324k this event) at fall risk (-0.1m hurts the bank) [net -324k this event (in 59k / out 383k), sel 65.2% = Q3 (~150k to move), price 7.7 over 19 snaps (+0.2m in window), already -1x0.1m this event]
 
-_Based on 18 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
+_Based on 19 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-09-29 02:25 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-09-30 07:07 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
