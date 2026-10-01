@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-09-30T06:51:43Z",
-  "coverage": 0.35,
+  "checked_at": "2026-10-01T06:09:58Z",
+  "coverage": 0.3,
   "enabled": 20,
   "gw": 6,
-  "healthy": 7,
+  "healthy": 6,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -16,11 +16,12 @@
       "club": "ARS",
       "content_hash": "9dec4f1cbaa6561accdf50dd598d0aa7bdc73fc353d14bc4d7df59e122132e41",
       "documents": 2,
+      "error": "HTTP Error 503: Service Unavailable",
       "etag": "\"1hoqjpb4xk2f4j\"",
       "id": "ars-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Arsenal",
-      "status": "ok",
+      "status": "error",
       "url": "https://www.arsenal.com/news"
     },
     {
@@ -29,9 +30,9 @@
       "club": "AVL",
       "content_hash": "9c7825becb8ff42f8c499d57fe8c1093bd5159607ffeacf1c5ac976ec67ff3f9",
       "documents": 1,
-      "etag": "\"864f1f102b3f57b7bcb37e789d246453\"",
+      "etag": "\"e17a4e6e81181611b4b9fe3ca6f41410\"",
       "id": "avl-news",
-      "last_modified": "Wed, 30 Sep 2026 02:07:46 GMT",
+      "last_modified": "Thu, 01 Oct 2026 02:08:43 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Aston Villa",
       "status": "no_articles",
@@ -59,9 +60,9 @@
       "article_validators": {},
       "club": "BOU",
       "content_hash": "acb5dd4aabbdaa586bbf7b20f9dfeaf68da886da33172d6ea44075f8dcbfa100",
-      "documents": 0,
+      "documents": 1,
       "id": "bou-news",
-      "last_modified": "Thu, 24 Sep 2026 11:56:50 GMT",
+      "last_modified": "Wed, 30 Sep 2026 09:50:25 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "AFC Bournemouth",
       "status": "no_articles",
@@ -74,7 +75,7 @@
       "content_hash": "dce59cdf6b8963e9a97ea55fed950746389dbaf8e3a6920bf3126805b782a30e",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Wed, 30 Sep 2026 06:51:46 GMT",
+      "last_modified": "Thu, 01 Oct 2026 06:09:59 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "no_articles",
@@ -82,16 +83,14 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {
-        "https://www.chelseafc.com/en/news/article/key-talking-points-from-sonia-bompastors-pre-lyon-press-conference": {}
-      },
+      "article_validators": {},
       "club": "CHE",
-      "content_hash": "2fadb87d78b0d3041b99a9d6d746bb01404fc1fb96f8c4bfad4d041168678b37",
-      "documents": 2,
+      "content_hash": "b61979eb5d84aea6da30811bd26cc4492be453c08e8d767845d335a66edebdf9",
+      "documents": 1,
       "id": "che-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Chelsea",
-      "status": "ok",
+      "status": "no_articles",
       "url": "https://www.chelseafc.com/en/news"
     },
     {
@@ -100,9 +99,9 @@
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
       "documents": 1,
-      "etag": "\"84b7c62f80165ef07fe9c0df1c8acd63\"",
+      "etag": "\"7a7d0fc715ee9d735da588c807a45565\"",
       "id": "cov-news",
-      "last_modified": "Wed, 30 Sep 2026 02:08:16 GMT",
+      "last_modified": "Thu, 01 Oct 2026 02:08:29 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Coventry City",
       "status": "no_articles",
@@ -114,7 +113,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"6j2oouiechtynv\"",
+      "etag": "\"f3nk2qf434tph8\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -127,9 +126,9 @@
       "club": "EVE",
       "content_hash": "54e2021d53c5959c4e3dc30111359c37658673c2e65215e1aaabf24197933129",
       "documents": 1,
-      "etag": "\"0bab89331d109b735de5c275df86fc40\"",
+      "etag": "\"4499df7ea240168538d750f786677afe\"",
       "id": "eve-news",
-      "last_modified": "Wed, 30 Sep 2026 02:05:17 GMT",
+      "last_modified": "Thu, 01 Oct 2026 02:05:57 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Everton",
       "status": "no_articles",
@@ -139,20 +138,20 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.fulhamfc.com/meetings-and-events/meetings-and-conferences": {
-          "etag": "\"357c31035a60bf3b4c131c589bfe8f9b\"",
-          "last_modified": "Wed, 30 Sep 2026 02:36:23 GMT"
+          "etag": "\"14f1228d03743cdd1e4ef6d799c6fff8\"",
+          "last_modified": "Thu, 01 Oct 2026 02:33:09 GMT"
         },
         "https://www.fulhamfc.com/riverside-development/artists-impression": {
-          "etag": "\"50ff26b1750f4ee411d22b663390617e\"",
-          "last_modified": "Wed, 30 Sep 2026 02:37:23 GMT"
+          "etag": "\"f2605170cce4c83c7180032ccb71fff5\"",
+          "last_modified": "Thu, 01 Oct 2026 02:34:07 GMT"
         }
       },
       "club": "FUL",
-      "content_hash": "7cd15afca93d42d286da03ddb6c02c2d77c26eb9997af5d3048eb2930d64d9b9",
+      "content_hash": "edc8053f7c2c5f8c8cb524f79ff1f39494e210d85c51afbfaf992e0f16376697",
       "documents": 3,
-      "etag": "\"64c91b2954cb6311c7669ffe4505a615\"",
+      "etag": "\"d6131809742bdf3256cda7fa7afb390a\"",
       "id": "ful-news",
-      "last_modified": "Wed, 30 Sep 2026 02:37:22 GMT",
+      "last_modified": "Thu, 01 Oct 2026 02:34:06 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Fulham",
       "status": "ok",
@@ -164,9 +163,9 @@
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
       "documents": 1,
-      "etag": "\"a05f51edd0ba42ba8344de3b9e958b73\"",
+      "etag": "\"ea8631af70da38fdf17454519e891e9b\"",
       "id": "hul-news",
-      "last_modified": "Wed, 30 Sep 2026 02:07:16 GMT",
+      "last_modified": "Thu, 01 Oct 2026 02:09:59 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Hull City",
       "status": "no_articles",
@@ -176,11 +175,11 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "IPS",
-      "content_hash": "bed269ff5310a69551dcba131e03a4d03eb93de15d333bb83d24086e35326a2c",
+      "content_hash": "636b6b01e7ea9afc50605e5215f2c47150ff6a65b894206847921623d682e08c",
       "documents": 1,
-      "etag": "\"5185d0aebf615519798b8388d54fd3f5\"",
+      "etag": "\"a44823c8aa6b4a53cda308e12923e243\"",
       "id": "ips-news",
-      "last_modified": "Wed, 30 Sep 2026 02:13:44 GMT",
+      "last_modified": "Thu, 01 Oct 2026 02:16:05 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
       "status": "no_articles",
@@ -188,34 +187,42 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {},
+      "article_validators": {
+        "https://www.leedsunited.com/en/news/tarik-muharemovic-reacts-to-second-international-goal-and-previews-meeting-with-leeds-united-teammate": {}
+      },
       "club": "LEE",
-      "content_hash": "66541fd8f4482437a9d532f3de38a1b9da25a8cd7805345737d85e69bfc53344",
-      "documents": 1,
+      "content_hash": "2f0d1f532d5f30da21d873f56ad0ff2ccfbc73c1a1cba5079c47909c0ff25a3c",
+      "documents": 2,
       "id": "lee-news",
-      "last_modified": "Wed, 30 Sep 2026 06:10:42 GMT",
+      "last_modified": "Thu, 01 Oct 2026 06:10:01 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
-      "status": "no_articles",
+      "status": "ok",
       "url": "https://www.leedsunited.com/en/news"
     },
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.liverpoolfc.com/news/cody-gakpo-withdraws-international-duty": {
-          "etag": "\"1bc2c-KWgDisBkuy9DiqOAIyaJlNWMpYc\""
+        "https://www.liverpoolfc.com/news/aurelie-csillag-injury-update": {
+          "etag": "\"1bc01-1g0dEdDJ8a4M0zrvgDKK2pr5qzo\""
+        },
+        "https://www.liverpoolfc.com/news/behind-scenes-liverpools-official-mens-squad-photo": {
+          "etag": "\"23e78-nCPa3/Fu+jW76zUcGLOkbonyZ3Q\""
         },
         "https://www.liverpoolfc.com/news/grace-fisk-and-khiara-keating-named-england-squad": {
-          "etag": "\"1baa4-Wdm+Q2JQiIQzT1NMzQE7+b0m7gQ\""
+          "etag": "\"1baa0-AROngCYwtXBUTAy1Ob2qIz3Z7tU\""
         },
         "https://www.liverpoolfc.com/news/liverpools-official-mens-squad-photo-2026-27-released": {
-          "etag": "\"1ab2b-//G9LmVl5HiHm8OVwTDyHjompOg\""
+          "etag": "\"1ab27-E9ItUVMizdmrA3sGXrhLNbeqfOk\""
+        },
+        "https://www.liverpoolfc.com/news/pressing-attacking-approach-and-solidity-opta-analysis-liverpools-start-2026-27": {
+          "etag": "\"20ac5-qNXRtxELto58IJAL+KDaQv/MYB0\""
         }
       },
       "club": "LIV",
-      "content_hash": "c3e8b74eef915f505e177b9e8fe86d71ecccf1d094a6e4bda10749f385121ce8",
-      "documents": 4,
-      "etag": "\"33c86-9QbX1sH3Ddvrqjw74WAUE7B2U58\"",
+      "content_hash": "27cfd3fe6d279e02bcd919fa525bb1c4d200361b97fe1a943b7ebacfca27b2c3",
+      "documents": 6,
+      "etag": "\"33336-EPXHDUV3pxtRFMvHMIGn1zdKcR8\"",
       "id": "liv-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
@@ -228,10 +235,10 @@
         "https://www.mancity.com/news/mens/liverpool-v-city-premier-league-match-preview-october-2026-63926279": {}
       },
       "club": "MCI",
-      "content_hash": "87e20f29690e3fecc181ca5ada4cb8c5da63cc6b4c12a5eac6a963a767636cfd",
+      "content_hash": "6f99728bf00e750a612f89b4f1308c039439bf0c5e86370248d4307d62880e83",
       "documents": 2,
       "id": "mci-news",
-      "last_modified": "Wed, 30 Sep 2026 06:48:35 GMT",
+      "last_modified": "Thu, 01 Oct 2026 06:07:36 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
       "status": "ok",
@@ -262,7 +269,7 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "NEW",
-      "content_hash": "2dcc4e05c5bbca79de92465eeafac8f43d1ca15f42a0d74e825ac35c4b3d3ca4",
+      "content_hash": "eb30a8aa3b70e1e327281c6de9e4fabfc71fa0dab65407102ead04eb05db68ff",
       "documents": 1,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -276,9 +283,9 @@
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
       "documents": 1,
-      "etag": "\"58ad2199315e350831dc89387a909f30\"",
+      "etag": "\"e9ad479ecd346ae610de8e8a468ab74f\"",
       "id": "nfo-news",
-      "last_modified": "Wed, 30 Sep 2026 02:09:04 GMT",
+      "last_modified": "Thu, 01 Oct 2026 02:08:15 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -290,9 +297,9 @@
       "club": "SUN",
       "content_hash": "191fbb568fbd24f60eb2575b6a2ad66dbbf72f8961bce0b666fc2a248e2add01",
       "documents": 1,
-      "etag": "\"77fab8a2f07b25c2fc5a33949609b161\"",
+      "etag": "\"8b5a5c377ea7b7b2dc3120bcc226b712\"",
       "id": "sun-news",
-      "last_modified": "Wed, 30 Sep 2026 02:04:57 GMT",
+      "last_modified": "Thu, 01 Oct 2026 02:05:14 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Sunderland",
       "status": "no_articles",

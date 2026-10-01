@@ -1,14 +1,14 @@
 {
   "affected_clubs": [
-    "MCI"
+    "ARS"
   ],
   "affected_owned": [],
-  "checked_at": "2026-09-30T06:51:43Z",
+  "checked_at": "2026-10-01T06:09:58Z",
   "claims": 0,
-  "coverage": 0.35,
+  "coverage": 0.3,
   "deadline": "2026-10-10T10:00:00Z",
   "gw": 6,
-  "notification_key": "9068280f15ce8e8afa44",
+  "notification_key": "59102da9681f013e7b76",
   "notify_required": false,
   "official_fpl": {
     "1": {
@@ -87,9 +87,9 @@
       "status": "a"
     },
     "112": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Foot injury - 75% chance of playing",
+      "status": "d"
     },
     "113": {
       "chance": 100,
@@ -3349,9 +3349,10 @@
   },
   "official_fpl_ok": true,
   "price_changed": [
-    34,
-    193,
-    358
+    17,
+    202,
+    229,
+    421
   ],
   "rebuild_required": true,
   "state_changed": false,
