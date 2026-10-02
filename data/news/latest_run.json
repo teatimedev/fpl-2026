@@ -3,9 +3,9 @@
     "ARS"
   ],
   "affected_owned": [],
-  "checked_at": "2026-10-01T06:09:58Z",
+  "checked_at": "2026-10-02T05:53:37Z",
   "claims": 0,
-  "coverage": 0.3,
+  "coverage": 0.35,
   "deadline": "2026-10-10T10:00:00Z",
   "gw": 6,
   "notification_key": "59102da9681f013e7b76",
@@ -757,9 +757,9 @@
       "status": "a"
     },
     "233": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Leg injury - 75% chance of playing",
+      "status": "d"
     },
     "234": {
       "chance": 0,
@@ -1607,9 +1607,9 @@
       "status": "a"
     },
     "387": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "388": {
       "chance": null,
@@ -2007,9 +2007,9 @@
       "status": "i"
     },
     "459": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "46": {
       "chance": null,
@@ -3348,12 +3348,7 @@
     }
   },
   "official_fpl_ok": true,
-  "price_changed": [
-    17,
-    202,
-    229,
-    421
-  ],
+  "price_changed": [],
   "rebuild_required": true,
   "state_changed": false,
   "status": "red",
