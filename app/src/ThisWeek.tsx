@@ -294,7 +294,8 @@ function PlanDetails({
   const plan = W.plan ?? null
   const sim = plan?.this_week_sim ?? null
   const moveCount = plan?.n_now ?? 0
-  const moveBar = plan?.move_bar ?? moveCount * 2
+  const sampled = plan?.decision ?? null
+  const bestMove = sampled?.best_move ?? null
   const holdRisk = W.price?.hold_risk ?? null
   const decisionInstruction = W.decision?.instruction ?? tr.advice
   const noTransfer = W.decision?.kind === 'hold'
@@ -310,6 +311,8 @@ function PlanDetails({
     const d = inn.reduce((s, i) => s + price(i), 0) - out.reduce((s, i) => s + price(i), 0)
     return signed(d)
   }
+  const vsSaving = (sampledGain?: number | null, nominal?: number | null) =>
+    sampledGain != null ? signed(sampledGain) : nominal != null ? `${signed(nominal)}*` : '—'
   const netCell = (net: number, gain: number) => {
     const hit = gain - net
     return (
@@ -345,13 +348,19 @@ function PlanDetails({
           {!!plan?.candidates?.length && (
             <details className="sync-details">
               <summary>Transfers compared with holding</summary>
-              <p className="hint">Each option includes the future transfers and hit costs it leads to over GW{gw}–{horizon}. A move must beat saving by the bar shown.</p>
+              {sampled ? (
+                <p className="hint">Each option and holding were re-planned over GW{gw}–{horizon} in the same {sampled.samples} sampled forecast revisions, including the future transfers and hit costs each leads to. Later weeks count for less, and the squad, banked transfers and money left after GW{horizon} count too. The option with the best average is chosen, preferring fewer moves when the difference is within one standard error.</p>
+              ) : (
+                <p className="hint">Each option includes the future transfers and hit costs it leads to over GW{gw}–{horizon}.</p>
+              )}
               <div className="tbl-scroll"><table>
-                <thead><tr><th className="l">Out → In</th><th>Gain vs saving</th><th>Bar</th><th>Worth it?</th></tr></thead>
-                <tbody>{plan.candidates.filter(row => row.status === 'scored').map((row, index) => (
+                <thead><tr><th className="l">Out → In</th><th>Expected vs saving</th>{sampled && <><th>± s.e.</th><th>Beats saving</th></>}<th>Chosen?</th></tr></thead>
+                <tbody>{plan.candidates.filter(row => row.status === 'scored' && !row.hold && (row.in_?.length ?? 0) > 0).map((row, index) => (
                   <tr key={index}>
                     <td className="l">{names(row.out ?? [])} → {names(row.in_ ?? [])}</td>
-                    <td>{signed(row.gain ?? 0)}</td><td>{(row.move_bar ?? 0).toFixed(1)}</td>
+                    <td>{signed(row.gain ?? 0)}</td>
+                    {sampled && <><td className="mono">{(row.se ?? 0).toFixed(1)}</td>
+                      <td className="mono">{row.p_beats_hold == null ? '—' : `${Math.round(row.p_beats_hold * 100)}%`}</td></>}
                     <td>{row.qualifies ? 'Yes' : 'No'}</td>
                   </tr>
                 ))}</tbody>
@@ -364,10 +373,9 @@ function PlanDetails({
               In {sim.n_sims.toLocaleString('en-GB')} simulations, the proposed moves
               beat holding <strong>{Math.round(sim.p_b_wins * 100)}% of the time</strong>
               {' '}and gained <strong className="mono">{signed(sim.mean_delta)} pts</strong>
-              {' '}on average this gameweek, after transfer hits. {noTransfer && moveCount > 0 ? (
-                <>Over the full planning window, acting now instead of waiting gains
-                  {' '}<strong className="mono">{signed(plan?.diff ?? 0)}</strong>, short of the
-                  {' '}<strong className="mono">+{moveBar.toFixed(1)}</strong> bar for {moveCount} move{moveCount === 1 ? '' : 's'}.</>
+              {' '}on average this gameweek, after transfer hits. {noTransfer && moveCount > 0 && bestMove ? (
+                <>Over the full planning window, acting now instead of waiting is worth
+                  {' '}<strong className="mono">{signed(bestMove.gain)}</strong> in expectation, so saving stands.</>
               ) : null}
             </p>
           )}
@@ -501,7 +509,7 @@ function PlanDetails({
                   <thead>
                     <tr>
                       <th className="l">Out</th><th className="l">In</th>
-                      <th>£</th><th>On pitch</th><th>Gain</th><th>Net of hits</th>
+                      <th>£</th><th>On pitch</th><th>Gain alone</th><th>Net of hits</th><th>vs saving</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -513,6 +521,7 @@ function PlanDetails({
                         <td className="mono">{s.xi_gain == null ? '—' : signed(s.xi_gain)}</td>
                         <td style={{ color: 'var(--flood-soft)' }}>+{s.gain.toFixed(1)}</td>
                         <td>{netCell(s.net, s.gain)}</td>
+                        <td className="mono">{vsSaving(s.vs_hold, s.vs_hold_nominal)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -527,7 +536,7 @@ function PlanDetails({
                     <thead>
                       <tr>
                         <th className="l">Out</th><th className="l">In</th>
-                        <th>£</th><th>On pitch</th><th>Gain</th><th>Net of hits</th>
+                        <th>£</th><th>On pitch</th><th>Gain alone</th><th>Net of hits</th><th>vs saving</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -539,6 +548,7 @@ function PlanDetails({
                           <td className="mono">{s.xi_gain == null ? '—' : signed(s.xi_gain)}</td>
                           <td style={{ color: 'var(--flood-soft)' }}>+{s.gain.toFixed(1)}</td>
                           <td>{netCell(s.net, s.gain)}</td>
+                          <td className="mono">{vsSaving(s.vs_hold, s.vs_hold_nominal)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -548,8 +558,10 @@ function PlanDetails({
             )}
             <p className="hint" style={{ padding: '10px 14px 14px' }}>
               On pitch is the lift to your expected XI and captain over GW{gw}–{horizon};
-              gain adds auto-sub cover when a starter does not play at all; net takes off {HIT_COST} per move
-              beyond your free transfers. The decision above also compares future transfer paths.
+              gain alone adds auto-sub cover and assumes you then make no other transfer; net takes off {HIT_COST} per move
+              beyond your free transfers. vs saving is what the move is worth against saving the transfer
+              and re-planning (the basis of the decision above); — means it was not tested,
+              and values marked * were not re-tested across forecast scenarios.
             </p>
             </div>
           </details>

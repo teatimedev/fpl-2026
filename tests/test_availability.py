@@ -3,10 +3,12 @@ import unittest
 from pathlib import Path
 
 from v2.availability import (
+    availability_for_gameweek,
     availability_forecast,
     deadline_start_probability,
     load_overrides,
     status_for_gameweek,
+    undated_return_probability,
 )
 
 
@@ -317,6 +319,63 @@ class AvailabilityForecastTests(unittest.TestCase):
             ),
             "i",
         )
+
+    def test_undated_injury_is_not_fully_fit_the_week_after_a_zero(self):
+        news = "Back injury - Unknown return date"
+        self.assertEqual(status_for_gameweek("i", 7, 6, news=news), "i")
+        deadlines = {6: "2026-10-10T10:00:00Z", 7: "2026-10-17T10:00:00Z",
+                     8: "2026-10-23T17:30:00Z", 11: "2026-11-21T11:00:00Z"}
+        fit = {gw: availability_for_gameweek(
+            "i", gw, 6, chance=0, news=news, gw_deadline=deadlines[gw],
+            flag_deadline=deadlines[6])[1] for gw in deadlines}
+        self.assertEqual(fit[6], 0.0)
+        # the measured ramp: ~0.04 a week on, ~0.15 two weeks on
+        self.assertAlmostEqual(fit[7], 0.039, places=3)
+        self.assertAlmostEqual(fit[8], 0.151, places=2)
+        self.assertLess(fit[7], fit[8])
+        self.assertLess(fit[8], fit[11])
+        self.assertLess(fit[11], 0.6)
+
+    def test_undated_ramp_falls_back_to_a_week_per_gameweek(self):
+        _, fit = availability_for_gameweek(
+            "i", 8, 6, chance=0, news="Achilles injury - Unknown return date")
+        self.assertAlmostEqual(fit, undated_return_probability(14.0))
+        self.assertAlmostEqual(undated_return_probability(5.0), 0.0)
+        self.assertGreater(undated_return_probability(365.0), 0.99)
+
+    def test_ramp_scales_starts_and_cameos(self):
+        status, fit = availability_for_gameweek(
+            "i", 9, 6, chance=0, news="Knee injury - Unknown return date")
+        forecast = availability_forecast(
+            player_id=1, gw=9, base_start=0.9, base_start_minutes=85,
+            position="DEF", status=status, availability_probability=fit)
+        self.assertAlmostEqual(forecast.p_start, 0.9 * fit, places=5)
+        self.assertLess(forecast.p_play, fit)
+
+    def test_dated_injury_still_clears_on_its_date(self):
+        news = "Hamstring injury - Expected back 10 Oct"
+        self.assertEqual(
+            availability_for_gameweek("i", 7, 6, chance=0, news=news,
+                                      gw_deadline="2026-10-17T10:00:00Z",
+                                      flag_deadline="2026-10-10T10:00:00Z"),
+            ("a", 1.0))
+        status, fit = availability_for_gameweek(
+            "i", 7, 5, chance=0, news="Leg injury - Expected back 28 Nov",
+            gw_deadline="2026-10-17T10:00:00Z")
+        self.assertEqual((status, fit), ("i", 0.0))
+
+    def test_undated_suspension_is_a_one_match_ban(self):
+        self.assertEqual(availability_for_gameweek("s", 5, 4), ("a", 1.0))
+        self.assertEqual(availability_for_gameweek("s", 4, 4), ("s", 0.0))
+
+    def test_doubt_decays_after_the_flagged_deadline(self):
+        self.assertEqual(availability_for_gameweek("d", 6, 6, chance=75), ("d", 0.75))
+        status, week = availability_for_gameweek("d", 7, 6, chance=75)
+        _, fortnight = availability_for_gameweek("d", 8, 6, chance=50)
+        self.assertEqual(status, "d")
+        self.assertAlmostEqual(week, 1 - 0.25 * 0.5 ** 0.5)
+        self.assertAlmostEqual(fortnight, 1 - 0.5 * 0.5)
+        self.assertEqual(availability_for_gameweek("a", 7, 6), ("a", 1.0))
 
     def test_doubtful_chance_is_a_next_deadline_multiplier(self):
         self.assertAlmostEqual(

@@ -83,7 +83,7 @@ export function LastWeek({ retro, poolById, openPlayer }: {
           <ul className="problems soft" style={{ margin: '0 0 12px' }}>
             {actRows.map(r => (
               <li key={r.id} className="act">
-                <strong>Act:</strong>{' '}
+                <strong>{/above/i.test(r.note) ? 'Role growing:' : r.cls === 'unavailable' || r.cls.startsWith('minutes') ? 'Check:' : 'Role changed:'}</strong>{' '}
                 <button className="plink strong" onClick={() => openPlayer(r.id)}>{nameOf(r.id)}</button>
                 {' '}— {CLS[r.cls].label}{r.subtype ? ` (${r.subtype})` : ''}: {r.note}
                 {r.start_move && r.start_move !== 'start estimate unchanged' && <> · {r.start_move}</>}
@@ -91,7 +91,7 @@ export function LastWeek({ retro, poolById, openPlayer }: {
             ))}
             {holdRows.map(r => (
               <li key={r.id}>
-                <strong>Hold — {r.cls === 'variance' ? 'variance, no action' : CLS[r.cls].label}:</strong>{' '}
+                <strong>{r.cls === 'variance' ? 'Just variance' : CLS[r.cls].label}:</strong>{' '}
                 <button className="plink strong" onClick={() => openPlayer(r.id)}>{nameOf(r.id)}</button>
                 {' '}{r.note}
                 {r.proj_next != null && <> Projection next: <span className="mono">{f1(r.proj_next)}</span>.</>}

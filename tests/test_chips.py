@@ -112,3 +112,40 @@ def test_an_entirely_blank_gameweek_is_present_in_the_fixture_outlook():
         fixtures=[])
     assert doubles == {}
     assert blanks == {1: ['A', 'B']}
+
+
+def test_future_chip_weeks_use_the_planned_squad_not_todays():
+    squad = squad_fixture(3)
+    players = {p['id']: p for p in squad}
+    # The plan swaps the weakest-positioned last player for a strong one by GW3.
+    newcomer = dict(squad[-1], id='new', team='NEW', proj_by_gw=[9.] * 3, by_gw=[9.] * 3,
+                    play_by_gw=[1.] * 3)
+    players['new'] = newcomer
+    planned = [p['id'] for p in squad[:-1]] + ['new']
+    windows = {key: [(1, 19)] for key in chips.NAMES}
+    kw = dict(sell_prices={p['id']: p['price'] for p in squad})
+    with patch.object(chips, 'doubles_and_blanks', return_value=({}, {})), \
+            patch.object(chips, 'best_possible_week', return_value=(100., [], None)):
+        today = chips.evaluate(players, [p['id'] for p in squad], 0., 2, 3, windows, {}, **kw)
+        path = chips.evaluate(players, [p['id'] for p in squad], 0., 2, 3, windows, {},
+                              path={3: planned}, **kw)
+    assert path['gaps']['2'] == today['gaps']['2']      # this week: today's squad
+    assert path['gaps']['3'] < today['gaps']['3']       # GW3: the stronger planned squad
+    assert 'selected transfer plan' in path['method']
+
+
+def test_planned_squads_reads_path_weeks():
+    path = {'weeks': [{'gw': 6, 'squad': list(range(15))}, {'gw': 7, 'squad': [1, 2]}]}
+    assert chips.planned_squads(path, []) == {6: list(range(15))}
+    assert chips.planned_squads(None, []) == {}
+
+
+def test_wildcard_waits_for_a_clearly_better_planned_week():
+    windows = {key: [(1, 19)] for key in chips.NAMES}
+    later = evaluate_fixture(5, 8, windows, wc_weeks={5: 22., 6: 15., 7: 30.})
+    assert later['chips']['wildcard']['play'] is False
+    assert later['chips']['wildcard']['best_gw'] == 7
+    assert 'GW7' in later['chips']['wildcard']['advice']
+    now = evaluate_fixture(5, 8, windows, wc_weeks={5: 29., 6: 15., 7: 30.})
+    assert now['chips']['wildcard']['play'] is True
+    assert now['chips']['wildcard']['now'] == 29.

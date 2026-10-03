@@ -34,6 +34,17 @@ class PolicyEvidenceTests(unittest.TestCase):
         self.assertEqual(set(hold['squad']), set(ids))
         self.assertEqual(hold['hit'], 0)
 
+    def test_sampled_decision_and_rejected_best_move_are_frozen_for_grading(self):
+        players, ids = pool()
+        plan = dict(diff=0, diff_unrounded=0, weeks=[dict(out=[], in_=[], hits=0)],
+                    decision=dict(chosen=dict(in_=[], out=[]),
+                                  best_move=dict(in_=[16], out=[8])))
+        rows = {r['label']: r for r in freeze(players, [players[i] for i in ids], 4, {},
+                                              ft=1, plan=plan)}
+        self.assertEqual(set(rows['sampled_act_or_hold']['squad']), set(ids))
+        self.assertIn(16, rows['sampled_best_move']['squad'])
+        self.assertEqual(rows['sampled_best_move']['hit'], 0)
+
     def test_stressing_incoming_can_erase_a_transfer_advantage(self):
         players, ids = pool()
         for p in players.values():

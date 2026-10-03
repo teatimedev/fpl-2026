@@ -49,23 +49,46 @@ export function plainPlayerCheck(player: Player | undefined, check: WeeklyCheck)
 }
 
 /** The numbers behind the transfer decision, in one plain sentence. */
+const pct = (p: number | null | undefined) => `${Math.round((p ?? 0) * 100)}%`
+const signedPts = (v: number) => `${v >= 0 ? '+' : ''}${v.toFixed(1)}`
+
+/** One sentence on why the decision is what it is. */
 export function decisionReason(w: Weekly, name: (id: number) => string) {
   const plan = w.plan
   const hold = w.decision?.kind === 'hold'
   const window = `Gameweeks ${w.gw}–${w.horizon}`
+  const pairs = (out: number[], inn: number[]) => out.map((o, i) => `${name(o)} → ${name(inn[i])}`).join(', ')
+  const sampled = plan?.decision
+  if (sampled) {
+    const n = sampled.samples
+    if (hold) {
+      const best = sampled.best_move
+      if (!best) return `No transfer tested beats saving it over ${window}.`
+      const move = pairs(best.out, best.in_)
+      return best.gain <= 0
+        ? `Saving the transfer beats every move tested: the best (${move}) is ${signedPts(best.gain)} pts against holding and comes out ahead in only ${pct(best.p_beats_hold)} of ${n} forecast scenarios.`
+        : `The best move tested (${move}) is only ${signedPts(best.gain)} ± ${best.se.toFixed(1)} pts against holding across ${n} forecast scenarios, which is within the noise, so saving stands.`
+    }
+    if ((w.decision?.moves?.length ?? 0) > 0) {
+      const chosen = sampled.chosen
+      return `Expected to gain ${signedPts(chosen.gain)} pts compared with saving your transfer (later weeks discounted, counting what carries past GW${w.horizon}); it came out ahead in ${pct(chosen.p_beats_hold)} of ${n} forecast scenarios.`
+    }
+    return ''
+  }
+  // Older weekly data (legacy per-move bar); kept so a stale bundle still reads.
   const scored = (plan?.candidates ?? []).filter(c => c.status === 'scored'
     && (c.in_?.length ?? 0) > 0 && Number.isFinite(c.gain))
   if (hold) {
     const best = scored.sort((a, b) => (b.gain ?? 0) - (a.gain ?? 0))[0]
     if (!best) return `No transfer improves your team over ${window}.`
-    const move = (best.out ?? []).map((out, i) => `${name(out)} → ${name(best.in_![i])}`).join(', ')
+    const move = pairs(best.out ?? [], best.in_ ?? [])
     const gain = best.gain ?? 0
-    return gain <= 0
+    return gain <= 0 || best.move_bar == null
       ? `No transfer beats saving it: the best tested (${move}) is ${gain.toFixed(1)} pts over ${window}.`
-      : `The best move tested (${move}) adds only ${gain.toFixed(1)} pts over ${window} compared with saving the transfer — below the ${(best.move_bar ?? 0).toFixed(1)}-point bar for spending it.`
+      : `The best move tested (${move}) adds only ${gain.toFixed(1)} pts over ${window} compared with saving the transfer — below the ${best.move_bar.toFixed(1)}-point bar for spending it.`
   }
   if (plan && Number.isFinite(plan.diff) && (w.decision?.moves?.length ?? 0) > 0)
-    return `Expected to gain ${plan.diff >= 0 ? '+' : ''}${plan.diff.toFixed(1)} pts over ${window} compared with saving your transfers, after any hits.`
+    return `Expected to gain ${signedPts(plan.diff)} pts over ${window} compared with saving your transfers, after any hits.`
   return ''
 }
 
