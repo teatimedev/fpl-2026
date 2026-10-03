@@ -1,14 +1,12 @@
 {
-  "affected_clubs": [
-    "ARS"
-  ],
+  "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-10-02T05:53:37Z",
+  "checked_at": "2026-10-03T02:06:37Z",
   "claims": 0,
-  "coverage": 0.35,
+  "coverage": 0.3,
   "deadline": "2026-10-10T10:00:00Z",
   "gw": 6,
-  "notification_key": "59102da9681f013e7b76",
+  "notification_key": "a85c6479525594e0c8c9",
   "notify_required": false,
   "official_fpl": {
     "1": {
@@ -2552,9 +2550,9 @@
       "status": "d"
     },
     "557": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Hamstring injury - 75% chance of playing",
+      "status": "d"
     },
     "558": {
       "chance": null,
@@ -3348,7 +3346,14 @@
     }
   },
   "official_fpl_ok": true,
-  "price_changed": [],
+  "price_changed": [
+    198,
+    339,
+    351,
+    368,
+    392,
+    488
+  ],
   "rebuild_required": true,
   "state_changed": false,
   "status": "red",
