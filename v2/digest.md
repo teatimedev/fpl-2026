@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 6
 
-Deadline **Sat 10 Oct, 10:00 UTC** — 6d 8h away.
+Deadline **Sat 10 Oct, 10:00 UTC** — 5d 8h away.
 Projections cover GW6–11.
 
 ## GW5 in review — what happened, and what it does and does not change
 
-_359 players classified: 40 unavailable, 20 minutes loss, 29 minutes watch, 20 minutes gain, 8 role change, 61 variance, 181 on model. Retrospective classes graded: 4 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_359 players classified: 42 unavailable, 20 minutes loss, 29 minutes watch, 20 minutes gain, 8 role change, 60 variance, 180 on model. Retrospective classes graded: 4 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -159,23 +159,23 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Groß £5.9 ⭑ | +25.0% | +804,086 | João Pedro £7.7 ⭑ | -4.7% | -339,041 |
-| Schade £6.2 | +29.6% | +380,815 | Szoboszlai £6.9 ⭑ | -5.2% | -185,909 |
-| Kostoulas £5.6 | +64.7% | +306,241 | Elanga £6.1 | -34.3% | -169,928 |
-| De Cuyper £5.0 | +9.3% | +286,808 | B.Fernandes £11.9 | -3.6% | -154,565 |
-| Hall £5.3 | +12.1% | +232,509 | Tzolis £6.3 | -10.4% | -137,901 |
-| Tarkowski £6.2 ⭑ | +11.9% | +218,989 | M.Sangaré £5.6 | -12.2% | -133,546 |
+| Groß £5.9 ⭑ | +25.2% | +812,595 | João Pedro £7.7 ⭑ | -4.8% | -342,075 |
+| Schade £6.2 | +29.7% | +386,221 | Szoboszlai £6.9 ⭑ | -5.2% | -188,488 |
+| Kostoulas £5.6 | +64.2% | +310,984 | Elanga £6.1 | -34.6% | -171,560 |
+| De Cuyper £5.0 | +9.4% | +290,382 | B.Fernandes £11.9 | -3.7% | -155,850 |
+| Hall £5.3 | +12.3% | +235,996 | Tzolis £6.3 | -10.8% | -142,452 |
+| Tarkowski £6.2 ⭑ | +12.0% | +221,402 | M.Sangaré £5.6 | -12.4% | -134,969 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Squad player Mbeumo (net -94k this event) at fall risk (-0.1m hurts the bank) [net -94k this event (in 38k / out 132k), sel 20.5% = Q3 (~150k to move), price 7.9 over 23 snaps (-0.1m in window)]
-- Squad player Szoboszlai (net -183k this event) at fall risk (-0.1m hurts the bank) [net -183k this event (in 37k / out 220k), sel 32.7% = Q3 (~150k to move), price 6.9 over 23 snaps (-0.1m in window), already -1x0.1m this event]
-- Squad player João Pedro (net -336k this event) at fall risk (-0.1m hurts the bank) [net -336k this event (in 65k / out 401k), sel 65.0% = Q3 (~150k to move), price 7.7 over 23 snaps (+0.2m in window), already -1x0.1m this event]
+- Squad player Mbeumo (net -95k this event) at fall risk (-0.1m hurts the bank) [net -95k this event (in 39k / out 134k), sel 20.5% = Q3 (~150k to move), price 7.9 over 24 snaps (-0.1m in window)]
+- Squad player Szoboszlai (net -186k this event) at fall risk (-0.1m hurts the bank) [net -186k this event (in 38k / out 224k), sel 32.7% = Q3 (~150k to move), price 6.9 over 24 snaps (-0.1m in window), already -1x0.1m this event]
+- Squad player João Pedro (net -339k this event) at fall risk (-0.1m hurts the bank) [net -339k this event (in 67k / out 406k), sel 65.0% = Q3 (~150k to move), price 7.7 over 24 snaps (+0.2m in window), already -1x0.1m this event]
 
-_Based on 23 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
+_Based on 24 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-10-04 02:05 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-10-05 01:28 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
