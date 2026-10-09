@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-09T09:18:09Z",
-  "coverage": 0.4,
+  "checked_at": "2026-10-09T21:04:43Z",
+  "coverage": 0.45,
   "enabled": 20,
   "gw": 6,
-  "healthy": 8,
+  "healthy": 9,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -74,7 +74,7 @@
       "content_hash": "e1e13ce5e495bcfbab3785e40f8d98e6c87a644983e90ad4d2616f7d5cdc3852",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Fri, 09 Oct 2026 09:06:00 GMT",
+      "last_modified": "Fri, 09 Oct 2026 14:47:19 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "no_articles",
@@ -99,9 +99,9 @@
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
       "documents": 1,
-      "etag": "\"83f40e5b344eab706800540d556a4537\"",
+      "etag": "\"3dce567b7c680ea5fc9d05012a0742b2\"",
       "id": "cov-news",
-      "last_modified": "Fri, 09 Oct 2026 08:21:38 GMT",
+      "last_modified": "Fri, 09 Oct 2026 15:00:56 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Coventry City",
       "status": "no_articles",
@@ -113,7 +113,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"123j5un1qk14d4u\"",
+      "etag": "\"v40a84yj054ovr\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -138,20 +138,28 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.fulhamfc.com/meetings-and-events/meetings-and-conferences": {
-          "etag": "\"80f4e8fe421e29e8160886b86099bd7c\"",
-          "last_modified": "Fri, 09 Oct 2026 02:23:40 GMT"
+          "etag": "\"fe8d5903c798aa4e0a728cd104e96297\"",
+          "last_modified": "Fri, 09 Oct 2026 11:07:41 GMT"
+        },
+        "https://www.fulhamfc.com/news/2026/october/09/matchday-preview-ipswich/": {
+          "etag": "\"26a3eb44b852a60ac484da78c9288a24\"",
+          "last_modified": "Fri, 09 Oct 2026 13:13:01 GMT"
+        },
+        "https://www.fulhamfc.com/news/2026/october/09/pre-ipswich-press-conference/": {
+          "etag": "\"2f2149093b03adae6369dbfa003cafd0\"",
+          "last_modified": "Fri, 09 Oct 2026 11:08:32 GMT"
         },
         "https://www.fulhamfc.com/riverside-development/artists-impression": {
-          "etag": "\"9ce2c6fbf52f7d4559db466b23b48558\"",
-          "last_modified": "Fri, 09 Oct 2026 02:24:31 GMT"
+          "etag": "\"69c303cc97de7cdcd5c04b82b095e2b6\"",
+          "last_modified": "Fri, 09 Oct 2026 11:08:34 GMT"
         }
       },
       "club": "FUL",
-      "content_hash": "7e2682a08f8a6bf1a2746542f3059f5adb1ad6a0e7d9afa5ac52f9fc2ed27753",
-      "documents": 3,
-      "etag": "\"eebc664ab96d7516eb3f7b22067ed997\"",
+      "content_hash": "536d5ca87ee595bdc0c4e3ae0f0b53b8f17dbf0c57f39d9865771113f904aaad",
+      "documents": 5,
+      "etag": "\"b8afd01fecba6151f48490f3817380ae\"",
       "id": "ful-news",
-      "last_modified": "Fri, 09 Oct 2026 02:24:30 GMT",
+      "last_modified": "Fri, 09 Oct 2026 15:01:19 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Fulham",
       "status": "ok",
@@ -162,10 +170,10 @@
       "article_validators": {},
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
-      "documents": 0,
-      "etag": "\"b5778b137e4662b69b4016a51cbf2751\"",
+      "documents": 1,
+      "etag": "\"52f45e059f0c1a89a3efc6388d1db6b0\"",
       "id": "hul-news",
-      "last_modified": "Fri, 09 Oct 2026 02:08:41 GMT",
+      "last_modified": "Fri, 09 Oct 2026 19:50:18 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Hull City",
       "status": "no_articles",
@@ -173,30 +181,38 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {},
+      "article_validators": {
+        "https://www.itfc.co.uk/news/2026/october/09/Gary-ONeil-early-Town-team-news-Fulham-Premier-League/": {
+          "etag": "\"a55606d22bb5ca07edc71cf7e24b6e92\"",
+          "last_modified": "Fri, 09 Oct 2026 15:53:44 GMT"
+        },
+        "https://www.itfc.co.uk/news/2026/october/09/matchday-guide---fulham--h-/": {
+          "etag": "\"aaa51174994adec60161fbf7d0f362ff\"",
+          "last_modified": "Fri, 09 Oct 2026 15:54:34 GMT"
+        }
+      },
       "club": "IPS",
-      "content_hash": "9d429235b9948af56021ee8f5054f7468a400c39a95f28e4a2dd0ea0b07b3cf5",
-      "documents": 1,
-      "etag": "\"4e06ad46fa3b0bf83b896897ffa4e516\"",
+      "content_hash": "122c4ffaa591b7a78bea7329353e443cb313807f1979d3e36dd139f2a6253007",
+      "documents": 3,
+      "etag": "\"a03da2d644d9c2bc94e0aff95ea30538\"",
       "id": "ips-news",
-      "last_modified": "Fri, 09 Oct 2026 08:57:08 GMT",
+      "last_modified": "Fri, 09 Oct 2026 20:07:57 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
-      "status": "no_articles",
+      "status": "ok",
       "url": "https://www.itfc.co.uk/news/"
     },
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.leedsunited.com/en/news/fpl-james-trafford-to-continue-impressive-returns": {},
-        "https://www.leedsunited.com/en/news/squad-update-farke-on-bahoya-wilson-and-more": {},
+        "https://www.leedsunited.com/en/news/arsenal-vs-leeds-united-team-news-key-stats-and-everything-you-need-to-know": {},
         "https://www.leedsunited.com/en/news/travel-with-no-fear-daniel-farke-previews-arsenal-trafford-and-more": {}
       },
       "club": "LEE",
-      "content_hash": "34e743fa6502534a82caa4bf809617dd6e6b47016c5d15a1e6efc5220035bea1",
-      "documents": 4,
+      "content_hash": "48203ac0f84b1d330a548cfca24c6dbe2f9e6f1baf9479bd54abce23e03d5905",
+      "documents": 3,
       "id": "lee-news",
-      "last_modified": "Fri, 09 Oct 2026 09:18:10 GMT",
+      "last_modified": "Fri, 09 Oct 2026 20:46:11 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -206,14 +222,15 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.liverpoolfc.com/news/andoni-iraola-liverpool-manchester-city-press-conference-premier-league": {},
+        "https://www.liverpoolfc.com/news/lfc-fitness-update-alexander-isak-cody-gakpo-federico-chiesa-and-jeremy-jacquet": {},
         "https://www.liverpoolfc.com/news/listing/mens-team-news": {},
-        "https://www.liverpoolfc.com/news/photos-liverpool-squad-arrive-axa-training-centre-man-city": {}
+        "https://www.liverpoolfc.com/news/liverpools-injury-list-suspensions-and-availability": {}
       },
       "club": "LIV",
-      "content_hash": "e4d0f34a16e190c392c0d33a9f049a2d6103feff46f900ed87b5254fdad57e42",
-      "documents": 4,
+      "content_hash": "ac25d98cc719f88ad2ddc9bdf2d7811a297542017dee50c794a45e870f1eed8a",
+      "documents": 5,
       "id": "liv-news",
-      "last_modified": "Fri, 09 Oct 2026 09:14:18 GMT",
+      "last_modified": "Fri, 09 Oct 2026 21:04:47 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
       "status": "ok",
@@ -222,12 +239,13 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/news/mens/erling-haaland-liverpool-psg-preview-message-to-fans-63927065": {},
+        "https://www.mancity.com/news/mens/enzo-maresca-liverpool-premier-league-preview-63927141": {},
+        "https://www.mancity.com/news/mens/enzo-maresca-liverpool-v-manchester-city-team-news-update-63927129": {},
         "https://www.mancity.com/news/mens/liverpool-v-city-premier-league-match-preview-october-2026-63926279": {}
       },
       "club": "MCI",
-      "content_hash": "e149656b948a27783c6805945f56d8abc48a93caf0248e4cffeb57df6224612e",
-      "documents": 3,
+      "content_hash": "bc74bb0313d5cad46e99b71653711e72069f7f56f5b92e3fcea0533da6574118",
+      "documents": 4,
       "id": "mci-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
@@ -261,7 +279,7 @@
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-warrior-joelinton-latest-ahead-of-coventry-trip": {}
       },
       "club": "NEW",
-      "content_hash": "5cc3a664616659637c1431bcd15f3c3eb7e239750dd7612a4a464bd8d7abcd24",
+      "content_hash": "19e20f69b6272466bb8231d95319a705335011395b265a3004c35900b93b4d13",
       "documents": 2,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -274,10 +292,10 @@
       "article_validators": {},
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
-      "documents": 0,
-      "etag": "\"03992b39f932cf7be6afe9388f4fe1aa\"",
+      "documents": 1,
+      "etag": "\"bcb6f7938346a05e002ae089a62be5fe\"",
       "id": "nfo-news",
-      "last_modified": "Fri, 09 Oct 2026 02:07:03 GMT",
+      "last_modified": "Fri, 09 Oct 2026 15:58:14 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -289,9 +307,9 @@
       "club": "SUN",
       "content_hash": "191fbb568fbd24f60eb2575b6a2ad66dbbf72f8961bce0b666fc2a248e2add01",
       "documents": 1,
-      "etag": "\"34e1081bf2a08e5011cd66a214123005\"",
+      "etag": "\"93fc93aad5fd0ea375b6724535112f6d\"",
       "id": "sun-news",
-      "last_modified": "Fri, 09 Oct 2026 09:07:14 GMT",
+      "last_modified": "Fri, 09 Oct 2026 12:27:17 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Sunderland",
       "status": "no_articles",
