@@ -1,5 +1,27 @@
 {
-  "claims": [],
+  "claims": [
+    {
+      "availability_scope_verified": false,
+      "checked_at": "2026-10-09T02:18:15Z",
+      "claim_type": "explicit_out",
+      "club": "LEE",
+      "confidence": "review",
+      "decision": "candidate",
+      "excerpt": "\u201cAlso, Daniel James will miss the Arsenal game, so he is out with a back injury.",
+      "extraction_version": "explicit-fixture-subject-v3",
+      "gw": 6,
+      "id": "ev-72166a11772ce873",
+      "observed_at": "2026-10-09T02:18:15Z",
+      "player": "Daniel James",
+      "player_id": 343,
+      "published_at": null,
+      "publisher": "Leeds United",
+      "reason": "missing_or_stale_publication_time",
+      "source_id": "lee-news",
+      "title": "Squad update: Farke on Bahoya, Wilson and more - Leeds United",
+      "url": "https://www.leedsunited.com/en/news/squad-update-farke-on-bahoya-wilson-and-more"
+    }
+  ],
   "deadline": "2026-10-10T10:00:00Z",
   "gw": 6,
   "policy": "explicit absences auto-apply; nuanced claims are review candidates",
