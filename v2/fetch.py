@@ -628,10 +628,14 @@ def odds_api_rows(events, now=None):
             continue
 
         def pick(d):
+            # Average books in probability space. The mean of decimal odds
+            # is not the odds of the mean probability: at 1.5 and 3.0 it
+            # gives 2.25 (44%) where the books say 50%, and the error always
+            # flatters the longer price.
             if 'pinnacle' in d:
                 return d['pinnacle']
             cols = list(zip(*d.values()))
-            return tuple(sum(c) / len(c) for c in cols)
+            return tuple(len(c) / sum(1.0 / o for o in c) for c in cols)
         oh, od, oa = pick(h2h)
         oo, ou = pick(tot) if tot else (None, None)
         rows.append((date, h, a, oh, od, oa, oo, ou))

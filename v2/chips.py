@@ -203,13 +203,44 @@ def used_chips(history):
     return out
 
 
+def planned_squads(path, squad_ids):
+    """{gw: [ids]} from a planner path's weeks; None-safe."""
+    out = {}
+    for week in (path or {}).get('weeks', []):
+        squad = week.get('squad')
+        if squad and len(set(squad)) == 15:
+            out[int(week['gw'])] = list(squad)
+    return out
+
+
 def evaluate(players, squad_ids, bank, gw, last_gw, windows, used, wc_now=None,
-             fh_weeks=None, sell_prices=None, first_gw=1):
+             fh_weeks=None, sell_prices=None, first_gw=1, path=None, wc_weeks=None):
     """The whole chip picture from gameweek `gw`. Returns a dict for the digest
-    and for data/chips.json."""
+    and for data/chips.json.
+
+    `path` ({gw: squad ids}, see planned_squads) is the squad the selected
+    transfer plan expects to field each week. A chip played in a future week
+    is played with THAT squad, not today's, so Bench Boost, Triple Captain
+    and the Free Hit gap are valued against it; weeks after the plan use its
+    last squad. `wc_weeks` ({gw: value}) is the planner's objective gain of a
+    wildcard in each week of the window over the selected plan.
+    """
     squad = [players[i] for i in squad_ids if i in players]
     if len(squad) != 15 or len(set(squad_ids)) != 15:
         raise ValueError('Chip evaluation requires a complete squad')
+    path = {g: ids for g, ids in (path or {}).items()
+            if len(ids) == 15 and all(i in players for i in ids)}
+    cache = {}
+
+    def squad_for(g):
+        """The squad the plan fields in gameweek g."""
+        known = [k for k in path if k <= g]
+        if not known:
+            return squad
+        k = max(known)
+        if k not in cache:
+            cache[k] = [players[i] for i in path[k]]
+        return cache[k]
     if not sell_prices or any(pid not in sell_prices for pid in squad_ids):
         raise ValueError('Chip evaluation requires verified selling values')
     budget = sum(sell_prices[pid] for pid in squad_ids) + bank
@@ -247,7 +278,7 @@ def evaluate(players, squad_ids, bank, gw, last_gw, windows, used, wc_now=None,
     # ---- bench boost
     weeks = eligible('bboost')
     if weeks:
-        series = [(g, round(your_week(squad, g)[1], 1)) for g in weeks]
+        series = [(g, round(your_week(squad_for(g), g)[1], 1)) for g in weeks]
         best_g, best_v = max(series, key=lambda t: t[1])
         now = dict(series).get(gw)
         half_end = max(weeks)
@@ -263,7 +294,7 @@ def evaluate(players, squad_ids, bank, gw, last_gw, windows, used, wc_now=None,
             play = False
         later = []
         for lo, hi, wks in later_copies('bboost'):
-            s2 = [(g, round(your_week(squad, g)[1], 1)) for g in wks]
+            s2 = [(g, round(your_week(squad_for(g), g)[1], 1)) for g in wks]
             g2, v2 = max(s2, key=lambda t: t[1])
             later.append(dict(lo=lo, hi=hi, best_gw=g2, best=v2))
             advice += f' Second copy (GW{lo}–{hi}): best week GW{g2} ({v2:.1f}).'
@@ -278,7 +309,7 @@ def evaluate(players, squad_ids, bank, gw, last_gw, windows, used, wc_now=None,
     if weeks:
         series = []
         for g in weeks:
-            gain, cap = triple_captain_gain(squad, g)
+            gain, cap = triple_captain_gain(squad_for(g), g)
             series.append((g, round(gain, 1), cap['name']))
         best_g, best_v, best_n = max(series, key=lambda t: t[1])
         now_row = next((s for s in series if s[0] == gw), None)
@@ -301,7 +332,7 @@ def evaluate(players, squad_ids, bank, gw, last_gw, windows, used, wc_now=None,
         for lo, hi, wks in later_copies('3xc'):
             s2 = []
             for g in wks:
-                value, c2 = triple_captain_gain(squad, g)
+                value, c2 = triple_captain_gain(squad_for(g), g)
                 s2.append((g, round(value, 1), c2['name']))
             g2, v2, n2 = max(s2, key=lambda t: t[1])
             later.append(dict(lo=lo, hi=hi, best_gw=g2, best=v2, best_name=n2))
@@ -319,7 +350,7 @@ def evaluate(players, squad_ids, bank, gw, last_gw, windows, used, wc_now=None,
     gaps = {}
     for g in gap_weeks:
         best, _, _ = best_possible_week(players, g, budget, owned=squad_ids, sell_prices=sell_prices)
-        mine, _, _ = your_week(squad, g)
+        mine, _, _ = your_week(squad_for(g), g)
         gaps[g] = round(best - mine, 1)
     if weeks:
         series = [(g, gaps[g]) for g in weeks]
@@ -350,8 +381,13 @@ def evaluate(players, squad_ids, bank, gw, last_gw, windows, used, wc_now=None,
     if weeks:
         half_end = max(weeks)
         trend = [(g, gaps[g]) for g in sorted(gaps) if g in weeks][:8]
-        now = wc_now
-        if now is not None and now >= WC_PLAY_MIN and gw in weeks:
+        by_week = sorted((int(g), round(v, 1)) for g, v in (wc_weeks or {}).items()
+                         if int(g) in weeks and v is not None)
+        now = dict(by_week).get(gw, wc_now)
+        best_wc = max(by_week, key=lambda t: t[1]) if by_week else None
+        later_better = (best_wc is not None and now is not None and best_wc[0] != gw
+                        and now < NEAR_BEST * best_wc[1])
+        if now is not None and now >= WC_PLAY_MIN and gw in weeks and not later_better:
             advice = f'Worth playing now: unlimited transfers are worth {now:.1f} over the window versus your free transfers.'
             play = True
         elif gw == half_end and gw in weeks and now is not None and now > 0:
@@ -362,6 +398,8 @@ def evaluate(players, squad_ids, bank, gw, last_gw, windows, used, wc_now=None,
             bits = ['Hold.']
             if now is not None and gw in weeks:
                 bits.append(f'Unlimited transfers now are worth {now:.1f} over the window.')
+            if best_wc is not None and best_wc[0] != gw:
+                bits.append(f'Of the planned weeks, GW{best_wc[0]} looks best ({best_wc[1]:.1f}).')
             if rising:
                 bits.append(f'The squad is decaying: gap to the optimised one-week squad '
                             f'{trend[0][1]:.1f} → {trend[-1][1]:.1f} by GW{trend[-1][0]}.')
@@ -374,6 +412,8 @@ def evaluate(players, squad_ids, bank, gw, last_gw, windows, used, wc_now=None,
             play = False
         out['chips']['wildcard'] = dict(name=NAMES['wildcard'], now=now, gap_trend=trend,
                                         play=play, advice=advice, last_eligible=half_end)
+        if by_week:
+            out['chips']['wildcard'].update(weeks=by_week, best_gw=best_wc[0], best=best_wc[1])
     else:
         out['chips']['wildcard'] = dict(name=NAMES['wildcard'], advice='Both used.', play=False)
 
@@ -390,7 +430,12 @@ def evaluate(players, squad_ids, bank, gw, last_gw, windows, used, wc_now=None,
             c['advice'] = f"Only one chip can be played this week. {selected['name']} has the larger estimated gain; this is an alternative."
     out['method'] = ('Incremental points relative to ordinary XI, captain fallback and autosubs. '
         'Free Hit uses a linear candidate search followed by full lineup scoring. '
-        'Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.')
+        + ('Future weeks are valued with the squad the selected transfer plan fields that week '
+           '(its last squad after the plan ends); the Free Hit budget is today\'s. '
+           if path else 'Timing assumes the current squad persists. ')
+        + ('The wildcard is valued in each planned week as the planner\'s gain over the selected plan. '
+           if wc_weeks else '')
+        + 'Chips are scheduled one at a time, not jointly with transfers.')
     return out
 
 
@@ -414,7 +459,7 @@ def digest_lines(res):
         c = res['chips'][key]
         if key == 'wildcard':
             now = f'{c["now"]:+.1f} over the window' if c.get('now') is not None else '—'
-            best = '—'
+            best = f'GW{c["best_gw"]}: {c["best"]:+.1f}' if c.get('best_gw') else '—'
         else:
             now = (f'{c["now"]:.1f}' + (f' ({c["now_name"]})' if c.get('now_name') else '')) if c.get('now') is not None else '—'
             best = (f'GW{c["best_gw"]}: {c["best"]:.1f}' + (f' ({c["best_name"]})' if c.get('best_name') else '')) if c.get('best_gw') else '—'

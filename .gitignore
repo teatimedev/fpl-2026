@@ -13,3 +13,4 @@ data/scouting/cache/
 
 # Regenerable prediction artefacts (v2/predict/run.py)
 v2/predict/_out/
+.claude/worktrees/

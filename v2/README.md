@@ -198,11 +198,31 @@ labelled as estimates until the authenticated account is checked.
 
 With `--plan`, the weekly run compares the unrestricted solver path and a bounded
 shortlist of singles/pairs, each with its first-week squad fixed and subsequent
-weeks re-optimised. Every path uses the same exact scoring and hit accounting.
-Hold is always feasible; each action must clear the existing, **unvalidated**
-two-point-per-move buffer separately. Solver bounds refer to the linear proxy,
-not the nonlinear squad score. The tested actions and their margins are saved
-in `weekly.plan.candidates` and shown under the recommendation details.
+weeks re-optimised (phase 4, `research/planner-phase4-2026-09-23.md`):
+
+- The planner objective (`planner.production_valuation`) weights week `gw+k` by
+  0.9^k and adds a terminal value: the horizon squad's next six weeks from the
+  season projection (decayed), each banked free transfer beyond the first
+  (2.0, 1.6, 1.3, 1.1) and 0.08 per £1m in the bank. A player with no future
+  (a season-long loanee) therefore costs his whole post-window slot, and the
+  last planned week no longer churns for a single week's points.
+- The act-versus-hold decision (`act_or_hold.py`) re-plans hold and up to
+  three candidate first weeks in the same sampled forecast revisions (spread
+  measured from 2026/27's one-week forecast revisions) and takes the best
+  expected objective, preferring fewer moves within one Monte Carlo standard
+  error. The old two-point-per-move buffer is gone in season; holding earns
+  its option value inside the model and loses it at the five-transfer cap.
+  It survives only for the pre-season wholesale rebuild.
+- The one- and two-move tables keep their static "move alone, no further
+  transfers" gain, and add `vs_hold` (sampled) / `vs_hold_nominal` — the
+  decision basis — so a +9.7 static gain is not mistaken for a +1.75 decision.
+- Chips are valued against the selected plan's squad for each future week,
+  and the wildcard is solved in every planned week, not just this one.
+
+Solver bounds refer to the linear proxy, not the nonlinear squad score. The
+tested actions, their sampled gains, standard errors and win rates are saved in
+`weekly.plan.candidates` / `weekly.plan.decision` and shown under the
+recommendation details.
 
 The 6 August attacking multipliers and present-tense role notes are retired.
 Player notes now show the current FPL set-piece listing. Archived preseason

@@ -45,6 +45,13 @@ Variants
                    total attacking points are unchanged -- predict/components.py's
                    VOL_LAMBDA pattern with the measured 0.56 slope
 
+  relative_vol     attack_volume.py's rule (fixture xG against the club's own
+                   season mean, ** 0.5), production's two-season anchor
+
+Run with --asof-club to place players at their club in S (gw_stat) rather
+than their 2026 club: the default attribution is a look-ahead that favours
+any rule multiplying by club strength (see ASOF_CLUB).
+
 No look-ahead guarantee, mechanically: (1) p['hist'] contains no row with
 season >= S, and every downstream consumer (shrink, positional_priors,
 minutes_model) reads only p['hist']; (2) the Dixon-Coles fit consumes matches
@@ -68,6 +75,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import player_model as PM      # noqa: E402  (shrinkage machinery, reused as-is)
 import teams_model as TM       # noqa: E402  (Dixon-Coles refit per hold-out)
+import attack_volume as AV     # noqa: E402
 from evaluation_metrics import rank_correlation  # noqa: E402
 
 SEASONS = ['2022/23', '2023/24', '2024/25', '2025/26']
@@ -113,7 +121,30 @@ def spearman(a, b):
 
 
 # ------------------------------------------------------------ as-of pieces
-def make_player(code, meta, hist_rows, price, pos):
+# Club attribution. season_stat.team is NULL for every historical row, so the
+# harness has always placed each player at his CURRENT (2026) club. That is
+# look-ahead, not just noise: a player's 2026 club was chosen partly on what
+# he did in S (strong seasons get bought by strong clubs), so any rule that
+# multiplies by club strength is rewarded for the leak. gw_stat now holds the
+# per-fixture club for every panel season: with ASOF_CLUB the player is
+# placed at the club of his first S fixture, which was known at S's first
+# deadline (a January mover keeps his August club). Set by --asof-club.
+ASOF_CLUB = False
+_SEASON_CLUB = {}
+
+
+def season_club(code, season):
+    if not _SEASON_CLUB:
+        cx = sqlite3.connect(DB)
+        for c, s, team in cx.execute(
+                'SELECT code, season, team FROM gw_stat WHERE team IS NOT NULL '
+                'ORDER BY kickoff DESC, fixture_id DESC'):
+            _SEASON_CLUB[(c, s)] = team       # last write = earliest fixture
+        cx.close()
+    return _SEASON_CLUB.get((code, season))
+
+
+def make_player(code, meta, hist_rows, price, pos, team=None):
     """A dict shaped exactly like player_model.load() output, so shrink(),
     positional_priors() and minutes_model() run unmodified. The synthetic
     string id cannot collide with the overlay's element-id keys, and joined=''
@@ -122,7 +153,7 @@ def make_player(code, meta, hist_rows, price, pos):
     return dict(
         id=f'holdout-{code}', code=code, pos=pos, price=price, joined='',
         dob=meta[code]['dob'], name=meta[code]['name'],
-        team=meta[code]['cur_team'], hist=hist_rows, now=None)
+        team=team or meta[code]['cur_team'], hist=hist_rows, now=None)
 
 
 def asof_players(meta, rows, target):
@@ -141,7 +172,8 @@ def asof_players(meta, rows, target):
         # position as of S: the registration that existed at the deadline
         pos = tgt['pos'] or next(
             (h['pos'] for h in reversed(hist) if h['pos']), 'MID')
-        out[code] = make_player(code, meta, hist, tgt['start_cost'] / 10.0, pos)
+        team = season_club(code, target) if ASOF_CLUB else None
+        out[code] = make_player(code, meta, hist, tgt['start_cost'] / 10.0, pos, team)
     return out
 
 _MATCH_CACHE = {}
@@ -195,25 +227,45 @@ def asof_team_view(target):
 
 
 # ------------------------------------------------------------- projection
-def project_totals(players, priors, view):
+def project_totals(players, priors, view, volume='league', club_norm=False, club_prior=0.0):
     """Season-total projection per player, following project()/components.py
     accounting, with everyone fully available (status/news/chance are 2026
     facts and must not reach a historical week). Returns each player's raw
     total plus his attack subtotal separately, because the attenuated variant
-    rescales only the club-volume-exposed part."""
+    rescales only the club-volume-exposed part. volume='relative' is the
+    attack_volume.py rule: the fixture against the club's own season mean,
+    to the power RELATIVE_MU. club_norm applies player_model's production
+    eleven-starter constraint to the season start rates of each club's
+    projected players (a partial squad: only players with history).
+    Each row also carries `rate`, the points from the rate components that a
+    rate-only calibration scales (attack, saves, DefCon, bonus)."""
     for pos in POSITIONS:
         prices = sorted(q['price'] for q in players.values() if q['pos'] == pos)
         PM.PRICE_MEDIAN[pos] = prices[len(prices) // 2] if prices else 5.5
 
+    minutes = {p['id']: PM.minutes_model(p, players) for p in players.values()}
+    if club_norm:
+        by_team, pos_of = {}, {p['id']: p['pos'] for p in players.values()}
+        for pid, p in players.items():
+            by_team.setdefault(p['team'], []).append(p['id'])
+        for pids in by_team.values():
+            new = PM.normalise_club_starts(
+                [dict(p=minutes[pid][0], pos=pos_of[pid]) for pid in pids],
+                **dict(PM.CLUB_NORMALISE, two_sided=False))
+            for pid, prob in zip(pids, new):
+                minutes[pid] = (prob, minutes[pid][1])
+    club_levels = {t: float(np.mean([f['xg'] for f in fx])) for t, fx in view.items() if fx}
     out = {}
     for p in players.values():
         pos = p['pos']
-        start_rate, mps = PM.minutes_model(p, players)
+        start_rate, mps = minutes[p['id']]
         p_play = start_rate + (1 - start_rate) * CAMEO_RATE
         frac = mps / 90.0
 
-        xg90, w_xg = PM.shrink(p, 'xg90', priors)
-        xa90, _ = PM.shrink(p, 'xa90', priors)
+        attack_priors = PM.club_attack_priors(priors, pos, club_levels.get(p['team']),
+                                              club_levels, gamma=club_prior)
+        xg90, w_xg = PM.shrink(p, 'xg90', attack_priors)
+        xa90, _ = PM.shrink(p, 'xa90', attack_priors)
         dc90, w_dc = PM.shrink(p, 'dc90', priors)
         bonus90, _ = PM.shrink(p, 'bonus90', priors)
         saves90, _ = PM.shrink(p, 'saves90', priors)
@@ -227,9 +279,10 @@ def project_totals(players, priors, view):
         xa90 *= af
 
         fx_list = view.get(p['team'], [])
-        pts = attack = 0.0
+        club_xg = (float(np.mean([f['xg'] for f in fx_list])) if fx_list else None)
+        pts = attack = rate = 0.0
         for f in fx_list:
-            vol = f['xg'] / 1.45
+            vol = AV.attack_volume(f['xg'], club_xg, rule=volume)
             att = ((xg90 * frac * vol * PM.GOAL_PTS[pos]
                     + xa90 * frac * vol * 3.0)) * p_play
             attack += att
@@ -239,15 +292,20 @@ def project_totals(players, priors, view):
             if pos in ('GKP', 'DEF'):
                 pts -= PM.expected_floor_div(f['xgc'], 2) * start_rate
             if pos == 'GKP':
-                pts += PM.expected_floor_div(saves90 * frac, 3) * start_rate
+                saves = PM.expected_floor_div(saves90 * frac, 3) * start_rate
+                pts += saves
+                rate += saves
             thr = PM.DC_THRESHOLD[pos]
             if thr and dc90 > 0:
-                pts += 2.0 * PM.defcon_hit_prob(dc90 * frac, thr, w_dc) * p_play
+                dc = 2.0 * PM.defcon_hit_prob(dc90 * frac, thr, w_dc) * p_play
+                pts += dc
+                rate += dc
             pts += start_rate * 2.0 + (p_play - start_rate)
             pts += bonus90 * frac * p_play * 0.85
+            rate += att + bonus90 * frac * p_play * 0.85
             pts -= yellow90 * frac * p_play
         out[p['id']] = dict(
-            code=p['code'], pos=pos, total=max(pts, 0.0), attack=attack,
+            code=p['code'], pos=pos, total=max(pts, 0.0), attack=attack, rate=rate,
             club_vol=(float(np.mean([f['xg'] / 1.45 for f in fx_list]))
                       if fx_list else 1.0))
     return out
@@ -272,7 +330,7 @@ def attenuate(totals):
     return totals
 
 
-def calibrate(totals, rows, target, two_season=False):
+def calibrate(totals, rows, target, two_season=False, rate_only=False):
     """Production-style positional level correction, computed as-of the
     target season instead of at runtime.
 
@@ -287,6 +345,11 @@ def calibrate(totals, rows, target, two_season=False):
     the single-season k — pooling dragged keepers off parity. Targets with
     only one training season behind them fall back to the single anchor,
     which is why 2023/24 is bit-identical between the two variants.
+
+    rate_only=True (item 4, 2026-09-23) fits and applies k to the rate
+    components only (attack, saves, DefCon, bonus): appearance points, clean
+    sheets, goals conceded and cards are rule-fixed consequences of minutes
+    and the team model, so k = (mean actual - mean fixed) / mean rate.
     """
     idx = SEASONS.index(target)
     prev = SEASONS[idx - 1]
@@ -294,13 +357,20 @@ def calibrate(totals, rows, target, two_season=False):
     def fit(actual):
         ks = {}
         for pos in POSITIONS:
-            proj, act = [], []
+            proj, act, rate = [], [], []
             for r in totals.values():
                 if r['pos'] != pos or r['code'] not in actual:
                     continue
                 proj.append(r['total'] / 38.0)
+                rate.append(r['rate'] / 38.0)
                 act.append(actual[r['code']])
             if len(proj) < 6:
+                continue
+            if rate_only:
+                fixed = sum(proj) - sum(rate)
+                if sum(rate) <= 0:
+                    continue
+                ks[pos] = round(max(0.7, min(1.45, (sum(act) - fixed) / sum(rate))), 3)
                 continue
             ratio = (sum(proj) / len(proj)) / (sum(act) / len(act))
             if ratio <= 0:
@@ -310,9 +380,10 @@ def calibrate(totals, rows, target, two_season=False):
 
     ks = fit({code: r[prev]['pts'] / 38.0 for code, r in rows.items()
               if prev in r and r[prev]['mins'] >= 2000})
-    if two_season:
-        if idx < 2:
-            return ks
+    # With one training season there is no second anchor: the single-season
+    # k applies. (This used to `return ks` here, BEFORE applying it, so every
+    # two_season row on the 2023/24 target was silently uncalibrated.)
+    if two_season and idx >= 2:
         older = SEASONS[idx - 2]
         hist = {}
         for code, r in rows.items():
@@ -328,7 +399,12 @@ def calibrate(totals, rows, target, two_season=False):
                 ks[pos] = outfield[pos]
     for r in totals.values():
         k = ks.get(r['pos'], 1.0)
-        r['total'] *= k
+        if rate_only:
+            r['total'] = max(0.0, r['total'] + (k - 1.0) * r['rate'])
+            r['rate'] *= k
+        else:
+            r['total'] *= k
+            r['rate'] *= k
         r['attack'] *= k
     return ks
 
@@ -413,6 +489,25 @@ def run_target(target, meta, rows):
     ks_ts = calibrate(totals_ts, rows, target, two_season=True)
     by_variant['anchor_2season'] = score(as_scoring(totals_ts), rows, target)
     by_variant['vol_lambda_0_56'] = score(as_scoring(totals_att), rows, target)
+    # item 3 (2026-09-23): the relative volume rule, production's two-season
+    # anchor, so it compares with anchor_2season
+    totals_rel = project_totals(players, priors, view, volume='relative')
+    ks_rel = calibrate(totals_rel, rows, target, two_season=True)
+    by_variant['relative_vol'] = score(as_scoring(totals_rel), rows, target)
+    # item 4 (2026-09-23): the production stack after items 2-3 (relative
+    # volume + the eleven-starter constraint), k on everything vs k on the
+    # rate components only, both two-season anchored
+    totals_p = project_totals(players, priors, view, volume='relative', club_norm=True)
+    totals_pr = {pid: dict(t) for pid, t in totals_p.items()}
+    ks_p = calibrate(totals_p, rows, target, two_season=True)
+    ks_pr = calibrate(totals_pr, rows, target, two_season=True, rate_only=True)
+    by_variant['prod_k_all'] = score(as_scoring(totals_p), rows, target)
+    by_variant['prod_k_rate'] = score(as_scoring(totals_pr), rows, target)
+    # item 3 follow-up: plus the club-scaled attacking prior
+    totals_cp = project_totals(players, priors, view, volume='relative', club_norm=True,
+                               club_prior=0.5)
+    calibrate(totals_cp, rows, target, two_season=True)
+    by_variant['prod_clubprior'] = score(as_scoring(totals_cp), rows, target)
 
     print(f'\n[{target}] n={len(players)} players scored '
           f'({len(unplaced)} unplaceable, excluded); calibration current: '
@@ -420,11 +515,21 @@ def run_target(target, meta, rows):
           + ' | attenuated: '
           + ', '.join(f'{p} {k:.3f}' for p, k in sorted(ks_att.items()))
           + ' | anchor_2season: '
-          + ', '.join(f'{p} {k:.3f}' for p, k in sorted(ks_ts.items())))
+          + ', '.join(f'{p} {k:.3f}' for p, k in sorted(ks_ts.items()))
+          + ' | relative_vol: '
+          + ', '.join(f'{p} {k:.3f}' for p, k in sorted(ks_rel.items()))
+          + ' | prod_k_all: '
+          + ', '.join(f'{p} {k:.3f}' for p, k in sorted(ks_p.items()))
+          + ' | prod_k_rate: '
+          + ', '.join(f'{p} {k:.3f}' for p, k in sorted(ks_pr.items())))
     return by_variant
 
 
 def main():
+    global ASOF_CLUB
+    ASOF_CLUB = '--asof-club' in sys.argv
+    print('club attribution: ' + ('club of the first S fixture (gw_stat)' if ASOF_CLUB
+                                  else "CURRENT club (look-ahead; see ASOF_CLUB)"))
     meta, rows = load_panel()
     res = {target: run_target(target, meta, rows) for target in TARGETS}
     print_table('SEASON-TOTALS HOLD-OUT (full-season totals, all players '

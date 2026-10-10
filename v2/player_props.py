@@ -74,7 +74,9 @@ def model_goal_probability(player, gw, view):
     fixtures = (view.get(player['team']) or {}).get(str(gw)) or []
     if not fixtures or minutes <= 0 or xg90 <= 0:
         return 0.0
-    lam = sum(xg90 * minutes / 90.0 * (float(f['xg']) / 1.45) for f in fixtures)
+    from attack_volume import attack_volume
+    lam = sum(xg90 * minutes / 90.0 * attack_volume(f['xg'], player.get('club_xg'))
+              for f in fixtures)
     return round(1.0 - math.exp(-lam), 4)
 
 

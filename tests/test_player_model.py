@@ -361,6 +361,20 @@ class CalibrationTests(unittest.TestCase):
         self.assertNotIn("calibration_k", rows[1])
         self.assertEqual(rows[1]["proj_by_gw"], [1.0, 1.0])
 
+    def test_rates_scope_leaves_rule_fixed_points_alone(self):
+        rows = [dict(id=1, pos="MID", proj_by_gw=[0.0, 4.0], rate_by_gw=[0.0, 1.5], price=8.0)]
+        with patch.object(PM, "WINDOW", 1), \
+                patch.dict(PM.SEASON, {1: [0.0, 4.0, 3.0]}, clear=True), \
+                patch.dict(PM.SEASON_RATE, {1: [0.0, 1.5, 1.0]}, clear=True):
+            PM.apply_calibration(rows, {"MID": 1.2}, scope="rates")
+            self.assertEqual(PM.SEASON[1], [0.0, 4.3, 3.2])
+        self.assertEqual(rows[0]["proj_by_gw"], [0.0, 4.3])      # 2.5 fixed + 1.2 x 1.5
+        self.assertEqual(rows[0]["rate_by_gw"], [0.0, 1.8])
+        whole = [dict(id=2, pos="MID", proj_by_gw=[4.0], rate_by_gw=[1.5], price=8.0)]
+        with patch.object(PM, "WINDOW", 1), patch.dict(PM.SEASON, {}, clear=True):
+            PM.apply_calibration(whole, {"MID": 1.2}, scope="all")
+        self.assertEqual(whole[0]["proj_by_gw"], [4.8])
+
     def test_fit_excludes_cohort_members_depressed_by_availability(self):
         players = {}
         rows = []
@@ -379,27 +393,44 @@ class CalibrationTests(unittest.TestCase):
         self.assertAlmostEqual(fit["FWD"]["ratio"], 2.0 / 4.0, places=4)
         self.assertAlmostEqual(fit["FWD"]["k"], 1.45, places=4)   # clipped
 
-    def _project(self, xg_scale, calibration_dir, overlay=None):
+    def _project(self, xg_scale, calibration_dir, overlay=None, rest_scale=1.0):
         p = make_player(pid=999_101, hist=[season_row("2025/26", 3000, 34, pts=200,
                                                        xg=20.0, xa=5.0)])
         players = {p["id"]: p}
         priors = {"FWD": dict(xg90=0.4, xa90=0.15, dc90=0.0, bonus90=0.2,
                               saves90=0.0, yellow90=0.1)}
-        fx = {str(gw): [dict(opp="X", home=True, xg=1.5 * xg_scale, xgc=1.2, cs=0.3)]
-              for gw in range(1, 7)}
+        # the window (GW1-6) plus the rest of the season, which sets the
+        # club's average level for the relative attack volume
+        fx = {str(gw): [dict(opp="X", home=True,
+                             xg=1.5 * (xg_scale if gw <= 6 else rest_scale),
+                             xgc=1.2, cs=0.3)]
+              for gw in range(1, 39)}
         view = {"view": {"MCI": fx}}
         cal = Path(calibration_dir) / "calibration.json"
         cal.write_text(json.dumps({"fitted_at": "test", "k": {"FWD": {"k": 1.0}}}))
         with patch.multiple(PM, START_GW=1, HORIZON=6, LAST_GW=6, WINDOW=6,
                             CALIBRATION=cal, GW_DEADLINES={}, AVAILABILITY_OVERRIDES=[],
                             OVERLAY=overlay or {}, PRESEASON_FORM={}, MINUTES_RULE="aggregate",
-                            GW_ROWS_LOADED=False), \
+                            GW_ROWS_LOADED=False, CLUB_NORMALISE=None), \
                 patch.dict(PM.SEASON, {}, clear=True), \
                 patch.dict(PM.GAMES_PLAYED, {}, clear=True), \
                 patch.dict(PM.TEAM_FIXTURES, {}, clear=True), \
                 patch.dict(PM.SNAPSHOT_STATUS, {}, clear=True):
             rows = PM.project(players, view, priors)
         return rows[0]
+
+    def test_club_level_is_not_counted_twice(self):
+        # a club that is 20% stronger in EVERY fixture: its players' xG/90
+        # already carries that, so the relative rule leaves them unchanged;
+        # the old league rule scaled them up again
+        with tempfile.TemporaryDirectory() as tmp:
+            base = self._project(1.0, tmp)
+            strong = self._project(1.2, tmp, rest_scale=1.2)
+            with patch('attack_volume.RULE', 'league'):
+                league_base = self._project(1.0, tmp)
+                league_strong = self._project(1.2, tmp, rest_scale=1.2)
+        self.assertAlmostEqual(strong["proj_6gw"], base["proj_6gw"], places=1)
+        self.assertGreater(league_strong["proj_6gw"], league_base["proj_6gw"] * 1.08)
 
     def test_archived_role_boost_cannot_change_live_attack_rates(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -421,10 +452,12 @@ class CalibrationTests(unittest.TestCase):
             up = self._project(1.1, tmp)
         self.assertEqual(base["calibration_k"], 1.0)
         ratio = up["proj_6gw"] / base["proj_6gw"]
-        # +10% on every fixture's xG lifts a forward's total by his attack
-        # share of that — well clear of the ~0% a re-fitting k produced
-        self.assertGreater(ratio, 1.03)
+        # +10% on the window's fixtures, against an unchanged season, lifts a
+        # forward's total by his attack share of the (attenuated) relative
+        # volume — clear of the ~0% a re-fitting k produced
+        self.assertGreater(ratio, 1.015)
         self.assertLess(ratio, 1.10)
+        self.assertEqual(base["club_xg"], round((6 * 1.5 + 32 * 1.5) / 38, 4))
         # and the new P2/P3 fields are on the row
         for key in ("baseline_start_rate", "start_rate_recency", "start_rate_aggregate",
                     "bonus90", "saves90", "yellow90", "dc_evidence", "minutes_rule"):
@@ -436,7 +469,7 @@ class ScoringEligibilityTests(unittest.TestCase):
     def project_scenario(self, minutes, fixtures, start=1.):
         p = make_player(pos='DEF')
         with patch.multiple(PM, START_GW=1, HORIZON=1, LAST_GW=1, WINDOW=1,
-                            AVAILABILITY_OVERRIDES=[], GW_DEADLINES={}), \
+                            AVAILABILITY_OVERRIDES=[], GW_DEADLINES={}, CLUB_NORMALISE=None), \
                 patch.object(PM, 'minutes_model', return_value=(start, minutes)), \
                 patch.object(PM, 'shrink', return_value=(0.0, 0.0)), \
                 patch.object(PM, 'calibrate'):
@@ -452,6 +485,22 @@ class ScoringEligibilityTests(unittest.TestCase):
         for key in ('proj_by_gw', 'play_by_gw', 'start_by_gw', 'mins_by_gw'):
             self.assertEqual(p[key], [0.0])
 
+    def test_undated_injury_ramps_back_across_the_window(self):
+        p = make_player(pos='DEF')
+        p.update(status='i', chance=0, news='Back injury - Unknown return date')
+        fx = {str(gw): [dict(xg=1.4, xgc=1.2, cs=.3)] for gw in range(6, 12)}
+        with patch.multiple(PM, START_GW=6, HORIZON=11, LAST_GW=11, WINDOW=6,
+                            AVAILABILITY_OVERRIDES=[], GW_DEADLINES={}, CLUB_NORMALISE=None), \
+                patch.object(PM, 'minutes_model', return_value=(.9, 88)), \
+                patch.object(PM, 'shrink', return_value=(0.0, 0.0)), \
+                patch.object(PM, 'calibrate'):
+            row = PM.project({p['id']: p}, {'view': {'MCI': fx}}, {})[0]
+        starts = row['start_by_gw'][5:]
+        self.assertEqual(starts[0], 0.0)
+        self.assertLess(starts[1], .1)             # was .9: fit the week after a zero
+        self.assertEqual(starts, sorted(starts))   # monotone return
+        self.assertLess(starts[-1], .9 * .5)
+
     def test_double_gameweek_exports_any_appearance_and_total_minutes(self):
         fx = [dict(xg=0, xgc=0, cs=1)]
         single = self.project_scenario(90, fx, start=.5)
@@ -462,6 +511,120 @@ class ScoringEligibilityTests(unittest.TestCase):
         self.assertAlmostEqual(double['mins_by_gw'][0], 2 * single['mins_by_gw'][0], delta=.1)
         self.assertEqual(double['availability_by_gw'][0]['fixtures'], 2)
         self.assertIsNone(double['p60_shadow_by_gw'][0])
+
+
+class ClubAttackPriorTests(unittest.TestCase):
+    def test_prior_scales_with_club_level_and_leaves_other_metrics(self):
+        priors = {"FWD": dict(xg90=0.4, xa90=0.1, dc90=4.0)}
+        levels = {"MCI": 2.0, "COV": 0.8, "MID": 1.4}      # league mean 1.4
+        weak = PM.club_attack_priors(priors, "FWD", 0.8, levels, gamma=0.5)
+        strong = PM.club_attack_priors(priors, "FWD", 2.0, levels, gamma=0.5)
+        self.assertAlmostEqual(weak["FWD"]["xg90"], 0.4 * math.sqrt(0.8 / 1.4))
+        self.assertAlmostEqual(strong["FWD"]["xa90"], 0.1 * math.sqrt(2.0 / 1.4))
+        self.assertEqual(weak["FWD"]["dc90"], 4.0)
+        self.assertEqual(priors["FWD"]["xg90"], 0.4)           # not mutated
+        self.assertIs(PM.club_attack_priors(priors, "FWD", 0.8, levels, gamma=0.0), priors)
+
+    def test_prior_only_moves_thin_evidence(self):
+        levels = {"A": 2.0, "B": 1.0}
+        priors = {"FWD": dict(xg90=0.4)}
+        veteran = make_player(hist=[season_row("2025/26", 3000, 34, xg=20.0)])
+        rookie = make_player(hist=[])
+        rookie["price"] = 5.5
+        v_weak, _ = PM.shrink(veteran, "xg90", PM.club_attack_priors(priors, "FWD", 1.0, levels, 0.5))
+        v_strong, _ = PM.shrink(veteran, "xg90", PM.club_attack_priors(priors, "FWD", 2.0, levels, 0.5))
+        r_weak, _ = PM.shrink(rookie, "xg90", PM.club_attack_priors(priors, "FWD", 1.0, levels, 0.5))
+        r_strong, _ = PM.shrink(rookie, "xg90", PM.club_attack_priors(priors, "FWD", 2.0, levels, 0.5))
+        self.assertLess(v_strong / v_weak, 1.05)          # ~8% prior weight x 41%
+        self.assertAlmostEqual(r_strong / r_weak, math.sqrt(2.0))
+
+
+class DefconStabilityTests(unittest.TestCase):
+    def test_a_full_recorded_season_of_defcon_is_mostly_believed(self):
+        row = season_row("2025/26", 2700, 30)
+        row["dc90"] = 11.0
+        p = make_player(pos="DEF", hist=[row])
+        est, w = PM.shrink(p, "dc90", {"DEF": dict(dc90=7.5)})
+        # k = max(0.15, 0.07/0.93): w = 1.23 / 1.38 ~ 0.89 (it was 0.61 at 0.56)
+        self.assertGreater(w, 0.88)
+        self.assertGreater(est, 10.5)
+
+
+class PeckingOrderTests(unittest.TestCase):
+    def test_tied_prices_share_the_slots_they_occupy(self):
+        a = make_player(pid=1, pos="GKP", price=5.0)
+        b = make_player(pid=2, pos="GKP", price=5.0)
+        c = make_player(pid=3, pos="GKP", price=4.0)
+        players = {p["id"]: p for p in (a, b, c)}
+        with patch.dict(PM.OVERLAY, {}, clear=True):
+            rate_a, _ = PM.minutes_prior(a, players)
+            rate_b, _ = PM.minutes_prior(b, players)
+            rate_c, _ = PM.minutes_prior(c, players)
+        # no history: 0.9 x the pecking-order rate; the tied pair splits #1/#2
+        self.assertAlmostEqual(rate_a, 0.9 * (0.92 + 0.09) / 2)
+        self.assertEqual(rate_a, rate_b)
+        self.assertAlmostEqual(rate_c, 0.9 * 0.03)
+
+
+class ClubStartConstraintTests(unittest.TestCase):
+    def club(self, outfield, keepers):
+        return ([dict(p=p, pos='MID') for p in outfield]
+                + [dict(p=p, pos='GKP') for p in keepers])
+
+    def test_over_full_club_sums_to_eleven_with_one_keeper(self):
+        entries = self.club([.95] * 8 + [.6] * 6, [.95, .3])
+        out = PM.normalise_club_starts(entries, mode='logit', two_sided=True)
+        self.assertAlmostEqual(sum(out[:14]), 10.0, places=6)
+        self.assertAlmostEqual(sum(out[14:]), 1.0, places=6)
+        # a near-certain starter gives up far less than a rotation option
+        self.assertGreater(out[0] / .95, out[8] / .6)
+        self.assertGreater(out[0], .9)
+
+    def test_proportional_mode_scales_everyone_alike(self):
+        entries = self.club([.9] * 12, [1.0])
+        out = PM.normalise_club_starts(entries, mode='proportional')
+        self.assertAlmostEqual(out[0], .9 * 10 / 10.8)
+        self.assertEqual(out[-1], 1.0)
+
+    def test_short_club_is_lifted_only_when_two_sided(self):
+        entries = self.club([.9] * 9 + [.3, .3, 0.0], [.5, .2])
+        capped = PM.normalise_club_starts(entries, two_sided=False)
+        self.assertEqual(capped, [e['p'] for e in entries])
+        lifted = PM.normalise_club_starts(entries, two_sided=True)
+        self.assertAlmostEqual(sum(lifted[:12]), 10.0, places=6)
+        self.assertAlmostEqual(sum(lifted[12:]), 1.0, places=6)
+        self.assertEqual(lifted[11], 0.0)            # an absentee stays absent
+
+    def test_fixed_rows_keep_their_value_and_the_rest_share_what_is_left(self):
+        entries = self.club([.95] * 12, [])
+        entries[0]['fixed'] = True
+        entries[0]['p'] = 1.0
+        out = PM.normalise_club_starts(entries, split_gk=False, two_sided=True)
+        self.assertEqual(out[0], 1.0)
+        self.assertAlmostEqual(sum(out), 11.0, places=6)
+
+    def test_project_constrains_each_club_gameweek(self):
+        players = {}
+        for i in range(14):
+            p = make_player(pid=5000 + i, pos='DEF' if i < 13 else 'GKP')
+            players[p['id']] = p
+        backup = make_player(pid=6000, pos='GKP')
+        players[backup['id']] = backup
+        rates = {pid: ((.9, 90) if pid != 6000 else (.4, 90)) for pid in players}
+        fx = {'1': [dict(xg=1.4, xgc=1.2, cs=.3)], '2': [dict(xg=1.4, xgc=1.2, cs=.3)] * 2}
+        with patch.multiple(PM, START_GW=1, HORIZON=2, LAST_GW=2, WINDOW=2,
+                            AVAILABILITY_OVERRIDES=[], GW_DEADLINES={}), \
+                patch.object(PM, 'minutes_model', side_effect=lambda p, _, rule=None: rates[p['id']]), \
+                patch.object(PM, 'shrink', return_value=(0.0, 0.0)), \
+                patch.object(PM, 'calibrate'):
+            rows = PM.project(players, {'view': {'MCI': fx}}, {})
+        for gw in (0, 1):
+            per_fixture = [r['availability_by_gw'][gw]['p_start'] for r in rows]
+            keepers = [r['availability_by_gw'][gw]['p_start'] for r in rows if r['pos'] == 'GKP']
+            self.assertAlmostEqual(sum(per_fixture), 11.0, places=3)
+            self.assertAlmostEqual(sum(keepers), 1.0, places=3)
+        # the rule-comparison shadows stay unconstrained
+        self.assertAlmostEqual(rows[0]['start_recency_by_gw'][0], .9)
 
 
 # ---------------------------------------------------------------------- P5

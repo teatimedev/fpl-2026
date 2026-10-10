@@ -1,4 +1,34 @@
-# Current handover — 6 September 2026
+# Current handover — 23 September 2026
+
+**Freshness and site (PR #1, live).** The Refresh gate now rebuilds after each
+deadline, once a gameweek is final (`graded`), daily after 01:00 UTC price
+changes, and 24h/2h before the next deadline. This Week withholds the plan only
+when it would be wrong (`adviceStatus` in `app/src/coherence.ts`) and otherwise
+shows notes beside it; a provisional lineup covers the gap before a new plan.
+The bundle is `app/public/data/fpl.json`, loaded at runtime.
+
+**Model phase 3** (`research/model-phase3-2026-09-23.md`): undated injuries ramp
+back in; starts constrained to 11 per club fixture; attack volume relative to
+the club's own level with a club-scaled prior; DefCon stability 0.93; retro,
+pecking-order and odds-averaging fixes. Rates-only calibration stays a shadow.
+Env flags revert each promoted change (`FPL_CLUB_NORMALISE=off`,
+`FPL_ATTACK_VOLUME=league`, `FPL_CLUB_PRIOR=off`).
+
+**Planner phase 4** (`research/planner-phase4-2026-09-23.md`): decayed objective
+with terminal FT/bank/squad value; sampled act-or-hold (`v2/act_or_hold.py`)
+replaces the 2.0-point bar; gains shown against saving; chips valued against the
+planned squad. Decay 0.9 and FT values are literature defaults, not fitted.
+
+**Club news**: Palace now read via embedded article links; seven
+client-rendered club sites remain uncovered (see SCOUTING.md).
+
+Open: Coventry attackers still sum high (promoted-club rating); MID/FWD levels
+~10% high; the decay rate is the most decision-relevant unfitted parameter;
+realised-points validation of the policy starts accumulating from GW6.
+
+---
+
+# Handover — 6 September 2026
 
 The September release brings the audit fixes, sourced scouting, transfer-policy
 experiments, correct displayed transfer rollover and the plain weekly checklist
