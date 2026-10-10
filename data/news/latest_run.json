@@ -1,12 +1,12 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-10-10T07:17:32Z",
-  "claims": 3,
+  "checked_at": "2026-10-10T13:52:00Z",
+  "claims": 2,
   "coverage": 0.45,
-  "deadline": "2026-10-10T10:00:00Z",
-  "gw": 6,
-  "notification_key": "a85c6479525594e0c8c9",
+  "deadline": "2026-10-17T10:00:00Z",
+  "gw": 7,
+  "notification_key": "0ddf3afbf8e375e50fb1",
   "notify_required": false,
   "official_fpl": {
     "1": {
@@ -136,7 +136,7 @@
     },
     "121": {
       "chance": 0,
-      "news": "Hamstring injury - Expected back 10 Oct",
+      "news": "Hamstring injury - Expected back 18 Oct",
       "status": "i"
     },
     "122": {
@@ -180,9 +180,9 @@
       "status": "a"
     },
     "13": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "130": {
       "chance": 0,
@@ -211,7 +211,7 @@
     },
     "135": {
       "chance": 0,
-      "news": "Unspecified injury - Expected back 10 Oct",
+      "news": "Unspecified injury - Expected back 18 Oct",
       "status": "i"
     },
     "136": {
@@ -231,7 +231,7 @@
     },
     "139": {
       "chance": 0,
-      "news": "Ankle injury - Expected back 10 Oct",
+      "news": "Ankle injury - Expected back 18 Oct",
       "status": "i"
     },
     "14": {
@@ -250,9 +250,9 @@
       "status": "u"
     },
     "142": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 50,
+      "news": "Hamstring injury - 50% chance of playing",
+      "status": "d"
     },
     "143": {
       "chance": 0,
@@ -406,7 +406,7 @@
     },
     "170": {
       "chance": 0,
-      "news": "Hamstring injury - Expected back 10 Oct",
+      "news": "Hamstring injury - Expected back 17 Oct",
       "status": "i"
     },
     "171": {
@@ -900,14 +900,14 @@
       "status": "a"
     },
     "26": {
-      "chance": 75,
-      "news": "Hamstring injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "260": {
-      "chance": 75,
-      "news": "Thigh injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "261": {
       "chance": null,
@@ -1065,9 +1065,9 @@
       "status": "a"
     },
     "29": {
-      "chance": 75,
-      "news": "Back injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "290": {
       "chance": null,
@@ -1180,9 +1180,9 @@
       "status": "a"
     },
     "31": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "310": {
       "chance": 100,
@@ -1280,9 +1280,9 @@
       "status": "a"
     },
     "328": {
-      "chance": 75,
-      "news": "Hamstring injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "329": {
       "chance": 0,
@@ -1345,9 +1345,9 @@
       "status": "a"
     },
     "34": {
-      "chance": 75,
-      "news": "Hamstring injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "340": {
       "chance": 100,
@@ -3055,9 +3055,9 @@
       "status": "a"
     },
     "648": {
-      "chance": 75,
-      "news": "Ankle injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "649": {
       "chance": null,
@@ -3081,7 +3081,7 @@
     },
     "652": {
       "chance": 0,
-      "news": "Hamstring injury - Expected back 10 Oct",
+      "news": "Hamstring injury - Expected back 18 Oct",
       "status": "i"
     },
     "653": {
@@ -3265,9 +3265,9 @@
       "status": "i"
     },
     "85": {
-      "chance": 0,
-      "news": "Groin injury - Unknown return date",
-      "status": "i"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "86": {
       "chance": null,
@@ -3330,9 +3330,9 @@
       "status": "d"
     },
     "97": {
-      "chance": 0,
-      "news": "Unspecified injury - Expected back 10 Oct",
-      "status": "i"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "98": {
       "chance": null,
@@ -3347,7 +3347,7 @@
   },
   "official_fpl_ok": true,
   "price_changed": [],
-  "rebuild_required": false,
+  "rebuild_required": true,
   "state_changed": false,
   "status": "red",
   "urgent": false,
