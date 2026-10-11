@@ -1,9 +1,9 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-10-10T13:52:00Z",
-  "claims": 2,
-  "coverage": 0.45,
+  "checked_at": "2026-10-11T01:59:43Z",
+  "claims": 1,
+  "coverage": 0.35,
   "deadline": "2026-10-17T10:00:00Z",
   "gw": 7,
   "notification_key": "0ddf3afbf8e375e50fb1",
@@ -250,8 +250,8 @@
       "status": "u"
     },
     "142": {
-      "chance": 50,
-      "news": "Hamstring injury - 50% chance of playing",
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
       "status": "d"
     },
     "143": {
@@ -1210,9 +1210,9 @@
       "status": "u"
     },
     "315": {
-      "chance": 0,
-      "news": "Suspended until 17 Oct",
-      "status": "s"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "316": {
       "chance": 100,
@@ -1265,9 +1265,9 @@
       "status": "a"
     },
     "325": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "326": {
       "chance": 0,
@@ -1280,9 +1280,9 @@
       "status": "a"
     },
     "328": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Suspended until 25 Oct",
+      "status": "s"
     },
     "329": {
       "chance": 0,
@@ -1840,9 +1840,9 @@
       "status": "a"
     },
     "429": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "43": {
       "chance": 100,
@@ -1855,14 +1855,14 @@
       "status": "a"
     },
     "431": {
-      "chance": 0,
-      "news": "Unspecified injury - Unknown return date",
-      "status": "i"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "432": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "433": {
       "chance": 0,
@@ -2290,9 +2290,9 @@
       "status": "a"
     },
     "51": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Knee injury - 75% chance of playing",
+      "status": "d"
     },
     "510": {
       "chance": null,
@@ -2325,9 +2325,9 @@
       "status": "a"
     },
     "516": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Suspended until 7 Nov",
+      "status": "s"
     },
     "517": {
       "chance": 0,
@@ -2345,9 +2345,9 @@
       "status": "a"
     },
     "52": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "520": {
       "chance": null,
@@ -2465,9 +2465,9 @@
       "status": "u"
     },
     "541": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Groin injury - 75% chance of playing",
+      "status": "d"
     },
     "542": {
       "chance": null,
@@ -2765,9 +2765,9 @@
       "status": "a"
     },
     "596": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Hamstring injury - 75% chance of playing",
+      "status": "d"
     },
     "597": {
       "chance": null,
@@ -3310,14 +3310,14 @@
       "status": "a"
     },
     "93": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Ankle injury - 75% chance of playing",
+      "status": "d"
     },
     "94": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Shoulder injury - 75% chance of playing",
+      "status": "d"
     },
     "95": {
       "chance": null,
@@ -3346,7 +3346,29 @@
     }
   },
   "official_fpl_ok": true,
-  "price_changed": [],
+  "price_changed": [
+    4,
+    13,
+    26,
+    50,
+    124,
+    153,
+    360,
+    379,
+    391,
+    398,
+    464,
+    532,
+    544,
+    545,
+    548,
+    574,
+    587,
+    589,
+    643,
+    647,
+    648
+  ],
   "rebuild_required": true,
   "state_changed": false,
   "status": "red",

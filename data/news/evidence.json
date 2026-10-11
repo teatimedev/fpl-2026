@@ -2,7 +2,7 @@
   "claims": [
     {
       "availability_scope_verified": false,
-      "checked_at": "2026-10-10T13:52:00Z",
+      "checked_at": "2026-10-11T01:59:43Z",
       "claim_type": "available",
       "club": "MCI",
       "confidence": "review",
@@ -11,7 +11,7 @@
       "extraction_version": "explicit-fixture-subject-v3",
       "gw": 7,
       "id": "ev-3a84f74f32804476",
-      "observed_at": "2026-10-10T13:52:00Z",
+      "observed_at": "2026-10-11T01:59:43Z",
       "player": "Erling Haaland",
       "player_id": 411,
       "published_at": "2026-10-09T09:30:00+00:00",
@@ -20,27 +20,6 @@
       "source_id": "mci-news",
       "title": "Liverpool v City: Kick-off time, team news and TV information",
       "url": "https://www.mancity.com/news/mens/liverpool-v-city-premier-league-match-preview-october-2026-63926279"
-    },
-    {
-      "availability_scope_verified": false,
-      "checked_at": "2026-10-10T13:52:00Z",
-      "claim_type": "available",
-      "club": "LIV",
-      "confidence": "review",
-      "decision": "candidate",
-      "excerpt": "Federico Chiesa, meanwhile, is back in training after the injury he sustained in pre-season.",
-      "extraction_version": "explicit-fixture-subject-v3",
-      "gw": 7,
-      "id": "ev-828fc9a2b4cb3b7a",
-      "observed_at": "2026-10-10T13:52:00Z",
-      "player": "Federico Chiesa",
-      "player_id": 370,
-      "published_at": null,
-      "publisher": "Liverpool",
-      "reason": "missing_or_stale_publication_time",
-      "source_id": "liv-news",
-      "title": "LFC fitness update: Alexander Isak, Cody Gakpo, Federico Chiesa and Jeremy Jacquet - Liverpool FC",
-      "url": "https://www.liverpoolfc.com/news/lfc-fitness-update-alexander-isak-cody-gakpo-federico-chiesa-and-jeremy-jacquet"
     }
   ],
   "deadline": "2026-10-17T10:00:00Z",

@@ -14,11 +14,11 @@
    "weeks": [
     [
      7,
-     8.1
+     8.2
     ],
     [
      8,
-     9.4
+     9.5
     ],
     [
      9,
@@ -26,15 +26,15 @@
     ],
     [
      10,
-     8.2
+     8.3
     ],
     [
      11,
-     7.2
+     7.3
     ],
     [
      12,
-     8.4
+     8.5
     ],
     [
      13,
@@ -42,15 +42,15 @@
     ],
     [
      14,
-     8.2
+     8.3
     ],
     [
      15,
-     8.1
+     8.2
     ],
     [
      16,
-     7.6
+     7.7
     ],
     [
      17,
@@ -62,21 +62,21 @@
     ],
     [
      19,
-     7.6
+     7.7
     ]
    ],
    "best_gw": 8,
-   "best": 9.4,
-   "now": 8.1,
+   "best": 9.5,
+   "now": 8.2,
    "play": false,
-   "advice": "Hold. Best-looking week for this one is GW8 (9.4 extra points); this week is 8.1. Second copy (GW20\u201338): best week GW37 (9.1).",
+   "advice": "Hold. Best-looking week for this one is GW8 (9.5 extra points); this week is 8.2. Second copy (GW20\u201338): best week GW37 (9.2).",
    "last_eligible": 19,
    "later": [
     {
      "lo": 20,
      "hi": 38,
      "best_gw": 37,
-     "best": 9.1
+     "best": 9.2
     }
    ]
   },
@@ -85,12 +85,12 @@
    "weeks": [
     [
      20,
-     7.1,
+     7.2,
      "Saka"
     ],
     [
      21,
-     7.9,
+     7.8,
      "Haaland"
     ],
     [
@@ -110,7 +110,7 @@
     ],
     [
      25,
-     8.0,
+     7.9,
      "Haaland"
     ],
     [
@@ -165,7 +165,7 @@
     ],
     [
      36,
-     8.8,
+     8.7,
      "Haaland"
     ],
     [
@@ -180,15 +180,15 @@
     ]
    ],
    "best_gw": 36,
-   "best": 8.8,
+   "best": 8.7,
    "best_name": "Haaland",
    "now": null,
    "now_name": "",
    "play": false,
-   "advice": "Hold. Best week for this one is GW36: Haaland (8.8 extra).",
+   "advice": "Hold. Best week for this one is GW36: Haaland (8.7 extra).",
    "anyone": [
     36,
-    8.6,
+    8.5,
     "Haaland"
    ],
    "last_eligible": 38,
@@ -199,47 +199,47 @@
    "weeks": [
     [
      7,
-     4.3
+     3.4
     ],
     [
      8,
-     4.7
+     4.2
     ],
     [
      9,
-     4.5
+     4.4
     ],
     [
      10,
-     2.5
+     2.4
     ],
     [
      11,
-     4.1
+     4.3
     ],
     [
      12,
-     7.0
+     6.9
     ],
     [
      13,
-     1.9
+     2.1
     ],
     [
      14,
-     4.5
+     4.4
     ],
     [
      15,
-     3.2
+     3.7
     ],
     [
      16,
-     7.3
+     7.4
     ],
     [
      17,
-     3.4
+     3.5
     ],
     [
      18,
@@ -247,72 +247,72 @@
     ],
     [
      19,
-     4.7
+     4.6
     ]
    ],
    "best_gw": 16,
-   "best": 7.3,
-   "now": 4.3,
+   "best": 7.4,
+   "now": 3.4,
    "play": false,
-   "advice": "Hold. Widest gap left is GW16 (7.3 behind the optimised one-week squad); this week 4.3.",
+   "advice": "Hold. Widest gap left is GW16 (7.4 behind the optimised one-week squad); this week 3.4.",
    "last_eligible": 19
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 6.6,
+   "now": 4.7,
    "gap_trend": [
     [
      7,
-     4.3
+     3.4
     ],
     [
      8,
-     4.7
+     4.2
     ],
     [
      9,
-     4.5
+     4.4
     ],
     [
      10,
-     2.5
+     2.4
     ],
     [
      11,
-     4.1
+     4.3
     ],
     [
      12,
-     7.0
+     6.9
     ],
     [
      13,
-     1.9
+     2.1
     ],
     [
      14,
-     4.5
+     4.4
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 6.6 over the window. The squad is holding up (gap to the optimised one-week squad 4.3\u20137.0 over the next weeks).",
+   "advice": "Hold. Unlimited transfers now are worth 4.7 over the window. The squad is holding up (gap to the optimised one-week squad 3.4\u20136.9 over the next weeks).",
    "last_eligible": 19
   }
  },
  "gaps": {
-  "7": 4.3,
-  "8": 4.7,
-  "9": 4.5,
-  "10": 2.5,
-  "11": 4.1,
-  "12": 7.0,
-  "13": 1.9,
-  "14": 4.5,
-  "15": 3.2,
-  "16": 7.3,
-  "17": 3.4,
+  "7": 3.4,
+  "8": 4.2,
+  "9": 4.4,
+  "10": 2.4,
+  "11": 4.3,
+  "12": 6.9,
+  "13": 2.1,
+  "14": 4.4,
+  "15": 3.7,
+  "16": 7.4,
+  "17": 3.5,
   "18": 4.7,
-  "19": 4.7
+  "19": 4.6
  },
  "method": "Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled."
 }
