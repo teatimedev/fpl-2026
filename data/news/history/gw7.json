@@ -1,27 +1,5 @@
 {
-  "claims": [
-    {
-      "availability_scope_verified": false,
-      "checked_at": "2026-10-11T01:59:43Z",
-      "claim_type": "available",
-      "club": "MCI",
-      "confidence": "review",
-      "decision": "candidate",
-      "excerpt": "City boss Enzo Maresca says Erling Haaland is fit and available for Sunday\u2019s return to Premier League action away at Liverpool.",
-      "extraction_version": "explicit-fixture-subject-v3",
-      "gw": 7,
-      "id": "ev-3a84f74f32804476",
-      "observed_at": "2026-10-11T01:59:43Z",
-      "player": "Erling Haaland",
-      "player_id": 411,
-      "published_at": "2026-10-09T09:30:00+00:00",
-      "publisher": "Manchester City",
-      "reason": "observation_only",
-      "source_id": "mci-news",
-      "title": "Liverpool v City: Kick-off time, team news and TV information",
-      "url": "https://www.mancity.com/news/mens/liverpool-v-city-premier-league-match-preview-october-2026-63926279"
-    }
-  ],
+  "claims": [],
   "deadline": "2026-10-17T10:00:00Z",
   "gw": 7,
   "policy": "explicit absences auto-apply; nuanced claims are review candidates",

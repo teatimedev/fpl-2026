@@ -1,13 +1,15 @@
 {
   "affected_clubs": [],
-  "affected_owned": [],
-  "checked_at": "2026-10-11T01:59:43Z",
-  "claims": 1,
+  "affected_owned": [
+    368
+  ],
+  "checked_at": "2026-10-12T07:28:56Z",
+  "claims": 0,
   "coverage": 0.35,
   "deadline": "2026-10-17T10:00:00Z",
   "gw": 7,
-  "notification_key": "0ddf3afbf8e375e50fb1",
-  "notify_required": false,
+  "notification_key": "b43309ca2335ea6414f7",
+  "notify_required": true,
   "official_fpl": {
     "1": {
       "chance": null,
@@ -625,9 +627,9 @@
       "status": "a"
     },
     "21": {
-      "chance": 50,
-      "news": "Groin injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "210": {
       "chance": 100,
@@ -825,9 +827,9 @@
       "status": "a"
     },
     "246": {
-      "chance": 50,
-      "news": "Unspecified injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "247": {
       "chance": 100,
@@ -1500,9 +1502,9 @@
       "status": "i"
     },
     "368": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Hamstring injury - 75% chance of playing",
+      "status": "d"
     },
     "369": {
       "chance": null,
@@ -1515,14 +1517,14 @@
       "status": "a"
     },
     "370": {
-      "chance": 25,
-      "news": "Back injury - 25% chance of playing",
-      "status": "d"
-    },
-    "371": {
-      "chance": null,
+      "chance": 100,
       "news": "",
       "status": "a"
+    },
+    "371": {
+      "chance": 0,
+      "news": "Suspended until 25 Oct",
+      "status": "s"
     },
     "372": {
       "chance": null,
@@ -1605,9 +1607,9 @@
       "status": "a"
     },
     "387": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "388": {
       "chance": null,
@@ -1660,14 +1662,14 @@
       "status": "a"
     },
     "397": {
-      "chance": 75,
-      "news": "Ankle injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "398": {
-      "chance": 0,
-      "news": "Suspended until 17 Oct",
-      "status": "s"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "399": {
       "chance": null,
@@ -2060,9 +2062,9 @@
       "status": "a"
     },
     "469": {
-      "chance": 50,
-      "news": "Illness - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "47": {
       "chance": 100,
@@ -3347,27 +3349,25 @@
   },
   "official_fpl_ok": true,
   "price_changed": [
-    4,
-    13,
-    26,
-    50,
-    124,
-    153,
-    360,
-    379,
-    391,
-    398,
-    464,
-    532,
-    544,
-    545,
-    548,
-    574,
-    587,
-    589,
-    643,
-    647,
-    648
+    40,
+    69,
+    72,
+    77,
+    115,
+    160,
+    162,
+    165,
+    166,
+    286,
+    330,
+    367,
+    386,
+    396,
+    397,
+    417,
+    487,
+    559,
+    632
   ],
   "rebuild_required": true,
   "state_changed": false,
