@@ -1,15 +1,13 @@
 {
   "affected_clubs": [],
-  "affected_owned": [
-    368
-  ],
-  "checked_at": "2026-10-12T07:28:56Z",
+  "affected_owned": [],
+  "checked_at": "2026-10-13T07:49:58Z",
   "claims": 0,
   "coverage": 0.35,
   "deadline": "2026-10-17T10:00:00Z",
   "gw": 7,
-  "notification_key": "b43309ca2335ea6414f7",
-  "notify_required": true,
+  "notification_key": "0ddf3afbf8e375e50fb1",
+  "notify_required": false,
   "official_fpl": {
     "1": {
       "chance": null,
@@ -432,9 +430,9 @@
       "status": "u"
     },
     "175": {
-      "chance": 75,
-      "news": "Hamstring injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "176": {
       "chance": null,
@@ -512,9 +510,9 @@
       "status": "a"
     },
     "19": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "190": {
       "chance": null,
@@ -1812,9 +1810,9 @@
       "status": "d"
     },
     "423": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "424": {
       "chance": null,
@@ -1862,9 +1860,9 @@
       "status": "a"
     },
     "432": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "433": {
       "chance": 0,
@@ -1947,9 +1945,9 @@
       "status": "a"
     },
     "448": {
-      "chance": 0,
-      "news": "Ankle injury - Expected back 12 Oct",
-      "status": "i"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "449": {
       "chance": null,
@@ -2002,14 +2000,14 @@
       "status": "a"
     },
     "458": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "459": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "46": {
       "chance": null,
@@ -2022,9 +2020,9 @@
       "status": "a"
     },
     "461": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "462": {
       "chance": null,
@@ -2042,9 +2040,9 @@
       "status": "a"
     },
     "465": {
-      "chance": 50,
-      "news": "Foot injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "466": {
       "chance": 0,
@@ -2192,9 +2190,9 @@
       "status": "i"
     },
     "492": {
-      "chance": 0,
-      "news": "Suspended until 19 Oct",
-      "status": "s"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "493": {
       "chance": null,
@@ -2752,9 +2750,9 @@
       "status": "a"
     },
     "593": {
-      "chance": 50,
-      "news": "Unspecified injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "594": {
       "chance": null,
@@ -2767,8 +2765,8 @@
       "status": "a"
     },
     "596": {
-      "chance": 75,
-      "news": "Hamstring injury - 75% chance of playing",
+      "chance": 25,
+      "news": "Hamstring injury - 25% chance of playing",
       "status": "d"
     },
     "597": {
@@ -3292,9 +3290,9 @@
       "status": "a"
     },
     "9": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Ankle injury - 75% chance of playing",
+      "status": "d"
     },
     "90": {
       "chance": null,
@@ -3349,25 +3347,10 @@
   },
   "official_fpl_ok": true,
   "price_changed": [
-    40,
-    69,
-    72,
-    77,
-    115,
-    160,
-    162,
-    165,
-    166,
-    286,
-    330,
-    367,
-    386,
-    396,
-    397,
-    417,
-    487,
-    559,
-    632
+    138,
+    175,
+    415,
+    600
   ],
   "rebuild_required": true,
   "state_changed": false,
