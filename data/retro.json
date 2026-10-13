@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-13T07:53:56Z",
- "latest_gw": 5,
+ "generated": "2026-10-13T16:14:32Z",
+ "latest_gw": 6,
  "gws": [
   {
    "gw": 1,
@@ -70,57 +70,71 @@
     "minutes_gain": 18
    },
    "generated": "2026-10-13T07:53:56Z"
+  },
+  {
+   "gw": 6,
+   "n": 356,
+   "counts": {
+    "on_model": 185,
+    "role_change": 6,
+    "variance": 57,
+    "unavailable": 37,
+    "minutes_loss": 21,
+    "minutes_watch": 30,
+    "minutes_gain": 20
+   },
+   "generated": "2026-10-13T16:14:32Z"
   }
  ],
- "classes_graded_gws": 4,
+ "classes_graded_gws": 5,
  "by_class": {
   "on_model": {
-   "n": 799,
-   "gws": 4,
-   "next_start_rate": 0.536,
-   "next_residual_mean": -0.05
+   "n": 977,
+   "gws": 5,
+   "next_start_rate": 0.543,
+   "next_residual_mean": -0.06
   },
   "variance/finishing": {
-   "n": 71,
-   "gws": 4,
-   "next_start_rate": 0.887,
-   "next_residual_mean": 0.46
+   "n": 91,
+   "gws": 5,
+   "next_start_rate": 0.901,
+   "next_residual_mean": 0.2
   },
   "variance": {
-   "n": 242,
-   "gws": 4,
-   "next_start_rate": 0.909,
-   "next_residual_mean": 0.37
+   "n": 303,
+   "gws": 5,
+   "next_start_rate": 0.918,
+   "next_residual_mean": 0.34
   },
   "minutes_loss/cameo": {
-   "n": 85,
-   "gws": 4,
-   "next_start_rate": 0.306,
-   "next_residual_mean": -0.21
+   "n": 95,
+   "gws": 5,
+   "next_start_rate": 0.316,
+   "next_residual_mean": -0.32
   },
   "minutes_loss": {
-   "n": 159,
-   "gws": 4,
-   "next_start_rate": 0.258,
-   "next_residual_mean": -0.38
+   "n": 181,
+   "gws": 5,
+   "next_start_rate": 0.271,
+   "next_residual_mean": -0.45
   },
   "unavailable": {
-   "n": 154,
-   "gws": 4,
-   "next_start_rate": 0.117,
-   "next_residual_mean": -0.34
+   "n": 197,
+   "gws": 5,
+   "next_start_rate": 0.152,
+   "next_residual_mean": -0.29
   },
   "minutes_loss/dnp": {
-   "n": 74,
-   "gws": 4,
-   "next_start_rate": 0.203,
-   "next_residual_mean": -0.58
+   "n": 86,
+   "gws": 5,
+   "next_start_rate": 0.221,
+   "next_residual_mean": -0.59
   },
   "variance/team": {
-   "n": 162,
-   "gws": 4,
-   "next_start_rate": 0.92,
-   "next_residual_mean": 0.37
+   "n": 203,
+   "gws": 5,
+   "next_start_rate": 0.926,
+   "next_residual_mean": 0.43
   },
   "variance/defcon": {
    "n": 4,
@@ -129,28 +143,28 @@
    "next_residual_mean": 1.1
   },
   "minutes_watch/fringe": {
-   "n": 137,
-   "gws": 4,
-   "next_start_rate": 0.212,
-   "next_residual_mean": 0.03
+   "n": 157,
+   "gws": 5,
+   "next_start_rate": 0.216,
+   "next_residual_mean": 0.01
   },
   "minutes_watch": {
-   "n": 183,
-   "gws": 4,
-   "next_start_rate": 0.289,
-   "next_residual_mean": -0.15
+   "n": 211,
+   "gws": 5,
+   "next_start_rate": 0.294,
+   "next_residual_mean": -0.12
   },
   "minutes_watch/hooked": {
-   "n": 46,
-   "gws": 4,
-   "next_start_rate": 0.522,
-   "next_residual_mean": -0.67
+   "n": 54,
+   "gws": 5,
+   "next_start_rate": 0.518,
+   "next_residual_mean": -0.52
   },
   "minutes_gain": {
-   "n": 88,
-   "gws": 4,
-   "next_start_rate": 0.773,
-   "next_residual_mean": 0.33
+   "n": 106,
+   "gws": 5,
+   "next_start_rate": 0.764,
+   "next_residual_mean": 0.57
   },
   "variance/bonus": {
    "n": 5,
@@ -159,22 +173,22 @@
    "next_residual_mean": -1.38
   },
   "role_change/setpiece": {
-   "n": 12,
-   "gws": 2,
-   "next_start_rate": 0.916,
-   "next_residual_mean": -0.16
+   "n": 14,
+   "gws": 3,
+   "next_start_rate": 0.857,
+   "next_residual_mean": 0.2
   },
   "role_change": {
-   "n": 34,
-   "gws": 3,
-   "next_start_rate": 0.941,
-   "next_residual_mean": -0.33
+   "n": 43,
+   "gws": 4,
+   "next_start_rate": 0.907,
+   "next_residual_mean": -0.38
   },
   "role_change/xgi": {
-   "n": 22,
-   "gws": 2,
-   "next_start_rate": 0.954,
-   "next_residual_mean": -0.42
+   "n": 29,
+   "gws": 3,
+   "next_start_rate": 0.931,
+   "next_residual_mean": -0.66
   }
  },
  "note": "Classes never change a projection or a transfer number; they change what the digest shows first and how it words it."
