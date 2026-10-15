@@ -217,17 +217,24 @@ export interface WeeklyModel {
 
 export interface WeeklyCheck { id: number; xi: boolean; flags: string[] }
 
+/** gain/net compare the move alone with keeping today's squad and making no
+ *  further transfers. vs_hold is the decision basis: expected objective gain
+ *  versus saving the transfer with later weeks re-planned (sampled where the
+ *  move was tested; vs_hold_nominal is the unsampled value). */
 export interface WeeklySingle {
   out: number; in_: number; gain: number; net: number
   xi_gain?: number; autosub_gain?: number
+  vs_hold?: number | null; vs_hold_nominal?: number | null
 }
 export interface WeeklyPair {
   out: number[]; in_: number[]; gain: number; net: number
   xi_gain?: number; autosub_gain?: number
+  vs_hold?: number | null; vs_hold_nominal?: number | null
 }
 export interface WeeklyTransfers {
   base: number; base_xi?: number; base_autosub?: number; unavailable?: number[]
   singles: WeeklySingle[]; pairs: WeeklyPair[]; advice: string
+  gain_basis?: string
 }
 
 export interface WeeklyPlanWeek {
@@ -242,16 +249,51 @@ export interface WeeklyDecisionSim {
   p_delta_lt_minus_2: number
   n_sims: number
 }
+/** One tested first-week action. `out`/`in_` are paired by position. */
+export interface WeeklyPlanAction {
+  in_: number[]; out: number[]
+  /** expected decision-objective gain versus holding, and its Monte Carlo standard error */
+  gain: number; se: number
+  /** share of sampled forecast revisions in which it beat holding */
+  p_beats_hold: number | null
+}
+export interface WeeklyPlanDecision {
+  method: string
+  samples: number
+  discovery?: number
+  seed?: number
+  runtime_s?: number
+  rule: string
+  noise?: Record<string, number | string>
+  chosen: WeeklyPlanAction
+  /** best action that makes a transfer, whether or not it was chosen */
+  best_move?: WeeklyPlanAction | null
+}
+export interface WeeklyPlanValuation {
+  decay: number; ft_values: number[]; bank_value: number; tail_weeks: number
+  tail_source?: string | null
+}
 export interface WeeklyPlan {
-  total: number; hold_total: number; diff: number; hits: number; weeks: WeeklyPlanWeek[]
+  /** undiscounted points over the window, net of hits */
+  total: number; hold_total: number
+  /** selected action versus holding, in decision-objective points */
+  diff: number; hits: number; weeks: WeeklyPlanWeek[]
   hold_weeks?: WeeklyPlanWeek[]
-  /** moves the plan makes this week, and whether diff clears the per-move hold threshold */
-  n_now?: number; worth_it?: boolean; move_bar?: number
+  /** decision objective: decayed points, hits and value carried past the window */
+  objective?: number; hold_objective?: number; nominal_diff?: number
+  n_now?: number; worth_it?: boolean
+  /** pre-season rebuild only: the legacy 2-point-per-move bar */
+  move_bar?: number
+  policy_status?: string
+  valuation?: WeeklyPlanValuation | null
+  terminal?: { ft_end: number; ft_value: number; bank_end: number; bank_value: number; tail_weeks: number; tail_value: number } | null
+  decision?: WeeklyPlanDecision
   this_week_sim?: WeeklyDecisionSim
   this_week_sim_error?: string
   candidates?: {
     source: string; status: string; total?: number; gain?: number
     n_now?: number; move_bar?: number; qualifies?: boolean; in_?: number[]; out?: number[]
+    se?: number; p_beats_hold?: number | null; p_best?: number; nominal_gain?: number | null; hold?: boolean
   }[]
 }
 

@@ -6,8 +6,10 @@ evaluator. They are sensitivity tests, not probabilities or fitted downgrades.
 from copy import deepcopy
 
 try:
+    from .attack_volume import attack_volume
     from .squad_evaluator import evaluate_squad
 except ImportError:
+    from attack_volume import attack_volume
     from squad_evaluator import evaluate_squad
 
 GOAL_POINTS = {'GKP': 6, 'DEF': 6, 'MID': 5, 'FWD': 4}
@@ -21,7 +23,7 @@ def stress_player(player, view, gw, horizon, attack_drop=0.0, start_drop=0.0):
             continue
         if attack_drop:
             fixtures = view.get(p['team'], {}).get(str(week), [])
-            volume = sum(f['xg'] / 1.45 for f in fixtures)
+            volume = sum(attack_volume(f['xg'], p.get('club_xg')) for f in fixtures)
             minutes = (p.get('mins_by_gw') or [p.get('mins_proj', 0)] * horizon)[i]
             # Exported minutes are a GW total; attacking volume already sums
             # fixtures, so use the per-fixture mean duration here.
