@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 7
 
-Deadline **Sat 17 Oct, 10:00 UTC** — 0d 21h away.
+Deadline **Sat 17 Oct, 10:00 UTC** — 0d 12h away.
 Projections cover GW7–12.
 
 ## GW6 in review — what happened, and what it does and does not change
 
-_356 players classified: 40 unavailable, 21 minutes loss, 30 minutes watch, 19 minutes gain, 6 role change, 57 variance, 183 on model. Retrospective classes graded: 5 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_356 players classified: 45 unavailable, 21 minutes loss, 29 minutes watch, 19 minutes gain, 6 role change, 56 variance, 180 on model. Retrospective classes graded: 5 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -38,9 +38,10 @@ _356 players classified: 40 unavailable, 21 minutes loss, 30 minutes watch, 19 m
 **Pool** — ordered by projected points GW7–12, capped at 5 a list, not by last week's residual:
 
 - breakout minutes (started at <= 40%): Christie (BOU, 0.0 xG, 3 pts; GW7–12 13.6), Andrés (BHA, 0.0 xG, 3 pts; GW7–12 12.9), Philogene (IPS, 0.0 xG, 2 pts; GW7–12 12.2), Senesi (TOT, 0.0 xG, 2 pts; GW7–12 11.9), Gallagher (TOT, 0.5 xG, 3 pts; GW7–12 11.8)
+- set-piece duty changed: Rudoni (COV, 0.8 xG, 7 pts; GW7–12 20.2)
 - lost their place — benched while healthy: Marmoush (TOT, 0.0 xG, 1 pts; GW7–12 18.8), Belloumi (HUL, 0.2 xG, 6 pts; GW7–12 17.2), Castagne (FUL, 0.0 xG, 0 pts; GW7–12 15.4), Van de Ven (TOT, 0.0 xG, 1 pts; GW7–12 14.4), Fofana (CHE, 0.0 xG, 0 pts; GW7–12 14.3)
 - hauled on low xG — do not chase: Rogers (CHE, 0.2 xG, 9 pts; GW7–12 26.2), De Cuyper (BHA, 0.2 xG, 15 pts; GW7–12 24.4), Dewsbury-Hall (EVE, 0.4 xG, 13 pts; GW7–12 23.7), Justin (LEE, 0.2 xG, 6 pts; GW7–12 21.3), Botman (NEW, 0.0 xG, 8 pts; GW7–12 21.1)
-- blanked on good xG — unchanged as targets: Barnes (NEW, 0.3 xG, 2 pts; GW7–12 27.1), Gonzalo (FUL, 0.7 xG, 2 pts; GW7–12 26.4), Gibbs-White (NFO, 0.1 xG, 2 pts; GW7–12 25.5), Fernandez-Pardo (NEW, 0.5 xG, 2 pts; GW7–12 18.6)
+- blanked on good xG — unchanged as targets: Barnes (NEW, 0.3 xG, 2 pts; GW7–12 27.1), Gonzalo (FUL, 0.7 xG, 2 pts; GW7–12 26.4), Fernandez-Pardo (NEW, 0.5 xG, 2 pts; GW7–12 18.6)
 
 ## Captain: **Haaland** (MCI)
 
@@ -133,9 +134,9 @@ Selected path under the current policy: **401.6** pts (0 hits). Making no move t
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
 | Tarkowski, Szoboszlai → De Cuyper, Cherki | +1.73 | 4.0 | no |
-| Sadiki → Gomez | -1.80 | 2.0 | no |
-| Szoboszlai → Enzo | -2.11 | 2.0 | no |
-| Tarkowski → Guéhi | -1.33 | 2.0 | no |
+| Sadiki → Gomez | +0.04 | 2.0 | no |
+| Szoboszlai → Enzo | -1.80 | 2.0 | no |
+| Tarkowski → Guéhi | -3.95 | 2.0 | no |
 | Sadiki, Szoboszlai → Gomez, Enzo | +0.05 | 4.0 | no |
 
 - **GW7** 66.9 pts, C Haaland, 2 FT  hold
@@ -167,25 +168,25 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| De Cuyper £5.1 | +14.1% | +579,168 | Szoboszlai £6.9 ⭑ | -14.2% | -414,263 |
-| Groß £6.0 ⭑ | +11.7% | +532,378 | B.Fernandes £11.9 | -11.0% | -406,394 |
-| Cherki £7.9 | +13.9% | +518,301 | Isak £9.0 | -24.9% | -370,094 |
-| João Pedro £7.8 ⭑ | +6.1% | +482,352 | Gakpo £7.1 | -30.9% | -247,242 |
-| Rogers £7.9 | +6.4% | +325,060 | Wissa £6.3 | -10.0% | -190,717 |
-| Belloumi £5.2 | +21.1% | +182,817 | Tzolis £6.2 | -25.9% | -175,087 |
+| De Cuyper £5.1 | +16.7% | +707,303 | Szoboszlai £6.9 ⭑ | -22.6% | -613,255 |
+| Groß £6.0 ⭑ | +14.2% | +665,126 | B.Fernandes £11.9 | -14.3% | -513,351 |
+| Cherki £7.9 | +17.2% | +664,538 | Isak £9.0 | -30.7% | -436,286 |
+| João Pedro £7.8 ⭑ | +7.0% | +557,121 | Gakpo £7.1 | -36.4% | -278,486 |
+| Rogers £7.9 | +7.6% | +389,655 | Wissa £6.3 | -14.1% | -260,694 |
+| Belloumi £5.2 | +25.3% | +230,105 | Gibbs-White £8.0 | -15.0% | -225,986 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Squad player Szoboszlai (net -332k this event) at fall risk (-0.1m hurts the bank) [net -332k this event (in 15k / out 347k), sel 27.0% = Q3 (~150k to move), price 6.9 over 36 snaps (-0.1m in window)]
+- Squad player Szoboszlai (net -414k this event) at fall risk (-0.1m hurts the bank) [net -414k this event (in 15k / out 429k), sel 26.2% = Q3 (~150k to move), price 6.9 over 36 snaps (-0.1m in window)]
 
 _Based on 36 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-10-16 12:46 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-10-16 21:44 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
 
 ## Scouting
 
-4 sourced observations; 1 API calls. Review these alongside the transfer stress tests in the app.
+20 sourced observations; 4 API calls. Review these alongside the transfer stress tests in the app.

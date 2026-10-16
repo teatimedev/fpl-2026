@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-16T12:35:00Z",
-  "coverage": 0.4,
+  "checked_at": "2026-10-16T21:24:19Z",
+  "coverage": 0.45,
   "enabled": 20,
   "gw": 7,
-  "healthy": 8,
+  "healthy": 9,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -28,7 +28,7 @@
       "article_validators": {},
       "club": "AVL",
       "content_hash": "9c7825becb8ff42f8c499d57fe8c1093bd5159607ffeacf1c5ac976ec67ff3f9",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"c5c0391b11af52f1a0defe8f20f62651\"",
       "id": "avl-news",
       "last_modified": "Fri, 16 Oct 2026 02:04:56 GMT",
@@ -74,7 +74,7 @@
       "content_hash": "2e4d32e42f1aadd7e72196fd3a58adfde04905e0530b40a1d332bf36ff9cce7c",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Fri, 16 Oct 2026 12:35:01 GMT",
+      "last_modified": "Fri, 16 Oct 2026 14:54:21 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "no_articles",
@@ -98,7 +98,7 @@
       "article_validators": {},
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"f204d157c744db65a2b40286adf95f80\"",
       "id": "cov-news",
       "last_modified": "Fri, 16 Oct 2026 02:07:08 GMT",
@@ -112,8 +112,8 @@
       "article_validators": {},
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
-      "documents": 0,
-      "etag": "\"dcgecgw2dn45lb\"",
+      "documents": 1,
+      "etag": "\"vo4u224epb4at3\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -125,7 +125,7 @@
       "article_validators": {},
       "club": "EVE",
       "content_hash": "54e2021d53c5959c4e3dc30111359c37658673c2e65215e1aaabf24197933129",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"f0bc1d018e790e0db8c97316aec8bf97\"",
       "id": "eve-news",
       "last_modified": "Fri, 16 Oct 2026 02:04:36 GMT",
@@ -138,16 +138,16 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.fulhamfc.com/599395a0-c871-11f1-95df-95b1aabd8ce2/artists-impression": {
-          "etag": "\"9ee325892d3f1d3a18667b6945c012f2\"",
-          "last_modified": "Fri, 16 Oct 2026 12:12:11 GMT"
+          "etag": "\"1ab0978ba8b9d56600858d079d0e3aee\"",
+          "last_modified": "Fri, 16 Oct 2026 15:44:28 GMT"
         },
         "https://www.fulhamfc.com/9f4fe8f0-c871-11f1-95df-95b1aabd8ce2/meetings-and-conferences": {
-          "etag": "\"9ee325892d3f1d3a18667b6945c012f2\"",
-          "last_modified": "Fri, 16 Oct 2026 12:12:11 GMT"
+          "etag": "\"1ab0978ba8b9d56600858d079d0e3aee\"",
+          "last_modified": "Fri, 16 Oct 2026 15:44:28 GMT"
         },
         "https://www.fulhamfc.com/news/2026/october/16/matchday-preview-hull-city/": {
-          "etag": "\"c04515d69f6d32bcab387208b7b7b1af\"",
-          "last_modified": "Fri, 16 Oct 2026 12:12:14 GMT"
+          "etag": "\"c1233c3b7cdf8602f660bb4520781628\"",
+          "last_modified": "Fri, 16 Oct 2026 15:12:43 GMT"
         },
         "https://www.fulhamfc.com/news/2026/october/16/pre-hull-press-conference/": {
           "etag": "\"d4db3c85c680958daf46940d5bdf07c7\"",
@@ -155,11 +155,11 @@
         }
       },
       "club": "FUL",
-      "content_hash": "4104e83ec45735df0f38b0d3f575433baef91cfb07f1a3b10be789a2a0a6387f",
-      "documents": 5,
-      "etag": "\"ec899f5a6ed1f1a348cb966f884c5ac2\"",
+      "content_hash": "eea691b900031785ca51440fae9bd946cda7c5f86ac68b539059398983ccbf4b",
+      "documents": 4,
+      "etag": "\"7bdb4aaea2e7fb301c55f295e0a87b49\"",
       "id": "ful-news",
-      "last_modified": "Fri, 16 Oct 2026 12:12:14 GMT",
+      "last_modified": "Fri, 16 Oct 2026 15:44:31 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Fulham",
       "status": "ok",
@@ -170,7 +170,7 @@
       "article_validators": {},
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"d602f73a8265322e5beef6515a4119e0\"",
       "id": "hul-news",
       "last_modified": "Fri, 16 Oct 2026 10:33:54 GMT",
@@ -181,16 +181,21 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {},
+      "article_validators": {
+        "https://www.itfc.co.uk/news/2026/october/16/early-manchester-city-team-news/": {
+          "etag": "\"777545f6a1543dbc92cec7fefb4450ec\"",
+          "last_modified": "Fri, 16 Oct 2026 15:14:39 GMT"
+        }
+      },
       "club": "IPS",
-      "content_hash": "39d9d50d082f1f0d4c9b22a6532a62e91183aeba1a808a582950ec3c75091e01",
-      "documents": 1,
-      "etag": "\"a15c68a4dbb6c5a45ba95d95ba775dad\"",
+      "content_hash": "dbc59f02c88bd846bb712ed43af6e0c142880c4a88f91a6aef73027a08df16fb",
+      "documents": 2,
+      "etag": "\"358be15b0d3896697074be37098ba314\"",
       "id": "ips-news",
-      "last_modified": "Fri, 16 Oct 2026 12:12:59 GMT",
+      "last_modified": "Fri, 16 Oct 2026 15:36:16 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
-      "status": "no_articles",
+      "status": "ok",
       "url": "https://www.itfc.co.uk/news/"
     },
     {
@@ -198,13 +203,15 @@
       "article_validators": {
         "https://www.leedsunited.com/en/news/every-win-is-a-step-closer-to-where-we-want-to-be-drew-greene-previews-sundays-top-two-meeting": {},
         "https://www.leedsunited.com/en/news/fpl-leeds-star-to-build-on-impressive-start-to-the-season": {},
+        "https://www.leedsunited.com/en/news/leeds-united-vs-manchester-united-team-news-key-stats-and-everything-you-need-to-know": {},
+        "https://www.leedsunited.com/en/news/team-news-daniel-farke-gives-positive-update-on-wales-duo": {},
         "https://www.leedsunited.com/en/news/watch-daniel-farkes-pre-man-utd-press-conference-from-1-30pm": {}
       },
       "club": "LEE",
-      "content_hash": "15481e447c023e265cfc3b2b0cfb49bd2d6bc2fd09e1d561b584a57a7f430411",
-      "documents": 4,
+      "content_hash": "d6fe9c77f6941d9fbb1237d2dcd05e4b4903ed5843f04fb9bbe08991b8ee52ab",
+      "documents": 6,
       "id": "lee-news",
-      "last_modified": "Fri, 16 Oct 2026 12:35:03 GMT",
+      "last_modified": "Fri, 16 Oct 2026 20:31:50 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -213,15 +220,14 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.liverpoolfc.com/news/fitness-update-andoni-iraola-gakpo-isak-szoboszlai-changes-brentford": {},
-        "https://www.liverpoolfc.com/news/how-really-smart-trey-nyoni-has-impressed-andoni-iraola": {},
+        "https://www.liverpoolfc.com/news/brentford-v-liverpool-team-news-premier-league": {},
         "https://www.liverpoolfc.com/news/listing/mens-team-news": {}
       },
       "club": "LIV",
-      "content_hash": "8638092de747e982981adee099ac7ddb5c28734b05ecae7f772fddc0d852cf23",
-      "documents": 4,
+      "content_hash": "be47f6e1d02b17d1b91085c49338b408545ec0b179d083ca532ee90fd5023dfa",
+      "documents": 3,
       "id": "liv-news",
-      "last_modified": "Fri, 16 Oct 2026 11:00:43 GMT",
+      "last_modified": "Fri, 16 Oct 2026 18:55:17 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
       "status": "ok",
@@ -230,14 +236,19 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/citytv/mens/enzo-maresca-manchester-city-ipswich-town-press-conference-63927740": {},
-        "https://www.mancity.com/citytv/mens/signed-shirts-gifted-to-greater-manchesters-largest-osc-63927670": {},
-        "https://www.mancity.com/news/mens/city-v-ipswich-town-match-preview-pl-17-october-63927580": {}
+        "https://www.mancity.com/news/mens/city-v-ipswich-town-match-preview-pl-17-october-63927580": {
+          "last_modified": "Fri, 16 Oct 2026 21:18:13 GMT"
+        },
+        "https://www.mancity.com/news/mens/enzo-maresca-pre-ipswich-press-conference-written-63927744": {},
+        "https://www.mancity.com/news/mens/maresca-written-ipswich-preview-63927753": {
+          "last_modified": "Fri, 16 Oct 2026 21:15:50 GMT"
+        }
       },
       "club": "MCI",
-      "content_hash": "e01e2e67b5f1769790a72fb5d244d2ddb72535b12378caf40489db968c514ba5",
+      "content_hash": "2d538b9a6d65b309521755b994f5d904b3dadf9493772bcf6b55da66827320a5",
       "documents": 4,
       "id": "mci-news",
+      "last_modified": "Fri, 16 Oct 2026 21:15:22 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
       "status": "ok",
@@ -270,7 +281,7 @@
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-toure-and-elanga-latest-ahead-of-villans-clash": {}
       },
       "club": "NEW",
-      "content_hash": "b919165222d371c280491176feb2e727fb6cecabd98a673221b991b0936dfce7",
+      "content_hash": "a7d850f1face3d83e21135a925bfb580bb85ce0c50f0736afea3e6840b8ad72f",
       "documents": 2,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -284,9 +295,9 @@
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
       "documents": 1,
-      "etag": "\"5e124690b73eeb4be4a18acce38fd72b\"",
+      "etag": "\"2f70c05f6e99df7cd8ce276b04cb74c0\"",
       "id": "nfo-news",
-      "last_modified": "Fri, 16 Oct 2026 11:59:40 GMT",
+      "last_modified": "Fri, 16 Oct 2026 16:08:27 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -298,9 +309,9 @@
       "club": "SUN",
       "content_hash": "191fbb568fbd24f60eb2575b6a2ad66dbbf72f8961bce0b666fc2a248e2add01",
       "documents": 1,
-      "etag": "\"7801153c732d783d84b10ed69c935574\"",
+      "etag": "\"b82c630e1b6f6a62b2d4697fdb43b876\"",
       "id": "sun-news",
-      "last_modified": "Fri, 16 Oct 2026 02:04:09 GMT",
+      "last_modified": "Fri, 16 Oct 2026 14:46:42 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Sunderland",
       "status": "no_articles",
