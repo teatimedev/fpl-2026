@@ -1,22 +1,22 @@
 # FPL weekly — Gameweek 7
 
-Deadline **Sat 17 Oct, 10:00 UTC** — 1d 8h away.
+Deadline **Sat 17 Oct, 10:00 UTC** — 0d 21h away.
 Projections cover GW7–12.
 
 ## GW6 in review — what happened, and what it does and does not change
 
-_356 players classified: 39 unavailable, 21 minutes loss, 30 minutes watch, 19 minutes gain, 6 role change, 57 variance, 184 on model. Retrospective classes graded: 5 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_356 players classified: 40 unavailable, 21 minutes loss, 30 minutes watch, 19 minutes gain, 6 role change, 57 variance, 183 on model. Retrospective classes graded: 5 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
-- **Gvardiol** (MCI) — 24 minutes, healthy (status a; deadline start estimate 92%) First non-start of a regular: check Friday's presser; two in a row is sell-grade. Projection GW7: 4.4 (start estimate 92% -> 71%).
-- **Saka** (ARS) — last 3 starts: 2.82 xGI vs 1.92 expected, above the 80% band (+-0.89) — reassess Projection GW7: 6.3 (start estimate unchanged).
+- **Gvardiol** (MCI) — 24 minutes, healthy (status a; deadline start estimate 92%) First non-start of a regular: check Friday's presser; two in a row is sell-grade. Projection GW7: 4.2 (start estimate 92% -> 71%).
+- **Saka** (ARS) — last 3 starts: 2.82 xGI vs 1.92 expected, above the 80% band (+-0.89) — reassess Projection GW7: 6.6 (start estimate unchanged).
 
 **Hold — variance, no action**
 
-- **João Pedro** (CHE) — 71', 0.60 xG, 2 goals, 12 pts (proj 5.7). Finishing (+5.3). Projection GW7: 4.7 (start estimate unchanged).
+- **João Pedro** (CHE) — 71', 0.60 xG, 2 goals, 12 pts (proj 5.7). Finishing (+5.3). Projection GW7: 5.1 (start estimate unchanged).
 - **Thiaw** (NEW) — 90', 0.00 xG, 0 goals, 0 pts (proj 4.4). Team (-2.8). Projection GW7: 4.1 (start estimate unchanged).
-- **Raya** (ARS) — 90', 0.00 xG, 0 goals, 3 pts (proj 4.7). Team (-2.0). Projection GW7: 4.5 (start estimate unchanged).
+- **Raya** (ARS) — 90', 0.00 xG, 0 goals, 3 pts (proj 4.7). Team (-2.0). Projection GW7: 4.4 (start estimate unchanged).
 
 | player | proj | actual | mins | Δ | minutes / chance / finishing / team / bonus | class |
 |---|---|---|---|---|---|---|
@@ -37,51 +37,50 @@ _356 players classified: 39 unavailable, 21 minutes loss, 30 minutes watch, 19 m
 
 **Pool** — ordered by projected points GW7–12, capped at 5 a list, not by last week's residual:
 
-- breakout minutes (started at <= 40%): Christie (BOU, 0.0 xG, 3 pts; GW7–12 13.6), Andrés (BHA, 0.0 xG, 3 pts; GW7–12 12.9), Philogene (IPS, 0.0 xG, 2 pts; GW7–12 12.2), Senesi (TOT, 0.0 xG, 2 pts; GW7–12 11.8), Gallagher (TOT, 0.5 xG, 3 pts; GW7–12 11.7)
-- lost their place — benched while healthy: Marmoush (TOT, 0.0 xG, 1 pts; GW7–12 18.5), Belloumi (HUL, 0.2 xG, 6 pts; GW7–12 17.2), Castagne (FUL, 0.0 xG, 0 pts; GW7–12 15.4), Fofana (CHE, 0.0 xG, 0 pts; GW7–12 14.2), Van de Ven (TOT, 0.0 xG, 1 pts; GW7–12 14.2)
-- hauled on low xG — do not chase: Rogers (CHE, 0.2 xG, 9 pts; GW7–12 26.0), De Cuyper (BHA, 0.2 xG, 15 pts; GW7–12 24.3), Dewsbury-Hall (EVE, 0.4 xG, 13 pts; GW7–12 23.8), Justin (LEE, 0.2 xG, 6 pts; GW7–12 21.4), Botman (NEW, 0.0 xG, 8 pts; GW7–12 21.1)
-- blanked on good xG — unchanged as targets: Barnes (NEW, 0.3 xG, 2 pts; GW7–12 27.1), Gonzalo (FUL, 0.7 xG, 2 pts; GW7–12 26.1), Gibbs-White (NFO, 0.1 xG, 2 pts; GW7–12 25.5), Fernandez-Pardo (NEW, 0.5 xG, 2 pts; GW7–12 18.6)
+- breakout minutes (started at <= 40%): Christie (BOU, 0.0 xG, 3 pts; GW7–12 13.6), Andrés (BHA, 0.0 xG, 3 pts; GW7–12 12.9), Philogene (IPS, 0.0 xG, 2 pts; GW7–12 12.2), Senesi (TOT, 0.0 xG, 2 pts; GW7–12 11.9), Gallagher (TOT, 0.5 xG, 3 pts; GW7–12 11.8)
+- lost their place — benched while healthy: Marmoush (TOT, 0.0 xG, 1 pts; GW7–12 18.8), Belloumi (HUL, 0.2 xG, 6 pts; GW7–12 17.2), Castagne (FUL, 0.0 xG, 0 pts; GW7–12 15.4), Van de Ven (TOT, 0.0 xG, 1 pts; GW7–12 14.4), Fofana (CHE, 0.0 xG, 0 pts; GW7–12 14.3)
+- hauled on low xG — do not chase: Rogers (CHE, 0.2 xG, 9 pts; GW7–12 26.2), De Cuyper (BHA, 0.2 xG, 15 pts; GW7–12 24.4), Dewsbury-Hall (EVE, 0.4 xG, 13 pts; GW7–12 23.7), Justin (LEE, 0.2 xG, 6 pts; GW7–12 21.3), Botman (NEW, 0.0 xG, 8 pts; GW7–12 21.1)
+- blanked on good xG — unchanged as targets: Barnes (NEW, 0.3 xG, 2 pts; GW7–12 27.1), Gonzalo (FUL, 0.7 xG, 2 pts; GW7–12 26.4), Gibbs-White (NFO, 0.1 xG, 2 pts; GW7–12 25.5), Fernandez-Pardo (NEW, 0.5 xG, 2 pts; GW7–12 18.6)
 
 ## Captain: **Haaland** (MCI)
 
-Projected 9.7 this week, doubled to 19.4. Vice: Saka (6.3).
-The pair adds 9.9 expected captain points including vice fallback; non-appearances are assumed independent.
+Projected 9.4 this week, doubled to 18.8. Vice: Saka (6.6).
+The pair adds 9.6 expected captain points including vice fallback; non-appearances are assumed independent.
 
 | rank | player | club | this GW | captain bonus incl. vice | start % |
 |---|---|---|---|---|---|
-| 1 | Haaland | MCI | 9.7 | 9.9 | 96 |
-| 2 | Gvardiol | MCI | 4.4 | 6.7 | 71 |
-| 3 | Saka | ARS | 6.3 | 6.7 | 95 |
-| 4 | Szoboszlai | LIV | 2.7 | 6.6 | 55 |
+| 1 | Haaland | MCI | 9.4 | 9.6 | 96 |
+| 2 | Szoboszlai | LIV | 0.9 | 8.4 | 18 |
+| 3 | Saka | ARS | 6.6 | 7.0 | 95 |
+| 4 | Gvardiol | MCI | 4.2 | 6.4 | 71 |
 
 ## Starting XI
 
 | pos | player | club | this GW | GW7–12 |
 |---|---|---|---|---|
-| GKP | Raya | ARS | 4.5 | 26.7 |
+| GKP | Raya | ARS | 4.4 | 26.6 |
 | DEF | Calafiori | ARS | 4.8 | 28.8 |
-| DEF | Gvardiol | MCI | 4.4 | 21.4 |
+| DEF | Gvardiol | MCI | 4.2 | 21.2 |
 | DEF | Thiaw | NEW | 4.1 | 22.7 |
-| DEF | Tarkowski | EVE | 4.0 | 23.7 |
-| MID | Saka (V) | ARS | 6.3 | 39.2 |
-| MID | Mbeumo | MUN | 5.3 | 34.3 |
-| MID | Groß | BHA | 5.2 | 28.9 |
-| MID | Szoboszlai | LIV | 2.7 | 20.7 |
-| FWD | Haaland (C) | MCI | 9.7 | 44.7 |
-| FWD | João Pedro | CHE | 4.7 | 30.8 |
+| DEF | Tarkowski | EVE | 3.7 | 23.4 |
+| MID | Saka (V) | ARS | 6.6 | 39.5 |
+| MID | Mbeumo | MUN | 5.4 | 34.4 |
+| MID | Groß | BHA | 5.3 | 29.1 |
+| MID | Szoboszlai | LIV | 0.9 | 18.9 |
+| FWD | Haaland (C) | MCI | 9.4 | 44.4 |
+| FWD | João Pedro | CHE | 5.1 | 31.2 |
 
-**Bench order:** Leno (4.4), Sadiki (2.9), O'Shea (2.0), Obi (0.0)
+**Bench order:** Leno (4.2), Sadiki (2.9), O'Shea (2.1), Obi (0.0)
 
 ## Your lineup vs the model  (FPL entry 3415101, picks from GW6)
 
-- **Bench → start:** Szoboszlai (2.7) is on your bench; the model starts him over O'Shea (2.0), +0.7.
-- **Bench order:** your first sub is Szoboszlai (2.7); Sadiki (2.9) is the better first man off.
+- **Bench order:** your first sub is Szoboszlai (0.9); Sadiki (2.9) is the better first man off.
 
 ## Check before the deadline
 
 - **Saka** (ARS, XI) — role: last 3 starts: 2.82 xGI vs 1.92 expected, above the 80% band (+-0.89) — reassess
 - **Gvardiol** (MCI, XI) — starts only 71% of the time
-- **Szoboszlai** (LIV, XI) — status d; 75% chance; "Hamstring injury - 75% chance of playing" (2026-10-11)
+- **Szoboszlai** (LIV, XI) — status d; 25% chance; "Hamstring injury - 25% chance of playing" (2026-10-11)
 - **Obi** (MUN, bench) — status u; 0% chance; "Has joined Willem II on loan for the rest of the season" (2026-09-14); 0% deadline start estimate (high confidence)
 
 ## Transfers  (£0.4m in the bank, 2 free)
@@ -90,17 +89,17 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 
 **Availability warning:** Obi has effectively no route to points. Simms is the best legal same-position replacement (+0.2: +0.0 XI/captain, +0.2 auto-sub cover).
 
-**Minutes warning:** Gvardiol did not start last week while healthy (24', deadline start estimate 92%) — check first. Best legal same-position replacement: Guéhi (+1.9: +5.4 XI/captain, -3.4 auto-sub cover).
+**Minutes warning:** Gvardiol did not start last week while healthy (24', deadline start estimate 92%) — check first. Best legal same-position replacement: Guéhi (+2.0: +5.3 XI/captain, -3.4 auto-sub cover).
 
 | out | in | £ | XI + captain | auto-sub | total | net |
 |---|---|---|---|---|---|---|
-| Sadiki (SUN) | Gomez (BHA) | +0.2 | +3.6 | +3.6 | **+7.2** | +7.2 |
-| Szoboszlai (LIV) | Enzo (MCI) | +0.0 | +9.3 | -2.7 | **+6.6** | +6.6 |
-| Tarkowski (EVE) | Guéhi (MCI) | -0.2 | +3.0 | +0.1 | **+3.0** | +3.0 |
-| Thiaw (NEW) | De Cuyper (BHA) | +0.1 | +2.0 | +0.3 | **+2.3** | +2.3 |
-| Gvardiol (MCI) | Guéhi (MCI) | +0.2 | +5.4 | -3.4 | **+1.9** | +1.9 |
-| O'Shea (IPS) | Thomas (COV) | +0.0 | +0.4 | +1.0 | **+1.4** | +1.4 |
-| Mbeumo (MUN) | Cherki (MCI) | +0.0 | -0.5 | +1.3 | **+0.8** | +0.8 |
+| Sadiki (SUN) | Gomez (BHA) | +0.2 | +4.1 | +3.4 | **+7.5** | +7.5 |
+| Szoboszlai (LIV) | Enzo (MCI) | +0.0 | +10.9 | -3.7 | **+7.2** | +7.2 |
+| Tarkowski (EVE) | Guéhi (MCI) | -0.2 | +3.1 | +0.1 | **+3.1** | +3.1 |
+| Thiaw (NEW) | De Cuyper (BHA) | +0.1 | +2.2 | +0.2 | **+2.4** | +2.4 |
+| Gvardiol (MCI) | Guéhi (MCI) | +0.2 | +5.3 | -3.4 | **+2.0** | +2.0 |
+| O'Shea (IPS) | Thomas (COV) | +0.0 | +0.4 | +0.8 | **+1.2** | +1.2 |
+| Mbeumo (MUN) | Cherki (MCI) | +0.0 | -0.9 | +1.3 | **+0.4** | +0.4 |
 | Obi (MUN) | Simms (COV) | +0.4 | +0.0 | +0.2 | **+0.2** | +0.2 |
 
 _Last week, for the names above:_
@@ -120,26 +119,26 @@ _Minutes check:_ the verdict above is on the numbers; Gvardiol is a check-first 
 
 | out | in | £ | XI + captain | auto-sub | total | net |
 |---|---|---|---|---|---|---|
-| Szoboszlai + Sadiki | Enzo + Gomez | +0.2 | +12.9 | +0.6 | +13.5 | **+13.5** |
-| Szoboszlai + Sadiki | Gomez + Enzo | +0.2 | +12.9 | +0.6 | +13.5 | **+13.5** |
-| Szoboszlai + Sadiki | Foden + Gomez | +0.1 | +10.1 | +2.9 | +13.0 | **+13.0** |
-| Szoboszlai + Sadiki | Gomez + Foden | +0.1 | +10.1 | +2.9 | +13.0 | **+13.0** |
-| Tarkowski + Szoboszlai | De Cuyper + Cherki | -0.1 | +14.1 | -1.7 | +12.4 | **+12.4** |
+| Szoboszlai + Sadiki | Enzo + Gomez | +0.2 | +15.0 | -0.6 | +14.5 | **+14.5** |
+| Szoboszlai + Sadiki | Gomez + Enzo | +0.2 | +15.0 | -0.6 | +14.5 | **+14.5** |
+| Szoboszlai + Sadiki | Foden + Gomez | +0.1 | +12.2 | +1.7 | +13.9 | **+13.9** |
+| Szoboszlai + Sadiki | Gomez + Foden | +0.1 | +12.2 | +1.7 | +13.9 | **+13.9** |
+| Tarkowski + Szoboszlai | De Cuyper + Cherki | -0.1 | +16.2 | -2.7 | +13.5 | **+13.5** |
 
 
 ## The next six weeks, planned
 
-Selected path under the current policy: **402.6** pts (0 hits). Making no move this week and re-planning: 402.6. Selected path versus holding: **+0.0** — not enough; hold.
+Selected path under the current policy: **401.6** pts (0 hits). Making no move this week and re-planning: 401.6. Selected path versus holding: **+0.0** — not enough; hold.
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
-| Tarkowski, Szoboszlai → De Cuyper, Cherki | +0.62 | 4.0 | no |
-| Sadiki → Gomez | -0.68 | 2.0 | no |
-| Szoboszlai → Enzo | -2.73 | 2.0 | no |
-| Tarkowski → Guéhi | -3.06 | 2.0 | no |
-| Sadiki, Szoboszlai → Gomez, Enzo | -0.88 | 4.0 | no |
+| Tarkowski, Szoboszlai → De Cuyper, Cherki | +1.73 | 4.0 | no |
+| Sadiki → Gomez | -1.80 | 2.0 | no |
+| Szoboszlai → Enzo | -2.11 | 2.0 | no |
+| Tarkowski → Guéhi | -1.33 | 2.0 | no |
+| Sadiki, Szoboszlai → Gomez, Enzo | +0.05 | 4.0 | no |
 
-- **GW7** 68.0 pts, C Haaland, 2 FT  hold
+- **GW7** 66.9 pts, C Haaland, 2 FT  hold
 - **GW8** 67.3 pts, C Palmer, 3 FT  Tarkowski → Silva, Gvardiol → Thomas, Szoboszlai → Palmer
 - **GW9** 65.0 pts, C Haaland, 1 FT  Sadiki → Gomez
 - **GW10** 70.5 pts, C Saka, 1 FT  Thiaw → De Cuyper
@@ -154,10 +153,10 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 
 | chip | this week | best week left | advice |
 |---|---|---|---|
-| Bench Boost | 6.7 | GW8: 8.0 | Hold. Best-looking week for this one is GW8 (8.0 extra points); this week is 6.7. Second copy (GW20–38): best week GW34 (8.0). |
+| Bench Boost | 5.7 | GW8: 8.0 | Hold. Best-looking week for this one is GW8 (8.0 extra points); this week is 5.7. Second copy (GW20–38): best week GW34 (8.0). |
 | Triple Captain | — | GW36: 8.8 (Haaland) | Hold. Best week for this one is GW36: Haaland (8.8 extra). |
-| Free Hit | 6.1 | GW16: 7.8 | Hold. Widest gap left is GW16 (7.8 behind the optimised one-week squad); this week 6.1. |
-| Wildcard | +7.5 over the window | — | Hold. Unlimited transfers now are worth 7.5 over the window. The squad is holding up (gap to the optimised one-week squad 6.1–6.5 over the next weeks). |
+| Free Hit | 7.1 | GW16: 7.8 | Hold. Widest gap left is GW16 (7.8 behind the optimised one-week squad); this week 7.1. |
+| Wildcard | +7.8 over the window | — | Hold. Unlimited transfers now are worth 7.8 over the window. The squad is holding up (gap to the optimised one-week squad 7.1–7.1 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -168,21 +167,25 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| De Cuyper £5.1 | +12.8% | +513,711 | B.Fernandes £11.9 | -9.4% | -351,937 |
-| Groß £6.0 ⭑ | +10.5% | +467,655 | Isak £9.0 | -21.9% | -332,752 |
-| Cherki £7.9 | +12.1% | +440,803 | Szoboszlai £6.9 ⭑ | -11.1% | -331,880 |
-| João Pedro £7.8 ⭑ | +5.6% | +439,828 | Gakpo £7.1 | -27.8% | -228,437 |
-| Rogers £7.9 | +5.8% | +293,671 | Wissa £6.3 | -8.1% | -157,290 |
-| Belloumi £5.2 | +18.8% | +158,514 | Tzolis £6.2 | -22.8% | -156,971 |
+| De Cuyper £5.1 | +14.1% | +579,168 | Szoboszlai £6.9 ⭑ | -14.2% | -414,263 |
+| Groß £6.0 ⭑ | +11.7% | +532,378 | B.Fernandes £11.9 | -11.0% | -406,394 |
+| Cherki £7.9 | +13.9% | +518,301 | Isak £9.0 | -24.9% | -370,094 |
+| João Pedro £7.8 ⭑ | +6.1% | +482,352 | Gakpo £7.1 | -30.9% | -247,242 |
+| Rogers £7.9 | +6.4% | +325,060 | Wissa £6.3 | -10.0% | -190,717 |
+| Belloumi £5.2 | +21.1% | +182,817 | Tzolis £6.2 | -25.9% | -175,087 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Squad player Szoboszlai (net -269k this event) at fall risk (-0.1m hurts the bank) [net -269k this event (in 14k / out 283k), sel 27.6% = Q3 (~150k to move), price 6.9 over 35 snaps (-0.1m in window)]
+- Squad player Szoboszlai (net -332k this event) at fall risk (-0.1m hurts the bank) [net -332k this event (in 15k / out 347k), sel 27.0% = Q3 (~150k to move), price 6.9 over 36 snaps (-0.1m in window)]
 
-_Based on 35 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
+_Based on 36 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-10-16 01:47 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-10-16 12:46 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+
+## Scouting
+
+4 sourced observations; 1 API calls. Review these alongside the transfer stress tests in the app.
