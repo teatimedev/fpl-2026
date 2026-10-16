@@ -1,14 +1,12 @@
 {
-  "affected_clubs": [
-    "ARS"
-  ],
+  "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-10-15T04:53:14Z",
+  "checked_at": "2026-10-16T01:30:16Z",
   "claims": 0,
-  "coverage": 0.35,
+  "coverage": 0.4,
   "deadline": "2026-10-17T10:00:00Z",
   "gw": 7,
-  "notification_key": "c09cdc1795277d37b331",
+  "notification_key": "0ddf3afbf8e375e50fb1",
   "notify_required": false,
   "official_fpl": {
     "1": {
@@ -147,9 +145,9 @@
       "status": "i"
     },
     "123": {
-      "chance": 50,
-      "news": "Ankle injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "124": {
       "chance": null,
@@ -2477,9 +2475,9 @@
       "status": "a"
     },
     "543": {
-      "chance": 0,
-      "news": "Hamstring injury - Expected back 18 Oct",
-      "status": "i"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "544": {
       "chance": null,
@@ -2527,14 +2525,14 @@
       "status": "a"
     },
     "552": {
-      "chance": 0,
-      "news": "Hamstring injury - Expected back 25 Oct",
-      "status": "i"
-    },
-    "553": {
-      "chance": null,
+      "chance": 100,
       "news": "",
       "status": "a"
+    },
+    "553": {
+      "chance": 50,
+      "news": "Knock - 50% chance of playing",
+      "status": "d"
     },
     "554": {
       "chance": 0,
@@ -3032,9 +3030,9 @@
       "status": "a"
     },
     "643": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Unspecified injury - Unknown return date",
+      "status": "i"
     },
     "644": {
       "chance": null,
@@ -3187,9 +3185,9 @@
       "status": "a"
     },
     "70": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "71": {
       "chance": null,
@@ -3222,9 +3220,9 @@
       "status": "a"
     },
     "77": {
-      "chance": 75,
-      "news": "Calf injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "78": {
       "chance": 0,
@@ -3349,11 +3347,9 @@
   },
   "official_fpl_ok": true,
   "price_changed": [
-    103,
-    201,
-    422,
-    498,
-    499
+    439,
+    491,
+    557
   ],
   "rebuild_required": true,
   "state_changed": false,

@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-15T04:58:41Z",
+ "generated": "2026-10-16T01:35:03Z",
  "latest_gw": 6,
  "gws": [
   {
@@ -75,15 +75,15 @@
    "gw": 6,
    "n": 356,
    "counts": {
-    "on_model": 185,
+    "on_model": 184,
     "role_change": 6,
     "variance": 57,
-    "unavailable": 37,
+    "unavailable": 39,
     "minutes_loss": 21,
     "minutes_watch": 30,
-    "minutes_gain": 20
+    "minutes_gain": 19
    },
-   "generated": "2026-10-15T04:58:41Z"
+   "generated": "2026-10-16T01:35:03Z"
   }
  ],
  "classes_graded_gws": 5,
