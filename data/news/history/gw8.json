@@ -1,0 +1,7 @@
+{
+  "claims": [],
+  "deadline": "2026-10-23T17:30:00Z",
+  "gw": 8,
+  "policy": "explicit absences auto-apply; nuanced claims are review candidates",
+  "version": 1
+}
