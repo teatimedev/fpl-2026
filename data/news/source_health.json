@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-17T10:58:05Z",
+  "checked_at": "2026-10-17T14:16:56Z",
   "coverage": 0.45,
   "enabled": 20,
   "gw": 8,
@@ -14,9 +14,9 @@
         }
       },
       "club": "ARS",
-      "content_hash": "bc748f10be731235b328b19a8686ee11d5cbac53769d6307ad8af82d08c8e7b8",
+      "content_hash": "aa6621f0d348c0ff63027e37c554b051b39fcfee0ba89118629389c31ad8116d",
       "documents": 2,
-      "etag": "\"uqkcf0j4dv2got\"",
+      "etag": "\"eq70xas51a2goh\"",
       "id": "ars-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Arsenal",
@@ -72,9 +72,9 @@
       "article_validators": {},
       "club": "BRE",
       "content_hash": "2e4d32e42f1aadd7e72196fd3a58adfde04905e0530b40a1d332bf36ff9cce7c",
-      "documents": 0,
+      "documents": 1,
       "id": "bre-news",
-      "last_modified": "Sat, 17 Oct 2026 05:42:03 GMT",
+      "last_modified": "Sat, 17 Oct 2026 13:10:45 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "no_articles",
@@ -113,7 +113,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"8e4rmzgpnp4epx\"",
+      "etag": "\"dcgecgw2dn45lb\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -156,7 +156,7 @@
       },
       "club": "FUL",
       "content_hash": "1253945f9e7b7e5caa9433c331588482f4da8d9bfbe0455cabec4b79e197a7c8",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"e888aa67105aa09e2fa7cb4aaa49cf8f\"",
       "id": "ful-news",
       "last_modified": "Sat, 17 Oct 2026 10:01:33 GMT",
@@ -182,17 +182,17 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.itfc.co.uk/news/2026/october/16/early-manchester-city-team-news/": {
-          "etag": "\"255963c744aae4605eaecb236fcaba9f\"",
-          "last_modified": "Sat, 17 Oct 2026 02:12:17 GMT"
+        "https://www.itfc.co.uk/news/2026/october/17/team-news---manchester-city--a-/": {
+          "etag": "\"0f9bd67e4bf1074c000ed4ead65178d7\"",
+          "last_modified": "Sat, 17 Oct 2026 13:08:25 GMT"
         }
       },
       "club": "IPS",
-      "content_hash": "1f5e561eb16a025bd2f67b5fc48f8b017150c49789812d844900ed5236605657",
-      "documents": 1,
-      "etag": "\"9b580df8334ce218c658cb6c84723494\"",
+      "content_hash": "8b02f70b1cd0cb91ae2fea979c2e9c2bc0c50f8e56a03561e6f5b07965bba9ea",
+      "documents": 2,
+      "etag": "\"5e191918c9a152ee7706b5f14c6c514b\"",
       "id": "ips-news",
-      "last_modified": "Sat, 17 Oct 2026 10:45:07 GMT",
+      "last_modified": "Sat, 17 Oct 2026 13:08:25 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
       "status": "ok",
@@ -207,10 +207,10 @@
         "https://www.leedsunited.com/en/news/watch-daniel-farkes-pre-man-utd-press-conference-from-1-30pm": {}
       },
       "club": "LEE",
-      "content_hash": "87dbf589f54ad38c5b5f84778e8e50cde9fef0ddd62d47877dada879bedf0125",
+      "content_hash": "3cbafb4ed14f39e85756d36acc1581b0e29613f7234b7bc81d8829a93f47734d",
       "documents": 5,
       "id": "lee-news",
-      "last_modified": "Sat, 17 Oct 2026 10:53:17 GMT",
+      "last_modified": "Sat, 17 Oct 2026 14:16:58 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -219,14 +219,14 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.liverpoolfc.com/news/brentford-v-liverpool-team-news-premier-league": {},
-        "https://www.liverpoolfc.com/news/listing/mens-team-news": {}
+        "https://www.liverpoolfc.com/news/listing/mens-team-news": {},
+        "https://www.liverpoolfc.com/news/team-news-confirmed-liverpool-line-up-v-brentford": {}
       },
       "club": "LIV",
-      "content_hash": "f5a602b1375d4fcbae73714f1c19513f89025b1a49c70711b0a1637f28768c53",
+      "content_hash": "c16faff9d3a55bbe590e7d8ba821c498b4e6c5d04b89e2e347ae1495018721da",
       "documents": 3,
       "id": "liv-news",
-      "last_modified": "Sat, 17 Oct 2026 09:08:16 GMT",
+      "last_modified": "Sat, 17 Oct 2026 14:11:33 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
       "status": "ok",
@@ -235,13 +235,13 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/news/mens/city-v-ipswich-town-match-preview-pl-17-october-63927580": {}
+        "https://www.mancity.com/news/mens/city-v-ipswich-town-match-preview-pl-17-october-63927580": {},
+        "https://www.mancity.com/news/mens/man-city-ipswich-premier-league-team-news-october-2026-63927837": {}
       },
       "club": "MCI",
-      "content_hash": "352d7fcd656cd7cd18e54bda55611ab876fbed22a0990d8dfa30c8100fe1ea7e",
-      "documents": 2,
+      "content_hash": "44914e957c37a054979306e7ad2c18decde25ce5e46345004a2969d8ed0bd7be",
+      "documents": 3,
       "id": "mci-news",
-      "last_modified": "Sat, 17 Oct 2026 10:55:40 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
       "status": "ok",
@@ -275,7 +275,7 @@
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-toure-and-elanga-latest-ahead-of-villans-clash": {}
       },
       "club": "NEW",
-      "content_hash": "31c787d96c025867c20a9f4de50f7f09d70b41648af3554cd5b9d2ad9f3019e9",
+      "content_hash": "f8509acd0a8cc2993aaf26728886e15b351745b37caaa62f524468be9eea04bb",
       "documents": 3,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -288,10 +288,10 @@
       "article_validators": {},
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
-      "documents": 0,
-      "etag": "\"11e57c0386787b1c23391e07077b34af\"",
+      "documents": 1,
+      "etag": "\"121428bb642896ffdde89fed9119a253\"",
       "id": "nfo-news",
-      "last_modified": "Sat, 17 Oct 2026 02:07:48 GMT",
+      "last_modified": "Sat, 17 Oct 2026 11:00:55 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",

@@ -1,13 +1,15 @@
 {
   "affected_clubs": [],
-  "affected_owned": [],
-  "checked_at": "2026-10-17T10:58:05Z",
+  "affected_owned": [
+    368
+  ],
+  "checked_at": "2026-10-17T14:16:56Z",
   "claims": 0,
   "coverage": 0.45,
   "deadline": "2026-10-23T17:30:00Z",
   "gw": 8,
-  "notification_key": "1147fac933f1ecf9e204",
-  "notify_required": false,
+  "notification_key": "671ccbb330f5f126eda6",
+  "notify_required": true,
   "official_fpl": {
     "1": {
       "chance": null,
@@ -870,9 +872,9 @@
       "status": "a"
     },
     "254": {
-      "chance": 75,
-      "news": "Ankle injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "255": {
       "chance": null,
@@ -935,9 +937,9 @@
       "status": "a"
     },
     "266": {
-      "chance": 75,
-      "news": "Knee injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "267": {
       "chance": null,
@@ -1010,9 +1012,9 @@
       "status": "a"
     },
     "28": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 25,
+      "news": "Head injury - 25% chance of playing",
+      "status": "d"
     },
     "280": {
       "chance": 100,
@@ -1495,14 +1497,14 @@
       "status": "a"
     },
     "367": {
-      "chance": 25,
-      "news": "Ankle injury - 25% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "368": {
-      "chance": 25,
-      "news": "Hamstring injury - 25% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "369": {
       "chance": null,
@@ -1560,9 +1562,9 @@
       "status": "a"
     },
     "379": {
-      "chance": 25,
-      "news": "Thigh injury - 25% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "38": {
       "chance": null,
@@ -2695,9 +2697,9 @@
       "status": "d"
     },
     "583": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "584": {
       "chance": null,
@@ -3260,9 +3262,9 @@
       "status": "a"
     },
     "84": {
-      "chance": 50,
-      "news": "Calf injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "85": {
       "chance": 100,
@@ -3315,9 +3317,9 @@
       "status": "d"
     },
     "94": {
-      "chance": 75,
-      "news": "Shoulder injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "95": {
       "chance": null,
@@ -3325,9 +3327,9 @@
       "status": "a"
     },
     "96": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "97": {
       "chance": 100,
