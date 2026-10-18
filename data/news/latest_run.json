@@ -3,9 +3,9 @@
   "affected_owned": [
     368
   ],
-  "checked_at": "2026-10-17T14:16:56Z",
+  "checked_at": "2026-10-18T01:13:10Z",
   "claims": 0,
-  "coverage": 0.45,
+  "coverage": 0.4,
   "deadline": "2026-10-23T17:30:00Z",
   "gw": 8,
   "notification_key": "671ccbb330f5f126eda6",
@@ -32,9 +32,9 @@
       "status": "a"
     },
     "102": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Suspended until 8 Nov",
+      "status": "s"
     },
     "103": {
       "chance": 0,
@@ -262,9 +262,9 @@
       "status": "u"
     },
     "144": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Illness - 75% chance of playing",
+      "status": "d"
     },
     "145": {
       "chance": 100,
@@ -952,9 +952,9 @@
       "status": "a"
     },
     "269": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Suspended until 7 Nov",
+      "status": "s"
     },
     "27": {
       "chance": 0,
@@ -1442,9 +1442,9 @@
       "status": "a"
     },
     "357": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Hamstring injury - Unknown return date",
+      "status": "i"
     },
     "358": {
       "chance": null,
@@ -1502,9 +1502,9 @@
       "status": "a"
     },
     "368": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Hamstring injury - Unknown return date",
+      "status": "i"
     },
     "369": {
       "chance": null,
@@ -1522,9 +1522,9 @@
       "status": "a"
     },
     "371": {
-      "chance": 0,
-      "news": "Suspended until 25 Oct",
-      "status": "s"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "372": {
       "chance": null,
@@ -1662,9 +1662,9 @@
       "status": "a"
     },
     "397": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Knee injury - 75% chance of playing",
+      "status": "d"
     },
     "398": {
       "chance": 100,
@@ -1717,7 +1717,7 @@
       "status": "a"
     },
     "406": {
-      "chance": null,
+      "chance": 100,
       "news": "",
       "status": "a"
     },
@@ -2012,9 +2012,9 @@
       "status": "a"
     },
     "46": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "460": {
       "chance": null,
@@ -2022,9 +2022,9 @@
       "status": "a"
     },
     "461": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "462": {
       "chance": null,
@@ -2402,9 +2402,9 @@
       "status": "a"
     },
     "53": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Calf injury - 75% chance of playing",
+      "status": "d"
     },
     "530": {
       "chance": 0,
@@ -2692,9 +2692,9 @@
       "status": "a"
     },
     "582": {
-      "chance": 50,
-      "news": "Unspecified injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "583": {
       "chance": 75,
@@ -2857,9 +2857,9 @@
       "status": "u"
     },
     "611": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Hamstring injury - 75% chance of playing",
+      "status": "d"
     },
     "612": {
       "chance": 100,
@@ -2997,9 +2997,9 @@
       "status": "a"
     },
     "637": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 50,
+      "news": "Achilles injury - 50% chance of playing",
+      "status": "d"
     },
     "638": {
       "chance": 100,
@@ -3337,9 +3337,9 @@
       "status": "a"
     },
     "98": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Suspended until 31 Oct",
+      "status": "s"
     },
     "99": {
       "chance": 0,
@@ -3348,7 +3348,18 @@
     }
   },
   "official_fpl_ok": true,
-  "price_changed": [],
+  "price_changed": [
+    8,
+    53,
+    254,
+    259,
+    393,
+    399,
+    461,
+    473,
+    514,
+    516
+  ],
   "rebuild_required": true,
   "state_changed": false,
   "status": "red",

@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-17T14:16:56Z",
-  "coverage": 0.45,
+  "checked_at": "2026-10-18T01:13:10Z",
+  "coverage": 0.4,
   "enabled": 20,
   "gw": 8,
-  "healthy": 9,
+  "healthy": 8,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -71,10 +71,10 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "BRE",
-      "content_hash": "2e4d32e42f1aadd7e72196fd3a58adfde04905e0530b40a1d332bf36ff9cce7c",
+      "content_hash": "f03683ba2e17d353c137f76f275993d3c1e9c3527ccd4b8b06865ae59a58a26b",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Sat, 17 Oct 2026 13:10:45 GMT",
+      "last_modified": "Sun, 18 Oct 2026 01:13:10 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "no_articles",
@@ -113,7 +113,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"dcgecgw2dn45lb\"",
+      "etag": "\"8e4rmzgpnp4epx\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -145,21 +145,17 @@
           "etag": "\"9ec3050b3f299a7cca6dbc85980f3542\"",
           "last_modified": "Sat, 17 Oct 2026 02:23:47 GMT"
         },
-        "https://www.fulhamfc.com/news/2026/october/16/matchday-preview-hull-city/": {
-          "etag": "\"d0034de2450a49a1954e5e1e6f4030ae\"",
-          "last_modified": "Sat, 17 Oct 2026 02:24:45 GMT"
-        },
-        "https://www.fulhamfc.com/news/2026/october/16/pre-hull-press-conference/": {
-          "etag": "\"01a8e6bc0d0addd7a3c6e2ca306ebee8\"",
-          "last_modified": "Sat, 17 Oct 2026 02:24:45 GMT"
+        "https://www.fulhamfc.com/news/2026/october/17/post-hull-press-conference/": {
+          "etag": "\"a0984047c4726fcf5634730c7b71c54e\"",
+          "last_modified": "Sat, 17 Oct 2026 17:07:20 GMT"
         }
       },
       "club": "FUL",
-      "content_hash": "1253945f9e7b7e5caa9433c331588482f4da8d9bfbe0455cabec4b79e197a7c8",
-      "documents": 0,
-      "etag": "\"e888aa67105aa09e2fa7cb4aaa49cf8f\"",
+      "content_hash": "1d86818276861c42acc9e02fe4b030a4ba9cb5f3f1c635bcd4ead420c7f8649c",
+      "documents": 2,
+      "etag": "\"28fdb1470f8de11332959840ceb9c6fb\"",
       "id": "ful-news",
-      "last_modified": "Sat, 17 Oct 2026 10:01:33 GMT",
+      "last_modified": "Sat, 17 Oct 2026 21:06:53 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Fulham",
       "status": "ok",
@@ -181,36 +177,30 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {
-        "https://www.itfc.co.uk/news/2026/october/17/team-news---manchester-city--a-/": {
-          "etag": "\"0f9bd67e4bf1074c000ed4ead65178d7\"",
-          "last_modified": "Sat, 17 Oct 2026 13:08:25 GMT"
-        }
-      },
+      "article_validators": {},
       "club": "IPS",
-      "content_hash": "8b02f70b1cd0cb91ae2fea979c2e9c2bc0c50f8e56a03561e6f5b07965bba9ea",
-      "documents": 2,
-      "etag": "\"5e191918c9a152ee7706b5f14c6c514b\"",
+      "content_hash": "fb36524427f0ef7458a6d23257d47fde48d33c03c312228960dce912cfaa838c",
+      "documents": 1,
+      "etag": "\"9dfb2abfd9f3fe71669eaba45af5b542\"",
       "id": "ips-news",
-      "last_modified": "Sat, 17 Oct 2026 13:08:25 GMT",
+      "last_modified": "Sat, 17 Oct 2026 17:52:44 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
-      "status": "ok",
+      "status": "no_articles",
       "url": "https://www.itfc.co.uk/news/"
     },
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.leedsunited.com/en/news/every-win-is-a-step-closer-to-where-we-want-to-be-drew-greene-previews-sundays-top-two-meeting": {},
         "https://www.leedsunited.com/en/news/leeds-united-vs-manchester-united-team-news-key-stats-and-everything-you-need-to-know": {},
         "https://www.leedsunited.com/en/news/team-news-daniel-farke-gives-positive-update-on-wales-duo": {},
         "https://www.leedsunited.com/en/news/watch-daniel-farkes-pre-man-utd-press-conference-from-1-30pm": {}
       },
       "club": "LEE",
-      "content_hash": "3cbafb4ed14f39e85756d36acc1581b0e29613f7234b7bc81d8829a93f47734d",
-      "documents": 5,
+      "content_hash": "c9d37d846a942ddc6b781178bb07f1b40194c7725c70d11c128973abe80d1320",
+      "documents": 4,
       "id": "lee-news",
-      "last_modified": "Sat, 17 Oct 2026 14:16:58 GMT",
+      "last_modified": "Sun, 18 Oct 2026 01:13:11 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -219,14 +209,17 @@
     {
       "article_errors": 0,
       "article_validators": {
+        "https://www.liverpoolfc.com/news/andoni-iraola-liverpool-brentford-press-conference": {},
+        "https://www.liverpoolfc.com/news/andoni-iraola-on-jeremie-frimpong-and-dominik-szoboszlai-injuries": {},
+        "https://www.liverpoolfc.com/news/brentford-1-2-liverpool-watch-andoni-iraola-post-match-press-conference": {},
         "https://www.liverpoolfc.com/news/listing/mens-team-news": {},
-        "https://www.liverpoolfc.com/news/team-news-confirmed-liverpool-line-up-v-brentford": {}
+        "https://www.liverpoolfc.com/news/liverpools-injury-list-suspensions-and-availability": {}
       },
       "club": "LIV",
-      "content_hash": "c16faff9d3a55bbe590e7d8ba821c498b4e6c5d04b89e2e347ae1495018721da",
-      "documents": 3,
+      "content_hash": "97009a0939d36cf781af13cdd3c44e54b7365205f111cd5d848bc70411dd2b92",
+      "documents": 6,
       "id": "liv-news",
-      "last_modified": "Sat, 17 Oct 2026 14:11:33 GMT",
+      "last_modified": "Sat, 17 Oct 2026 21:43:42 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
       "status": "ok",
@@ -235,13 +228,14 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/news/mens/city-v-ipswich-town-match-preview-pl-17-october-63927580": {},
-        "https://www.mancity.com/news/mens/man-city-ipswich-premier-league-team-news-october-2026-63927837": {}
+        "https://www.mancity.com/citytv/mens/enzo-maresca-post-ipswich-press-conference-63927853": {},
+        "https://www.mancity.com/news/mens/maresca-ipswich-postmatch-written-presser-63927853": {}
       },
       "club": "MCI",
-      "content_hash": "44914e957c37a054979306e7ad2c18decde25ce5e46345004a2969d8ed0bd7be",
+      "content_hash": "7e53dcd113a75db91faa7ee1c5d670fc49a1d0c00f6fcf3e2595aa86fdd7e664",
       "documents": 3,
       "id": "mci-news",
+      "last_modified": "Sun, 18 Oct 2026 01:05:54 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
       "status": "ok",
@@ -271,12 +265,13 @@
     {
       "article_errors": 0,
       "article_validators": {
+        "https://www.newcastleunited.com/en/news/aston-villa-h-team-news-26-27": {},
         "https://www.newcastleunited.com/en/news/how-to-watch-newcastle-united-vs-aston-villa-tv-details-kick-off-time-and-team-news": {},
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-toure-and-elanga-latest-ahead-of-villans-clash": {}
       },
       "club": "NEW",
-      "content_hash": "f8509acd0a8cc2993aaf26728886e15b351745b37caaa62f524468be9eea04bb",
-      "documents": 3,
+      "content_hash": "7b4e166ab00df28f587b12eabfef2d20b5c43f661b91a335521a372e534a1ee5",
+      "documents": 4,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Newcastle United",
@@ -288,7 +283,7 @@
       "article_validators": {},
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"121428bb642896ffdde89fed9119a253\"",
       "id": "nfo-news",
       "last_modified": "Sat, 17 Oct 2026 11:00:55 GMT",
