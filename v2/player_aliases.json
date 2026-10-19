@@ -6142,6 +6142,15 @@
       "canonical": "James Wright",
       "club": "AVL",
       "player_id": 667
+    },
+    {
+      "aliases": [
+        "Tutierov",
+        "Tymur Tutierov"
+      ],
+      "canonical": "Tymur Tutierov",
+      "club": "SUN",
+      "player_id": 668
     }
   ],
   "version": 1
