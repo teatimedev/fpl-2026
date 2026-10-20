@@ -1,42 +1,42 @@
 {
- "generated": "2026-10-20T02:01:36Z",
+ "generated": "2026-10-20T18:38:35Z",
  "summary": {
-  "n_gws": 6,
-  "spearman_starters": 0.267,
-  "spearman_pool": 0.484,
-  "mae_starters": 2.472,
-  "bias_starters": -0.16,
-  "captain_model": 6.5,
-  "captain_yours": 7.167,
-  "captain_best": 11.833,
-  "xi_model": 56.0,
-  "xi_yours": 60.5,
-  "xi_best": 61.333,
-  "cs_brier": 0.189,
-  "cs_predicted_rate": 0.261,
-  "cs_actual_rate": 0.267,
-  "start_brier": 0.1,
-  "appearance_brier": 0.12,
-  "minutes_mae": 15.908,
-  "minutes_bias": -1.677,
-  "baseline_start_brier": 0.131,
-  "start_brier_lift": 0.031,
+  "n_gws": 7,
+  "spearman_starters": 0.27,
+  "spearman_pool": 0.493,
+  "mae_starters": 2.461,
+  "bias_starters": -0.157,
+  "captain_model": 7.429,
+  "captain_yours": 8.0,
+  "captain_best": 12.0,
+  "xi_model": 54.857,
+  "xi_yours": 58.714,
+  "xi_best": 60.143,
+  "cs_brier": 0.188,
+  "cs_predicted_rate": 0.258,
+  "cs_actual_rate": 0.271,
+  "start_brier": 0.098,
+  "appearance_brier": 0.119,
+  "minutes_mae": 15.611,
+  "minutes_bias": -1.493,
+  "baseline_start_brier": 0.129,
+  "start_brier_lift": 0.032,
   "recency_start_brier": 0.084,
-  "aggregate_start_brier": 0.099,
-  "recency_vs_aggregate_lift": 0.015,
-  "n_rule_gws": 5,
-  "recency_wins": 5,
+  "aggregate_start_brier": 0.098,
+  "recency_vs_aggregate_lift": 0.014,
+  "n_rule_gws": 6,
+  "recency_wins": 6,
   "level_ratio_cum": {
-   "FWD": 0.886,
-   "ALL": 0.949,
-   "MID": 0.922,
-   "DEF": 0.994,
-   "GKP": 0.97
+   "FWD": 0.901,
+   "ALL": 0.951,
+   "MID": 0.914,
+   "DEF": 1.002,
+   "GKP": 0.979
   },
-  "spearman_ep_next_starters": 0.198,
-  "spearman_ep_next_pool": 0.427,
-  "mae_ep_next_starters": 2.652,
-  "n_retro_gws": 5,
+  "spearman_ep_next_starters": 0.168,
+  "spearman_ep_next_pool": 0.418,
+  "mae_ep_next_starters": 2.713,
+  "n_retro_gws": 6,
   "goal_logloss_model": null,
   "goal_logloss_market": null
  },
@@ -2014,6 +2014,394 @@
     {
      "policy": "planner_buffer_2",
      "points": 66,
+     "hit": 0
+    }
+   ],
+   "grading_version": 2,
+   "checked": true
+  },
+  {
+   "gw": 7,
+   "generated": "2026-10-17T00:56:11Z",
+   "n_pool": 361,
+   "n_starters": 200,
+   "spearman_pool": 0.543,
+   "spearman_starters": 0.29,
+   "spearman_played": 0.436,
+   "mae_starters": 2.4,
+   "bias_starters": -0.14,
+   "top20_mean_actual": 3.6,
+   "top20_in_actual_top50": 5,
+   "deciles": [
+    {
+     "lo": 1.61,
+     "hi": 2.37,
+     "proj": 2.06,
+     "actual": 1.9,
+     "n": 20
+    },
+    {
+     "lo": 2.37,
+     "hi": 2.64,
+     "proj": 2.52,
+     "actual": 2.25,
+     "n": 20
+    },
+    {
+     "lo": 2.64,
+     "hi": 2.85,
+     "proj": 2.75,
+     "actual": 2.4,
+     "n": 20
+    },
+    {
+     "lo": 2.86,
+     "hi": 3.06,
+     "proj": 2.98,
+     "actual": 2.75,
+     "n": 20
+    },
+    {
+     "lo": 3.07,
+     "hi": 3.3,
+     "proj": 3.19,
+     "actual": 3.15,
+     "n": 20
+    },
+    {
+     "lo": 3.3,
+     "hi": 3.47,
+     "proj": 3.4,
+     "actual": 2.8,
+     "n": 20
+    },
+    {
+     "lo": 3.52,
+     "hi": 3.78,
+     "proj": 3.64,
+     "actual": 4.55,
+     "n": 20
+    },
+    {
+     "lo": 3.78,
+     "hi": 4.28,
+     "proj": 4.07,
+     "actual": 4.2,
+     "n": 20
+    },
+    {
+     "lo": 4.29,
+     "hi": 4.77,
+     "proj": 4.5,
+     "actual": 5.8,
+     "n": 20
+    },
+    {
+     "lo": 4.79,
+     "hi": 9.41,
+     "proj": 5.67,
+     "actual": 3.6,
+     "n": 20
+    }
+   ],
+   "level_sums": {
+    "FWD": [
+     84.0,
+     84.964,
+     20
+    ],
+    "ALL": [
+     668.0,
+     695.38,
+     200
+    ],
+    "MID": [
+     275.0,
+     316.884,
+     85
+    ],
+    "DEF": [
+     241.0,
+     227.851,
+     76
+    ],
+    "GKP": [
+     68.0,
+     65.681,
+     19
+    ]
+   },
+   "level_ratio": {
+    "FWD": 0.989,
+    "ALL": 0.961,
+    "MID": 0.868,
+    "DEF": 1.058,
+    "GKP": 1.035
+   },
+   "ep_next": {
+    "n": 361,
+    "spearman_pool": 0.37,
+    "spearman_starters": 0.018,
+    "mae_starters": 3.02
+   },
+   "availability": {
+    "n": 667,
+    "start_brier": 0.085,
+    "appearance_brier": 0.111,
+    "minutes_mae": 13.83,
+    "minutes_bias": -0.39,
+    "p60_shadow_n": 559,
+    "p60_shadow_brier": 0.094,
+    "p60_start_proxy_brier": 0.098,
+    "baseline_start_brier": 0.121,
+    "start_brier_lift": 0.036,
+    "minutes_rule": "recency",
+    "n_rules": 667,
+    "recency_start_brier": 0.085,
+    "aggregate_start_brier": 0.094,
+    "recency_vs_aggregate_lift": 0.009,
+    "recency_start_brier_regulars": 0.113,
+    "aggregate_start_brier_regulars": 0.129
+   },
+   "availability_groups": {
+    "confidence": {
+     "model": {
+      "n": 559,
+      "start_brier": 0.101
+     },
+     "high": {
+      "n": 108,
+      "start_brier": 0.0
+     }
+    },
+    "source_tier": {
+     "baseline": {
+      "n": 559,
+      "start_brier": 0.101
+     },
+     "official_fpl": {
+      "n": 108,
+      "start_brier": 0.0
+     }
+    },
+    "claim_type": {
+     "baseline": {
+      "n": 667,
+      "start_brier": 0.085
+     }
+    }
+   },
+   "retro_class": {
+    "unavailable": {
+     "n": 60,
+     "next_start_rate": 0.4,
+     "next_play_rate": 0.55,
+     "next_residual_mean": -0.28
+    },
+    "role_change/xgi": {
+     "n": 5,
+     "next_start_rate": 1.0,
+     "next_play_rate": 1.0,
+     "next_residual_mean": -1.78
+    },
+    "on_model": {
+     "n": 174,
+     "next_start_rate": 0.598,
+     "next_play_rate": 0.747,
+     "next_residual_mean": 0.11
+    },
+    "variance/finishing": {
+     "n": 25,
+     "next_start_rate": 0.92,
+     "next_play_rate": 0.92,
+     "next_residual_mean": -1.29
+    },
+    "variance/team": {
+     "n": 23,
+     "next_start_rate": 0.957,
+     "next_play_rate": 0.957,
+     "next_residual_mean": 0.48
+    },
+    "minutes_watch/hooked": {
+     "n": 9,
+     "next_start_rate": 0.556,
+     "next_play_rate": 0.778,
+     "next_residual_mean": 0.29
+    },
+    "minutes_loss/cameo": {
+     "n": 13,
+     "next_start_rate": 0.385,
+     "next_play_rate": 0.846,
+     "next_residual_mean": -0.56
+    },
+    "variance/bonus": {
+     "n": 3,
+     "next_start_rate": 1.0,
+     "next_play_rate": 1.0,
+     "next_residual_mean": -1.73
+    },
+    "variance/defcon": {
+     "n": 1,
+     "next_start_rate": 1.0,
+     "next_play_rate": 1.0,
+     "next_residual_mean": -1.79
+    },
+    "minutes_loss/dnp": {
+     "n": 5,
+     "next_start_rate": 0.6,
+     "next_play_rate": 0.6,
+     "next_residual_mean": 0.36
+    },
+    "role_change/setpiece": {
+     "n": 1,
+     "next_start_rate": 1.0,
+     "next_play_rate": 1.0,
+     "next_residual_mean": 2.72
+    },
+    "minutes_watch/fringe": {
+     "n": 21,
+     "next_start_rate": 0.238,
+     "next_play_rate": 0.714,
+     "next_residual_mean": -0.41
+    },
+    "minutes_gain": {
+     "n": 16,
+     "next_start_rate": 0.438,
+     "next_play_rate": 0.75,
+     "next_residual_mean": 0.45
+    }
+   },
+   "retro_tags": {
+    "xgi_shift": {
+     "n": 5,
+     "next_start_rate": 1.0,
+     "next_play_rate": 1.0,
+     "next_residual_mean": -1.78
+    },
+    "large_residual": {
+     "n": 28,
+     "next_start_rate": 0.857,
+     "next_play_rate": 1.0,
+     "next_residual_mean": -0.34
+    },
+    "haul": {
+     "n": 14,
+     "next_start_rate": 0.929,
+     "next_play_rate": 0.929,
+     "next_residual_mean": -1.14
+    },
+    "hauled_low_xg": {
+     "n": 11,
+     "next_start_rate": 0.909,
+     "next_play_rate": 0.909,
+     "next_residual_mean": -0.24
+    },
+    "blank": {
+     "n": 24,
+     "next_start_rate": 0.958,
+     "next_play_rate": 0.958,
+     "next_residual_mean": -0.06
+    },
+    "blanked_good_xg": {
+     "n": 3,
+     "next_start_rate": 1.0,
+     "next_play_rate": 1.0,
+     "next_residual_mean": -2.76
+    },
+    "setpiece_change": {
+     "n": 1,
+     "next_start_rate": 1.0,
+     "next_play_rate": 1.0,
+     "next_residual_mean": 2.72
+    },
+    "breakout_minutes": {
+     "n": 16,
+     "next_start_rate": 0.438,
+     "next_play_rate": 0.75,
+     "next_residual_mean": 0.45
+    }
+   },
+   "retro_gw": 6,
+   "submitted": {
+    "entry_id": 3415101,
+    "chip": null,
+    "points": 61,
+    "transfer_cost": 0,
+    "credited_points": 61,
+    "captain_multiplier": 2
+   },
+   "captain": {
+    "model": {
+     "id": 411,
+     "name": "Haaland",
+     "pts": 13
+    },
+    "yours": {
+     "id": 411,
+     "name": "Haaland",
+     "pts": 13
+    },
+    "best": {
+     "id": 411,
+     "name": "Haaland",
+     "pts": 13
+    }
+   },
+   "xi": {
+    "model": 48,
+    "yours": 48,
+    "best": 53
+   },
+   "cs": {
+    "n": 20,
+    "brier": 0.18,
+    "predicted_rate": 0.246,
+    "actual_rate": 0.3
+   },
+   "policy_benchmarks": [
+    {
+     "policy": "model_hold",
+     "points": 61,
+     "hit": 0
+    },
+    {
+     "policy": "official_ep_next_hold",
+     "points": 51,
+     "hit": 0
+    },
+    {
+     "policy": "best_single_static_window",
+     "points": 69,
+     "hit": 0
+    },
+    {
+     "policy": "planner_buffer_0",
+     "points": 61,
+     "hit": 0
+    },
+    {
+     "policy": "planner_buffer_0.1",
+     "points": 61,
+     "hit": 0
+    },
+    {
+     "policy": "planner_buffer_0.25",
+     "points": 61,
+     "hit": 0
+    },
+    {
+     "policy": "planner_buffer_0.5",
+     "points": 61,
+     "hit": 0
+    },
+    {
+     "policy": "planner_buffer_1",
+     "points": 61,
+     "hit": 0
+    },
+    {
+     "policy": "planner_buffer_2",
+     "points": 61,
      "hit": 0
     }
    ],

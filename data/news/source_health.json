@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-20T01:55:37Z",
-  "coverage": 0.35,
+  "checked_at": "2026-10-20T18:32:30Z",
+  "coverage": 0.4,
   "enabled": 20,
   "gw": 8,
-  "healthy": 7,
+  "healthy": 8,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -28,10 +28,10 @@
       "article_validators": {},
       "club": "AVL",
       "content_hash": "9c7825becb8ff42f8c499d57fe8c1093bd5159607ffeacf1c5ac976ec67ff3f9",
-      "documents": 0,
-      "etag": "\"df6fa54beb3dbaa8fda596053b531f14\"",
+      "documents": 1,
+      "etag": "\"9a65062e284b991e51cc95ca619711b5\"",
       "id": "avl-news",
-      "last_modified": "Mon, 19 Oct 2026 02:06:53 GMT",
+      "last_modified": "Tue, 20 Oct 2026 02:06:52 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Aston Villa",
       "status": "no_articles",
@@ -41,13 +41,13 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.brightonandhovealbion.com/first-team-men-squad": {
-          "etag": "\"1yc845n\""
+          "etag": "\"xh1ing\""
         }
       },
       "club": "BHA",
       "content_hash": "ab2a74c84f65f5f6162c348ea52d2fb6792873a48c913eb6b241db4a880a6d3c",
       "documents": 2,
-      "etag": "\"18vw1dk\"",
+      "etag": "\"1copcxr\"",
       "id": "bha-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brighton & Hove Albion",
@@ -74,7 +74,7 @@
       "content_hash": "e5d6a4f5b91521c59112c5c997b9e27246947de2b2109ac1593971c9f84686d7",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Mon, 19 Oct 2026 15:59:25 GMT",
+      "last_modified": "Tue, 20 Oct 2026 16:11:41 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "no_articles",
@@ -98,10 +98,10 @@
       "article_validators": {},
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
-      "documents": 0,
-      "etag": "\"63ee521e560ff870605ce91266ab79bf\"",
+      "documents": 1,
+      "etag": "\"f6e77092b5c763b61cc69a80c590e556\"",
       "id": "cov-news",
-      "last_modified": "Mon, 19 Oct 2026 02:06:44 GMT",
+      "last_modified": "Tue, 20 Oct 2026 02:07:35 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Coventry City",
       "status": "no_articles",
@@ -113,7 +113,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"16is16hnud14cne\"",
+      "etag": "\"gn1buiy8p6470r\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -122,36 +122,41 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {},
+      "article_validators": {
+        "https://www.evertonfc.com/news/2026/october/20/my-everton--176--toffee-lady-passes-late-fitness-test/": {
+          "etag": "W/\"oB7B0E6dTW\"",
+          "last_modified": "Tue, 20 Oct 2026 18:31:44 GMT"
+        }
+      },
       "club": "EVE",
-      "content_hash": "54e2021d53c5959c4e3dc30111359c37658673c2e65215e1aaabf24197933129",
-      "documents": 0,
-      "etag": "\"087348d842179f6c24f7ac85f5fbdd5f\"",
+      "content_hash": "a37fe7474c84ea3b890b69c1fa65f522650c3d790b4406d43deb7b53990d5f48",
+      "documents": 2,
+      "etag": "W/\"yN7yH9rUKG\"",
       "id": "eve-news",
-      "last_modified": "Mon, 19 Oct 2026 02:04:33 GMT",
+      "last_modified": "Tue, 20 Oct 2026 18:32:12 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Everton",
-      "status": "no_articles",
+      "status": "ok",
       "url": "https://www.evertonfc.com/news"
     },
     {
       "article_errors": 0,
       "article_validators": {
         "https://www.fulhamfc.com/599395a0-c871-11f1-95df-95b1aabd8ce2/artists-impression": {
-          "etag": "\"b0233e610d3b42ec575c9a2a64199d1e\"",
-          "last_modified": "Mon, 19 Oct 2026 08:49:25 GMT"
+          "etag": "\"f16fd66a29f7535d6d10a75084418bdf\"",
+          "last_modified": "Tue, 20 Oct 2026 02:24:13 GMT"
         },
         "https://www.fulhamfc.com/9f4fe8f0-c871-11f1-95df-95b1aabd8ce2/meetings-and-conferences": {
-          "etag": "\"adcffbaaaeb370e67048d4f4da8cfef2\"",
-          "last_modified": "Mon, 19 Oct 2026 08:49:25 GMT"
+          "etag": "\"6f70a5eecbfdcba4e6fd7b61e3fc6d6d\"",
+          "last_modified": "Tue, 20 Oct 2026 02:24:13 GMT"
         }
       },
       "club": "FUL",
-      "content_hash": "5481ebba7d9a4ba676f8d3bc7b216165527aaab535d4af85c50786177d5b4d80",
+      "content_hash": "844b7eedfbd661f0df93ac896c7fcb92617eb3cf058b0967dcc425d33eebd90a",
       "documents": 3,
-      "etag": "\"e5b2a88771e8687d6ff727a6f6df061a\"",
+      "etag": "\"d59b3116c01d8af9adef8c877ab6e28d\"",
       "id": "ful-news",
-      "last_modified": "Mon, 19 Oct 2026 17:01:15 GMT",
+      "last_modified": "Tue, 20 Oct 2026 12:13:57 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Fulham",
       "status": "ok",
@@ -163,9 +168,9 @@
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
       "documents": 1,
-      "etag": "\"05ef2f20025d36140684b1cf738f9388\"",
+      "etag": "\"3ceac6a33bc00fbf26e955c87359435c\"",
       "id": "hul-news",
-      "last_modified": "Mon, 19 Oct 2026 13:57:06 GMT",
+      "last_modified": "Tue, 20 Oct 2026 10:03:26 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Hull City",
       "status": "no_articles",
@@ -175,11 +180,11 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "IPS",
-      "content_hash": "d0fb69ea3a4e73bb471a4f373c8bba86f0caa01b5f9b83cd6a1a2f15806b1201",
+      "content_hash": "953a8c1d8ea329b636c9490751e30bf5e459cc9dcaa69fa0a89fc37249fca965",
       "documents": 1,
-      "etag": "\"b17d2a1f9858cd967df25a72feed2ede\"",
+      "etag": "\"7cf35b9d6318e17ec192238fc5bd0536\"",
       "id": "ips-news",
-      "last_modified": "Mon, 19 Oct 2026 16:01:09 GMT",
+      "last_modified": "Tue, 20 Oct 2026 17:48:39 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
       "status": "no_articles",
@@ -189,10 +194,10 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "LEE",
-      "content_hash": "dc8a472ef3d8ebe2563f2edafb3c01cd50ef1f8493e5dc9e8fbd904abeadc846",
+      "content_hash": "68e49b5a768daf6bcd9dc9f5206a35ea1e08a4aaac6f0e32860a1b2cd2ac9e44",
       "documents": 1,
       "id": "lee-news",
-      "last_modified": "Tue, 20 Oct 2026 01:05:33 GMT",
+      "last_modified": "Tue, 20 Oct 2026 18:00:33 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "no_articles",
@@ -201,17 +206,16 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.liverpoolfc.com/news/injury-news-jeremie-frimpong-dominik-szoboszlai-liverpool-fc": {},
         "https://www.liverpoolfc.com/news/listing/mens-team-news": {},
         "https://www.liverpoolfc.com/news/liverpool-v-villarreal-team-news-champions-league": {},
-        "https://www.liverpoolfc.com/news/liverpools-injury-list-suspensions-and-availability": {},
-        "https://www.liverpoolfc.com/news/ronald-araujo-villarreal-press-conference-champions-league": {}
+        "https://www.liverpoolfc.com/news/photo-gallery-liverpool-squad-latest-tommy-hilfiger-matchday-fits": {},
+        "https://www.liverpoolfc.com/news/team-news-confirmed-liverpool-line-up-v-villarreal": {}
       },
       "club": "LIV",
-      "content_hash": "5edebef046bee572df84f98c22293e0897a013059c56fcc6ced8b200ca86a3f3",
-      "documents": 6,
+      "content_hash": "9eeb2539e336d63dfbdb3de834cf48a913f5215490529b9d90ff5b7c7de38e2c",
+      "documents": 5,
       "id": "liv-news",
-      "last_modified": "Mon, 19 Oct 2026 22:44:19 GMT",
+      "last_modified": "Tue, 20 Oct 2026 18:32:35 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
       "status": "ok",
@@ -220,25 +224,15 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/citytv/mens/enzo-maresca-marc-guehi-manchester-city-aek-athens-press-conference-63927998": {
-          "last_modified": "Tue, 20 Oct 2026 01:32:59 GMT"
-        },
-        "https://www.mancity.com/citytv/mens/marc-guehi-aek-athens-uefa-champions-league-video-preview-63928009": {
-          "last_modified": "Tue, 20 Oct 2026 01:39:23 GMT"
-        },
-        "https://www.mancity.com/news/mens/city-v-aek-athens-match-preview-ucl-20-oct-63927836": {
-          "last_modified": "Tue, 20 Oct 2026 01:37:43 GMT"
-        },
-        "https://www.mancity.com/news/mens/marc-guehi-pre-aek-athens-preview-63928000": {},
-        "https://www.mancity.com/news/mens/maresca-aek-athen-written-press-conference-63928003": {
-          "last_modified": "Tue, 20 Oct 2026 01:50:22 GMT"
+        "https://www.mancity.com/news/mens/city-v-aek-athens-match-preview-ucl-20-oct-63927836": {},
+        "https://www.mancity.com/news/mens/city-v-aek-athens-team-news-63928107": {
+          "last_modified": "Tue, 20 Oct 2026 18:31:34 GMT"
         }
       },
       "club": "MCI",
-      "content_hash": "a225e8daf86ac4220f73004601091754336ed4556228537da6f4a50388bf445f",
-      "documents": 6,
+      "content_hash": "b0f823267fca2746cdecd05276ef8a8e9530da6868d63857502a0307a6eb2418",
+      "documents": 3,
       "id": "mci-news",
-      "last_modified": "Tue, 20 Oct 2026 01:44:56 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
       "status": "ok",
@@ -272,7 +266,7 @@
         "https://www.newcastleunited.com/en/news/how-to-watch-newcastle-united-vs-aston-villa-tv-details-kick-off-time-and-team-news": {}
       },
       "club": "NEW",
-      "content_hash": "b786d2109755ca366404e9f44779abb6d275e06fa3c0f6df03849e75fa27a1ef",
+      "content_hash": "b070075764f594b73663ea12c4fcc266c179667c7f43c94745d0b23f9d755b03",
       "documents": 3,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -286,9 +280,9 @@
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
       "documents": 1,
-      "etag": "\"e7cd764c35a681d060667e8778b526b7\"",
+      "etag": "\"374ffdc162342fc06fa7a7e8e0c62aef\"",
       "id": "nfo-news",
-      "last_modified": "Mon, 19 Oct 2026 13:22:15 GMT",
+      "last_modified": "Tue, 20 Oct 2026 16:03:17 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -298,11 +292,11 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "SUN",
-      "content_hash": "191fbb568fbd24f60eb2575b6a2ad66dbbf72f8961bce0b666fc2a248e2add01",
+      "content_hash": "83ec15aaae3409e9a938b70f4d73928762d5e0ab7390b0daee6538811cc6d630",
       "documents": 1,
-      "etag": "\"5f19d0e52a76ffe3009dd6be0a800cbb\"",
+      "etag": "\"73a903d8aebbfd8e7994b870874c971c\"",
       "id": "sun-news",
-      "last_modified": "Mon, 19 Oct 2026 15:24:05 GMT",
+      "last_modified": "Tue, 20 Oct 2026 15:43:47 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Sunderland",
       "status": "no_articles",

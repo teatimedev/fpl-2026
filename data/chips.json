@@ -14,7 +14,7 @@
    "weeks": [
     [
      8,
-     5.1
+     5.4
     ],
     [
      9,
@@ -63,9 +63,9 @@
    ],
    "best_gw": 12,
    "best": 7.4,
-   "now": 5.1,
+   "now": 5.4,
    "play": false,
-   "advice": "Hold. Best-looking week for this one is GW12 (7.4 extra points); this week is 5.1. Second copy (GW20\u201338): best week GW34 (7.9).",
+   "advice": "Hold. Best-looking week for this one is GW12 (7.4 extra points); this week is 5.4. Second copy (GW20\u201338): best week GW34 (7.9).",
    "last_eligible": 19,
    "later": [
     {
@@ -195,7 +195,7 @@
    "weeks": [
     [
      8,
-     7.9
+     7.0
     ],
     [
      9,
@@ -219,7 +219,7 @@
     ],
     [
      14,
-     5.0
+     4.8
     ],
     [
      15,
@@ -227,11 +227,11 @@
     ],
     [
      16,
-     8.1
+     8.2
     ],
     [
      17,
-     4.7
+     4.2
     ],
     [
      18,
@@ -243,19 +243,19 @@
     ]
    ],
    "best_gw": 16,
-   "best": 8.1,
-   "now": 7.9,
+   "best": 8.2,
+   "now": 7.0,
    "play": false,
-   "advice": "Hold. Widest gap left is GW16 (8.1 behind the optimised one-week squad); this week 7.9.",
+   "advice": "Hold. Widest gap left is GW16 (8.2 behind the optimised one-week squad); this week 7.0.",
    "last_eligible": 19
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 9.2,
+   "now": 6.5,
    "gap_trend": [
     [
      8,
-     7.9
+     7.0
     ],
     [
      9,
@@ -279,7 +279,7 @@
     ],
     [
      14,
-     5.0
+     4.8
     ],
     [
      15,
@@ -287,21 +287,21 @@
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 9.2 over the window. The squad is holding up (gap to the optimised one-week squad 7.9\u20137.9 over the next weeks).",
+   "advice": "Hold. Unlimited transfers now are worth 6.5 over the window. The squad is holding up (gap to the optimised one-week squad 7.0\u20137.5 over the next weeks).",
    "last_eligible": 19
   }
  },
  "gaps": {
-  "8": 7.9,
+  "8": 7.0,
   "9": 5.0,
   "10": 2.8,
   "11": 5.4,
   "12": 7.5,
   "13": 4.3,
-  "14": 5.0,
+  "14": 4.8,
   "15": 4.7,
-  "16": 8.1,
-  "17": 4.7,
+  "16": 8.2,
+  "17": 4.2,
   "18": 5.6,
   "19": 6.4
  },
