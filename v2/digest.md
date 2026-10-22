@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 8
 
-Deadline **Fri 23 Oct, 17:30 UTC** — 1d 15h away.
+Deadline **Fri 23 Oct, 17:30 UTC** — 0d 22h away.
 Projections cover GW8–13.
 
 ## GW7 in review — what happened, and what it does and does not change
@@ -159,7 +159,7 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 | Bench Boost | 4.7 | GW12: 7.4 | Hold. Best-looking week for this one is GW12 (7.4 extra points); this week is 4.7. Second copy (GW20–38): best week GW34 (7.9). |
 | Triple Captain | — | GW36: 8.8 (Haaland) | Hold. Best week for this one is GW36: Haaland (8.8 extra). |
 | Free Hit | 8.7 | GW8: 8.7 | Hold. Widest gap left is GW8 (8.7 behind the optimised one-week squad); this week 8.7. |
-| Wildcard | +8.4 over the window | — | Hold. Unlimited transfers now are worth 8.4 over the window. The squad is holding up (gap to the optimised one-week squad 8.7–8.7 over the next weeks). |
+| Wildcard | +7.2 over the window | — | Hold. Unlimited transfers now are worth 7.2 over the window. The squad is holding up (gap to the optimised one-week squad 8.7–8.7 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -170,21 +170,27 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Tavernier £6.2 | +18.0% | +192,292 | Szoboszlai £6.8 ⭑ | -15.1% | -318,213 |
-| Groß £6.2 ⭑ | +3.5% | +176,824 | Semenyo £8.3 | -22.8% | -299,671 |
-| De Cuyper £5.3 | +3.5% | +162,542 | B.Fernandes £11.8 | -6.9% | -223,448 |
-| Cherki £8.0 | +3.0% | +128,219 | Wissa £6.1 | -11.9% | -184,464 |
-| Rogers £8.0 | +2.3% | +122,857 | Gibbs-White £7.9 | -7.8% | -98,639 |
-| Neto £6.5 | +40.1% | +116,292 | Gvardiol £5.8 ⭑ | -2.5% | -79,241 |
+| Tavernier £6.2 | +22.0% | +247,528 | Szoboszlai £6.8 ⭑ | -17.5% | -361,126 |
+| Groß £6.2 ⭑ | +3.8% | +194,543 | Semenyo £8.3 | -28.1% | -353,939 |
+| De Cuyper £5.3 | +3.9% | +181,099 | B.Fernandes £11.8 | -8.5% | -269,436 |
+| Cherki £8.0 | +3.7% | +157,187 | Wissa £6.1 | -13.7% | -207,300 |
+| Rogers £8.0 | +2.8% | +149,625 | Saka £9.6 ⭑ | -10.0% | -171,179 |
+| Mbeumo £7.8 ⭑ | +5.8% | +134,542 | Gvardiol £5.8 ⭑ | -2.9% | -90,884 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Squad player Szoboszlai (net -282k this event) at fall risk (-0.1m hurts the bank) [net -282k this event (in 2k / out 284k), sel 19.2% = Q3 (~150k to move), price 6.8 over 41 snaps (-0.2m in window)]
+- Target Foden (net +40k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +40k this event (in 42k / out 3k), sel 1.9% = Q1 (~77k to move), price 6.8 over 42 snaps (-0.2m in window)]
+- Squad player Gvardiol (net -79k this event) at fall risk (-0.1m hurts the bank) [net -79k this event (in 35k / out 115k), sel 28.2% = Q3 (~150k to move), price 5.8 over 42 snaps (+0.3m in window)]
+- Squad player Szoboszlai (net -318k this event) at fall risk (-0.1m hurts the bank) [net -318k this event (in 2k / out 320k), sel 18.9% = Q3 (~150k to move), price 6.8 over 42 snaps (-0.2m in window)]
 
-_Based on 41 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
+_Based on 42 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-10-22 01:55 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-10-22 19:00 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+
+## Scouting
+
+15 sourced observations; 6 API calls. Review these alongside the transfer stress tests in the app.
