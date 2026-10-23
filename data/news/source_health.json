@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-23T13:36:27Z",
-  "coverage": 0.4,
+  "checked_at": "2026-10-23T22:23:09Z",
+  "coverage": 0.45,
   "enabled": 20,
-  "gw": 8,
-  "healthy": 8,
+  "gw": 9,
+  "healthy": 9,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -16,12 +16,11 @@
       "club": "ARS",
       "content_hash": "aa6621f0d348c0ff63027e37c554b051b39fcfee0ba89118629389c31ad8116d",
       "documents": 2,
-      "error": "HTTP Error 503: Service Unavailable",
       "etag": "\"eq70xas51a2goh\"",
       "id": "ars-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Arsenal",
-      "status": "error",
+      "status": "ok",
       "url": "https://www.arsenal.com/news"
     },
     {
@@ -29,7 +28,7 @@
       "article_validators": {},
       "club": "AVL",
       "content_hash": "9c7825becb8ff42f8c499d57fe8c1093bd5159607ffeacf1c5ac976ec67ff3f9",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"bee3e2ccb87a90cefbf127ac1806b10c\"",
       "id": "avl-news",
       "last_modified": "Fri, 23 Oct 2026 02:06:46 GMT",
@@ -75,7 +74,7 @@
       "content_hash": "e5d6a4f5b91521c59112c5c997b9e27246947de2b2109ac1593971c9f84686d7",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Fri, 23 Oct 2026 13:36:28 GMT",
+      "last_modified": "Fri, 23 Oct 2026 22:23:09 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "no_articles",
@@ -99,7 +98,7 @@
       "article_validators": {},
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"e248ad787b1fba6123d00edab9ebeaec\"",
       "id": "cov-news",
       "last_modified": "Fri, 23 Oct 2026 02:07:20 GMT",
@@ -114,7 +113,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"10rekzrji8j48yy\"",
+      "etag": "\"xhosfrqea54455\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -125,20 +124,20 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.evertonfc.com/news/2026/october/23/Moyes-Talks-Team-News---Norgaard-Fitness-Ahead-Of-Arsenal-Trip/": {
-          "etag": "W/\"z7IQq9rswU\"",
-          "last_modified": "Fri, 23 Oct 2026 13:22:34 GMT"
+          "etag": "W/\"BOP6rWkxXt\"",
+          "last_modified": "Fri, 23 Oct 2026 22:21:17 GMT"
         },
         "https://www.evertonfc.com/news/2026/october/23/watch-moyes--press-conference--1-30pm-bst----follow-live-blog/": {
-          "etag": "W/\"cUBe1OW25Q\"",
-          "last_modified": "Fri, 23 Oct 2026 13:36:28 GMT"
+          "etag": "W/\"hUqNlVKKjK\"",
+          "last_modified": "Fri, 23 Oct 2026 22:22:22 GMT"
         }
       },
       "club": "EVE",
-      "content_hash": "bfcddf09fb6634c8647d0367b8314a1e278c2a90936b191c0a6511ac8145ddc4",
+      "content_hash": "7be1e29d3bfa6f43a16420babe27e98a9fe7a4f5c015b53694c4d8077a849011",
       "documents": 3,
-      "etag": "W/\"Q3Zxu5dZqF\"",
+      "etag": "W/\"sopsCv5QQt\"",
       "id": "eve-news",
-      "last_modified": "Fri, 23 Oct 2026 13:20:41 GMT",
+      "last_modified": "Fri, 23 Oct 2026 22:21:15 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Everton",
       "status": "ok",
@@ -150,9 +149,9 @@
       "club": "FUL",
       "content_hash": "8408c6124d807047950e21e167dbc0c906db562bac8f712424e2d6e68d53383b",
       "documents": 1,
-      "etag": "\"22ca4b8b681d5840837a689fe23dd1d9\"",
+      "etag": "\"916911701453e45cf9ae14e2d809fa88\"",
       "id": "ful-news",
-      "last_modified": "Fri, 23 Oct 2026 13:28:34 GMT",
+      "last_modified": "Fri, 23 Oct 2026 13:59:21 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Fulham",
       "status": "no_articles",
@@ -164,9 +163,9 @@
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
       "documents": 1,
-      "etag": "\"09acd895a57fc4de8694e22afaecd2a8\"",
+      "etag": "\"df3fb898b6f196d0956190f56f3d873e\"",
       "id": "hul-news",
-      "last_modified": "Fri, 23 Oct 2026 02:06:31 GMT",
+      "last_modified": "Fri, 23 Oct 2026 14:27:53 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Hull City",
       "status": "no_articles",
@@ -175,21 +174,21 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.itfc.co.uk/news/2026/october/22/early-nottingham-forest-team-news/": {
-          "etag": "\"73b7e39cd5b1d24bdbfeaa7ca63aa8e6\"",
-          "last_modified": "Fri, 23 Oct 2026 02:12:22 GMT"
-        },
         "https://www.itfc.co.uk/news/2026/october/22/matchday-guide---nottingham-forest--h-/": {
-          "etag": "\"8c2b5f8e336202883afcd238f5a90b10\"",
-          "last_modified": "Fri, 23 Oct 2026 12:32:24 GMT"
+          "etag": "\"017fdd566e3871a402223d7797fbbb69\"",
+          "last_modified": "Fri, 23 Oct 2026 18:12:14 GMT"
+        },
+        "https://www.itfc.co.uk/news/2026/october/23/team-news---nottingham-forest--h-/": {
+          "etag": "\"232ab3d0c4abfe2e7219dbb59a991e01\"",
+          "last_modified": "Fri, 23 Oct 2026 18:12:14 GMT"
         }
       },
       "club": "IPS",
-      "content_hash": "ec53f299795e5e223520a81917efb2143f365216b6d3348b281c5ac650754e08",
+      "content_hash": "db28e1b300c7b460dacd3661deb5f32f42b2a2ed4039dd4a6ce975325932a13e",
       "documents": 3,
-      "etag": "\"fa5ca844238592aa4440d1108a4e0d54\"",
+      "etag": "\"137dcd991942d0090402fd08687d3e2b\"",
       "id": "ips-news",
-      "last_modified": "Fri, 23 Oct 2026 12:32:24 GMT",
+      "last_modified": "Fri, 23 Oct 2026 21:02:28 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
       "status": "ok",
@@ -198,13 +197,14 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.leedsunited.com/en/news/daniel-farke-gives-fitness-update-on-dominic-calvert-lewin-anton-stach-and-noah-okafor": {}
+        "https://www.leedsunited.com/en/news/daniel-farke-gives-fitness-update-on-dominic-calvert-lewin-anton-stach-and-noah-okafor": {},
+        "https://www.leedsunited.com/en/news/sunderland-vs-leeds-united-team-news-key-stats-and-everything-you-need-to-know": {}
       },
       "club": "LEE",
-      "content_hash": "2e35a2723d2dffa77d85dff88ad4806efdaf386d4f6385ac742f2923e430c60b",
-      "documents": 2,
+      "content_hash": "e264d23e85ae3e01d22c43933cd4da5410e286a875b2ffbf09656d497233664d",
+      "documents": 3,
       "id": "lee-news",
-      "last_modified": "Fri, 23 Oct 2026 13:09:16 GMT",
+      "last_modified": "Fri, 23 Oct 2026 22:23:11 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -214,14 +214,16 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.liverpoolfc.com/news/LFC-fitness-update-Victor-Munoz-Bradley-Barcola-Dominik-Szoboszlai": {},
+        "https://www.liverpoolfc.com/news/alexander-isak-interview-goals-fitness-liverpool-brighton-preview": {},
+        "https://www.liverpoolfc.com/news/andoni-iraola-press-conference-liverpool-brighton-premier-league": {},
         "https://www.liverpoolfc.com/news/listing/mens-team-news": {},
-        "https://www.liverpoolfc.com/news/watch-andoni-iraola-pre-brighton-press-conference-premier-league": {}
+        "https://www.liverpoolfc.com/news/liverpools-injury-list-suspensions-and-availability": {}
       },
       "club": "LIV",
-      "content_hash": "34f7c495e373972d679bb83f3bd547795e35009aee99ac97d9f490c5ad491b3e",
-      "documents": 4,
+      "content_hash": "367863c76f78372edb0b09a26c04c93e31f8d36fa60e55e382785513d484ab3b",
+      "documents": 6,
       "id": "liv-news",
-      "last_modified": "Fri, 23 Oct 2026 13:36:11 GMT",
+      "last_modified": "Fri, 23 Oct 2026 18:49:18 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
       "status": "ok",
@@ -233,7 +235,7 @@
         "https://www.mancity.com/news/mens/aston-villa-v-city-match-preview-pl-24-oct-63928096": {}
       },
       "club": "MCI",
-      "content_hash": "4f4c9d512351193209db5d649555db09adb50728168b2c4f5640215220f4808d",
+      "content_hash": "3982d0cee62cfc17377a45db2c38f5d911803c7b3bbdbb731f671fe24d729214",
       "documents": 2,
       "id": "mci-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -268,7 +270,7 @@
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-elanga-and-ramsey-latest-ahead-of-palace-trip": {}
       },
       "club": "NEW",
-      "content_hash": "9485eada361b60f6575563b8ad98aad9ecad5e7dda30c390b9035a097987e5df",
+      "content_hash": "34fcfad5eb060f4f17922d4ddc6151ad8402a85d5df9b234bb3428f0955e3742",
       "documents": 2,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -282,9 +284,9 @@
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
       "documents": 1,
-      "etag": "\"ef54d13c6bba98ac5286c54aefafc007\"",
+      "etag": "\"e08538fe96087b0d0498921590a3e8fd\"",
       "id": "nfo-news",
-      "last_modified": "Fri, 23 Oct 2026 13:20:42 GMT",
+      "last_modified": "Fri, 23 Oct 2026 21:06:00 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -295,7 +297,7 @@
       "article_validators": {},
       "club": "SUN",
       "content_hash": "83ec15aaae3409e9a938b70f4d73928762d5e0ab7390b0daee6538811cc6d630",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"64735e9f83fbc10a988ece3c3fd395ec\"",
       "id": "sun-news",
       "last_modified": "Fri, 23 Oct 2026 08:58:12 GMT",

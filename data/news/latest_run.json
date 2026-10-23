@@ -1,15 +1,13 @@
 {
   "affected_clubs": [],
-  "affected_owned": [
-    12
-  ],
-  "checked_at": "2026-10-23T13:36:27Z",
-  "claims": 0,
-  "coverage": 0.4,
-  "deadline": "2026-10-23T17:30:00Z",
-  "gw": 8,
-  "notification_key": "3a34b44f508854458c83",
-  "notify_required": true,
+  "affected_owned": [],
+  "checked_at": "2026-10-23T22:23:09Z",
+  "claims": 5,
+  "coverage": 0.45,
+  "deadline": "2026-10-31T11:00:00Z",
+  "gw": 9,
+  "notification_key": "60e301a0c6de5d0833c3",
+  "notify_required": false,
   "official_fpl": {
     "1": {
       "chance": null,
@@ -697,9 +695,9 @@
       "status": "a"
     },
     "222": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "223": {
       "chance": 100,
@@ -943,7 +941,7 @@
     },
     "267": {
       "chance": 0,
-      "news": "Groin injury - Expected back 23 Oct",
+      "news": "Groin injury - Unknown return date",
       "status": "i"
     },
     "268": {
@@ -1367,9 +1365,9 @@
       "status": "u"
     },
     "343": {
-      "chance": 50,
-      "news": "Back injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "344": {
       "chance": 100,
@@ -1802,9 +1800,9 @@
       "status": "a"
     },
     "421": {
-      "chance": 75,
-      "news": "Illness - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "422": {
       "chance": 100,
@@ -1982,9 +1980,9 @@
       "status": "a"
     },
     "454": {
-      "chance": 0,
-      "news": "Unspecified injury - Expected back 25 Oct",
-      "status": "i"
+      "chance": 75,
+      "news": "Hamstring injury - 75% chance of playing",
+      "status": "d"
     },
     "455": {
       "chance": 100,
@@ -2322,9 +2320,9 @@
       "status": "a"
     },
     "515": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "516": {
       "chance": 0,
@@ -2982,9 +2980,9 @@
       "status": "a"
     },
     "634": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Illness - 75% chance of playing",
+      "status": "d"
     },
     "635": {
       "chance": 100,
