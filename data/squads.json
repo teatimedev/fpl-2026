@@ -22,7 +22,7 @@
     "pos": "MID",
     "price": "7.9",
     "proj": 35.59,
-    "sel_pct": 21.8,
+    "sel_pct": 21.9,
     "starting": true,
     "mins_proj": 84,
     "news": "",
@@ -33,9 +33,9 @@
     "name": "Saka",
     "team": "ARS",
     "pos": "MID",
-    "price": "9.6",
+    "price": "9.5",
     "proj": 33.18,
-    "sel_pct": 10.3,
+    "sel_pct": 10.2,
     "starting": false,
     "mins_proj": 0,
     "news": "Thigh injury - Unknown return date",
@@ -81,17 +81,17 @@
     "note": "FPL set-piece listing \u2014 corners: order 2; direct free kicks: order 2."
    },
    {
-    "id": "53",
-    "name": "Manzambi",
-    "team": "AVL",
+    "id": "68",
+    "name": "Tavernier",
+    "team": "BOU",
     "pos": "MID",
-    "price": "6.0",
-    "proj": 25.47,
-    "sel_pct": 3.0,
+    "price": "6.3",
+    "proj": 28.82,
+    "sel_pct": 13.5,
     "starting": true,
-    "mins_proj": 49,
-    "news": "Calf injury - 75% chance of playing",
-    "note": "FPL set-piece listing \u2014 direct free kicks: order 2."
+    "mins_proj": 78,
+    "news": "",
+    "note": "FPL set-piece listing \u2014 penalties: order 3; corners: order 1; direct free kicks: order 1."
    },
    {
     "id": "8",
@@ -120,17 +120,17 @@
     "note": ""
    },
    {
-    "id": "138",
-    "name": "Kostoulas",
+    "id": "115",
+    "name": "De Cuyper",
     "team": "BHA",
-    "pos": "FWD",
-    "price": "5.7",
-    "proj": 25.36,
-    "sel_pct": 10.4,
+    "pos": "DEF",
+    "price": "5.3",
+    "proj": 24.7,
+    "sel_pct": 42.2,
     "starting": false,
-    "mins_proj": 71,
+    "mins_proj": 78,
     "news": "",
-    "note": ""
+    "note": "FPL set-piece listing \u2014 corners: order 2; direct free kicks: order 4."
    },
    {
     "id": "566",
@@ -146,17 +146,17 @@
     "note": ""
    },
    {
-    "id": "115",
-    "name": "De Cuyper",
-    "team": "BHA",
-    "pos": "DEF",
-    "price": "5.3",
-    "proj": 24.7,
-    "sel_pct": 42.2,
+    "id": "316",
+    "name": "Emersonn",
+    "team": "IPS",
+    "pos": "FWD",
+    "price": "5.5",
+    "proj": 23.78,
+    "sel_pct": 3.6,
     "starting": false,
-    "mins_proj": 78,
+    "mins_proj": 72,
     "news": "",
-    "note": "FPL set-piece listing \u2014 corners: order 2; direct free kicks: order 4."
+    "note": ""
    },
    {
     "id": "385",
@@ -199,16 +199,16 @@
    }
   ],
   "cost": 100.0,
-  "xi_proj": 338.3,
-  "squad_proj": 423.4,
-  "expected_total": 398.8,
-  "autosub_proj": 18.0,
-  "exact_refinement_gain": 1.88,
+  "xi_proj": 340.3,
+  "squad_proj": 425.2,
+  "expected_total": 397.3,
+  "autosub_proj": 14.6,
+  "exact_refinement_gain": 0.61,
   "captain": "154",
   "vice": "427",
   "bench_weights": {
    "GKP": 0.07,
-   "outfield": 0.219
+   "outfield": 0.177
   }
  },
  {
@@ -247,7 +247,7 @@
     "pos": "MID",
     "price": "7.9",
     "proj": 35.59,
-    "sel_pct": 21.8,
+    "sel_pct": 21.9,
     "starting": true,
     "mins_proj": 84,
     "news": "",
@@ -280,6 +280,19 @@
     "note": "FPL set-piece listing \u2014 corners: order 2; direct free kicks: order 2."
    },
    {
+    "id": "68",
+    "name": "Tavernier",
+    "team": "BOU",
+    "pos": "MID",
+    "price": "6.3",
+    "proj": 28.82,
+    "sel_pct": 13.5,
+    "starting": true,
+    "mins_proj": 78,
+    "news": "",
+    "note": "FPL set-piece listing \u2014 penalties: order 3; corners: order 1; direct free kicks: order 1."
+   },
+   {
     "id": "53",
     "name": "Manzambi",
     "team": "AVL",
@@ -293,19 +306,6 @@
     "note": "FPL set-piece listing \u2014 direct free kicks: order 2."
    },
    {
-    "id": "68",
-    "name": "Tavernier",
-    "team": "BOU",
-    "pos": "MID",
-    "price": "6.2",
-    "proj": 28.62,
-    "sel_pct": 13.5,
-    "starting": true,
-    "mins_proj": 78,
-    "news": "",
-    "note": "FPL set-piece listing \u2014 penalties: order 3; corners: order 1; direct free kicks: order 1."
-   },
-   {
     "id": "8",
     "name": "Calafiori",
     "team": "ARS",
@@ -315,19 +315,6 @@
     "sel_pct": 54.8,
     "starting": true,
     "mins_proj": 80,
-    "news": "",
-    "note": ""
-   },
-   {
-    "id": "138",
-    "name": "Kostoulas",
-    "team": "BHA",
-    "pos": "FWD",
-    "price": "5.7",
-    "proj": 25.36,
-    "sel_pct": 10.4,
-    "starting": false,
-    "mins_proj": 71,
     "news": "",
     "note": ""
    },
@@ -356,6 +343,19 @@
     "mins_proj": 81,
     "news": "",
     "note": ""
+   },
+   {
+    "id": "249",
+    "name": "Barry",
+    "team": "EVE",
+    "pos": "FWD",
+    "price": "5.7",
+    "proj": 23.8,
+    "sel_pct": 7.8,
+    "starting": false,
+    "mins_proj": 81,
+    "news": "",
+    "note": "FPL set-piece listing \u2014 penalties: order 1."
    },
    {
     "id": "385",
@@ -402,7 +402,7 @@
     "team": "IPS",
     "pos": "DEF",
     "price": "4.0",
-    "proj": 18.8,
+    "proj": 18.82,
     "sel_pct": 2.8,
     "starting": false,
     "mins_proj": 87,
@@ -410,17 +410,17 @@
     "note": ""
    }
   ],
-  "cost": 99.9,
-  "xi_proj": 335.1,
-  "squad_proj": 416.9,
-  "expected_total": 396.4,
-  "autosub_proj": 17.1,
-  "exact_refinement_gain": 1.72,
+  "cost": 100.0,
+  "xi_proj": 334.8,
+  "squad_proj": 415.5,
+  "expected_total": 394.7,
+  "autosub_proj": 15.6,
+  "exact_refinement_gain": 0.75,
   "captain": "411",
   "vice": "154",
   "bench_weights": {
    "GKP": 0.045,
-   "outfield": 0.223
+   "outfield": 0.214
   }
  },
  {
@@ -433,7 +433,7 @@
     "pos": "MID",
     "price": "7.9",
     "proj": 35.59,
-    "sel_pct": 21.8,
+    "sel_pct": 21.9,
     "starting": true,
     "mins_proj": 84,
     "news": "",
@@ -444,9 +444,9 @@
     "name": "Saka",
     "team": "ARS",
     "pos": "MID",
-    "price": "9.6",
+    "price": "9.5",
     "proj": 33.18,
-    "sel_pct": 10.3,
+    "sel_pct": 10.2,
     "starting": false,
     "mins_proj": 0,
     "news": "Thigh injury - Unknown return date",
@@ -496,8 +496,8 @@
     "name": "Tavernier",
     "team": "BOU",
     "pos": "MID",
-    "price": "6.2",
-    "proj": 28.62,
+    "price": "6.3",
+    "proj": 28.82,
     "sel_pct": 13.5,
     "starting": true,
     "mins_proj": 78,
@@ -623,16 +623,16 @@
    }
   ],
   "cost": 99.7,
-  "xi_proj": 331.0,
-  "squad_proj": 415.9,
-  "expected_total": 386.0,
-  "autosub_proj": 14.6,
+  "xi_proj": 331.2,
+  "squad_proj": 416.1,
+  "expected_total": 386.1,
+  "autosub_proj": 14.4,
   "exact_refinement_gain": 0.03,
   "captain": "398",
   "vice": "427",
   "bench_weights": {
    "GKP": 0.07,
-   "outfield": 0.176
+   "outfield": 0.174
   }
  },
  {
@@ -671,7 +671,7 @@
     "pos": "MID",
     "price": "7.9",
     "proj": 35.59,
-    "sel_pct": 21.8,
+    "sel_pct": 21.9,
     "starting": true,
     "mins_proj": 84,
     "news": "",
@@ -704,6 +704,19 @@
     "note": "FPL set-piece listing \u2014 corners: order 2; direct free kicks: order 2."
    },
    {
+    "id": "68",
+    "name": "Tavernier",
+    "team": "BOU",
+    "pos": "MID",
+    "price": "6.3",
+    "proj": 28.82,
+    "sel_pct": 13.5,
+    "starting": true,
+    "mins_proj": 78,
+    "news": "",
+    "note": "FPL set-piece listing \u2014 penalties: order 3; corners: order 1; direct free kicks: order 1."
+   },
+   {
     "id": "53",
     "name": "Manzambi",
     "team": "AVL",
@@ -717,19 +730,6 @@
     "note": "FPL set-piece listing \u2014 direct free kicks: order 2."
    },
    {
-    "id": "68",
-    "name": "Tavernier",
-    "team": "BOU",
-    "pos": "MID",
-    "price": "6.2",
-    "proj": 28.62,
-    "sel_pct": 13.5,
-    "starting": true,
-    "mins_proj": 78,
-    "news": "",
-    "note": "FPL set-piece listing \u2014 penalties: order 3; corners: order 1; direct free kicks: order 1."
-   },
-   {
     "id": "8",
     "name": "Calafiori",
     "team": "ARS",
@@ -739,19 +739,6 @@
     "sel_pct": 54.8,
     "starting": true,
     "mins_proj": 80,
-    "news": "",
-    "note": ""
-   },
-   {
-    "id": "138",
-    "name": "Kostoulas",
-    "team": "BHA",
-    "pos": "FWD",
-    "price": "5.7",
-    "proj": 25.36,
-    "sel_pct": 10.4,
-    "starting": false,
-    "mins_proj": 71,
     "news": "",
     "note": ""
    },
@@ -780,6 +767,19 @@
     "mins_proj": 81,
     "news": "",
     "note": ""
+   },
+   {
+    "id": "249",
+    "name": "Barry",
+    "team": "EVE",
+    "pos": "FWD",
+    "price": "5.7",
+    "proj": 23.8,
+    "sel_pct": 7.8,
+    "starting": false,
+    "mins_proj": 81,
+    "news": "",
+    "note": "FPL set-piece listing \u2014 penalties: order 1."
    },
    {
     "id": "385",
@@ -826,7 +826,7 @@
     "team": "IPS",
     "pos": "DEF",
     "price": "4.0",
-    "proj": 18.8,
+    "proj": 18.82,
     "sel_pct": 2.8,
     "starting": false,
     "mins_proj": 87,
@@ -834,17 +834,17 @@
     "note": ""
    }
   ],
-  "cost": 99.9,
-  "xi_proj": 335.1,
-  "squad_proj": 416.9,
-  "expected_total": 396.4,
-  "autosub_proj": 17.1,
-  "exact_refinement_gain": 1.72,
+  "cost": 100.0,
+  "xi_proj": 334.8,
+  "squad_proj": 415.5,
+  "expected_total": 394.7,
+  "autosub_proj": 15.6,
+  "exact_refinement_gain": 0.75,
   "captain": "411",
   "vice": "154",
   "bench_weights": {
    "GKP": 0.045,
-   "outfield": 0.223
+   "outfield": 0.214
   }
  }
 ]

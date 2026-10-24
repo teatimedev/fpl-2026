@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 9
 
-Deadline **Sat 31 Oct, 11:00 UTC** — 7d 12h away.
+Deadline **Sat 31 Oct, 11:00 UTC** — 7d 4h away.
 Projections cover GW9–14.
 
 ## Captain: **Haaland** (MCI)
@@ -61,13 +61,13 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 | Szoboszlai (LIV) | Foden (MCI) | +0.0 | +6.1 | +1.5 | **+7.6** | +7.6 |
 | Sadiki (SUN) | Gomez (BHA) | +0.2 | +5.8 | +1.6 | **+7.4** | +7.4 |
 | Gvardiol (MCI) | Guéhi (MCI) | +0.2 | +9.1 | -4.7 | **+4.4** | +4.4 |
-| Saka (ARS) | Palmer (CHE) | +0.2 | +1.3 | +1.6 | **+2.9** | +2.9 |
+| Saka (ARS) | Palmer (CHE) | +0.3 | +1.3 | +1.6 | **+2.9** | +2.9 |
 | Thiaw (NEW) | De Cuyper (BHA) | +0.3 | +1.6 | +0.4 | **+1.9** | +1.9 |
 | O'Shea (IPS) | Maatsen (AVL) | +0.4 | +0.2 | +1.7 | **+1.9** | +1.9 |
 | Tarkowski (EVE) | Guéhi (MCI) | -0.2 | +1.0 | +0.0 | **+1.0** | +1.0 |
 | Obi (MUN) | Simms (COV) | +0.4 | +0.0 | +0.4 | **+0.4** | +0.4 |
 
-**Recommended: hold.** No transfer path tested beats saving by the 2.0-point-per-move bar over GW9–14. You would have 5 free transfers next week.
+**Recommended:** Szoboszlai→Foden this week (+3.1 versus holding/re-planning).
 
 **Best two-move combinations** (net of any hit):
 
@@ -75,30 +75,32 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 |---|---|---|---|---|---|---|
 | Szoboszlai + Sadiki | Foden + Gomez | +0.2 | +11.6 | +3.4 | +15.0 | **+15.0** |
 | Szoboszlai + Sadiki | Gomez + Foden | +0.2 | +11.6 | +3.4 | +15.0 | **+15.0** |
-| Szoboszlai + Obi | Manzambi + Kostoulas | +0.4 | +8.5 | +5.4 | +13.9 | **+13.9** |
-| Szoboszlai + Sadiki | Tavernier + Gomez | -0.4 | +11.7 | +2.0 | +13.6 | **+13.6** |
-| Szoboszlai + Sadiki | Gomez + Tavernier | -0.4 | +11.7 | +2.0 | +13.6 | **+13.6** |
+| Szoboszlai + Sadiki | Tavernier + Gomez | -0.3 | +11.9 | +1.9 | +13.7 | **+13.7** |
+| Szoboszlai + Sadiki | Gomez + Tavernier | -0.3 | +11.9 | +1.9 | +13.7 | **+13.7** |
+| Szoboszlai + Obi | Gomez + N.Jackson | +0.3 | +10.3 | +3.3 | +13.5 | **+13.5** |
 
 
 ## The next six weeks, planned
 
-Selected path under the current policy: **395.5** pts (0 hits). Making no move this week and re-planning: 395.5. Selected path versus holding: **+0.0** — not enough; hold.
+
+**GW9 simulation:** the selected GW9 squad beats holding in 72% of 4,000 simulations (average +3.4 points, net of hits). The advantage is both likely and large enough to clear the 2.0-point bar for 1 move. This covers one gameweek; the transfer decision compares the full window.
+Selected path under the current policy: **398.6** pts (0 hits). Making no move this week and re-planning: 395.6. Selected path versus holding: **+3.1**.
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
 | Sadiki, Tarkowski, Szoboszlai, Gvardiol → Gomez, Palmer, Thomas, Justin | +5.65 | 8.0 | no |
-| Sadiki, Szoboszlai → Tavernier, Gomez | +0.84 | 4.0 | no |
-| Szoboszlai → Foden | +1.36 | 2.0 | no |
-| Sadiki → Gomez | +0.56 | 2.0 | no |
-| Gvardiol → Guéhi | -0.65 | 2.0 | no |
-| Sadiki, Szoboszlai → Gomez, Foden | +2.58 | 4.0 | no |
+| Sadiki, Szoboszlai → Tavernier, Gomez | +1.03 | 4.0 | no |
+| Szoboszlai → Foden | +3.06 | 2.0 | yes |
+| Sadiki → Gomez | -0.89 | 2.0 | no |
+| Gvardiol → Guéhi | -0.62 | 2.0 | no |
+| Sadiki, Szoboszlai → Gomez, Foden | +2.55 | 4.0 | no |
 
-- **GW9** 55.9 pts, C Haaland, 4 FT  hold
-- **GW10** 70.4 pts, C Saka, 5 FT  Tarkowski → De Cuyper, Gvardiol → Thomas, Thiaw → Justin, Sadiki → Gomez, Szoboszlai → Palmer
-- **GW11** 67.6 pts, C Haaland, 1 FT  hold
-- **GW12** 64.3 pts, C B.Fernandes, 2 FT  Gomez → B.Fernandes, Haaland → Isak
-- **GW13** 66.6 pts, C Palmer, 1 FT  hold
-- **GW14** 70.8 pts, C B.Fernandes, 2 FT  De Cuyper → Silva, Groß → Tavernier
+- **GW9** 59.5 pts, C Haaland, 4 FT  Szoboszlai → Foden
+- **GW10** 71.2 pts, C Saka, 4 FT  Gvardiol → Guéhi, Sadiki → Palmer, Haaland → Calvert-Lewin, Obi → Isak
+- **GW11** 67.0 pts, C Saka, 1 FT  Tarkowski → De Cuyper
+- **GW12** 63.4 pts, C Mbeumo, 1 FT  Thiaw → Muharemović
+- **GW13** 67.3 pts, C Palmer, 1 FT  hold
+- **GW14** 70.2 pts, C B.Fernandes, 2 FT  Guéhi → Silva, Palmer → B.Fernandes
 
 _The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
 
@@ -110,8 +112,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 3.2 | GW12: 7.4 | Hold. Best-looking week for this one is GW12 (7.4 extra points); this week is 3.2. Second copy (GW20–38): best week GW34 (7.9). |
 | Triple Captain | — | GW36: 8.8 (Haaland) | Hold. Best week for this one is GW36: Haaland (8.8 extra). |
-| Free Hit | 9.4 | GW9: 9.4 | Hold. Widest gap left is GW9 (9.4 behind the optimised one-week squad); this week 9.4. |
-| Wildcard | +11.2 over the window | — | Hold. Unlimited transfers now are worth 11.2 over the window. The squad is holding up (gap to the optimised one-week squad 9.4–9.4 over the next weeks). |
+| Free Hit | 9.7 | GW9: 9.7 | Hold. Widest gap left is GW9 (9.7 behind the optimised one-week squad); this week 9.7. |
+| Wildcard | +7.4 over the window | — | Hold. Unlimited transfers now are worth 7.4 over the window. The squad is holding up (gap to the optimised one-week squad 9.7–9.7 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -122,28 +124,15 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Tavernier £6.2 | +1.0% | +15,579 | Saka £9.6 ⭑ | -1.6% | -18,457 |
-| Cherki £8.0 | +0.2% | +7,840 | Semenyo £8.3 | -1.0% | -9,337 |
-| Evanilson £6.1 | +1.0% | +6,536 | Szoboszlai £6.8 ⭑ | -0.5% | -8,230 |
-| Rogers £8.0 | +0.1% | +4,360 | B.Fernandes £11.8 | -0.2% | -7,283 |
-| Groß £6.2 ⭑ | +0.1% | +4,330 | Calvert-Lewin £6.1 | -0.3% | -7,204 |
-| Palmer £9.8 | +0.1% | +3,913 | Wissa £6.1 | -0.2% | -3,012 |
+| Tavernier £6.3 | +1.5% | +22,385 | Saka £9.5 ⭑ | -2.3% | -26,304 |
+| Cherki £8.0 | +0.3% | +11,493 | Semenyo £8.2 | -1.3% | -13,067 |
+| Evanilson £6.2 | +1.4% | +9,175 | Szoboszlai £6.8 ⭑ | -0.7% | -11,955 |
+| Groß £6.2 ⭑ | +0.1% | +6,387 | B.Fernandes £11.7 | -0.4% | -10,451 |
+| Rogers £8.0 | +0.1% | +6,300 | Calvert-Lewin £6.1 | -0.4% | -10,267 |
+| De Cuyper £5.3 | +0.1% | +5,846 | Wissa £6.1 | -0.3% | -4,412 |
 
 ⭑ = in your squad.
 
-**Price risk if you wait (shadow-only):**
-
-- Target Foden (net +94k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +94k this event (in 100k / out 5k), sel 2.4% = Q1 (~77k to move), price 6.8 over 43 snaps (-0.2m in window)]
-- Squad player Gvardiol (net -121k this event) at fall risk (-0.1m hurts the bank) [net -121k this event (in 54k / out 175k), sel 27.8% = Q3 (~150k to move), price 5.8 over 43 snaps (+0.3m in window)]
-- Squad player Saka (net -433k this event) at fall risk (-0.1m hurts the bank) [net -433k this event (in 27k / out 460k), sel 13.0% = Q3 (~150k to move), price 9.6 over 43 snaps (+0.1m in window)]
-- Squad player Szoboszlai (net -478k this event) at fall risk (-0.1m hurts the bank) [net -478k this event (in 2k / out 480k), sel 17.4% = Q3 (~150k to move), price 6.8 over 43 snaps (-0.2m in window)]
-
-_Based on 43 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
-
 ---
 
-_Generated 2026-10-23 22:37 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
-
-## Scouting
-
-15 sourced observations; 8 API calls. Review these alongside the transfer stress tests in the app.
+_Generated 2026-10-24 06:20 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._

@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-23T22:23:09Z",
-  "coverage": 0.45,
+  "checked_at": "2026-10-24T06:00:58Z",
+  "coverage": 0.4,
   "enabled": 20,
   "gw": 9,
-  "healthy": 9,
+  "healthy": 8,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -28,10 +28,10 @@
       "article_validators": {},
       "club": "AVL",
       "content_hash": "9c7825becb8ff42f8c499d57fe8c1093bd5159607ffeacf1c5ac976ec67ff3f9",
-      "documents": 0,
-      "etag": "\"bee3e2ccb87a90cefbf127ac1806b10c\"",
+      "documents": 1,
+      "etag": "\"8d292845d13e306dc64bbfe4889a0b28\"",
       "id": "avl-news",
-      "last_modified": "Fri, 23 Oct 2026 02:06:46 GMT",
+      "last_modified": "Sat, 24 Oct 2026 02:06:45 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Aston Villa",
       "status": "no_articles",
@@ -72,7 +72,7 @@
       "article_validators": {},
       "club": "BRE",
       "content_hash": "e5d6a4f5b91521c59112c5c997b9e27246947de2b2109ac1593971c9f84686d7",
-      "documents": 1,
+      "documents": 0,
       "id": "bre-news",
       "last_modified": "Fri, 23 Oct 2026 22:23:09 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -98,10 +98,10 @@
       "article_validators": {},
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
-      "documents": 0,
-      "etag": "\"e248ad787b1fba6123d00edab9ebeaec\"",
+      "documents": 1,
+      "etag": "\"8a8ffb001582639fdf875f66571a27a0\"",
       "id": "cov-news",
-      "last_modified": "Fri, 23 Oct 2026 02:07:20 GMT",
+      "last_modified": "Sat, 24 Oct 2026 02:07:13 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Coventry City",
       "status": "no_articles",
@@ -124,20 +124,20 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.evertonfc.com/news/2026/october/23/Moyes-Talks-Team-News---Norgaard-Fitness-Ahead-Of-Arsenal-Trip/": {
-          "etag": "W/\"BOP6rWkxXt\"",
-          "last_modified": "Fri, 23 Oct 2026 22:21:17 GMT"
+          "etag": "W/\"mnlxfWISXS\"",
+          "last_modified": "Sat, 24 Oct 2026 06:01:02 GMT"
         },
         "https://www.evertonfc.com/news/2026/october/23/watch-moyes--press-conference--1-30pm-bst----follow-live-blog/": {
-          "etag": "W/\"hUqNlVKKjK\"",
-          "last_modified": "Fri, 23 Oct 2026 22:22:22 GMT"
+          "etag": "W/\"YqKOGwgAWW\"",
+          "last_modified": "Sat, 24 Oct 2026 06:00:14 GMT"
         }
       },
       "club": "EVE",
-      "content_hash": "7be1e29d3bfa6f43a16420babe27e98a9fe7a4f5c015b53694c4d8077a849011",
+      "content_hash": "f718b92170c6eba059cf5016632c455497a7f5f33a00dd7bcf298c14d9d097e5",
       "documents": 3,
-      "etag": "W/\"sopsCv5QQt\"",
+      "etag": "W/\"gOPM70yS2m\"",
       "id": "eve-news",
-      "last_modified": "Fri, 23 Oct 2026 22:21:15 GMT",
+      "last_modified": "Sat, 24 Oct 2026 06:00:35 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Everton",
       "status": "ok",
@@ -148,7 +148,7 @@
       "article_validators": {},
       "club": "FUL",
       "content_hash": "8408c6124d807047950e21e167dbc0c906db562bac8f712424e2d6e68d53383b",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"916911701453e45cf9ae14e2d809fa88\"",
       "id": "ful-news",
       "last_modified": "Fri, 23 Oct 2026 13:59:21 GMT",
@@ -163,9 +163,9 @@
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
       "documents": 1,
-      "etag": "\"df3fb898b6f196d0956190f56f3d873e\"",
+      "etag": "\"a66ce4723439a7f31c9f23111f301145\"",
       "id": "hul-news",
-      "last_modified": "Fri, 23 Oct 2026 14:27:53 GMT",
+      "last_modified": "Sat, 24 Oct 2026 02:08:24 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Hull City",
       "status": "no_articles",
@@ -173,25 +173,16 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {
-        "https://www.itfc.co.uk/news/2026/october/22/matchday-guide---nottingham-forest--h-/": {
-          "etag": "\"017fdd566e3871a402223d7797fbbb69\"",
-          "last_modified": "Fri, 23 Oct 2026 18:12:14 GMT"
-        },
-        "https://www.itfc.co.uk/news/2026/october/23/team-news---nottingham-forest--h-/": {
-          "etag": "\"232ab3d0c4abfe2e7219dbb59a991e01\"",
-          "last_modified": "Fri, 23 Oct 2026 18:12:14 GMT"
-        }
-      },
+      "article_validators": {},
       "club": "IPS",
-      "content_hash": "db28e1b300c7b460dacd3661deb5f32f42b2a2ed4039dd4a6ce975325932a13e",
-      "documents": 3,
-      "etag": "\"137dcd991942d0090402fd08687d3e2b\"",
+      "content_hash": "2762daecac7a078a6d98bf23c84820e539c0a9e2e2ed28fe57d0741a3e833b4a",
+      "documents": 1,
+      "etag": "\"f935a77a13f852dcc78de3baf4adddd9\"",
       "id": "ips-news",
-      "last_modified": "Fri, 23 Oct 2026 21:02:28 GMT",
+      "last_modified": "Sat, 24 Oct 2026 02:13:15 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
-      "status": "ok",
+      "status": "no_articles",
       "url": "https://www.itfc.co.uk/news/"
     },
     {
@@ -201,10 +192,10 @@
         "https://www.leedsunited.com/en/news/sunderland-vs-leeds-united-team-news-key-stats-and-everything-you-need-to-know": {}
       },
       "club": "LEE",
-      "content_hash": "e264d23e85ae3e01d22c43933cd4da5410e286a875b2ffbf09656d497233664d",
+      "content_hash": "4921165c967f782be686e838ad3ca3782d39b9f64a29af852dde92056398fc0c",
       "documents": 3,
       "id": "lee-news",
-      "last_modified": "Fri, 23 Oct 2026 22:23:11 GMT",
+      "last_modified": "Sat, 24 Oct 2026 05:07:46 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -221,7 +212,7 @@
       },
       "club": "LIV",
       "content_hash": "367863c76f78372edb0b09a26c04c93e31f8d36fa60e55e382785513d484ab3b",
-      "documents": 6,
+      "documents": 5,
       "id": "liv-news",
       "last_modified": "Fri, 23 Oct 2026 18:49:18 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -232,12 +223,15 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/news/mens/aston-villa-v-city-match-preview-pl-24-oct-63928096": {}
+        "https://www.mancity.com/news/mens/aston-villa-v-city-match-preview-pl-24-oct-63928096": {
+          "last_modified": "Sat, 24 Oct 2026 05:45:04 GMT"
+        }
       },
       "club": "MCI",
-      "content_hash": "3982d0cee62cfc17377a45db2c38f5d911803c7b3bbdbb731f671fe24d729214",
+      "content_hash": "34f15bede7722a9526b0fa085063af8266ec7f80c3bec2b21540ff03a52e853c",
       "documents": 2,
       "id": "mci-news",
+      "last_modified": "Sat, 24 Oct 2026 05:54:01 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
       "status": "ok",
@@ -270,7 +264,7 @@
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-elanga-and-ramsey-latest-ahead-of-palace-trip": {}
       },
       "club": "NEW",
-      "content_hash": "34fcfad5eb060f4f17922d4ddc6151ad8402a85d5df9b234bb3428f0955e3742",
+      "content_hash": "604656bf8e096a0a2a54592e0c495cb4b9c4d97a558005d1507ff1609f36c267",
       "documents": 2,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -284,9 +278,9 @@
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
       "documents": 1,
-      "etag": "\"e08538fe96087b0d0498921590a3e8fd\"",
+      "etag": "\"309c1915e95634d41e8f6603d4f21f42\"",
       "id": "nfo-news",
-      "last_modified": "Fri, 23 Oct 2026 21:06:00 GMT",
+      "last_modified": "Sat, 24 Oct 2026 02:06:07 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -297,10 +291,10 @@
       "article_validators": {},
       "club": "SUN",
       "content_hash": "83ec15aaae3409e9a938b70f4d73928762d5e0ab7390b0daee6538811cc6d630",
-      "documents": 0,
-      "etag": "\"64735e9f83fbc10a988ece3c3fd395ec\"",
+      "documents": 1,
+      "etag": "\"f95904e2907587153aaa336a3210cac8\"",
       "id": "sun-news",
-      "last_modified": "Fri, 23 Oct 2026 08:58:12 GMT",
+      "last_modified": "Sat, 24 Oct 2026 02:03:59 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Sunderland",
       "status": "no_articles",
