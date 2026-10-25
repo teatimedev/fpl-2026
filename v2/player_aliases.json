@@ -6151,6 +6151,15 @@
       "canonical": "Tymur Tutierov",
       "club": "SUN",
       "player_id": 668
+    },
+    {
+      "aliases": [
+        "Sharman-Lowe",
+        "Teddy Sharman-Lowe"
+      ],
+      "canonical": "Teddy Sharman-Lowe",
+      "club": "CHE",
+      "player_id": 669
     }
   ],
   "version": 1
