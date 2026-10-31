@@ -17,8 +17,9 @@ def validate_public_picks(payload, expected_gw=None):
         if sum(bool(p.get(flag)) for p in picks) != 1:
             raise ValueError(f'Public picks have no unique {flag}')
     armbands = [next(p for p in picks if p.get(flag)) for flag in ('is_captain', 'is_vice_captain')]
-    if armbands[0]['element'] == armbands[1]['element'] or any(p['position'] > 11 for p in armbands):
-        raise ValueError('Captain and vice must be distinct starting players')
+    # Finished-gameweek picks reflect auto-subs, so an armband can sit on the bench.
+    if armbands[0]['element'] == armbands[1]['element']:
+        raise ValueError('Captain and vice must be distinct players')
     if expected_gw is not None and payload.get('entry_history', {}).get('event') != expected_gw:
         raise ValueError('Public picks belong to a different gameweek')
 

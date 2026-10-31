@@ -1,0 +1,97 @@
+{
+ "generated": "2026-10-31T11:04:47+00:00",
+ "source": "deadline snapshots GW1–7, minutes through GW8, price log 46 snapshots",
+ "note": "availability: multiplier on fitness k gameweeks after an undated FPL flag (beyond the last entry the gap closes geometrically); price_drop: expected £m lost k weeks after the deadline (held flat beyond the last entry).",
+ "availability": {
+  "i": [
+   0.185,
+   0.3,
+   0.38,
+   0.38
+  ],
+  "d": [
+   0.697,
+   0.768,
+   0.768,
+   0.881
+  ]
+ },
+ "tail_rate": {
+  "i": 0.913,
+  "d": 0.732
+ },
+ "price_drop": {
+  "i": [
+   0.04,
+   0.062,
+   0.074,
+   0.083
+  ],
+  "d": [
+   0.027,
+   0.052,
+   0.063,
+   0.071
+  ]
+ },
+ "report": {
+  "i": {
+   "per_k": {
+    "1": "16/100",
+    "2": "21/85",
+    "3": "19/63",
+    "4": "13/44"
+   },
+   "fit_per_k": {
+    "1": "1241/1432",
+    "2": "1018/1238",
+    "3": "836/1053",
+    "4": "668/860"
+   },
+   "curve": [
+    0.185,
+    0.3,
+    0.38,
+    0.38
+   ],
+   "holdout_curve": [
+    0.11,
+    0.196,
+    0.245,
+    0.368
+   ],
+   "holdout_brier_new": 0.2129,
+   "holdout_brier_old": 0.5385,
+   "holdout_n": 164
+  },
+  "d": {
+   "per_k": {
+    "1": "32/53",
+    "2": "24/38",
+    "3": "11/24",
+    "4": "13/19"
+   },
+   "fit_per_k": {
+    "1": "1241/1432",
+    "2": "1018/1238",
+    "3": "836/1053",
+    "4": "668/860"
+   },
+   "curve": [
+    0.697,
+    0.768,
+    0.768,
+    0.881
+   ],
+   "holdout_curve": [
+    0.534,
+    0.797,
+    0.83,
+    0.952
+   ],
+   "holdout_brier_new": 0.2672,
+   "holdout_brier_old": 0.3135,
+   "holdout_n": 90
+  }
+ }
+}

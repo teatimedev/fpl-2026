@@ -207,6 +207,46 @@ for `role_change` — it stays a flag, never an input. 2022/23 is skipped
   the recency rule the same move is +4.1 on the pitch over the window but
   acting now rather than next week is worth +1.0 — hold, Gvardiol queued.
 
+## 0.2 Injuries, forced sales and the churn bar — 2026-10-31
+
+GW9 exposed two policy errors. The squad held four dead players (João Pedro
+and Saka "Unknown return date", Szoboszlai 50%, Obi on loan since 14 Sep) and
+the digest recommended Szoboszlai→Gomez, Obi→Kostoulas, keeping the other two.
+
+**Undated flags expired at the deadline.** `status_for_gameweek` returned `a`
+for every later gameweek, so an "Unknown return date" injury was projected
+fully fit the following week. Measured on this season's deadline snapshots
+(`v2/injury_recovery.py`, regulars with baseline start ≥ 0.6; ratio is the
+flagged play rate over the fit-regular play rate at the same horizon):
+
+| flag at deadline | GW+1 | GW+2 | GW+3 | GW+4 | n (GW+1) |
+|---|---|---|---|---|---|
+| `i` injured | 0.185 | 0.30 | 0.38 | 0.38 | 100 |
+| `d` doubtful | 0.70 | 0.77 | 0.77 | 0.88 | 53 |
+
+Holdout (fit GW1–4 deadlines, score GW5–8 on "plays in GW n+k"): Brier 0.213
+vs 0.539 with no decay for `i`, 0.267 vs 0.314 for `d`. Production now
+multiplies fitness by this curve for undated flags (`recovery_probability`,
+frozen in `v2/recovery.json`; beyond GW+4 the gap closes geometrically). Dated
+absences keep their exact handling. Saka's GW10–15 projection went 32.9 → 10.9,
+João Pedro's 23.5 → 6.6. Refit with `python v2/injury_recovery.py` as
+snapshots accumulate; it refuses to write a curve that loses on holdout.
+
+**Value leak.** Owned (≥ 2%) flagged players lose £0.04m a week injured
+(£0.08m by four weeks), £0.03m doubtful (`data/price_log`, 46 snapshots).
+The planner now charges that against the budget when a flagged owner is sold
+later rather than now. Real but small — about a tenth over three weeks.
+
+**The churn bar charged forced sales.** `HOLD_THRESHOLD` (2.0 per move,
+unvalidated) applied to every move, so the four-move clear-out (+7.65 over
+holding) needed +8.0. The hold path already re-plans with the banked
+transfers, so the bar is the value of waiting a week for information before a
+judgement call — which does not exist when the news has arrived. `move_bar()`
+now exempts outgoing players with a deadline-week appearance chance below 0.5,
+and one move when the bank is full. Discretionary moves keep 2.0 until a
+policy-level replay can tune it (§5). The weekly also tests a "clear
+unavailable" path (`plan(..., must_sell=...)`) alongside the unconstrained solve.
+
 ## 1. How learning works today
 
 ### 1.1 The refresh cadence (what "each week" means)

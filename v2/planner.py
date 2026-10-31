@@ -19,7 +19,9 @@ next deadline, and solves the whole modelled window as one integer program:
   subject to  budget, 2/5/5/3, max 3 per club, a legal XI, and FPL's
               free-transfer accounting (one a week, bank up to five)
 
-Assumptions worth knowing: prices are held static across the window. Supply
+Assumptions worth knowing: prices are held static across the window, except
+that an owned player carrying an injured/doubtful flag sells for less the
+longer he is kept (the measured drift in v2/recovery.json). Supply
 sell_prices for initially owned players to account for the profit lost on
 their first sale; later repurchases cost the full current price. Without
 sell_prices, the legacy current-price budget is used. wildcard_week models one wildcard gameweek:
@@ -33,6 +35,7 @@ import math
 
 import pulp
 
+from availability import expected_price_drop
 from squad_evaluator import evaluate_squad, modelled_bench_weights
 
 SQUAD = {'GKP': 2, 'DEF': 5, 'MID': 5, 'FWD': 3}
@@ -41,6 +44,26 @@ XI_MAX = {'GKP': 1, 'DEF': 5, 'MID': 5, 'FWD': 3}
 HIT = 4.0
 MAX_BANK = 5
 POOL = 120
+
+
+def value_leak(P, owned, discounts, GW, gw):
+    """{player: {gw: tenths lost by selling before that deadline}} for flagged owners.
+
+    A flagged player's price drifts down while owners sell. A drop passes
+    straight into the sale price when he shows no profit, and about half of it
+    when he does (FPL keeps half of any rise, rounded down).
+    """
+    leak = {}
+    for i in owned:
+        p = P.get(i)
+        if not p or p.get('status') not in {'i', 'd'}:
+            continue
+        share = 0.5 if i in discounts else 1.0
+        weeks = {g: 10 * share * expected_price_drop(p['status'], g - gw, news=p.get('news', ''))
+                 for g in GW}
+        if any(weeks.values()):
+            leak[i] = weeks
+    return leak
 
 
 def transfer_ledger(ft, moves, gw, wildcard=False):
@@ -104,13 +127,15 @@ def _pool(players, owned, gw, horizon):
 
 def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
          freeze_this_week=False, time_limit=30, wildcard_week=None, sell_prices=None,
-         first_week_squad=None):
+         first_week_squad=None, must_sell=()):
     """Optimal transfer path from `owned` over GW gw..horizon.
 
     `ft` is the number of free transfers available at the coming deadline
     (before Gameweek 1 pass 15: everything is free). `freeze_this_week`
     forbids any transfer before the coming deadline — solve both and the
     difference is what using the transfer now is worth versus holding it.
+    `must_sell` lists owned players who must be gone by the coming deadline
+    (a forced clear-out the solver still chooses the replacements for).
     Set `wildcard_week` to a gameweek inside the window to model playing the
     wildcard chip that week: unlimited free transfers at no point cost, and
     per FPL's chip rules the free-transfer bank is neither spent nor gained
@@ -151,6 +176,7 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
             raise ValueError('selling price must be between zero and current price')
         if sale < price[i]:
             discounts[i] = price[i] - sale
+    leak = value_leak(P, owned, discounts, GW, gw)
     seed = [P[i] for i in owned if i in P]
     bench_weights = {g: modelled_bench_weights(seed or pool, g) for g in GW}
 
@@ -185,6 +211,9 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
     if first_week_squad is not None:
         for i in ids:
             prob += x[(i, gw)] == int(i in first_week_squad)
+    for i in must_sell or ():
+        if i in P:
+            prob += x[(i, gw)] == 0
 
     for g in GW:
         prob += pulp.lpSum(x[(i, g)] for i in ids) == 15
@@ -192,6 +221,7 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
             prob += pulp.lpSum(x[(i, g)] for i in ids if P[i]['pos'] == pos) == n
         prob += (pulp.lpSum(x[(i, g)] * price[i] for i in ids)
                  + pulp.lpSum(discounts[i] * (1-retained[(i, g)]) for i in discounts)
+                 + pulp.lpSum(tout[(i, s)] * leak[i][s] for i in leak for s in GW if s <= g)
                  <= budget)
         for club in {p['team'] for p in pool}:
             prob += pulp.lpSum(x[(i, g)] for i in ids if P[i]['team'] == club) <= 3

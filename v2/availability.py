@@ -79,6 +79,59 @@ def status_for_gameweek(status, gw, deadline_gw, *, news="", gw_deadline=None,
     return "a"
 
 
+DEFAULT_RECOVERY = HERE / "recovery.json"
+_RECOVERY_CACHE = {}
+
+
+def _recovery_curve(path=DEFAULT_RECOVERY):
+    path = Path(path)
+    if path not in _RECOVERY_CACHE:
+        data = json.loads(path.read_text()) if path.exists() else {}
+        _RECOVERY_CACHE[path] = (data.get("availability") or {}, data.get("tail_rate") or {})
+    return _RECOVERY_CACHE[path]
+
+
+def recovery_probability(status, gw, deadline_gw, *, news="", path=DEFAULT_RECOVERY):
+    """Fitness k gameweeks after an undated injured/doubtful deadline flag.
+
+    status_for_gameweek expires these flags at the deadline; on its own that
+    projects an "Unknown return date" injury fully fit the following week.
+    The measured curve (v2/injury_recovery.py) is the probability of playing
+    relative to a fit regular, k gameweeks on. Dated absences keep their
+    exact handling and are never decayed here.
+    """
+    if gw <= deadline_gw or status not in {"i", "d"} or _dated_return(news):
+        return 1.0
+    curves, tails = _recovery_curve(path)
+    curve = curves.get(status)
+    if not curve:
+        return 1.0
+    k = gw - deadline_gw
+    if k <= len(curve):
+        return _clamp_probability(curve[k - 1])
+    gap = (1.0 - curve[-1]) * float(tails.get(status, 0.5)) ** (k - len(curve))
+    return _clamp_probability(1.0 - gap)
+
+
+def expected_price_drop(status, weeks, *, news="", path=DEFAULT_RECOVERY):
+    """£m a flagged player is expected to lose `weeks` after the deadline.
+
+    Dated absences drift too (owners still sell), so the date is not an
+    exemption here. Held flat beyond the measured horizon.
+    """
+    if weeks <= 0 or status not in {"i", "d"}:
+        return 0.0
+    path = Path(path)
+    key = ("price", path)
+    if key not in _RECOVERY_CACHE:
+        data = json.loads(path.read_text()) if path.exists() else {}
+        _RECOVERY_CACHE[key] = data.get("price_drop") or {}
+    curve = _RECOVERY_CACHE[key].get(status)
+    if not curve:
+        return 0.0
+    return max(0.0, float(curve[min(weeks, len(curve)) - 1]))
+
+
 def deadline_start_probability(base_start, status, chance=None, news=""):
     """Apply FPL's next-round flag without contaminating later gameweeks."""
     base_start = _clamp_probability(base_start)

@@ -29,8 +29,17 @@ def test_wrong_gameweek_or_illegal_armbands_cannot_be_used_as_current_picks():
     payload = picks()
     payload['picks'][0]['is_vice_captain'] = True
     payload['picks'][1]['is_vice_captain'] = False
-    with pytest.raises(ValueError, match='distinct starting'):
+    with pytest.raises(ValueError, match='distinct players'):
         validate_public_picks(payload)
+
+
+def test_auto_subbed_vice_on_the_bench_is_still_valid_picks():
+    # GW8 2026/27: Saka was vice, did not play and was auto-subbed to position
+    # 13; the finished gameweek's picks then blocked every refresh for days.
+    payload = picks()
+    payload['picks'][1]['is_vice_captain'] = False
+    payload['picks'][12]['is_vice_captain'] = True
+    validate_public_picks(payload)
 
 
 def test_weekly_outage_cannot_fall_back_to_an_old_squad_or_assume_one_ft(monkeypatch):

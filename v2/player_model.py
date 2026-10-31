@@ -124,6 +124,7 @@ from availability import (  # noqa: E402
     availability_forecast,
     deadline_start_probability,
     load_overrides,
+    recovery_probability,
     status_for_gameweek,
 )
 # Importing statistical helpers must not access a live calendar. Production
@@ -764,7 +765,8 @@ def project(players, view, priors, refit_calibration=False, feedback=False):
             def deadline_forecast(rate):
                 fit_probability = (deadline_start_probability(
                     1.0, effective_status, p['chance'], p['news']
-                ) if effective_status != 'a' else 1.0)
+                ) if effective_status != 'a' else recovery_probability(
+                    p['status'], gw, START_GW, news=p['news']))
                 return availability_forecast(
                     player_id=p['id'], gw=gw, base_start=rate,
                     base_start_minutes=mps, position=pos, status=effective_status,

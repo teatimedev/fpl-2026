@@ -88,18 +88,47 @@ POS_ORDER = ('GKP', 'DEF', 'MID', 'FWD')
 HIT = 4.0
 MAX_FT = 5
 HOLD_THRESHOLD = 2.0     # unvalidated uncertainty buffer, not an FT cost
+FORCED_PLAY = 0.5        # deadline-week appearance chance below which a sale is forced
 
 
-def worth_rebuilding(diff, n_moves):
+def forced_out(player, gw):
+    """Whether selling this player is a response to news, not a judgement call."""
+    player = player or {}
+    play = player.get('play_by_gw') or []
+    if 0 <= gw - 1 < len(play):
+        return play[gw - 1] < FORCED_PLAY
+    return player.get('status') in {'i', 'u', 's'}
+
+
+def move_bar(outs, players, gw, ft):
+    """What a path must beat holding by: HOLD_THRESHOLD per judgement-call move.
+
+    The planner's hold path already re-plans with the banked transfers, so the
+    bar is not the value of a transfer; it is the value of waiting a week for
+    more information before a discretionary swap. Neither applies to selling a
+    player with no likely route to minutes this week (the news has arrived), nor
+    to the one move a full bank of five would otherwise forfeit.
+    GW9 2026/27: four moves clearing out three dead players needed +8.0 and
+    were rejected at +7.7.
+    """
+    discretionary = sum(not forced_out(players.get(i), gw) for i in outs)
+    if ft >= MAX_FT and discretionary:
+        discretionary -= 1
+    return HOLD_THRESHOLD * discretionary
+
+
+def worth_rebuilding(diff, n_moves, bar=None):
     """Only overturn a settled squad when the gain clears churn per move.
 
     Unlimited transfers remove the points cost, not the uncertainty and
-    decision cost of replacing most of a confirmed squad.
+    decision cost of replacing most of a confirmed squad. `bar` defaults to
+    HOLD_THRESHOLD per move; move_bar() exempts forced and use-or-lose moves.
     """
-    return n_moves > 0 and diff >= HOLD_THRESHOLD * n_moves
+    bar = HOLD_THRESHOLD * n_moves if bar is None else bar
+    return n_moves > 0 and diff > 0 and diff >= bar
 
 
-def choose_plan(paths, hold):
+def choose_plan(paths, hold, bar=None):
     """Apply the policy to each exact-scored path, always including hold.
 
     A solver optimises a linear bench proxy; rescoring can reverse its
@@ -118,9 +147,10 @@ def choose_plan(paths, hold):
         week = path['weeks'][0]
         n = len(week['in'])
         gain = score(path) - baseline
-        qualifies = worth_rebuilding(gain, n)
+        required = HOLD_THRESHOLD * n if bar is None else bar(week)
+        qualifies = worth_rebuilding(gain, n, required)
         comparisons.append(dict(source=label, status='scored', total=score(path),
-                                gain=gain, n_now=n, move_bar=HOLD_THRESHOLD * n,
+                                gain=gain, n_now=n, move_bar=required,
                                 qualifies=qualifies, in_=week['in'], out=week['out']))
         if qualifies:
             eligible.append(path)
@@ -1233,7 +1263,7 @@ def main():
                          f'{best["in_"]["name"]} ({best["gain"]:+.1f}).')
                 P.append(f'Use a FT (you have {ft}): {best["out"]["name"]}→'
                          f'{best["in_"]["name"]} {best["gain"]:+.1f}')
-            elif pitch['xi_gain'] < HOLD_THRESHOLD:
+            elif pitch['xi_gain'] < max(move_bar([pitch['out']['id']], players, gw, ft), 1e-9):
                 # Judged on the pitch (XI + captain). Auto-sub cover is real
                 # expectation, but it is the bench playing more because the
                 # newcomer sits — buying a rotation risk so the bench mops up
@@ -1369,7 +1399,15 @@ def main():
                                          sell_prices=sell_prices,
                                          first_week_squad=first_squad, time_limit=15)
                         paths.append((label, candidate))
-                    free, hold, comparisons = choose_plan(paths, hold)
+                    # The unconstrained solve weighs every dead player against
+                    # the bar on its own; also test clearing them all at once.
+                    dead = [i for i in ids if forced_out(players.get(i), gw)]
+                    if dead:
+                        paths.append(('clear unavailable', plan(
+                            players, ids, bank, ft, gw, horizon, sell_prices=sell_prices,
+                            must_sell=dead, time_limit=15)))
+                    free, hold, comparisons = choose_plan(
+                        paths, hold, bar=lambda week: move_bar(week['out'], players, gw, ft))
                     free_source = 'hold path' if free is hold else 'compared action paths'
                 if args.chips and free and ft < 15 and gw >= 2:
                     # What a wildcard would add: unlimited moves ONLY in the
@@ -1391,15 +1429,18 @@ def main():
                     # transfers remove the points cost, not the uncertainty of
                     # overturning a settled and manually confirmed squad.
                     unlimited = ft >= 15
-                    worth_it = worth_rebuilding(diff, n_now)
+                    bar_now = (HOLD_THRESHOLD * n_now if unlimited
+                               else move_bar(free['weeks'][0]['out'], players, gw, ft))
+                    worth_it = worth_rebuilding(diff, n_now, bar_now)
                     J['plan'] = dict(total=free['total'], hold_total=hold['total'],
                                      solver=free.get('solver'), hold_solver=hold.get('solver'),
-                                     policy_status='Unvalidated 2-point-per-move heuristic',
+                                     policy_status='Unvalidated 2-point bar per judgement-call move; '
+                                                   'forced and use-or-lose moves exempt',
                                      candidates=comparisons,
                                      diff=round(diff, 1), hits=free['hits'],
                                      diff_unrounded=free.get('total_unrounded', free['total'])-hold.get('total_unrounded', hold['total']),
                                      n_now=n_now, worth_it=worth_it,
-                                     move_bar=round(HOLD_THRESHOLD * n_now, 1),
+                                     move_bar=round(bar_now, 1),
                                      weeks=[dict(gw=w['gw'], pts=w['pts'], hits=w['hits'],
                                                  captain=w['captain'], ft=w['ft'],
                                                  ft_next=w.get('ft_next'), ft_lost=w.get('ft_lost', 0),
@@ -1470,7 +1511,8 @@ def main():
                         action_kind = 'hold'
                         recommendation = (
                             '**Recommended: hold.** No transfer path tested beats '
-                            f'saving by the {HOLD_THRESHOLD:.1f}-point-per-move bar '
+                            f'saving by its bar ({HOLD_THRESHOLD:.1f} points per judgement-call move; '
+                            'selling an unavailable player needs no bar) '
                             f'over GW{gw}–{horizon}. '
                             + (f'You would have {ft + 1} free transfers next week.' if ft < MAX_FT else
                                'Your bank stays at five; holding forfeits the next weekly transfer. '
@@ -1483,17 +1525,17 @@ def main():
                     if this_week_sim:
                         wins = this_week_sim['p_b_wins'] * 100
                         mean_delta = this_week_sim['mean_delta']
-                        move_bar = HOLD_THRESHOLD * n_now
-                        if wins >= 60 and mean_delta >= move_bar:
+                        move_bar_now = bar_now
+                        if wins >= 60 and mean_delta >= move_bar_now:
                             interpretation = (
                                 f'The advantage is both likely and large enough to clear '
-                                f'the {move_bar:.1f}-point bar for {n_now} move'
+                                f'the {move_bar_now:.1f}-point bar for {n_now} move'
                                 f'{"s" if n_now != 1 else ""}.'
                             )
                         elif wins >= 60 and mean_delta > 0:
                             interpretation = (
                                 f'There is probably a points edge, but its {mean_delta:+.1f} '
-                                f'average does not clear the {move_bar:.1f}-point bar for '
+                                f'average does not clear the {move_bar_now:.1f}-point bar for '
                                 f'spending {n_now} transfer{"s" if n_now != 1 else ""} now.'
                             )
                         else:
