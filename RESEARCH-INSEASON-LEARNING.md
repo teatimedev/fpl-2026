@@ -247,6 +247,38 @@ and one move when the bank is full. Discretionary moves keep 2.0 until a
 policy-level replay can tune it (§5). The weekly also tests a "clear
 unavailable" path (`plan(..., must_sell=...)`) alongside the unconstrained solve.
 
+## 0.3 Season replay: the churn bar, measured — 2026-10-31
+
+`v2/season_replay.py` replays 2023/24–2025/26 deadline by deadline: as-of
+projections (recency minutes, shrinkage rates, preseason Dixon-Coles, club
+fixture lists), the production planner and `choose_plan()`, real prices and
+selling rule, the production lineup search, real points with auto-subs. No
+news, no chips, calibration k = 1, today's five-FT bank rule throughout.
+
+| policy (bar per judgement-call move) | 2023/24 | 2024/25 | 2025/26 | total | moves | hits |
+|---|---|---|---|---|---|---|
+| **0** | **2216** | **2194** | 2135 | **6545** | 128 | 17 |
+| 1 | 2164 | 2084 | **2231** | 6479 | 112 | 6 |
+| 2 (production until today) | 2182 | 2084 | 2065 | 6331 | 97 | 2 |
+| 3 | 2195 | 2141 | 2094 | 6430 | 81 | 1 |
+| never transfer | 1975 | 1764 | 1937 | 5676 | 0 | 0 |
+
+Paired over 114 gameweeks against bar 2: bar 0 +71 pts/season (± 30 s.e.),
+bar 1 +49 (± 30), bar 3 +33 (± 35), never −218 (± 54). Bar 0 beats bar 2 in
+all three seasons (+34, +110, +70). The weekly s.e. ignores path dependence
+between weeks, so it is optimistic; the sign is not in doubt, the size is.
+The non-monotonic 3 > 2 is that noise. Production `HOLD_THRESHOLD` is now 0:
+act on any path that beats holding. The planner's hold path already carries
+the value of banking, and the replay shows weekly re-solving captures the
+information a wait would buy. (The replay cannot see news; a policy that
+waits for a press conference is not testable here.)
+
+Bug found by the replay and fixed in production: a player changing clubs can
+leave four owned from one club, which made every path — holding included —
+infeasible under the planner's ≤ 3 constraint. The cap is now max(3, owned
+from that club). Each policy-season takes ~25 min (HiGHS, 20 s limit); the
+full grid runs in about an hour on 10 cores.
+
 ## 1. How learning works today
 
 ### 1.1 The refresh cadence (what "each week" means)

@@ -104,3 +104,17 @@ class MustSellTests(unittest.TestCase):
         result = plan(players, owned, 0, 2, 4, 5, must_sell=[8])
         self.assertNotIn(8, result['weeks'][0]['squad'])
         self.assertIn(16, result['weeks'][0]['squad'])
+
+
+class ClubMoveTests(unittest.TestCase):
+    def test_a_club_move_that_leaves_four_from_one_club_can_still_be_held(self):
+        from test_planner_selling_prices import pool
+        from planner import plan
+        players, owned = pool()
+        for pid in (1, 3, 4, 5):                 # four owned players now at T1
+            players[pid]['team'] = 'T1'
+        held = plan(players, owned, 0, 1, 4, 5, freeze_this_week=True)
+        self.assertIsNotNone(held)
+        players[16]['team'] = 'T1'               # but a fifth cannot be bought
+        moved = plan(players, owned, 0, 1, 4, 5)
+        self.assertNotIn(16, moved['weeks'][0]['squad'])

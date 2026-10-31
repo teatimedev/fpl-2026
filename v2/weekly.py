@@ -87,7 +87,10 @@ XI_MAX = {'GKP': 1, 'DEF': 5, 'MID': 5, 'FWD': 3}
 POS_ORDER = ('GKP', 'DEF', 'MID', 'FWD')
 HIT = 4.0
 MAX_FT = 5
-HOLD_THRESHOLD = 2.0     # unvalidated uncertainty buffer, not an FT cost
+# Churn bar per judgement-call move. Season replay (v2/season_replay.py, three
+# seasons, 114 paired gameweeks): bar 0 beat the old 2.0 by +71 pts/season
+# (±30 s.e.) and won every season; 1.0 +49, 3.0 +33. Data: data/season_replay.json.
+HOLD_THRESHOLD = 0.0
 FORCED_PLAY = 0.5        # deadline-week appearance chance below which a sale is forced
 
 
@@ -100,7 +103,7 @@ def forced_out(player, gw):
     return player.get('status') in {'i', 'u', 's'}
 
 
-def move_bar(outs, players, gw, ft):
+def move_bar(outs, players, gw, ft, per_move=None):
     """What a path must beat holding by: HOLD_THRESHOLD per judgement-call move.
 
     The planner's hold path already re-plans with the banked transfers, so the
@@ -114,7 +117,7 @@ def move_bar(outs, players, gw, ft):
     discretionary = sum(not forced_out(players.get(i), gw) for i in outs)
     if ft >= MAX_FT and discretionary:
         discretionary -= 1
-    return HOLD_THRESHOLD * discretionary
+    return (HOLD_THRESHOLD if per_move is None else per_move) * discretionary
 
 
 def worth_rebuilding(diff, n_moves, bar=None):
@@ -1434,8 +1437,8 @@ def main():
                     worth_it = worth_rebuilding(diff, n_now, bar_now)
                     J['plan'] = dict(total=free['total'], hold_total=hold['total'],
                                      solver=free.get('solver'), hold_solver=hold.get('solver'),
-                                     policy_status='Unvalidated 2-point bar per judgement-call move; '
-                                                   'forced and use-or-lose moves exempt',
+                                     policy_status=f'{HOLD_THRESHOLD:g}-point bar per judgement-call move '
+                                                   '(season replay, data/season_replay.json)',
                                      candidates=comparisons,
                                      diff=round(diff, 1), hits=free['hits'],
                                      diff_unrounded=free.get('total_unrounded', free['total'])-hold.get('total_unrounded', hold['total']),

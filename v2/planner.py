@@ -177,6 +177,12 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
         if sale < price[i]:
             discounts[i] = price[i] - sale
     leak = value_leak(P, owned, discounts, GW, gw)
+    # A player who changes clubs can leave you with four from one club. FPL
+    # lets you keep them; it only refuses transfers that add a fourth. Without
+    # this, holding (and so every path) is infeasible.
+    clubs = {p['team'] for p in pool if p.get('team') is not None}
+    club_cap = {club: max(3, sum(1 for i in owned if i in P and P[i]['team'] == club))
+                for club in clubs}
     seed = [P[i] for i in owned if i in P]
     bench_weights = {g: modelled_bench_weights(seed or pool, g) for g in GW}
 
@@ -223,8 +229,8 @@ def plan(players, owned, bank, ft, gw, horizon, allow_hits=True,
                  + pulp.lpSum(discounts[i] * (1-retained[(i, g)]) for i in discounts)
                  + pulp.lpSum(tout[(i, s)] * leak[i][s] for i in leak for s in GW if s <= g)
                  <= budget)
-        for club in {p['team'] for p in pool}:
-            prob += pulp.lpSum(x[(i, g)] for i in ids if P[i]['team'] == club) <= 3
+        for club in clubs:
+            prob += pulp.lpSum(x[(i, g)] for i in ids if P[i]['team'] == club) <= club_cap[club]
         prob += pulp.lpSum(y[(i, g)] for i in ids) == 11
         for pos in SQUAD:
             n = pulp.lpSum(y[(i, g)] for i in ids if P[i]['pos'] == pos)

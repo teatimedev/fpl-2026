@@ -1,0 +1,7030 @@
+{
+ "generated": "2026-10-31T12:48:37Z",
+ "window": 6,
+ "seasons": [
+  "2023/24",
+  "2024/25",
+  "2025/26"
+ ],
+ "results": [
+  {
+   "season": "2023/24",
+   "policy": "never transfer",
+   "total": 1975,
+   "transfers": 0,
+   "hits": 0,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 64,
+     "expected": 66.7,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 47,
+     "expected": 50.06,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 3,
+     "points": 53,
+     "expected": 60.03,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 4,
+     "points": 89,
+     "expected": 53.44,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 0
+    },
+    {
+     "gw": 5,
+     "points": 55,
+     "expected": 52.71,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 6,
+     "points": 79,
+     "expected": 73.3,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 7,
+     "points": 54,
+     "expected": 59.81,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 8,
+     "points": 36,
+     "expected": 52.14,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 9,
+     "points": 60,
+     "expected": 59.37,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 10,
+     "points": 68,
+     "expected": 59.71,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 11,
+     "points": 41,
+     "expected": 58.84,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 12,
+     "points": 45,
+     "expected": 60.63,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 13,
+     "points": 59,
+     "expected": 53.08,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 14,
+     "points": 48,
+     "expected": 63.98,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 15,
+     "points": 34,
+     "expected": 53.52,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 16,
+     "points": 29,
+     "expected": 54.84,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 17,
+     "points": 28,
+     "expected": 51.35,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 18,
+     "points": 38,
+     "expected": 43.49,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 19,
+     "points": 29,
+     "expected": 55.42,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 20,
+     "points": 35,
+     "expected": 52.01,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 21,
+     "points": 59,
+     "expected": 54.49,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 22,
+     "points": 47,
+     "expected": 52.66,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 23,
+     "points": 45,
+     "expected": 51.82,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 24,
+     "points": 98,
+     "expected": 51.62,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 25,
+     "points": 89,
+     "expected": 75.41,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 26,
+     "points": 37,
+     "expected": 52.27,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 27,
+     "points": 72,
+     "expected": 56.51,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 28,
+     "points": 36,
+     "expected": 55.43,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 29,
+     "points": 4,
+     "expected": 5.91,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 30,
+     "points": 43,
+     "expected": 51.94,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 31,
+     "points": 42,
+     "expected": 63.16,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 32,
+     "points": 65,
+     "expected": 45.57,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 33,
+     "points": 67,
+     "expected": 57.12,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 34,
+     "points": 91,
+     "expected": 87.85,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 35,
+     "points": 37,
+     "expected": 54.83,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 36,
+     "points": 73,
+     "expected": 58.08,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 37,
+     "points": 54,
+     "expected": 68.43,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 38,
+     "points": 25,
+     "expected": 56.66,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    }
+   ]
+  },
+  {
+   "season": "2024/25",
+   "policy": "never transfer",
+   "total": 1764,
+   "transfers": 0,
+   "hits": 0,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 58,
+     "expected": 57.76,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 67,
+     "expected": 68.41,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 3,
+     "points": 62,
+     "expected": 62.88,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 4,
+     "points": 63,
+     "expected": 63.46,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 0
+    },
+    {
+     "gw": 5,
+     "points": 54,
+     "expected": 45.22,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 6,
+     "points": 30,
+     "expected": 51.28,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 7,
+     "points": 42,
+     "expected": 55.67,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 8,
+     "points": 27,
+     "expected": 52.11,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 9,
+     "points": 50,
+     "expected": 56.33,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 10,
+     "points": 41,
+     "expected": 46.2,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 11,
+     "points": 57,
+     "expected": 52.93,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 12,
+     "points": 44,
+     "expected": 65.61,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 13,
+     "points": 53,
+     "expected": 47.83,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 14,
+     "points": 48,
+     "expected": 55.86,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 15,
+     "points": 48,
+     "expected": 51.04,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 16,
+     "points": 59,
+     "expected": 57.38,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 17,
+     "points": 48,
+     "expected": 57.66,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 18,
+     "points": 39,
+     "expected": 60.66,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 19,
+     "points": 45,
+     "expected": 52.01,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 20,
+     "points": 49,
+     "expected": 59.95,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 21,
+     "points": 48,
+     "expected": 53.97,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 22,
+     "points": 45,
+     "expected": 61.3,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 23,
+     "points": 65,
+     "expected": 57.21,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 24,
+     "points": 26,
+     "expected": 42.79,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 25,
+     "points": 41,
+     "expected": 56.87,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 26,
+     "points": 39,
+     "expected": 58.44,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 27,
+     "points": 39,
+     "expected": 48.15,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 28,
+     "points": 35,
+     "expected": 45.95,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 29,
+     "points": 42,
+     "expected": 42.12,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 30,
+     "points": 47,
+     "expected": 54.05,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 31,
+     "points": 34,
+     "expected": 45.23,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 32,
+     "points": 57,
+     "expected": 63.1,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 33,
+     "points": 38,
+     "expected": 65.23,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 34,
+     "points": 41,
+     "expected": 33.82,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 35,
+     "points": 53,
+     "expected": 39.22,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 36,
+     "points": 48,
+     "expected": 40.95,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 37,
+     "points": 42,
+     "expected": 37.68,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 38,
+     "points": 40,
+     "expected": 44.82,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    }
+   ]
+  },
+  {
+   "season": "2023/24",
+   "policy": "bar 0",
+   "total": 2216,
+   "transfers": 43,
+   "hits": 6,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 64,
+     "expected": 66.7,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 53,
+     "expected": 52.99,
+     "hits": 1,
+     "out": [
+      487117,
+      226597
+     ],
+     "in_": [
+      231065,
+      205533
+     ],
+     "ft_after": 1,
+     "bank": 10
+    },
+    {
+     "gw": 3,
+     "points": 48,
+     "expected": 65.05,
+     "hits": 0,
+     "out": [
+      447203
+     ],
+     "in_": [
+      461358
+     ],
+     "ft_after": 1,
+     "bank": 17
+    },
+    {
+     "gw": 4,
+     "points": 89,
+     "expected": 60.3,
+     "hits": 0,
+     "out": [
+      60307
+     ],
+     "in_": [
+      172780
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 5,
+     "points": 60,
+     "expected": 59.55,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 4
+    },
+    {
+     "gw": 6,
+     "points": 74,
+     "expected": 77.48,
+     "hits": 0,
+     "out": [
+      199798,
+      154561
+     ],
+     "in_": [
+      78916,
+      54738
+     ],
+     "ft_after": 1,
+     "bank": 7
+    },
+    {
+     "gw": 7,
+     "points": 65,
+     "expected": 69.94,
+     "hits": 0,
+     "out": [
+      451340
+     ],
+     "in_": [
+      243016
+     ],
+     "ft_after": 1,
+     "bank": 13
+    },
+    {
+     "gw": 8,
+     "points": 26,
+     "expected": 56.8,
+     "hits": 0,
+     "out": [
+      54738
+     ],
+     "in_": [
+      80201
+     ],
+     "ft_after": 1,
+     "bank": 11
+    },
+    {
+     "gw": 9,
+     "points": 75,
+     "expected": 69.38,
+     "hits": 1,
+     "out": [
+      172780,
+      141746
+     ],
+     "in_": [
+      482442,
+      118748
+     ],
+     "ft_after": 1,
+     "bank": 1
+    },
+    {
+     "gw": 10,
+     "points": 88,
+     "expected": 68.61,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 1
+    },
+    {
+     "gw": 11,
+     "points": 27,
+     "expected": 69.97,
+     "hits": 0,
+     "out": [
+      220237,
+      184029
+     ],
+     "in_": [
+      209244,
+      83299
+     ],
+     "ft_after": 1,
+     "bank": 5
+    },
+    {
+     "gw": 12,
+     "points": 61,
+     "expected": 64.28,
+     "hits": 0,
+     "out": [
+      209244
+     ],
+     "in_": [
+      451340
+     ],
+     "ft_after": 1,
+     "bank": 15
+    },
+    {
+     "gw": 13,
+     "points": 48,
+     "expected": 59.03,
+     "hits": 0,
+     "out": [
+      194010
+     ],
+     "in_": [
+      216051
+     ],
+     "ft_after": 1,
+     "bank": 8
+    },
+    {
+     "gw": 14,
+     "points": 54,
+     "expected": 68.02,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 8
+    },
+    {
+     "gw": 15,
+     "points": 31,
+     "expected": 57.61,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 8
+    },
+    {
+     "gw": 16,
+     "points": 59,
+     "expected": 60.05,
+     "hits": 0,
+     "out": [
+      482442,
+      205533
+     ],
+     "in_": [
+      230046,
+      102057
+     ],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 17,
+     "points": 46,
+     "expected": 55.98,
+     "hits": 0,
+     "out": [
+      451340,
+      83299
+     ],
+     "in_": [
+      226597,
+      232826
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 18,
+     "points": 45,
+     "expected": 54.42,
+     "hits": 1,
+     "out": [
+      243016,
+      223094
+     ],
+     "in_": [
+      205651,
+      85971
+     ],
+     "ft_after": 1,
+     "bank": 24
+    },
+    {
+     "gw": 19,
+     "points": 32,
+     "expected": 64.38,
+     "hits": 0,
+     "out": [
+      230046
+     ],
+     "in_": [
+      209244
+     ],
+     "ft_after": 1,
+     "bank": 3
+    },
+    {
+     "gw": 20,
+     "points": 73,
+     "expected": 59.68,
+     "hits": 0,
+     "out": [
+      216051
+     ],
+     "in_": [
+      58621
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 21,
+     "points": 57,
+     "expected": 59.06,
+     "hits": 0,
+     "out": [
+      205651
+     ],
+     "in_": [
+      447203
+     ],
+     "ft_after": 1,
+     "bank": 6
+    },
+    {
+     "gw": 22,
+     "points": 77,
+     "expected": 63.43,
+     "hits": 0,
+     "out": [
+      85971
+     ],
+     "in_": [
+      184029
+     ],
+     "ft_after": 1,
+     "bank": 18
+    },
+    {
+     "gw": 23,
+     "points": 47,
+     "expected": 57.14,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 18
+    },
+    {
+     "gw": 24,
+     "points": 58,
+     "expected": 62.14,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 18
+    },
+    {
+     "gw": 25,
+     "points": 87,
+     "expected": 90.28,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 18
+    },
+    {
+     "gw": 26,
+     "points": 60,
+     "expected": 58.05,
+     "hits": 1,
+     "out": [
+      102057,
+      447203,
+      58621,
+      116535,
+      118748
+     ],
+     "in_": [
+      171101,
+      69752,
+      178301,
+      230046,
+      223094
+     ],
+     "ft_after": 1,
+     "bank": 3
+    },
+    {
+     "gw": 27,
+     "points": 103,
+     "expected": 60.91,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 3
+    },
+    {
+     "gw": 28,
+     "points": 25,
+     "expected": 61.99,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 3
+    },
+    {
+     "gw": 29,
+     "points": 39,
+     "expected": 26.62,
+     "hits": 0,
+     "out": [
+      461358,
+      232826
+     ],
+     "in_": [
+      178186,
+      244042
+     ],
+     "ft_after": 2,
+     "bank": 4
+    },
+    {
+     "gw": 30,
+     "points": 40,
+     "expected": 59.58,
+     "hits": 0,
+     "out": [
+      178186,
+      231065
+     ],
+     "in_": [
+      220237,
+      244731
+     ],
+     "ft_after": 1,
+     "bank": 8
+    },
+    {
+     "gw": 31,
+     "points": 60,
+     "expected": 69.2,
+     "hits": 0,
+     "out": [
+      230046
+     ],
+     "in_": [
+      243016
+     ],
+     "ft_after": 1,
+     "bank": 6
+    },
+    {
+     "gw": 32,
+     "points": 58,
+     "expected": 50.27,
+     "hits": 1,
+     "out": [
+      171101,
+      178301
+     ],
+     "in_": [
+      447203,
+      216051
+     ],
+     "ft_after": 1,
+     "bank": 10
+    },
+    {
+     "gw": 33,
+     "points": 60,
+     "expected": 65.7,
+     "hits": 0,
+     "out": [
+      220237
+     ],
+     "in_": [
+      220362
+     ],
+     "ft_after": 1,
+     "bank": 6
+    },
+    {
+     "gw": 34,
+     "points": 82,
+     "expected": 96.33,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 6
+    },
+    {
+     "gw": 35,
+     "points": 41,
+     "expected": 65.4,
+     "hits": 0,
+     "out": [
+      447203,
+      244042
+     ],
+     "in_": [
+      461358,
+      165153
+     ],
+     "ft_after": 1,
+     "bank": 1
+    },
+    {
+     "gw": 36,
+     "points": 81,
+     "expected": 65.46,
+     "hits": 0,
+     "out": [
+      69752
+     ],
+     "in_": [
+      67089
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 37,
+     "points": 66,
+     "expected": 93.94,
+     "hits": 1,
+     "out": [
+      184029,
+      244731
+     ],
+     "in_": [
+      60307,
+      85971
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 38,
+     "points": 57,
+     "expected": 59.6,
+     "hits": 0,
+     "out": [
+      220362
+     ],
+     "in_": [
+      179268
+     ],
+     "ft_after": 1,
+     "bank": 4
+    }
+   ]
+  },
+  {
+   "season": "2023/24",
+   "policy": "bar 1",
+   "total": 2164,
+   "transfers": 39,
+   "hits": 2,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 64,
+     "expected": 66.7,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 53,
+     "expected": 52.99,
+     "hits": 1,
+     "out": [
+      487117,
+      226597
+     ],
+     "in_": [
+      231065,
+      205533
+     ],
+     "ft_after": 1,
+     "bank": 10
+    },
+    {
+     "gw": 3,
+     "points": 48,
+     "expected": 65.05,
+     "hits": 0,
+     "out": [
+      447203
+     ],
+     "in_": [
+      461358
+     ],
+     "ft_after": 1,
+     "bank": 17
+    },
+    {
+     "gw": 4,
+     "points": 84,
+     "expected": 59.47,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 17
+    },
+    {
+     "gw": 5,
+     "points": 54,
+     "expected": 61.77,
+     "hits": 0,
+     "out": [
+      60307,
+      154561
+     ],
+     "in_": [
+      444145,
+      54738
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 6,
+     "points": 74,
+     "expected": 78.5,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 4
+    },
+    {
+     "gw": 7,
+     "points": 60,
+     "expected": 68.57,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 4
+    },
+    {
+     "gw": 8,
+     "points": 26,
+     "expected": 54.13,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 4
+    },
+    {
+     "gw": 9,
+     "points": 69,
+     "expected": 62.0,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 4
+    },
+    {
+     "gw": 10,
+     "points": 91,
+     "expected": 67.78,
+     "hits": 0,
+     "out": [
+      220237,
+      223340,
+      444145,
+      116535,
+      141746
+     ],
+     "in_": [
+      446008,
+      101982,
+      226597,
+      243016,
+      118748
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 11,
+     "points": 40,
+     "expected": 72.54,
+     "hits": 0,
+     "out": [
+      184029
+     ],
+     "in_": [
+      209244
+     ],
+     "ft_after": 1,
+     "bank": 13
+    },
+    {
+     "gw": 12,
+     "points": 49,
+     "expected": 60.97,
+     "hits": 0,
+     "out": [
+      194010
+     ],
+     "in_": [
+      78916
+     ],
+     "ft_after": 1,
+     "bank": 11
+    },
+    {
+     "gw": 13,
+     "points": 39,
+     "expected": 58.63,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 11
+    },
+    {
+     "gw": 14,
+     "points": 60,
+     "expected": 71.91,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 11
+    },
+    {
+     "gw": 15,
+     "points": 29,
+     "expected": 56.89,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 11
+    },
+    {
+     "gw": 16,
+     "points": 47,
+     "expected": 58.73,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 11
+    },
+    {
+     "gw": 17,
+     "points": 29,
+     "expected": 58.18,
+     "hits": 0,
+     "out": [
+      446008,
+      78916,
+      101982,
+      205533,
+      451340
+     ],
+     "in_": [
+      223340,
+      102057,
+      244954,
+      535818,
+      80201
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 18,
+     "points": 36,
+     "expected": 54.93,
+     "hits": 1,
+     "out": [
+      243016,
+      223094
+     ],
+     "in_": [
+      205651,
+      85971
+     ],
+     "ft_after": 1,
+     "bank": 20
+    },
+    {
+     "gw": 19,
+     "points": 31,
+     "expected": 63.39,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 20
+    },
+    {
+     "gw": 20,
+     "points": 64,
+     "expected": 59.32,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 20
+    },
+    {
+     "gw": 21,
+     "points": 54,
+     "expected": 62.4,
+     "hits": 0,
+     "out": [
+      535818,
+      205651,
+      85971
+     ],
+     "in_": [
+      184029,
+      447203,
+      60307
+     ],
+     "ft_after": 1,
+     "bank": 24
+    },
+    {
+     "gw": 22,
+     "points": 77,
+     "expected": 64.99,
+     "hits": 0,
+     "out": [
+      244954
+     ],
+     "in_": [
+      58621
+     ],
+     "ft_after": 1,
+     "bank": 17
+    },
+    {
+     "gw": 23,
+     "points": 62,
+     "expected": 55.63,
+     "hits": 0,
+     "out": [
+      102057
+     ],
+     "in_": [
+      475168
+     ],
+     "ft_after": 1,
+     "bank": 14
+    },
+    {
+     "gw": 24,
+     "points": 77,
+     "expected": 62.68,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 14
+    },
+    {
+     "gw": 25,
+     "points": 98,
+     "expected": 88.05,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 14
+    },
+    {
+     "gw": 26,
+     "points": 60,
+     "expected": 57.81,
+     "hits": 0,
+     "out": [
+      447203,
+      58621,
+      118748
+     ],
+     "in_": [
+      230046,
+      223094,
+      106468
+     ],
+     "ft_after": 1,
+     "bank": 21
+    },
+    {
+     "gw": 27,
+     "points": 80,
+     "expected": 56.35,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 21
+    },
+    {
+     "gw": 28,
+     "points": 28,
+     "expected": 57.15,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 21
+    },
+    {
+     "gw": 29,
+     "points": 33,
+     "expected": 21.05,
+     "hits": 0,
+     "out": [
+      475168,
+      60307
+     ],
+     "in_": [
+      243016,
+      244042
+     ],
+     "ft_after": 2,
+     "bank": 35
+    },
+    {
+     "gw": 30,
+     "points": 56,
+     "expected": 57.99,
+     "hits": 0,
+     "out": [
+      231065,
+      230046
+     ],
+     "in_": [
+      220237,
+      244731
+     ],
+     "ft_after": 1,
+     "bank": 16
+    },
+    {
+     "gw": 31,
+     "points": 65,
+     "expected": 70.38,
+     "hits": 0,
+     "out": [
+      461358
+     ],
+     "in_": [
+      447203
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 32,
+     "points": 56,
+     "expected": 49.79,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 4
+    },
+    {
+     "gw": 33,
+     "points": 56,
+     "expected": 64.0,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 4
+    },
+    {
+     "gw": 34,
+     "points": 84,
+     "expected": 92.79,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 4
+    },
+    {
+     "gw": 35,
+     "points": 42,
+     "expected": 66.47,
+     "hits": 0,
+     "out": [
+      447203,
+      243016,
+      244042,
+      106468
+     ],
+     "in_": [
+      461358,
+      78916,
+      242898,
+      165153
+     ],
+     "ft_after": 1,
+     "bank": 2
+    },
+    {
+     "gw": 36,
+     "points": 86,
+     "expected": 63.65,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 2
+    },
+    {
+     "gw": 37,
+     "points": 69,
+     "expected": 87.64,
+     "hits": 0,
+     "out": [
+      220237,
+      184029
+     ],
+     "in_": [
+      83299,
+      60307
+     ],
+     "ft_after": 1,
+     "bank": 19
+    },
+    {
+     "gw": 38,
+     "points": 34,
+     "expected": 61.97,
+     "hits": 0,
+     "out": [
+      242898
+     ],
+     "in_": [
+      219847
+     ],
+     "ft_after": 1,
+     "bank": 1
+    }
+   ]
+  },
+  {
+   "season": "2023/24",
+   "policy": "bar 2",
+   "total": 2182,
+   "transfers": 33,
+   "hits": 1,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 64,
+     "expected": 66.7,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 53,
+     "expected": 52.99,
+     "hits": 1,
+     "out": [
+      487117,
+      226597
+     ],
+     "in_": [
+      231065,
+      205533
+     ],
+     "ft_after": 1,
+     "bank": 10
+    },
+    {
+     "gw": 3,
+     "points": 48,
+     "expected": 65.05,
+     "hits": 0,
+     "out": [
+      447203
+     ],
+     "in_": [
+      461358
+     ],
+     "ft_after": 1,
+     "bank": 17
+    },
+    {
+     "gw": 4,
+     "points": 84,
+     "expected": 59.47,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 17
+    },
+    {
+     "gw": 5,
+     "points": 61,
+     "expected": 57.69,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 17
+    },
+    {
+     "gw": 6,
+     "points": 74,
+     "expected": 77.7,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 17
+    },
+    {
+     "gw": 7,
+     "points": 62,
+     "expected": 63.63,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 17
+    },
+    {
+     "gw": 8,
+     "points": 27,
+     "expected": 53.85,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 17
+    },
+    {
+     "gw": 9,
+     "points": 69,
+     "expected": 62.0,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 17
+    },
+    {
+     "gw": 10,
+     "points": 74,
+     "expected": 69.13,
+     "hits": 0,
+     "out": [
+      220237,
+      223340,
+      116535,
+      141746,
+      194010
+     ],
+     "in_": [
+      78916,
+      101982,
+      226597,
+      243016,
+      118748
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 11,
+     "points": 33,
+     "expected": 67.32,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 4
+    },
+    {
+     "gw": 12,
+     "points": 51,
+     "expected": 62.05,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 4
+    },
+    {
+     "gw": 13,
+     "points": 47,
+     "expected": 56.19,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 4
+    },
+    {
+     "gw": 14,
+     "points": 57,
+     "expected": 68.02,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 4
+    },
+    {
+     "gw": 15,
+     "points": 37,
+     "expected": 55.61,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 4
+    },
+    {
+     "gw": 16,
+     "points": 54,
+     "expected": 56.96,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 4
+    },
+    {
+     "gw": 17,
+     "points": 45,
+     "expected": 53.75,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 4
+    },
+    {
+     "gw": 18,
+     "points": 56,
+     "expected": 55.26,
+     "hits": 0,
+     "out": [
+      205533,
+      451340,
+      243016,
+      223094,
+      154561
+     ],
+     "in_": [
+      223340,
+      102057,
+      80201,
+      205651,
+      85971
+     ],
+     "ft_after": 1,
+     "bank": 1
+    },
+    {
+     "gw": 19,
+     "points": 27,
+     "expected": 65.14,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 1
+    },
+    {
+     "gw": 20,
+     "points": 55,
+     "expected": 57.02,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 1
+    },
+    {
+     "gw": 21,
+     "points": 48,
+     "expected": 62.2,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 1
+    },
+    {
+     "gw": 22,
+     "points": 81,
+     "expected": 60.54,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 1
+    },
+    {
+     "gw": 23,
+     "points": 61,
+     "expected": 56.89,
+     "hits": 0,
+     "out": [
+      101982,
+      102057,
+      85971
+     ],
+     "in_": [
+      475168,
+      116535,
+      209244
+     ],
+     "ft_after": 3,
+     "bank": 4
+    },
+    {
+     "gw": 24,
+     "points": 71,
+     "expected": 60.5,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 4
+    },
+    {
+     "gw": 25,
+     "points": 76,
+     "expected": 81.26,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 4
+    },
+    {
+     "gw": 26,
+     "points": 65,
+     "expected": 56.43,
+     "hits": 0,
+     "out": [
+      116535,
+      205651,
+      118748
+     ],
+     "in_": [
+      69752,
+      230046,
+      223094
+     ],
+     "ft_after": 3,
+     "bank": 23
+    },
+    {
+     "gw": 27,
+     "points": 87,
+     "expected": 57.72,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 23
+    },
+    {
+     "gw": 28,
+     "points": 31,
+     "expected": 59.86,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 23
+    },
+    {
+     "gw": 29,
+     "points": 17,
+     "expected": 26.65,
+     "hits": 0,
+     "out": [
+      475168,
+      461358,
+      60307
+     ],
+     "in_": [
+      156700,
+      178301,
+      101178
+     ],
+     "ft_after": 3,
+     "bank": 4
+    },
+    {
+     "gw": 30,
+     "points": 38,
+     "expected": 57.65,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 4
+    },
+    {
+     "gw": 31,
+     "points": 66,
+     "expected": 71.04,
+     "hits": 0,
+     "out": [
+      178301,
+      231065,
+      230046,
+      101178
+     ],
+     "in_": [
+      427623,
+      447203,
+      243016,
+      244731
+     ],
+     "ft_after": 1,
+     "bank": 5
+    },
+    {
+     "gw": 32,
+     "points": 68,
+     "expected": 51.03,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 5
+    },
+    {
+     "gw": 33,
+     "points": 61,
+     "expected": 65.57,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 5
+    },
+    {
+     "gw": 34,
+     "points": 79,
+     "expected": 95.92,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 5
+    },
+    {
+     "gw": 35,
+     "points": 39,
+     "expected": 60.61,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 36,
+     "points": 82,
+     "expected": 66.86,
+     "hits": 0,
+     "out": [
+      156700,
+      199798,
+      69752,
+      209244
+     ],
+     "in_": [
+      461358,
+      477424,
+      202641,
+      60307
+     ],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 37,
+     "points": 90,
+     "expected": 92.91,
+     "hits": 0,
+     "out": [
+      184029,
+      447203
+     ],
+     "in_": [
+      219168,
+      242898
+     ],
+     "ft_after": 1,
+     "bank": 18
+    },
+    {
+     "gw": 38,
+     "points": 44,
+     "expected": 65.32,
+     "hits": 0,
+     "out": [
+      242898
+     ],
+     "in_": [
+      219847
+     ],
+     "ft_after": 1,
+     "bank": 0
+    }
+   ]
+  },
+  {
+   "season": "2023/24",
+   "policy": "bar 3",
+   "total": 2195,
+   "transfers": 30,
+   "hits": 1,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 64,
+     "expected": 66.7,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 47,
+     "expected": 50.06,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 3,
+     "points": 44,
+     "expected": 65.05,
+     "hits": 1,
+     "out": [
+      487117,
+      447203,
+      226597
+     ],
+     "in_": [
+      461358,
+      231065,
+      205533
+     ],
+     "ft_after": 1,
+     "bank": 15
+    },
+    {
+     "gw": 4,
+     "points": 84,
+     "expected": 59.47,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 15
+    },
+    {
+     "gw": 5,
+     "points": 61,
+     "expected": 57.69,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 15
+    },
+    {
+     "gw": 6,
+     "points": 74,
+     "expected": 77.7,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 15
+    },
+    {
+     "gw": 7,
+     "points": 62,
+     "expected": 63.63,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 15
+    },
+    {
+     "gw": 8,
+     "points": 27,
+     "expected": 53.85,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 15
+    },
+    {
+     "gw": 9,
+     "points": 69,
+     "expected": 62.0,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 15
+    },
+    {
+     "gw": 10,
+     "points": 84,
+     "expected": 59.15,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 15
+    },
+    {
+     "gw": 11,
+     "points": 40,
+     "expected": 63.18,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 15
+    },
+    {
+     "gw": 12,
+     "points": 43,
+     "expected": 65.03,
+     "hits": 0,
+     "out": [
+      220237,
+      116535,
+      60307,
+      194010
+     ],
+     "in_": [
+      78916,
+      243016,
+      80201,
+      77794
+     ],
+     "ft_after": 2,
+     "bank": 1
+    },
+    {
+     "gw": 13,
+     "points": 43,
+     "expected": 59.74,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 1
+    },
+    {
+     "gw": 14,
+     "points": 70,
+     "expected": 66.5,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 1
+    },
+    {
+     "gw": 15,
+     "points": 31,
+     "expected": 56.37,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 1
+    },
+    {
+     "gw": 16,
+     "points": 29,
+     "expected": 58.9,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 1
+    },
+    {
+     "gw": 17,
+     "points": 39,
+     "expected": 56.39,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 1
+    },
+    {
+     "gw": 18,
+     "points": 36,
+     "expected": 53.46,
+     "hits": 0,
+     "out": [
+      205533,
+      451340,
+      223094,
+      141746
+     ],
+     "in_": [
+      447203,
+      535818,
+      205651,
+      118748
+     ],
+     "ft_after": 2,
+     "bank": 5
+    },
+    {
+     "gw": 19,
+     "points": 34,
+     "expected": 63.1,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 5
+    },
+    {
+     "gw": 20,
+     "points": 48,
+     "expected": 53.47,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 5
+    },
+    {
+     "gw": 21,
+     "points": 47,
+     "expected": 58.26,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 22,
+     "points": 87,
+     "expected": 58.14,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 23,
+     "points": 60,
+     "expected": 57.37,
+     "hits": 0,
+     "out": [
+      535818,
+      205651
+     ],
+     "in_": [
+      475168,
+      209244
+     ],
+     "ft_after": 4,
+     "bank": 1
+    },
+    {
+     "gw": 24,
+     "points": 61,
+     "expected": 62.62,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 1
+    },
+    {
+     "gw": 25,
+     "points": 91,
+     "expected": 93.11,
+     "hits": 0,
+     "out": [
+      77794
+     ],
+     "in_": [
+      126184
+     ],
+     "ft_after": 5,
+     "bank": 19
+    },
+    {
+     "gw": 26,
+     "points": 65,
+     "expected": 57.29,
+     "hits": 0,
+     "out": [
+      475168,
+      447203,
+      126184,
+      243016,
+      118748
+     ],
+     "in_": [
+      178301,
+      230046,
+      51927,
+      88894,
+      223094
+     ],
+     "ft_after": 1,
+     "bank": 1
+    },
+    {
+     "gw": 27,
+     "points": 92,
+     "expected": 60.4,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 1
+    },
+    {
+     "gw": 28,
+     "points": 27,
+     "expected": 57.13,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 1
+    },
+    {
+     "gw": 29,
+     "points": 18,
+     "expected": 29.15,
+     "hits": 0,
+     "out": [
+      461358
+     ],
+     "in_": [
+      156700
+     ],
+     "ft_after": 3,
+     "bank": 14
+    },
+    {
+     "gw": 30,
+     "points": 37,
+     "expected": 57.57,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 14
+    },
+    {
+     "gw": 31,
+     "points": 58,
+     "expected": 68.72,
+     "hits": 0,
+     "out": [
+      178301,
+      231065,
+      230046,
+      154561
+     ],
+     "in_": [
+      111234,
+      447203,
+      226597,
+      244731
+     ],
+     "ft_after": 1,
+     "bank": 3
+    },
+    {
+     "gw": 32,
+     "points": 73,
+     "expected": 52.06,
+     "hits": 0,
+     "out": [
+      51927
+     ],
+     "in_": [
+      198826
+     ],
+     "ft_after": 1,
+     "bank": 8
+    },
+    {
+     "gw": 33,
+     "points": 60,
+     "expected": 63.48,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 8
+    },
+    {
+     "gw": 34,
+     "points": 99,
+     "expected": 92.1,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 8
+    },
+    {
+     "gw": 35,
+     "points": 45,
+     "expected": 60.32,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 8
+    },
+    {
+     "gw": 36,
+     "points": 79,
+     "expected": 63.73,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 8
+    },
+    {
+     "gw": 37,
+     "points": 110,
+     "expected": 93.39,
+     "hits": 0,
+     "out": [
+      198826,
+      184029,
+      447203,
+      88894,
+      244731
+     ],
+     "in_": [
+      219168,
+      244851,
+      242898,
+      477424,
+      60307
+     ],
+     "ft_after": 1,
+     "bank": 14
+    },
+    {
+     "gw": 38,
+     "points": 57,
+     "expected": 63.69,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 14
+    }
+   ]
+  },
+  {
+   "season": "2024/25",
+   "policy": "bar 2",
+   "total": 2084,
+   "transfers": 31,
+   "hits": 1,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 58,
+     "expected": 57.76,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 67,
+     "expected": 68.41,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 3,
+     "points": 65,
+     "expected": 65.24,
+     "hits": 0,
+     "out": [
+      119471,
+      220566
+     ],
+     "in_": [
+      199796,
+      243016
+     ],
+     "ft_after": 1,
+     "bank": 9
+    },
+    {
+     "gw": 4,
+     "points": 62,
+     "expected": 68.45,
+     "hits": 0,
+     "out": [
+      168636
+     ],
+     "in_": [
+      475168
+     ],
+     "ft_after": 1,
+     "bank": 6
+    },
+    {
+     "gw": 5,
+     "points": 56,
+     "expected": 48.02,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 6
+    },
+    {
+     "gw": 6,
+     "points": 30,
+     "expected": 55.72,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 6
+    },
+    {
+     "gw": 7,
+     "points": 42,
+     "expected": 59.13,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 6
+    },
+    {
+     "gw": 8,
+     "points": 35,
+     "expected": 62.62,
+     "hits": 0,
+     "out": [
+      475168,
+      111317,
+      184029,
+      222627
+     ],
+     "in_": [
+      118342,
+      60689,
+      159533,
+      232826
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 9,
+     "points": 63,
+     "expected": 64.09,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 10,
+     "points": 41,
+     "expected": 57.06,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 11,
+     "points": 46,
+     "expected": 59.36,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 0
+    },
+    {
+     "gw": 12,
+     "points": 31,
+     "expected": 69.13,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 13,
+     "points": 57,
+     "expected": 54.21,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 14,
+     "points": 53,
+     "expected": 61.06,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 15,
+     "points": 43,
+     "expected": 57.83,
+     "hits": 0,
+     "out": [
+      60689,
+      159533,
+      243016,
+      80201
+     ],
+     "in_": [
+      242898,
+      433979,
+      249231,
+      154561
+     ],
+     "ft_after": 2,
+     "bank": 2
+    },
+    {
+     "gw": 16,
+     "points": 55,
+     "expected": 63.64,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 2
+    },
+    {
+     "gw": 17,
+     "points": 48,
+     "expected": 59.88,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 2
+    },
+    {
+     "gw": 18,
+     "points": 44,
+     "expected": 64.14,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 19,
+     "points": 53,
+     "expected": 57.13,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 20,
+     "points": 63,
+     "expected": 62.52,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 21,
+     "points": 53,
+     "expected": 61.77,
+     "hits": 0,
+     "out": [
+      223340,
+      199796,
+      433979
+     ],
+     "in_": [
+      243298,
+      122798,
+      165809
+     ],
+     "ft_after": 3,
+     "bank": 1
+    },
+    {
+     "gw": 22,
+     "points": 40,
+     "expected": 68.79,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 1
+    },
+    {
+     "gw": 23,
+     "points": 89,
+     "expected": 66.87,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 1
+    },
+    {
+     "gw": 24,
+     "points": 103,
+     "expected": 86.64,
+     "hits": 0,
+     "out": [
+      242898,
+      223094,
+      209289,
+      122798,
+      165809
+     ],
+     "in_": [
+      475168,
+      446008,
+      243016,
+      17761,
+      118748
+     ],
+     "ft_after": 1,
+     "bank": 2
+    },
+    {
+     "gw": 25,
+     "points": 76,
+     "expected": 89.89,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 2
+    },
+    {
+     "gw": 26,
+     "points": 78,
+     "expected": 58.75,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 2
+    },
+    {
+     "gw": 27,
+     "points": 57,
+     "expected": 58.82,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 2
+    },
+    {
+     "gw": 28,
+     "points": 60,
+     "expected": 65.56,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 29,
+     "points": 44,
+     "expected": 59.25,
+     "hits": 0,
+     "out": [
+      243298,
+      199798,
+      243016,
+      232826,
+      118748
+     ],
+     "in_": [
+      184029,
+      232185,
+      87835,
+      510281,
+      223094
+     ],
+     "ft_after": 1,
+     "bank": 3
+    },
+    {
+     "gw": 30,
+     "points": 51,
+     "expected": 67.82,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 3
+    },
+    {
+     "gw": 31,
+     "points": 34,
+     "expected": 57.25,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 3
+    },
+    {
+     "gw": 32,
+     "points": 79,
+     "expected": 83.12,
+     "hits": 0,
+     "out": [
+      446008,
+      223094,
+      249231
+     ],
+     "in_": [
+      114243,
+      438234,
+      118748
+     ],
+     "ft_after": 1,
+     "bank": 13
+    },
+    {
+     "gw": 33,
+     "points": 45,
+     "expected": 89.7,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 13
+    },
+    {
+     "gw": 34,
+     "points": 67,
+     "expected": 62.89,
+     "hits": 1,
+     "out": [
+      184029,
+      226597,
+      510281
+     ],
+     "in_": [
+      446008,
+      174874,
+      244731
+     ],
+     "ft_after": 1,
+     "bank": 20
+    },
+    {
+     "gw": 35,
+     "points": 43,
+     "expected": 61.64,
+     "hits": 0,
+     "out": [
+      87835
+     ],
+     "in_": [
+      171314
+     ],
+     "ft_after": 1,
+     "bank": 9
+    },
+    {
+     "gw": 36,
+     "points": 57,
+     "expected": 58.02,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 9
+    },
+    {
+     "gw": 37,
+     "points": 32,
+     "expected": 56.3,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 9
+    },
+    {
+     "gw": 38,
+     "points": 64,
+     "expected": 57.58,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 9
+    }
+   ]
+  },
+  {
+   "season": "2025/26",
+   "policy": "bar 0",
+   "total": 2135,
+   "transfers": 43,
+   "hits": 6,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 59,
+     "expected": 52.05,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 58,
+     "expected": 60.94,
+     "hits": 1,
+     "out": [
+      477424,
+      220566
+     ],
+     "in_": [
+      244858,
+      226597
+     ],
+     "ft_after": 1,
+     "bank": 13
+    },
+    {
+     "gw": 3,
+     "points": 56,
+     "expected": 55.64,
+     "hits": 0,
+     "out": [
+      184029
+     ],
+     "in_": [
+      201666
+     ],
+     "ft_after": 1,
+     "bank": 27
+    },
+    {
+     "gw": 4,
+     "points": 73,
+     "expected": 62.18,
+     "hits": 2,
+     "out": [
+      440323,
+      223340,
+      244858
+     ],
+     "in_": [
+      475168,
+      243298,
+      424876
+     ],
+     "ft_after": 1,
+     "bank": 9
+    },
+    {
+     "gw": 5,
+     "points": 33,
+     "expected": 51.65,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 9
+    },
+    {
+     "gw": 6,
+     "points": 62,
+     "expected": 63.63,
+     "hits": 0,
+     "out": [
+      232185,
+      201666
+     ],
+     "in_": [
+      446008,
+      111317
+     ],
+     "ft_after": 1,
+     "bank": 7
+    },
+    {
+     "gw": 7,
+     "points": 58,
+     "expected": 58.2,
+     "hits": 0,
+     "out": [
+      227444
+     ],
+     "in_": [
+      466075
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 8,
+     "points": 74,
+     "expected": 55.84,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 4
+    },
+    {
+     "gw": 9,
+     "points": 58,
+     "expected": 59.6,
+     "hits": 0,
+     "out": [
+      98980,
+      208706
+     ],
+     "in_": [
+      592031,
+      457569
+     ],
+     "ft_after": 1,
+     "bank": 14
+    },
+    {
+     "gw": 10,
+     "points": 79,
+     "expected": 64.56,
+     "hits": 0,
+     "out": [
+      446008
+     ],
+     "in_": [
+      232413
+     ],
+     "ft_after": 1,
+     "bank": 20
+    },
+    {
+     "gw": 11,
+     "points": 49,
+     "expected": 60.77,
+     "hits": 0,
+     "out": [
+      576756
+     ],
+     "in_": [
+      502500
+     ],
+     "ft_after": 1,
+     "bank": 3
+    },
+    {
+     "gw": 12,
+     "points": 67,
+     "expected": 60.34,
+     "hits": 0,
+     "out": [
+      111317
+     ],
+     "in_": [
+      509416
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 13,
+     "points": 64,
+     "expected": 66.89,
+     "hits": 0,
+     "out": [
+      232413
+     ],
+     "in_": [
+      209244
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 14,
+     "points": 60,
+     "expected": 64.4,
+     "hits": 0,
+     "out": [
+      226597
+     ],
+     "in_": [
+      477424
+     ],
+     "ft_after": 1,
+     "bank": 3
+    },
+    {
+     "gw": 15,
+     "points": 61,
+     "expected": 72.62,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 3
+    },
+    {
+     "gw": 16,
+     "points": 63,
+     "expected": 61.11,
+     "hits": 0,
+     "out": [
+      475168,
+      437499
+     ],
+     "in_": [
+      465642,
+      470313
+     ],
+     "ft_after": 1,
+     "bank": 1
+    },
+    {
+     "gw": 17,
+     "points": 71,
+     "expected": 63.47,
+     "hits": 0,
+     "out": [
+      509416
+     ],
+     "in_": [
+      514254
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 18,
+     "points": 41,
+     "expected": 58.71,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 19,
+     "points": 37,
+     "expected": 66.77,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 20,
+     "points": 35,
+     "expected": 55.33,
+     "hits": 0,
+     "out": [
+      243298,
+      466075,
+      592031
+     ],
+     "in_": [
+      437499,
+      232826,
+      60307
+     ],
+     "ft_after": 1,
+     "bank": 9
+    },
+    {
+     "gw": 21,
+     "points": 51,
+     "expected": 61.89,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 9
+    },
+    {
+     "gw": 22,
+     "points": 37,
+     "expected": 56.71,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 9
+    },
+    {
+     "gw": 23,
+     "points": 40,
+     "expected": 61.41,
+     "hits": 0,
+     "out": [
+      465642,
+      477424,
+      470313
+     ],
+     "in_": [
+      462424,
+      102057,
+      445122
+     ],
+     "ft_after": 1,
+     "bank": 5
+    },
+    {
+     "gw": 24,
+     "points": 56,
+     "expected": 54.21,
+     "hits": 0,
+     "out": [
+      209244
+     ],
+     "in_": [
+      184029
+     ],
+     "ft_after": 1,
+     "bank": 9
+    },
+    {
+     "gw": 25,
+     "points": 70,
+     "expected": 54.18,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 9
+    },
+    {
+     "gw": 26,
+     "points": 66,
+     "expected": 74.88,
+     "hits": 0,
+     "out": [
+      184029,
+      232826
+     ],
+     "in_": [
+      494595,
+      204480
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 27,
+     "points": 56,
+     "expected": 56.7,
+     "hits": 0,
+     "out": [
+      462424
+     ],
+     "in_": [
+      221466
+     ],
+     "ft_after": 1,
+     "bank": 12
+    },
+    {
+     "gw": 28,
+     "points": 63,
+     "expected": 63.74,
+     "hits": 1,
+     "out": [
+      437499,
+      424876
+     ],
+     "in_": [
+      243298,
+      209036
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 29,
+     "points": 51,
+     "expected": 56.2,
+     "hits": 0,
+     "out": [
+      445122
+     ],
+     "in_": [
+      465642
+     ],
+     "ft_after": 1,
+     "bank": 17
+    },
+    {
+     "gw": 30,
+     "points": 52,
+     "expected": 59.48,
+     "hits": 1,
+     "out": [
+      494595,
+      204480
+     ],
+     "in_": [
+      244851,
+      451340
+     ],
+     "ft_after": 1,
+     "bank": 7
+    },
+    {
+     "gw": 31,
+     "points": 43,
+     "expected": 59.15,
+     "hits": 1,
+     "out": [
+      451340,
+      17761
+     ],
+     "in_": [
+      444765,
+      232826
+     ],
+     "ft_after": 1,
+     "bank": 6
+    },
+    {
+     "gw": 32,
+     "points": 55,
+     "expected": 54.1,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 6
+    },
+    {
+     "gw": 33,
+     "points": 77,
+     "expected": 94.27,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 6
+    },
+    {
+     "gw": 34,
+     "points": 33,
+     "expected": 47.91,
+     "hits": 0,
+     "out": [
+      244851,
+      514254,
+      221466
+     ],
+     "in_": [
+      204480,
+      226597,
+      215379
+     ],
+     "ft_after": 1,
+     "bank": 11
+    },
+    {
+     "gw": 35,
+     "points": 58,
+     "expected": 55.2,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 11
+    },
+    {
+     "gw": 36,
+     "points": 75,
+     "expected": 84.63,
+     "hits": 0,
+     "out": [
+      444765,
+      232826
+     ],
+     "in_": [
+      466052,
+      437499
+     ],
+     "ft_after": 1,
+     "bank": 11
+    },
+    {
+     "gw": 37,
+     "points": 56,
+     "expected": 57.36,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 11
+    },
+    {
+     "gw": 38,
+     "points": 38,
+     "expected": 58.12,
+     "hits": 0,
+     "out": [
+      466052,
+      226597
+     ],
+     "in_": [
+      244851,
+      233963
+     ],
+     "ft_after": 1,
+     "bank": 0
+    }
+   ]
+  },
+  {
+   "season": "2025/26",
+   "policy": "never transfer",
+   "total": 1937,
+   "transfers": 0,
+   "hits": 0,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 59,
+     "expected": 52.05,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 57,
+     "expected": 56.3,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 3,
+     "points": 55,
+     "expected": 52.74,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 4,
+     "points": 68,
+     "expected": 53.74,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 0
+    },
+    {
+     "gw": 5,
+     "points": 41,
+     "expected": 43.75,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 6,
+     "points": 63,
+     "expected": 54.89,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 7,
+     "points": 69,
+     "expected": 49.25,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 8,
+     "points": 47,
+     "expected": 49.99,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 9,
+     "points": 31,
+     "expected": 48.3,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 10,
+     "points": 57,
+     "expected": 56.96,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 11,
+     "points": 65,
+     "expected": 53.72,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 12,
+     "points": 65,
+     "expected": 50.89,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 13,
+     "points": 41,
+     "expected": 60.29,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 14,
+     "points": 80,
+     "expected": 57.31,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 15,
+     "points": 53,
+     "expected": 60.41,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 16,
+     "points": 67,
+     "expected": 51.58,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 17,
+     "points": 63,
+     "expected": 54.6,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 18,
+     "points": 55,
+     "expected": 53.78,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 19,
+     "points": 55,
+     "expected": 62.74,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 20,
+     "points": 38,
+     "expected": 50.63,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 21,
+     "points": 55,
+     "expected": 53.37,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 22,
+     "points": 33,
+     "expected": 52.0,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 23,
+     "points": 40,
+     "expected": 53.94,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 24,
+     "points": 38,
+     "expected": 49.79,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 25,
+     "points": 62,
+     "expected": 48.42,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 26,
+     "points": 68,
+     "expected": 58.02,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 27,
+     "points": 46,
+     "expected": 48.15,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 28,
+     "points": 29,
+     "expected": 49.92,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 29,
+     "points": 59,
+     "expected": 46.99,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 30,
+     "points": 34,
+     "expected": 46.51,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 31,
+     "points": 27,
+     "expected": 20.94,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 32,
+     "points": 27,
+     "expected": 45.07,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 33,
+     "points": 61,
+     "expected": 64.31,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 34,
+     "points": 31,
+     "expected": 33.25,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 35,
+     "points": 39,
+     "expected": 41.59,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 36,
+     "points": 72,
+     "expected": 69.24,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 37,
+     "points": 71,
+     "expected": 45.34,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 38,
+     "points": 16,
+     "expected": 44.04,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    }
+   ]
+  },
+  {
+   "season": "2025/26",
+   "policy": "bar 1",
+   "total": 2231,
+   "transfers": 37,
+   "hits": 2,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 59,
+     "expected": 52.05,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 58,
+     "expected": 60.94,
+     "hits": 1,
+     "out": [
+      477424,
+      220566
+     ],
+     "in_": [
+      244858,
+      226597
+     ],
+     "ft_after": 1,
+     "bank": 13
+    },
+    {
+     "gw": 3,
+     "points": 56,
+     "expected": 54.34,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 13
+    },
+    {
+     "gw": 4,
+     "points": 75,
+     "expected": 56.28,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 13
+    },
+    {
+     "gw": 5,
+     "points": 38,
+     "expected": 55.04,
+     "hits": 1,
+     "out": [
+      440323,
+      223340,
+      244858,
+      184029
+     ],
+     "in_": [
+      243298,
+      178301,
+      592031,
+      451340
+     ],
+     "ft_after": 1,
+     "bank": 5
+    },
+    {
+     "gw": 6,
+     "points": 78,
+     "expected": 60.71,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 5
+    },
+    {
+     "gw": 7,
+     "points": 67,
+     "expected": 56.5,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 5
+    },
+    {
+     "gw": 8,
+     "points": 59,
+     "expected": 54.35,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 5
+    },
+    {
+     "gw": 9,
+     "points": 55,
+     "expected": 58.42,
+     "hits": 0,
+     "out": [
+      178301,
+      576756,
+      97032,
+      451340
+     ],
+     "in_": [
+      475168,
+      466075,
+      502500,
+      424876
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 10,
+     "points": 76,
+     "expected": 63.47,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 11,
+     "points": 53,
+     "expected": 59.85,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 12,
+     "points": 58,
+     "expected": 59.22,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 0
+    },
+    {
+     "gw": 13,
+     "points": 66,
+     "expected": 69.01,
+     "hits": 0,
+     "out": [
+      227444,
+      111234,
+      226597,
+      208706
+     ],
+     "in_": [
+      477424,
+      209244,
+      444765,
+      457569
+     ],
+     "ft_after": 1,
+     "bank": 6
+    },
+    {
+     "gw": 14,
+     "points": 66,
+     "expected": 63.51,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 6
+    },
+    {
+     "gw": 15,
+     "points": 61,
+     "expected": 71.17,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 6
+    },
+    {
+     "gw": 16,
+     "points": 62,
+     "expected": 58.45,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 6
+    },
+    {
+     "gw": 17,
+     "points": 69,
+     "expected": 63.08,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 6
+    },
+    {
+     "gw": 18,
+     "points": 39,
+     "expected": 55.82,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 6
+    },
+    {
+     "gw": 19,
+     "points": 31,
+     "expected": 62.89,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 6
+    },
+    {
+     "gw": 20,
+     "points": 64,
+     "expected": 56.57,
+     "hits": 0,
+     "out": [
+      243298,
+      466075,
+      477424,
+      232185
+     ],
+     "in_": [
+      223340,
+      432830,
+      465642,
+      60307
+     ],
+     "ft_after": 2,
+     "bank": 2
+    },
+    {
+     "gw": 21,
+     "points": 58,
+     "expected": 60.24,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 2
+    },
+    {
+     "gw": 22,
+     "points": 39,
+     "expected": 56.52,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 2
+    },
+    {
+     "gw": 23,
+     "points": 50,
+     "expected": 57.87,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 24,
+     "points": 61,
+     "expected": 56.13,
+     "hits": 0,
+     "out": [
+      592031,
+      98980,
+      432830,
+      209244,
+      444765
+     ],
+     "in_": [
+      448089,
+      184029,
+      221466,
+      174874,
+      154561
+     ],
+     "ft_after": 1,
+     "bank": 1
+    },
+    {
+     "gw": 25,
+     "points": 69,
+     "expected": 53.67,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 1
+    },
+    {
+     "gw": 26,
+     "points": 60,
+     "expected": 67.57,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 1
+    },
+    {
+     "gw": 27,
+     "points": 49,
+     "expected": 53.41,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 1
+    },
+    {
+     "gw": 28,
+     "points": 69,
+     "expected": 65.54,
+     "hits": 0,
+     "out": [
+      475168,
+      223340,
+      184029,
+      437499
+     ],
+     "in_": [
+      243298,
+      209036,
+      510663,
+      437730
+     ],
+     "ft_after": 1,
+     "bank": 8
+    },
+    {
+     "gw": 29,
+     "points": 61,
+     "expected": 56.48,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 8
+    },
+    {
+     "gw": 30,
+     "points": 63,
+     "expected": 60.99,
+     "hits": 0,
+     "out": [
+      448089
+     ],
+     "in_": [
+      451340
+     ],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 31,
+     "points": 46,
+     "expected": 57.4,
+     "hits": 0,
+     "out": [
+      510663,
+      451340
+     ],
+     "in_": [
+      475168,
+      232826
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 32,
+     "points": 60,
+     "expected": 53.97,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 33,
+     "points": 77,
+     "expected": 93.35,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 34,
+     "points": 43,
+     "expected": 47.72,
+     "hits": 0,
+     "out": [
+      475168,
+      221466,
+      437730
+     ],
+     "in_": [
+      247412,
+      204480,
+      226597
+     ],
+     "ft_after": 1,
+     "bank": 6
+    },
+    {
+     "gw": 35,
+     "points": 64,
+     "expected": 56.08,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 6
+    },
+    {
+     "gw": 36,
+     "points": 82,
+     "expected": 86.42,
+     "hits": 0,
+     "out": [
+      174874,
+      232826
+     ],
+     "in_": [
+      466052,
+      437499
+     ],
+     "ft_after": 1,
+     "bank": 6
+    },
+    {
+     "gw": 37,
+     "points": 57,
+     "expected": 58.59,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 6
+    },
+    {
+     "gw": 38,
+     "points": 33,
+     "expected": 58.9,
+     "hits": 0,
+     "out": [
+      466052,
+      226597
+     ],
+     "in_": [
+      477717,
+      244851
+     ],
+     "ft_after": 1,
+     "bank": 2
+    }
+   ]
+  },
+  {
+   "season": "2024/25",
+   "policy": "bar 1",
+   "total": 2084,
+   "transfers": 36,
+   "hits": 2,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 58,
+     "expected": 57.76,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 67,
+     "expected": 68.41,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 3,
+     "points": 65,
+     "expected": 65.24,
+     "hits": 0,
+     "out": [
+      119471,
+      220566
+     ],
+     "in_": [
+      199796,
+      243016
+     ],
+     "ft_after": 1,
+     "bank": 9
+    },
+    {
+     "gw": 4,
+     "points": 62,
+     "expected": 68.45,
+     "hits": 0,
+     "out": [
+      168636
+     ],
+     "in_": [
+      475168
+     ],
+     "ft_after": 1,
+     "bank": 6
+    },
+    {
+     "gw": 5,
+     "points": 56,
+     "expected": 48.02,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 6
+    },
+    {
+     "gw": 6,
+     "points": 30,
+     "expected": 55.72,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 6
+    },
+    {
+     "gw": 7,
+     "points": 52,
+     "expected": 64.39,
+     "hits": 0,
+     "out": [
+      219168,
+      199796,
+      184029
+     ],
+     "in_": [
+      211975,
+      446008,
+      219847
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 8,
+     "points": 28,
+     "expected": 59.16,
+     "hits": 0,
+     "out": [
+      111317
+     ],
+     "in_": [
+      159533
+     ],
+     "ft_after": 1,
+     "bank": 2
+    },
+    {
+     "gw": 9,
+     "points": 68,
+     "expected": 64.97,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 2
+    },
+    {
+     "gw": 10,
+     "points": 29,
+     "expected": 55.87,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 2
+    },
+    {
+     "gw": 11,
+     "points": 46,
+     "expected": 57.6,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 2
+    },
+    {
+     "gw": 12,
+     "points": 40,
+     "expected": 67.5,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 13,
+     "points": 47,
+     "expected": 58.47,
+     "hits": 0,
+     "out": [
+      211975,
+      475168,
+      219847,
+      80201,
+      243016
+     ],
+     "in_": [
+      219168,
+      102057,
+      441164,
+      249231,
+      154561
+     ],
+     "ft_after": 1,
+     "bank": 2
+    },
+    {
+     "gw": 14,
+     "points": 47,
+     "expected": 65.76,
+     "hits": 0,
+     "out": [
+      159533
+     ],
+     "in_": [
+      156689
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 15,
+     "points": 61,
+     "expected": 55.93,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 16,
+     "points": 65,
+     "expected": 62.36,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 17,
+     "points": 38,
+     "expected": 60.91,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 0
+    },
+    {
+     "gw": 18,
+     "points": 39,
+     "expected": 63.58,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 19,
+     "points": 55,
+     "expected": 61.55,
+     "hits": 0,
+     "out": [
+      446008,
+      223340,
+      441164,
+      209289
+     ],
+     "in_": [
+      244851,
+      232185,
+      487838,
+      165809
+     ],
+     "ft_after": 2,
+     "bank": 2
+    },
+    {
+     "gw": 20,
+     "points": 69,
+     "expected": 66.79,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 2
+    },
+    {
+     "gw": 21,
+     "points": 55,
+     "expected": 63.5,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 2
+    },
+    {
+     "gw": 22,
+     "points": 35,
+     "expected": 71.05,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 23,
+     "points": 78,
+     "expected": 73.32,
+     "hits": 0,
+     "out": [
+      102057,
+      232185,
+      223094,
+      487838,
+      165809
+     ],
+     "in_": [
+      475168,
+      243298,
+      224967,
+      243016,
+      118748
+     ],
+     "ft_after": 1,
+     "bank": 2
+    },
+    {
+     "gw": 24,
+     "points": 98,
+     "expected": 87.12,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 2
+    },
+    {
+     "gw": 25,
+     "points": 74,
+     "expected": 91.07,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 2
+    },
+    {
+     "gw": 26,
+     "points": 72,
+     "expected": 60.41,
+     "hits": 0,
+     "out": [
+      156689,
+      243298,
+      199798
+     ],
+     "in_": [
+      247348,
+      114243,
+      438234
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 27,
+     "points": 60,
+     "expected": 63.92,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 28,
+     "points": 60,
+     "expected": 69.95,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 29,
+     "points": 38,
+     "expected": 56.05,
+     "hits": 1,
+     "out": [
+      247348,
+      243016,
+      438234,
+      118748
+     ],
+     "in_": [
+      448047,
+      445122,
+      510281,
+      223094
+     ],
+     "ft_after": 1,
+     "bank": 7
+    },
+    {
+     "gw": 30,
+     "points": 65,
+     "expected": 68.42,
+     "hits": 0,
+     "out": [
+      249231
+     ],
+     "in_": [
+      232185
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 31,
+     "points": 44,
+     "expected": 57.27,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 32,
+     "points": 79,
+     "expected": 79.69,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 33,
+     "points": 39,
+     "expected": 82.63,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 0
+    },
+    {
+     "gw": 34,
+     "points": 65,
+     "expected": 63.77,
+     "hits": 1,
+     "out": [
+      232185,
+      226597,
+      510281,
+      223094,
+      154561
+     ],
+     "in_": [
+      446008,
+      118342,
+      174874,
+      438234,
+      118748
+     ],
+     "ft_after": 1,
+     "bank": 1
+    },
+    {
+     "gw": 35,
+     "points": 56,
+     "expected": 57.39,
+     "hits": 0,
+     "out": [
+      445122
+     ],
+     "in_": [
+      171314
+     ],
+     "ft_after": 1,
+     "bank": 3
+    },
+    {
+     "gw": 36,
+     "points": 46,
+     "expected": 59.93,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 3
+    },
+    {
+     "gw": 37,
+     "points": 38,
+     "expected": 54.68,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 3
+    },
+    {
+     "gw": 38,
+     "points": 60,
+     "expected": 58.82,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 3
+    }
+   ]
+  },
+  {
+   "season": "2024/25",
+   "policy": "bar 0",
+   "total": 2194,
+   "transfers": 42,
+   "hits": 5,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 58,
+     "expected": 57.76,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 75,
+     "expected": 70.48,
+     "hits": 0,
+     "out": [
+      168636
+     ],
+     "in_": [
+      475168
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 3,
+     "points": 71,
+     "expected": 67.1,
+     "hits": 0,
+     "out": [
+      220566
+     ],
+     "in_": [
+      243016
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 4,
+     "points": 65,
+     "expected": 70.32,
+     "hits": 0,
+     "out": [
+      184029
+     ],
+     "in_": [
+      244731
+     ],
+     "ft_after": 1,
+     "bank": 6
+    },
+    {
+     "gw": 5,
+     "points": 70,
+     "expected": 53.6,
+     "hits": 0,
+     "out": [
+      119471
+     ],
+     "in_": [
+      122798
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 6,
+     "points": 34,
+     "expected": 57.96,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 7,
+     "points": 49,
+     "expected": 63.05,
+     "hits": 0,
+     "out": [
+      219168,
+      111317
+     ],
+     "in_": [
+      444145,
+      60689
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 8,
+     "points": 28,
+     "expected": 59.98,
+     "hits": 1,
+     "out": [
+      444145,
+      122798
+     ],
+     "in_": [
+      211975,
+      232826
+     ],
+     "ft_after": 1,
+     "bank": 2
+    },
+    {
+     "gw": 9,
+     "points": 67,
+     "expected": 62.05,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 2
+    },
+    {
+     "gw": 10,
+     "points": 35,
+     "expected": 54.89,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 2
+    },
+    {
+     "gw": 11,
+     "points": 48,
+     "expected": 61.43,
+     "hits": 0,
+     "out": [
+      211975,
+      475168,
+      244731
+     ],
+     "in_": [
+      242898,
+      101668,
+      441164
+     ],
+     "ft_after": 1,
+     "bank": 9
+    },
+    {
+     "gw": 12,
+     "points": 50,
+     "expected": 67.14,
+     "hits": 0,
+     "out": [
+      80201
+     ],
+     "in_": [
+      154561
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 13,
+     "points": 66,
+     "expected": 56.86,
+     "hits": 0,
+     "out": [
+      243016
+     ],
+     "in_": [
+      249231
+     ],
+     "ft_after": 1,
+     "bank": 16
+    },
+    {
+     "gw": 14,
+     "points": 46,
+     "expected": 64.05,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 16
+    },
+    {
+     "gw": 15,
+     "points": 53,
+     "expected": 58.09,
+     "hits": 0,
+     "out": [
+      60689,
+      441164
+     ],
+     "in_": [
+      448514,
+      219168
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 16,
+     "points": 51,
+     "expected": 64.76,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 17,
+     "points": 45,
+     "expected": 60.66,
+     "hits": 0,
+     "out": [
+      242898,
+      101668
+     ],
+     "in_": [
+      102057,
+      165809
+     ],
+     "ft_after": 1,
+     "bank": 4
+    },
+    {
+     "gw": 18,
+     "points": 55,
+     "expected": 66.47,
+     "hits": 0,
+     "out": [
+      209289
+     ],
+     "in_": [
+      232185
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 19,
+     "points": 54,
+     "expected": 60.77,
+     "hits": 0,
+     "out": [
+      448514
+     ],
+     "in_": [
+      17761
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 20,
+     "points": 74,
+     "expected": 66.53,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 21,
+     "points": 56,
+     "expected": 61.65,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 22,
+     "points": 32,
+     "expected": 69.02,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 0
+    },
+    {
+     "gw": 23,
+     "points": 86,
+     "expected": 75.89,
+     "hits": 0,
+     "out": [
+      223340,
+      102057,
+      223094,
+      165809
+     ],
+     "in_": [
+      243298,
+      178301,
+      243016,
+      118748
+     ],
+     "ft_after": 1,
+     "bank": 3
+    },
+    {
+     "gw": 24,
+     "points": 103,
+     "expected": 85.08,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 3
+    },
+    {
+     "gw": 25,
+     "points": 89,
+     "expected": 94.2,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 3
+    },
+    {
+     "gw": 26,
+     "points": 58,
+     "expected": 60.74,
+     "hits": 0,
+     "out": [
+      243298
+     ],
+     "in_": [
+      438234
+     ],
+     "ft_after": 3,
+     "bank": 7
+    },
+    {
+     "gw": 27,
+     "points": 71,
+     "expected": 63.96,
+     "hits": 0,
+     "out": [
+      199798,
+      178301,
+      232826
+     ],
+     "in_": [
+      448514,
+      475168,
+      244851
+     ],
+     "ft_after": 1,
+     "bank": 2
+    },
+    {
+     "gw": 28,
+     "points": 64,
+     "expected": 70.2,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 2
+    },
+    {
+     "gw": 29,
+     "points": 34,
+     "expected": 56.58,
+     "hits": 2,
+     "out": [
+      243016,
+      17761,
+      438234,
+      118748
+     ],
+     "in_": [
+      448047,
+      462424,
+      510281,
+      223094
+     ],
+     "ft_after": 1,
+     "bank": 2
+    },
+    {
+     "gw": 30,
+     "points": 60,
+     "expected": 68.94,
+     "hits": 0,
+     "out": [
+      249231
+     ],
+     "in_": [
+      114243
+     ],
+     "ft_after": 1,
+     "bank": 2
+    },
+    {
+     "gw": 31,
+     "points": 47,
+     "expected": 57.72,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 2
+    },
+    {
+     "gw": 32,
+     "points": 80,
+     "expected": 79.69,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 2
+    },
+    {
+     "gw": 33,
+     "points": 42,
+     "expected": 91.53,
+     "hits": 0,
+     "out": [
+      244851,
+      223094,
+      222627
+     ],
+     "in_": [
+      118342,
+      438234,
+      118748
+     ],
+     "ft_after": 1,
+     "bank": 35
+    },
+    {
+     "gw": 34,
+     "points": 74,
+     "expected": 64.84,
+     "hits": 2,
+     "out": [
+      232185,
+      226597,
+      510281
+     ],
+     "in_": [
+      446008,
+      174874,
+      244731
+     ],
+     "ft_after": 1,
+     "bank": 18
+    },
+    {
+     "gw": 35,
+     "points": 49,
+     "expected": 62.76,
+     "hits": 0,
+     "out": [
+      448514
+     ],
+     "in_": [
+      171314
+     ],
+     "ft_after": 1,
+     "bank": 12
+    },
+    {
+     "gw": 36,
+     "points": 49,
+     "expected": 58.72,
+     "hits": 0,
+     "out": [
+      244731
+     ],
+     "in_": [
+      184029
+     ],
+     "ft_after": 1,
+     "bank": 5
+    },
+    {
+     "gw": 37,
+     "points": 43,
+     "expected": 59.88,
+     "hits": 0,
+     "out": [
+      475168
+     ],
+     "in_": [
+      101668
+     ],
+     "ft_after": 1,
+     "bank": 6
+    },
+    {
+     "gw": 38,
+     "points": 63,
+     "expected": 61.76,
+     "hits": 0,
+     "out": [
+      174874
+     ],
+     "in_": [
+      432830
+     ],
+     "ft_after": 1,
+     "bank": 2
+    }
+   ]
+  },
+  {
+   "season": "2024/25",
+   "policy": "bar 3",
+   "total": 2141,
+   "transfers": 24,
+   "hits": 0,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 58,
+     "expected": 57.76,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 67,
+     "expected": 68.41,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 3,
+     "points": 62,
+     "expected": 62.88,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 4,
+     "points": 68,
+     "expected": 69.88,
+     "hits": 0,
+     "out": [
+      119471,
+      168636,
+      220566
+     ],
+     "in_": [
+      475168,
+      243016,
+      83299
+     ],
+     "ft_after": 1,
+     "bank": 6
+    },
+    {
+     "gw": 5,
+     "points": 49,
+     "expected": 49.57,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 6
+    },
+    {
+     "gw": 6,
+     "points": 29,
+     "expected": 55.72,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 6
+    },
+    {
+     "gw": 7,
+     "points": 37,
+     "expected": 59.13,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 6
+    },
+    {
+     "gw": 8,
+     "points": 30,
+     "expected": 53.53,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 6
+    },
+    {
+     "gw": 9,
+     "points": 74,
+     "expected": 68.64,
+     "hits": 0,
+     "out": [
+      475168,
+      223340,
+      199798,
+      111317,
+      184029
+     ],
+     "in_": [
+      446008,
+      242898,
+      60689,
+      171314,
+      232826
+     ],
+     "ft_after": 1,
+     "bank": 2
+    },
+    {
+     "gw": 10,
+     "points": 51,
+     "expected": 55.71,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 2
+    },
+    {
+     "gw": 11,
+     "points": 48,
+     "expected": 60.91,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 2
+    },
+    {
+     "gw": 12,
+     "points": 20,
+     "expected": 66.26,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 2
+    },
+    {
+     "gw": 13,
+     "points": 49,
+     "expected": 50.9,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 14,
+     "points": 51,
+     "expected": 58.43,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 15,
+     "points": 54,
+     "expected": 54.31,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 16,
+     "points": 56,
+     "expected": 60.25,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 17,
+     "points": 58,
+     "expected": 59.4,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 18,
+     "points": 51,
+     "expected": 60.47,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 19,
+     "points": 78,
+     "expected": 53.38,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 20,
+     "points": 78,
+     "expected": 63.37,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 21,
+     "points": 52,
+     "expected": 55.95,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 22,
+     "points": 48,
+     "expected": 69.41,
+     "hits": 0,
+     "out": [
+      171314,
+      209289
+     ],
+     "in_": [
+      224967,
+      510281
+     ],
+     "ft_after": 4,
+     "bank": 0
+    },
+    {
+     "gw": 23,
+     "points": 75,
+     "expected": 64.89,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 24,
+     "points": 116,
+     "expected": 89.84,
+     "hits": 0,
+     "out": [
+      242898,
+      80201,
+      510281,
+      223094
+     ],
+     "in_": [
+      243298,
+      111234,
+      249231,
+      118748
+     ],
+     "ft_after": 2,
+     "bank": 8
+    },
+    {
+     "gw": 25,
+     "points": 80,
+     "expected": 84.7,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 8
+    },
+    {
+     "gw": 26,
+     "points": 70,
+     "expected": 58.37,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 8
+    },
+    {
+     "gw": 27,
+     "points": 54,
+     "expected": 57.04,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 8
+    },
+    {
+     "gw": 28,
+     "points": 59,
+     "expected": 65.23,
+     "hits": 0,
+     "out": [
+      232826,
+      222627
+     ],
+     "in_": [
+      232185,
+      154561
+     ],
+     "ft_after": 4,
+     "bank": 10
+    },
+    {
+     "gw": 29,
+     "points": 43,
+     "expected": 58.3,
+     "hits": 0,
+     "out": [
+      243298,
+      111234,
+      243016,
+      118748
+     ],
+     "in_": [
+      149065,
+      184029,
+      510281,
+      223094
+     ],
+     "ft_after": 1,
+     "bank": 1
+    },
+    {
+     "gw": 30,
+     "points": 51,
+     "expected": 67.65,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 1
+    },
+    {
+     "gw": 31,
+     "points": 31,
+     "expected": 56.73,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 1
+    },
+    {
+     "gw": 32,
+     "points": 50,
+     "expected": 72.03,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 1
+    },
+    {
+     "gw": 33,
+     "points": 69,
+     "expected": 84.23,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 1
+    },
+    {
+     "gw": 34,
+     "points": 67,
+     "expected": 60.84,
+     "hits": 0,
+     "out": [
+      232185,
+      226597,
+      510281,
+      223094
+     ],
+     "in_": [
+      114243,
+      216646,
+      174874,
+      118748
+     ],
+     "ft_after": 2,
+     "bank": 28
+    },
+    {
+     "gw": 35,
+     "points": 47,
+     "expected": 58.9,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 28
+    },
+    {
+     "gw": 36,
+     "points": 51,
+     "expected": 57.42,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 28
+    },
+    {
+     "gw": 37,
+     "points": 47,
+     "expected": 56.39,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 28
+    },
+    {
+     "gw": 38,
+     "points": 63,
+     "expected": 58.67,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 28
+    }
+   ]
+  },
+  {
+   "season": "2025/26",
+   "policy": "bar 3",
+   "total": 2094,
+   "transfers": 27,
+   "hits": 0,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 60,
+     "expected": 52.05,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 55,
+     "expected": 56.3,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 3,
+     "points": 60,
+     "expected": 57.86,
+     "hits": 0,
+     "out": [
+      477424,
+      220566
+     ],
+     "in_": [
+      249231,
+      201666
+     ],
+     "ft_after": 1,
+     "bank": 8
+    },
+    {
+     "gw": 4,
+     "points": 62,
+     "expected": 56.58,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 8
+    },
+    {
+     "gw": 5,
+     "points": 36,
+     "expected": 47.1,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 8
+    },
+    {
+     "gw": 6,
+     "points": 59,
+     "expected": 53.29,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 8
+    },
+    {
+     "gw": 7,
+     "points": 60,
+     "expected": 46.67,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 8
+    },
+    {
+     "gw": 8,
+     "points": 58,
+     "expected": 54.85,
+     "hits": 0,
+     "out": [
+      431639,
+      223340,
+      184029,
+      249231,
+      201666
+     ],
+     "in_": [
+      475168,
+      466075,
+      592031,
+      424876,
+      141746
+     ],
+     "ft_after": 1,
+     "bank": 5
+    },
+    {
+     "gw": 9,
+     "points": 48,
+     "expected": 57.14,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 5
+    },
+    {
+     "gw": 10,
+     "points": 73,
+     "expected": 62.11,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 5
+    },
+    {
+     "gw": 11,
+     "points": 48,
+     "expected": 58.64,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 5
+    },
+    {
+     "gw": 12,
+     "points": 57,
+     "expected": 58.96,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 13,
+     "points": 43,
+     "expected": 62.9,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 14,
+     "points": 81,
+     "expected": 63.41,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 15,
+     "points": 62,
+     "expected": 66.03,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 16,
+     "points": 66,
+     "expected": 53.85,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 17,
+     "points": 60,
+     "expected": 58.09,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 18,
+     "points": 37,
+     "expected": 56.6,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 19,
+     "points": 50,
+     "expected": 60.47,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 20,
+     "points": 28,
+     "expected": 49.77,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 21,
+     "points": 60,
+     "expected": 60.83,
+     "hits": 0,
+     "out": [
+      466075,
+      592031,
+      576756,
+      232185,
+      141746
+     ],
+     "in_": [
+      466052,
+      502500,
+      174874,
+      209244,
+      547719
+     ],
+     "ft_after": 1,
+     "bank": 2
+    },
+    {
+     "gw": 22,
+     "points": 26,
+     "expected": 57.49,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 2
+    },
+    {
+     "gw": 23,
+     "points": 52,
+     "expected": 59.62,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 2
+    },
+    {
+     "gw": 24,
+     "points": 49,
+     "expected": 53.01,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 2
+    },
+    {
+     "gw": 25,
+     "points": 72,
+     "expected": 47.62,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 2
+    },
+    {
+     "gw": 26,
+     "points": 84,
+     "expected": 72.61,
+     "hits": 0,
+     "out": [
+      466052,
+      98980,
+      208706,
+      209244
+     ],
+     "in_": [
+      243298,
+      204480,
+      481655,
+      154561
+     ],
+     "ft_after": 2,
+     "bank": 6
+    },
+    {
+     "gw": 27,
+     "points": 50,
+     "expected": 56.84,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 6
+    },
+    {
+     "gw": 28,
+     "points": 48,
+     "expected": 57.93,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 6
+    },
+    {
+     "gw": 29,
+     "points": 61,
+     "expected": 54.15,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 6
+    },
+    {
+     "gw": 30,
+     "points": 62,
+     "expected": 59.04,
+     "hits": 0,
+     "out": [
+      111234,
+      437499,
+      547719
+     ],
+     "in_": [
+      221466,
+      457569,
+      60307
+     ],
+     "ft_after": 3,
+     "bank": 5
+    },
+    {
+     "gw": 31,
+     "points": 40,
+     "expected": 58.56,
+     "hits": 0,
+     "out": [
+      204480,
+      174874,
+      481655
+     ],
+     "in_": [
+      465642,
+      232826,
+      195546
+     ],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 32,
+     "points": 54,
+     "expected": 54.33,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 33,
+     "points": 77,
+     "expected": 83.3,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 34,
+     "points": 35,
+     "expected": 44.24,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 0
+    },
+    {
+     "gw": 35,
+     "points": 78,
+     "expected": 53.58,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 0
+    },
+    {
+     "gw": 36,
+     "points": 75,
+     "expected": 87.89,
+     "hits": 0,
+     "out": [
+      227444,
+      97032,
+      221466,
+      232826,
+      195546
+     ],
+     "in_": [
+      466052,
+      209036,
+      651426,
+      242898,
+      437499
+     ],
+     "ft_after": 1,
+     "bank": 9
+    },
+    {
+     "gw": 37,
+     "points": 49,
+     "expected": 56.3,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 9
+    },
+    {
+     "gw": 38,
+     "points": 19,
+     "expected": 54.01,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 9
+    }
+   ]
+  },
+  {
+   "season": "2025/26",
+   "policy": "bar 2",
+   "total": 2065,
+   "transfers": 33,
+   "hits": 0,
+   "weeks": [
+    {
+     "gw": 1,
+     "points": 59,
+     "expected": 52.05,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 1,
+     "bank": 0
+    },
+    {
+     "gw": 2,
+     "points": 57,
+     "expected": 56.3,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 3,
+     "points": 54,
+     "expected": 56.39,
+     "hits": 0,
+     "out": [
+      477424,
+      220566
+     ],
+     "in_": [
+      199796,
+      201666
+     ],
+     "ft_after": 1,
+     "bank": 13
+    },
+    {
+     "gw": 4,
+     "points": 67,
+     "expected": 56.79,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 13
+    },
+    {
+     "gw": 5,
+     "points": 44,
+     "expected": 47.99,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 13
+    },
+    {
+     "gw": 6,
+     "points": 60,
+     "expected": 52.89,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 13
+    },
+    {
+     "gw": 7,
+     "points": 59,
+     "expected": 49.97,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 13
+    },
+    {
+     "gw": 8,
+     "points": 62,
+     "expected": 55.23,
+     "hits": 0,
+     "out": [
+      440323,
+      223340,
+      199796,
+      184029,
+      201666
+     ],
+     "in_": [
+      475168,
+      448047,
+      243298,
+      226597,
+      424876
+     ],
+     "ft_after": 1,
+     "bank": 7
+    },
+    {
+     "gw": 9,
+     "points": 46,
+     "expected": 57.2,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 7
+    },
+    {
+     "gw": 10,
+     "points": 76,
+     "expected": 63.73,
+     "hits": 0,
+     "out": [
+      448047,
+      208706
+     ],
+     "in_": [
+      592031,
+      232413
+     ],
+     "ft_after": 1,
+     "bank": 3
+    },
+    {
+     "gw": 11,
+     "points": 42,
+     "expected": 59.96,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 3
+    },
+    {
+     "gw": 12,
+     "points": 75,
+     "expected": 60.0,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 3
+    },
+    {
+     "gw": 13,
+     "points": 47,
+     "expected": 63.15,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 3
+    },
+    {
+     "gw": 14,
+     "points": 58,
+     "expected": 63.81,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 3
+    },
+    {
+     "gw": 15,
+     "points": 56,
+     "expected": 72.9,
+     "hits": 0,
+     "out": [
+      227444,
+      576756,
+      232185,
+      226597,
+      232413
+     ],
+     "in_": [
+      174594,
+      465642,
+      477424,
+      209244,
+      533463
+     ],
+     "ft_after": 1,
+     "bank": 3
+    },
+    {
+     "gw": 16,
+     "points": 66,
+     "expected": 58.1,
+     "hits": 0,
+     "out": [
+      475168
+     ],
+     "in_": [
+      502500
+     ],
+     "ft_after": 1,
+     "bank": 5
+    },
+    {
+     "gw": 17,
+     "points": 57,
+     "expected": 62.42,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 5
+    },
+    {
+     "gw": 18,
+     "points": 42,
+     "expected": 56.51,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 5
+    },
+    {
+     "gw": 19,
+     "points": 40,
+     "expected": 66.34,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 5
+    },
+    {
+     "gw": 20,
+     "points": 54,
+     "expected": 53.29,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 21,
+     "points": 53,
+     "expected": 58.17,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 22,
+     "points": 32,
+     "expected": 58.3,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 23,
+     "points": 45,
+     "expected": 60.84,
+     "hits": 0,
+     "out": [
+      174594,
+      243298,
+      592031,
+      477424,
+      533463
+     ],
+     "in_": [
+      448089,
+      445122,
+      514254,
+      184029,
+      247670
+     ],
+     "ft_after": 1,
+     "bank": 5
+    },
+    {
+     "gw": 24,
+     "points": 39,
+     "expected": 54.44,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 5
+    },
+    {
+     "gw": 25,
+     "points": 63,
+     "expected": 50.44,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 5
+    },
+    {
+     "gw": 26,
+     "points": 57,
+     "expected": 66.81,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 5
+    },
+    {
+     "gw": 27,
+     "points": 50,
+     "expected": 51.2,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 5,
+     "bank": 5
+    },
+    {
+     "gw": 28,
+     "points": 60,
+     "expected": 62.96,
+     "hits": 0,
+     "out": [
+      448089,
+      98980,
+      445122,
+      184029,
+      437499
+     ],
+     "in_": [
+      243298,
+      209036,
+      221466,
+      457569,
+      60307
+     ],
+     "ft_after": 1,
+     "bank": 25
+    },
+    {
+     "gw": 29,
+     "points": 54,
+     "expected": 54.71,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 25
+    },
+    {
+     "gw": 30,
+     "points": 57,
+     "expected": 57.25,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 25
+    },
+    {
+     "gw": 31,
+     "points": 45,
+     "expected": 58.01,
+     "hits": 0,
+     "out": [
+      209244,
+      247670
+     ],
+     "in_": [
+      475168,
+      232826
+     ],
+     "ft_after": 2,
+     "bank": 10
+    },
+    {
+     "gw": 32,
+     "points": 68,
+     "expected": 53.87,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 10
+    },
+    {
+     "gw": 33,
+     "points": 80,
+     "expected": 91.69,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 4,
+     "bank": 10
+    },
+    {
+     "gw": 34,
+     "points": 34,
+     "expected": 49.37,
+     "hits": 0,
+     "out": [
+      475168,
+      514254,
+      221466
+     ],
+     "in_": [
+      247412,
+      226597,
+      215379
+     ],
+     "ft_after": 2,
+     "bank": 0
+    },
+    {
+     "gw": 35,
+     "points": 61,
+     "expected": 55.27,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 0
+    },
+    {
+     "gw": 36,
+     "points": 75,
+     "expected": 87.77,
+     "hits": 0,
+     "out": [
+      97032,
+      457569,
+      232826
+     ],
+     "in_": [
+      172649,
+      466052,
+      437499
+     ],
+     "ft_after": 1,
+     "bank": 9
+    },
+    {
+     "gw": 37,
+     "points": 49,
+     "expected": 58.05,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 2,
+     "bank": 9
+    },
+    {
+     "gw": 38,
+     "points": 22,
+     "expected": 53.85,
+     "hits": 0,
+     "out": [],
+     "in_": [],
+     "ft_after": 3,
+     "bank": 9
+    }
+   ]
+  }
+ ]
+}

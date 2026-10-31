@@ -6,6 +6,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'v2'))
 from weekly import choose_plan, first_action_candidates
 
 
+# The mechanics below are tested with an explicit 2-point-per-move bar; the
+# production bar is HOLD_THRESHOLD (0 since the season replay).
+TWO = lambda week: 2.0 * len(week['in'])
+
+
 def path(score, n):
     return dict(total=round(score, 1), total_unrounded=score,
                 weeks=[{'in': list(range(n)), 'out': list(range(10, 10+n))}])
@@ -20,21 +25,21 @@ def test_hold_is_feasible_even_when_unconstrained_proxy_scores_worse():
 
 def test_qualifying_single_survives_a_larger_package_below_its_buffer():
     hold, single, package = path(100, 0), path(102.1, 1), path(103.9, 3)
-    chosen, _, rows = choose_plan([('package', package), ('single', single)], hold)
+    chosen, _, rows = choose_plan([('package', package), ('single', single)], hold, bar=TWO)
     assert chosen is single
     assert [r['qualifies'] for r in rows] == [False, True]
 
 
 def test_sub_threshold_rounding_does_not_trigger_a_transfer():
     hold = path(100, 0)
-    chosen, _, rows = choose_plan([('single', path(101.96, 1))], hold)
+    chosen, _, rows = choose_plan([('single', path(101.96, 1))], hold, bar=TWO)
     assert chosen is hold
     assert not rows[0]['qualifies']
 
 
 def test_better_no_move_path_improves_the_hold_baseline():
     hold, better = path(100, 0), path(101, 0)
-    chosen, baseline, _ = choose_plan([('free', better), ('single', path(102.5, 1))], hold)
+    chosen, baseline, _ = choose_plan([('free', better), ('single', path(102.5, 1))], hold, bar=TWO)
     assert chosen is baseline is better
 
 
@@ -51,3 +56,11 @@ def test_candidates_include_original_advice_and_deduplicate():
     rows = first_action_candidates(ids, {'singles': [single], 'pairs': []}, [(8, 16)])
     assert len(rows) == 1
     assert 8 not in rows[0][1] and 16 in rows[0][1]
+
+
+def test_production_bar_acts_on_any_positive_gain_and_never_on_a_loss():
+    hold = path(100, 0)
+    chosen, _, _ = choose_plan([('single', path(100.4, 1))], hold)
+    assert chosen['total_unrounded'] == 100.4
+    chosen, _, _ = choose_plan([('single', path(99.9, 1))], hold)
+    assert chosen is hold
