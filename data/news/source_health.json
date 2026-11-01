@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-31T12:49:19Z",
-  "coverage": 0.45,
+  "checked_at": "2026-11-01T01:17:05Z",
+  "coverage": 0.35,
   "enabled": 20,
   "gw": 10,
-  "healthy": 9,
+  "healthy": 7,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -28,7 +28,7 @@
       "article_validators": {},
       "club": "AVL",
       "content_hash": "9c7825becb8ff42f8c499d57fe8c1093bd5159607ffeacf1c5ac976ec67ff3f9",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"091f3ed80083fcc6e1fe3bb52fc7fe4b\"",
       "id": "avl-news",
       "last_modified": "Sat, 31 Oct 2026 02:04:52 GMT",
@@ -41,12 +41,12 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.brightonandhovealbion.com/first-team-men-squad": {
-          "etag": "\"1h9ti1l\""
+          "etag": "\"1xconh5\""
         }
       },
       "club": "BHA",
       "content_hash": "ab2a74c84f65f5f6162c348ea52d2fb6792873a48c913eb6b241db4a880a6d3c",
-      "documents": 2,
+      "documents": 1,
       "etag": "\"2w6v3e\"",
       "id": "bha-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -73,10 +73,10 @@
         "https://www.brentfordfc.com/en/news/first-team-news-sunderland-v-brentford-carabao-cup-rico-henry-injury-mikkel-damsgaard": {}
       },
       "club": "BRE",
-      "content_hash": "f7d2bc87d34850dca8898b05220057523b1a61d3b81ae4dd4bf900595f5f54a7",
+      "content_hash": "261059e6978396a60c38427ab840d7913e29577083f624824cba758db9f0f4c4",
       "documents": 2,
       "id": "bre-news",
-      "last_modified": "Sat, 31 Oct 2026 12:49:20 GMT",
+      "last_modified": "Sat, 31 Oct 2026 20:08:41 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "ok",
@@ -100,7 +100,7 @@
       "article_validators": {},
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"2e0f453491ac7e982a185163a44b0673\"",
       "id": "cov-news",
       "last_modified": "Sat, 31 Oct 2026 02:07:13 GMT",
@@ -115,7 +115,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"69hk6vq66a486z\"",
+      "etag": "\"puif2e83wa4886\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -126,20 +126,20 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.evertonfc.com/news/2026/october/30/branthwaite-fitness-update-ahead-of-second-newcastle-clash/": {
-          "etag": "W/\"t0lY2cbeaO\"",
-          "last_modified": "Sat, 31 Oct 2026 12:47:04 GMT"
+          "etag": "W/\"krTLTYi6Pq\"",
+          "last_modified": "Sun, 01 Nov 2026 01:16:15 GMT"
         },
         "https://www.evertonfc.com/news/2026/october/30/watch--moyes--pre-match-press-conference-ahead-of-newcastle-trip/": {
-          "etag": "W/\"9AKlpYdlPG\"",
-          "last_modified": "Sat, 31 Oct 2026 12:49:24 GMT"
+          "etag": "W/\"LXS8xnxAYj\"",
+          "last_modified": "Sun, 01 Nov 2026 01:16:53 GMT"
         }
       },
       "club": "EVE",
-      "content_hash": "636e421501e335901209d2366e524c7b1e37d50152f20e1b451da21b7b0f9844",
+      "content_hash": "e32656811dbad4b9c727ba29b19d1e8619aea6f6789cfb10c9ef92bf96565d98",
       "documents": 3,
-      "etag": "W/\"Xg7IXVhRib\"",
+      "etag": "W/\"1z9jA0RBE9\"",
       "id": "eve-news",
-      "last_modified": "Sat, 31 Oct 2026 12:49:22 GMT",
+      "last_modified": "Sun, 01 Nov 2026 01:17:01 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Everton",
       "status": "ok",
@@ -150,7 +150,7 @@
       "article_validators": {},
       "club": "FUL",
       "content_hash": "8408c6124d807047950e21e167dbc0c906db562bac8f712424e2d6e68d53383b",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"402db4a891b600dbf6474617ffb678bd\"",
       "id": "ful-news",
       "last_modified": "Sat, 31 Oct 2026 02:06:22 GMT",
@@ -165,9 +165,9 @@
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
       "documents": 1,
-      "etag": "\"b1e5f3ac238b05116054f2e4bd47eb00\"",
+      "etag": "\"6d9c1a05235a2565c752db635736c04e\"",
       "id": "hul-news",
-      "last_modified": "Sat, 31 Oct 2026 02:06:38 GMT",
+      "last_modified": "Sat, 31 Oct 2026 19:10:56 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Hull City",
       "status": "no_articles",
@@ -175,40 +175,29 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {
-        "https://www.itfc.co.uk/news/2026/october/30/early-hull-team-news-sasa-lukic-update/": {
-          "etag": "\"b7a87aa60afd84f82d55fd646a0deb8f\"",
-          "last_modified": "Sat, 31 Oct 2026 02:12:29 GMT"
-        },
-        "https://www.itfc.co.uk/news/2026/october/30/matchday-guide-hull-city-a-/": {
-          "etag": "\"cba26904ab137ff7dbd5051c5c9b0e46\"",
-          "last_modified": "Sat, 31 Oct 2026 02:12:29 GMT"
-        }
-      },
+      "article_validators": {},
       "club": "IPS",
-      "content_hash": "d48bc67637c4ecf774d0bb925b3d51cde5a5effb61ad2d360fa0a1f2268c19a8",
-      "documents": 3,
-      "etag": "\"e622b41c54fa7401a8414d6b793f73dd\"",
+      "content_hash": "bf89b1fb5ac7e7eee545c4893cb9e2d483094eb426343353863de1ee4d8abd68",
+      "documents": 1,
+      "etag": "\"26fdb6d81e1311bd12d4741cd78b88c5\"",
       "id": "ips-news",
-      "last_modified": "Sat, 31 Oct 2026 08:03:47 GMT",
+      "last_modified": "Sun, 01 Nov 2026 00:11:31 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
-      "status": "ok",
+      "status": "no_articles",
       "url": "https://www.itfc.co.uk/news/"
     },
     {
       "article_errors": 0,
-      "article_validators": {
-        "https://www.leedsunited.com/en/news/afc-bournemouth-vs-leeds-united-team-news-key-stats-and-everything-you-need-to-know": {}
-      },
+      "article_validators": {},
       "club": "LEE",
-      "content_hash": "f71615679e85a4cc0341271f1fcc8f1a970ce16976d469a3c69baf286144460f",
-      "documents": 2,
+      "content_hash": "dcfd63c86301309a05c08598f455181ea772132049c59e4eb04a05611173948d",
+      "documents": 1,
       "id": "lee-news",
-      "last_modified": "Sat, 31 Oct 2026 12:49:24 GMT",
+      "last_modified": "Sun, 01 Nov 2026 01:03:44 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
-      "status": "ok",
+      "status": "no_articles",
       "url": "https://www.leedsunited.com/en/news"
     },
     {
@@ -221,10 +210,10 @@
         "https://www.liverpoolfc.com/news/watch-andoni-iraola-liverpool-arsenal-press-conference": {}
       },
       "club": "LIV",
-      "content_hash": "93e14e0288b665e761631113845dcd1d6f48d47117d32871d0ea2f59b1a59124",
+      "content_hash": "42c4c619e79967bf55e57cc2ea57fc81b59b86e4f3ceaeee3445ec75f58ce1db",
       "documents": 6,
       "id": "liv-news",
-      "last_modified": "Sat, 31 Oct 2026 11:38:35 GMT",
+      "last_modified": "Sat, 31 Oct 2026 15:57:50 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
       "status": "ok",
@@ -233,15 +222,15 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/news/mens/city-v-brighton-match-preview-pl-31-oct-63928793": {},
-        "https://www.mancity.com/news/mens/enzo-maresca-brighton-premier-league-preview-63928962": {},
-        "https://www.mancity.com/news/mens/enzo-maresca-brighton-squad-update-63928963": {}
+        "https://www.mancity.com/citytv/mens/enzo-maresca-post-match-press-conference-manchester-city-brighton-63929066": {
+          "last_modified": "Sun, 01 Nov 2026 01:03:17 GMT"
+        }
       },
       "club": "MCI",
-      "content_hash": "23cd7bab5547364d54d92db4a47529b455fbfccb5dec80fdd691e6dbd547ffb9",
-      "documents": 4,
+      "content_hash": "8dd6e5a32e008a07523171fe36636df87fe91501919e05890498ff1ea73659b9",
+      "documents": 2,
       "id": "mci-news",
-      "last_modified": "Sat, 31 Oct 2026 12:48:34 GMT",
+      "last_modified": "Sun, 01 Nov 2026 00:55:53 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
       "status": "ok",
@@ -271,12 +260,11 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.newcastleunited.com/en/news/how-to-watch-everton-vs-newcastle-united-tv-channel-kick-off-time-and-team-news": {},
-        "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-fernandez-pardo-and-miley-latest-ahead-of-carabao-cup-tie": {}
+        "https://www.newcastleunited.com/en/news/how-to-watch-everton-vs-newcastle-united-tv-channel-kick-off-time-and-team-news": {}
       },
       "club": "NEW",
-      "content_hash": "d55315e4971d8a086376d7ff23a5b5ca52629a40378817e36153e60b0438cb1d",
-      "documents": 3,
+      "content_hash": "267242b53be8462a5ddb903531fdf1566b12bfe01f38e198e718f918476f06b3",
+      "documents": 2,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Newcastle United",
@@ -289,9 +277,9 @@
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
       "documents": 1,
-      "etag": "\"f5dc66303196e2206ab8e7613eda5f88\"",
+      "etag": "\"5eca61859de0438f1549eff3bdd2de73\"",
       "id": "nfo-news",
-      "last_modified": "Sat, 31 Oct 2026 12:21:51 GMT",
+      "last_modified": "Sat, 31 Oct 2026 23:09:07 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -302,7 +290,7 @@
       "article_validators": {},
       "club": "SUN",
       "content_hash": "83ec15aaae3409e9a938b70f4d73928762d5e0ab7390b0daee6538811cc6d630",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"2691ba54cea22e3f610efe989fdc7eb6\"",
       "id": "sun-news",
       "last_modified": "Sat, 31 Oct 2026 11:18:28 GMT",
@@ -315,7 +303,7 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "TOT",
-      "content_hash": "0dd7029b45b6f3f3d205e2da7581c0fb41e5a01ac4a023a7a462053ce080c094",
+      "content_hash": "7918de1b82e741115b278254d6fb79afb33c8e457aa98931f46505cecb02fe68",
       "documents": 1,
       "id": "tot-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
