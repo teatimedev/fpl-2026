@@ -1,13 +1,15 @@
 {
   "affected_clubs": [],
-  "affected_owned": [],
-  "checked_at": "2026-11-01T01:17:05Z",
+  "affected_owned": [
+    8
+  ],
+  "checked_at": "2026-11-02T06:28:00Z",
   "claims": 0,
   "coverage": 0.35,
   "deadline": "2026-11-06T18:30:00Z",
   "gw": 10,
-  "notification_key": "866db4e204feb470a50d",
-  "notify_required": false,
+  "notification_key": "7366616164dfe6b8f896",
+  "notify_required": true,
   "official_fpl": {
     "1": {
       "chance": null,
@@ -180,9 +182,9 @@
       "status": "a"
     },
     "13": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "130": {
       "chance": 100,
@@ -345,9 +347,9 @@
       "status": "a"
     },
     "16": {
-      "chance": 50,
-      "news": "Ankle injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "160": {
       "chance": null,
@@ -1500,9 +1502,9 @@
       "status": "a"
     },
     "368": {
-      "chance": 50,
-      "news": "Hamstring injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "369": {
       "chance": null,
@@ -1550,9 +1552,9 @@
       "status": "u"
     },
     "377": {
-      "chance": 50,
-      "news": "Knee injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "378": {
       "chance": null,
@@ -2421,7 +2423,7 @@
     },
     "533": {
       "chance": 75,
-      "news": "Knock - 75% chance of playing",
+      "news": "Concussion - 75% chance of playing",
       "status": "d"
     },
     "534": {
@@ -2475,9 +2477,9 @@
       "status": "a"
     },
     "543": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Muscular injury - 75% chance of playing",
+      "status": "d"
     },
     "544": {
       "chance": null,
@@ -2550,9 +2552,9 @@
       "status": "i"
     },
     "557": {
-      "chance": 75,
-      "news": "Hamstring injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "558": {
       "chance": null,
@@ -3250,9 +3252,9 @@
       "status": "a"
     },
     "8": {
-      "chance": 75,
-      "news": "Hip injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "80": {
       "chance": 0,
@@ -3362,20 +3364,9 @@
   },
   "official_fpl_ok": true,
   "price_changed": [
-    68,
-    79,
-    107,
-    112,
-    115,
-    165,
-    166,
-    268,
-    286,
-    379,
-    399,
-    469,
-    491,
-    532
+    7,
+    285,
+    361
   ],
   "rebuild_required": true,
   "state_changed": false,
