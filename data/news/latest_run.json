@@ -1,15 +1,13 @@
 {
   "affected_clubs": [],
-  "affected_owned": [
-    8
-  ],
-  "checked_at": "2026-11-02T06:28:00Z",
+  "affected_owned": [],
+  "checked_at": "2026-11-03T06:59:47Z",
   "claims": 0,
-  "coverage": 0.35,
+  "coverage": 0.25,
   "deadline": "2026-11-06T18:30:00Z",
   "gw": 10,
-  "notification_key": "7366616164dfe6b8f896",
-  "notify_required": true,
+  "notification_key": "866db4e204feb470a50d",
+  "notify_required": false,
   "official_fpl": {
     "1": {
       "chance": null,
@@ -742,9 +740,9 @@
       "status": "u"
     },
     "230": {
-      "chance": 75,
-      "news": "Concussion - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "231": {
       "chance": null,
@@ -1992,9 +1990,9 @@
       "status": "a"
     },
     "456": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Suspended until 21 Nov",
+      "status": "s"
     },
     "457": {
       "chance": null,
@@ -2042,9 +2040,9 @@
       "status": "a"
     },
     "465": {
-      "chance": 50,
-      "news": "Ankle injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "466": {
       "chance": 0,
@@ -3364,9 +3362,9 @@
   },
   "official_fpl_ok": true,
   "price_changed": [
-    7,
-    285,
-    361
+    11,
+    568,
+    569
   ],
   "rebuild_required": true,
   "state_changed": false,
