@@ -1,8 +1,8 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-11-03T06:59:47Z",
-  "claims": 0,
+  "checked_at": "2026-11-03T15:20:50Z",
+  "claims": 1,
   "coverage": 0.25,
   "deadline": "2026-11-06T18:30:00Z",
   "gw": 10,
@@ -3361,12 +3361,8 @@
     }
   },
   "official_fpl_ok": true,
-  "price_changed": [
-    11,
-    568,
-    569
-  ],
-  "rebuild_required": true,
+  "price_changed": [],
+  "rebuild_required": false,
   "state_changed": false,
   "status": "red",
   "urgent": false,

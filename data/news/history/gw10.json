@@ -1,5 +1,27 @@
 {
-  "claims": [],
+  "claims": [
+    {
+      "availability_scope_verified": false,
+      "checked_at": "2026-11-03T15:20:50Z",
+      "claim_type": "explicit_out",
+      "club": "LIV",
+      "confidence": "review",
+      "decision": "candidate",
+      "excerpt": "Ryan Gravenberch has been ruled out of Liverpool\u2019s Champions League fixture at Fenerbahce.",
+      "extraction_version": "explicit-fixture-subject-v3",
+      "gw": 10,
+      "id": "ev-1a6c206006dbe218",
+      "observed_at": "2026-11-03T15:20:50Z",
+      "player": "Ryan Gravenberch",
+      "player_id": 371,
+      "published_at": null,
+      "publisher": "Liverpool",
+      "reason": "missing_or_stale_publication_time",
+      "source_id": "liv-news",
+      "title": "Ryan Gravenberch injury update - Liverpool FC",
+      "url": "https://www.liverpoolfc.com/news/ryan-gravenberch-injury-update"
+    }
+  ],
   "deadline": "2026-11-06T18:30:00Z",
   "gw": 10,
   "policy": "explicit absences auto-apply; nuanced claims are review candidates",

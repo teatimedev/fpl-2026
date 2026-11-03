@@ -211,7 +211,7 @@
     ],
     [
      16,
-     5.8
+     5.9
     ],
     [
      17,
@@ -235,7 +235,7 @@
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 5.4,
+   "now": 6.5,
    "gap_trend": [
     [
      10,
@@ -263,7 +263,7 @@
     ],
     [
      16,
-     5.8
+     5.9
     ],
     [
      17,
@@ -271,7 +271,7 @@
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 5.4 over the window. The squad is holding up (gap to the optimised one-week squad 2.2\u20135.8 over the next weeks).",
+   "advice": "Hold. Unlimited transfers now are worth 6.5 over the window. The squad is holding up (gap to the optimised one-week squad 2.2\u20135.9 over the next weeks).",
    "last_eligible": 19
   }
  },
@@ -282,7 +282,7 @@
   "13": 2.3,
   "14": 2.2,
   "15": 4.3,
-  "16": 5.8,
+  "16": 5.9,
   "17": 2.8,
   "18": 1.8,
   "19": 6.8
