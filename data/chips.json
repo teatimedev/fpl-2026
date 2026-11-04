@@ -26,7 +26,7 @@
     ],
     [
      13,
-     10.0
+     9.9
     ],
     [
      14,
@@ -53,11 +53,11 @@
      9.2
     ]
    ],
-   "best_gw": 13,
+   "best_gw": 14,
    "best": 10.0,
    "now": 9.9,
    "play": false,
-   "advice": "Hold. Best-looking week for this one is GW13 (10.0 extra points); this week is 9.9. Second copy (GW20\u201338): best week GW34 (10.9).",
+   "advice": "Hold. Best-looking week for this one is GW14 (10.0 extra points); this week is 9.9. Second copy (GW20\u201338): best week GW34 (10.9).",
    "last_eligible": 19,
    "later": [
     {
@@ -187,11 +187,11 @@
    "weeks": [
     [
      10,
-     2.2
+     2.1
     ],
     [
      11,
-     3.5
+     3.4
     ],
     [
      12,
@@ -199,11 +199,11 @@
     ],
     [
      13,
-     2.3
+     2.6
     ],
     [
      14,
-     2.2
+     1.9
     ],
     [
      15,
@@ -211,39 +211,39 @@
     ],
     [
      16,
-     5.9
+     5.8
     ],
     [
      17,
-     2.8
+     2.6
     ],
     [
      18,
-     1.8
+     2.0
     ],
     [
      19,
-     6.8
+     6.7
     ]
    ],
    "best_gw": 19,
-   "best": 6.8,
-   "now": 2.2,
+   "best": 6.7,
+   "now": 2.1,
    "play": false,
-   "advice": "Hold. Widest gap left is GW19 (6.8 behind the optimised one-week squad); this week 2.2.",
+   "advice": "Hold. Widest gap left is GW19 (6.7 behind the optimised one-week squad); this week 2.1.",
    "last_eligible": 19
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 6.5,
+   "now": 5.0,
    "gap_trend": [
     [
      10,
-     2.2
+     2.1
     ],
     [
      11,
-     3.5
+     3.4
     ],
     [
      12,
@@ -251,11 +251,11 @@
     ],
     [
      13,
-     2.3
+     2.6
     ],
     [
      14,
-     2.2
+     1.9
     ],
     [
      15,
@@ -263,29 +263,29 @@
     ],
     [
      16,
-     5.9
+     5.8
     ],
     [
      17,
-     2.8
+     2.6
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 6.5 over the window. The squad is holding up (gap to the optimised one-week squad 2.2\u20135.9 over the next weeks).",
+   "advice": "Hold. Unlimited transfers now are worth 5.0 over the window. The squad is holding up (gap to the optimised one-week squad 2.1\u20135.8 over the next weeks).",
    "last_eligible": 19
   }
  },
  "gaps": {
-  "10": 2.2,
-  "11": 3.5,
+  "10": 2.1,
+  "11": 3.4,
   "12": 3.8,
-  "13": 2.3,
-  "14": 2.2,
+  "13": 2.6,
+  "14": 1.9,
   "15": 4.3,
-  "16": 5.9,
-  "17": 2.8,
-  "18": 1.8,
-  "19": 6.8
+  "16": 5.8,
+  "17": 2.6,
+  "18": 2.0,
+  "19": 6.7
  },
  "method": "Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled."
 }
