@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 10
 
-Deadline **Fri 06 Nov, 18:30 UTC** — 2d 16h away.
+Deadline **Fri 06 Nov, 18:30 UTC** — 1d 11h away.
 Projections cover GW10–15.
 
 ## GW9 in review — what happened, and what it does and does not change
@@ -110,7 +110,7 @@ _Last week, for the names above:_
 - O'Shea — variance (team): 90', 0.00 xG, 0 goals, 1 pts (proj 3.4). Team (-1.4).
 - Verbruggen — variance (team): 90', 0.00 xG, 0 goals, 11 pts (proj 2.7). Team (+4.1).
 
-**Recommended:** Thiaw→Konsa this week (+0.1 versus holding/re-planning).
+**Recommended: hold.** No transfer path tested beats saving by its bar (0.0 points per judgement-call move; selling an unavailable player needs no bar) over GW10–15. You would have 2 free transfers next week.
 
 _Minutes check:_ the verdict above is on the numbers; Thiaw is a check-first case (see the review).
 
@@ -126,24 +126,22 @@ _Minutes check:_ the verdict above is on the numbers; Thiaw is a check-first cas
 
 ## The next six weeks, planned
 
-
-**GW10 simulation:** the selected GW10 squad beats holding in 60% of 4,000 simulations (average +0.9 points, net of hits). The advantage is both likely and large enough to clear the 0.0-point bar for 1 move. This covers one gameweek; the transfer decision compares the full window.
-Selected path under the current policy: **390.7** pts (0 hits). Making no move this week and re-planning: 390.6. Selected path versus holding: **+0.1**.
+Selected path under the current policy: **390.8** pts (0 hits). Making no move this week and re-planning: 390.8. Selected path versus holding: **+0.0** — not enough; hold.
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
-| Gvardiol → De Cuyper | -1.55 | 0.0 | no |
-| Thiaw → Konsa | +0.06 | 0.0 | yes |
+| Gvardiol → De Cuyper | -1.72 | 0.0 | no |
+| Thiaw → Konsa | -0.12 | 0.0 | no |
 | Tarkowski → De Cuyper | -0.60 | 0.0 | no |
-| Sadiki, Thiaw → Konsa, Gomez | -1.46 | 0.0 | no |
-| Sadiki, Thiaw → Maatsen, Gomez | -1.04 | 0.0 | no |
+| Sadiki, Thiaw → Konsa, Gomez | -1.63 | 0.0 | no |
+| Sadiki, Thiaw → Maatsen, Gomez | -1.21 | 0.0 | no |
 
-- **GW10** 66.6 pts, C Haaland, 1 FT  Thiaw → Konsa
-- **GW11** 65.2 pts, C Haaland, 1 FT  Tarkowski → De Cuyper
-- **GW12** 60.3 pts, C Palmer, 1 FT  Gvardiol → Vuskovic
-- **GW13** 64.2 pts, C Haaland, 1 FT  Sadiki → Barnes
-- **GW14** 66.6 pts, C Haaland, 1 FT  Konsa → Maguire
-- **GW15** 67.7 pts, C Haaland, 1 FT  Tavernier → Ødegaard
+- **GW10** 65.6 pts, C Haaland, 1 FT  hold
+- **GW11** 65.9 pts, C Haaland, 2 FT  Tarkowski → De Cuyper, Thiaw → Vuskovic
+- **GW12** 60.8 pts, C Palmer, 1 FT  Gvardiol → Justin
+- **GW13** 64.0 pts, C Haaland, 1 FT  Sadiki → Barnes
+- **GW14** 66.6 pts, C Haaland, 1 FT  hold
+- **GW15** 67.9 pts, C Haaland, 2 FT  Justin → Maatsen, Tavernier → Ødegaard
 
 _The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
 
@@ -155,8 +153,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 9.9 | GW14: 10.0 | Hold. Best-looking week for this one is GW14 (10.0 extra points); this week is 9.9. Second copy (GW20–38): best week GW34 (10.9). |
 | Triple Captain | — | GW36: 8.7 (Haaland) | Hold. Best week for this one is GW36: Haaland (8.7 extra). |
-| Free Hit | 2.1 | GW19: 6.7 | Hold. Widest gap left is GW19 (6.7 behind the optimised one-week squad); this week 2.1. |
-| Wildcard | +5.0 over the window | — | Hold. Unlimited transfers now are worth 5.0 over the window. The squad is holding up (gap to the optimised one-week squad 2.1–5.8 over the next weeks). |
+| Free Hit | 2.1 | GW19: 6.8 | Hold. Widest gap left is GW19 (6.8 behind the optimised one-week squad); this week 2.1. |
+| Wildcard | +5.4 over the window | — | Hold. Unlimited transfers now are worth 5.4 over the window. The squad is holding up (gap to the optimised one-week squad 2.1–5.9 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -167,15 +165,23 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Evanilson £6.4 | +20.3% | +412,683 | João Pedro £7.7 | -16.2% | -724,278 |
-| N.Jackson £7.0 ⭑ | +11.3% | +331,157 | Cherki £7.9 | -5.3% | -208,985 |
-| Tavernier £6.6 ⭑ | +8.5% | +263,614 | B.Fernandes £11.7 | -4.9% | -118,922 |
-| Van Hecke £5.0 | +15.8% | +200,448 | Mbeumo £7.9 ⭑ | -3.9% | -88,318 |
-| Isak £9.2 | +7.8% | +190,771 | Guéhi £6.0 | -4.2% | -75,227 |
-| Rogers £8.2 | +3.0% | +174,952 | Gvardiol £5.7 ⭑ | -2.4% | -70,073 |
+| Evanilson £6.4 | +21.9% | +458,432 | João Pedro £7.7 | -18.3% | -802,022 |
+| N.Jackson £7.0 ⭑ | +12.3% | +364,913 | Cherki £7.9 | -6.0% | -235,515 |
+| Tavernier £6.6 ⭑ | +9.5% | +298,767 | B.Fernandes £11.7 | -5.4% | -129,450 |
+| Van Hecke £5.0 | +17.5% | +227,910 | Mbeumo £7.9 ⭑ | -4.2% | -96,448 |
+| Isak £9.2 | +8.9% | +219,402 | Gibbs-White £7.8 | -7.6% | -89,198 |
+| Rogers £8.2 | +3.3% | +193,152 | Guéhi £6.0 | -4.7% | -84,295 |
 
 ⭑ = in your squad.
 
+**Price risk if you wait (shadow-only):**
+
+- Target Konsa (net +147k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +147k this event (in 152k / out 6k), sel 23.1% = Q3 (~150k to move), price 4.8 over 51 snaps (+0.3m in window), already +1x0.1m this event]
+- Target De Cuyper (net +162k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +162k this event (in 167k / out 5k), sel 45.1% = Q3 (~150k to move), price 5.4 over 51 snaps (+0.9m in window), already +1x0.1m this event]
+- Squad player Mbeumo (net -88k this event) at fall risk (-0.1m hurts the bank) [net -88k this event (in 13k / out 101k), sel 20.4% = Q3 (~150k to move), price 7.9 over 51 snaps (-0.1m in window)]
+
+_Based on 51 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
+
 ---
 
-_Generated 2026-11-04 01:49 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-11-05 07:22 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._

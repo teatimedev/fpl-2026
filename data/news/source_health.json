@@ -1,41 +1,45 @@
 {
-  "checked_at": "2026-11-04T01:29:30Z",
-  "coverage": 0.2,
+  "checked_at": "2026-11-05T07:01:50Z",
+  "coverage": 0.35,
   "enabled": 20,
   "gw": 10,
-  "healthy": 4,
+  "healthy": 7,
   "official_fpl_ok": true,
   "sources": [
     {
       "article_errors": 0,
       "article_validators": {
         "https://www.arsenal.com/meetings-and-events/conferences": {
-          "etag": "\"10ts48y12px2g73\""
+          "etag": "\"mxw85vy4wa1t3r\""
         }
       },
       "club": "ARS",
-      "content_hash": "ab34d381b25594a3a73bf4c64688549957e4799484c67964033dcf804690937a",
+      "content_hash": "c2a94a2b896db7f4877587af42bdd256a1b34081ddf6fa9ea49ef84b5f07ea41",
       "documents": 2,
-      "error": "HTTP Error 503: Service Unavailable",
-      "etag": "\"s2t1wmxwya2f11\"",
+      "etag": "\"92d0q46f611rxp\"",
       "id": "ars-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Arsenal",
-      "status": "error",
+      "status": "ok",
       "url": "https://www.arsenal.com/news"
     },
     {
       "article_errors": 0,
-      "article_validators": {},
+      "article_validators": {
+        "https://www.avfc.co.uk/news/2026/november/03/prematch-barcelona-v-aston-villa-team-news/": {
+          "etag": "W/\"FpPLgodVh2\"",
+          "last_modified": "Thu, 05 Nov 2026 07:01:54 GMT"
+        }
+      },
       "club": "AVL",
-      "content_hash": "9c7825becb8ff42f8c499d57fe8c1093bd5159607ffeacf1c5ac976ec67ff3f9",
-      "documents": 0,
-      "etag": "\"0dcde99a34fa1bef98aa0d1fa62fe5bf\"",
+      "content_hash": "9cdba602bcdef41a4e7aec613832ba150115aefa0c7ca015f3b60aa18b75dd16",
+      "documents": 2,
+      "etag": "W/\"yiHYiiipxx\"",
       "id": "avl-news",
-      "last_modified": "Tue, 03 Nov 2026 14:24:45 GMT",
+      "last_modified": "Thu, 05 Nov 2026 07:01:51 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Aston Villa",
-      "status": "no_articles",
+      "status": "ok",
       "url": "https://www.avfc.co.uk/news/"
     },
     {
@@ -75,7 +79,7 @@
       "content_hash": "851824b022246d31723b4dbab6f4bc0e541a05bde41fc877c4d4a92110c9302b",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Tue, 03 Nov 2026 22:22:15 GMT",
+      "last_modified": "Wed, 04 Nov 2026 13:43:14 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "no_articles",
@@ -99,10 +103,10 @@
       "article_validators": {},
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
-      "documents": 0,
-      "etag": "\"dd181e4551fa0ffc63fa66c979e3345a\"",
+      "documents": 1,
+      "etag": "\"0104a8b6bda5491bf0939630a7398177\"",
       "id": "cov-news",
-      "last_modified": "Tue, 03 Nov 2026 12:03:59 GMT",
+      "last_modified": "Thu, 05 Nov 2026 02:10:01 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Coventry City",
       "status": "no_articles",
@@ -125,11 +129,11 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "EVE",
-      "content_hash": "ac5ba6c4cfea6402f44ef86567bdd0706bdaffac999518a8f749c5bad304d6f0",
+      "content_hash": "796f56fcb5b2291d92a574cd1faeeb3e6b6e3f0702c26a92eed54372b1e9f3cc",
       "documents": 1,
-      "etag": "W/\"DdEWQo3448\"",
+      "etag": "W/\"vHtrzKwjcT\"",
       "id": "eve-news",
-      "last_modified": "Wed, 04 Nov 2026 01:28:10 GMT",
+      "last_modified": "Thu, 05 Nov 2026 07:01:11 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Everton",
       "status": "no_articles",
@@ -141,9 +145,9 @@
       "club": "FUL",
       "content_hash": "8408c6124d807047950e21e167dbc0c906db562bac8f712424e2d6e68d53383b",
       "documents": 1,
-      "etag": "\"15f4a9a5d5e71932766ca3ae50f6f8c0\"",
+      "etag": "\"0aae56a4566ee755a5f3aaa3513b68fe\"",
       "id": "ful-news",
-      "last_modified": "Tue, 03 Nov 2026 16:33:23 GMT",
+      "last_modified": "Thu, 05 Nov 2026 02:07:05 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Fulham",
       "status": "no_articles",
@@ -155,9 +159,9 @@
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
       "documents": 1,
-      "etag": "\"f85c59c60ece3b4da6d49b49bf82b2a5\"",
+      "etag": "\"1395980af6d76a6e61b48cc177b92b27\"",
       "id": "hul-news",
-      "last_modified": "Tue, 03 Nov 2026 22:53:14 GMT",
+      "last_modified": "Wed, 04 Nov 2026 02:09:37 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Hull City",
       "status": "no_articles",
@@ -165,26 +169,31 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {},
+      "article_validators": {
+        "https://www.itfc.co.uk/news/2026/november/03/palacios-called-to-argentina-squad/": {
+          "etag": "\"68fc9447e3b3113fff2369406048a5aa\"",
+          "last_modified": "Thu, 05 Nov 2026 02:11:34 GMT"
+        }
+      },
       "club": "IPS",
-      "content_hash": "c67bc82ee0b6023ca642ca98c0b41a9facd5a019bfbfaccc6f33d92bbb5d8cb0",
-      "documents": 1,
-      "etag": "\"30ae50d8525589669e3802e0b9bf5a93\"",
+      "content_hash": "cc8ee55e273292323e4b54e6e05f7ee62875607b2536e424552cc37b998e1209",
+      "documents": 2,
+      "etag": "\"38f3e89e1e43a32bd4afd0aeff4fa3c9\"",
       "id": "ips-news",
-      "last_modified": "Tue, 03 Nov 2026 19:56:15 GMT",
+      "last_modified": "Thu, 05 Nov 2026 02:11:35 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
-      "status": "no_articles",
+      "status": "ok",
       "url": "https://www.itfc.co.uk/news/"
     },
     {
       "article_errors": 0,
       "article_validators": {},
       "club": "LEE",
-      "content_hash": "715c18b36c8380947991606eac1ecc1d0ee1efe46113fbacc95216fa592f3ec5",
+      "content_hash": "6a03de00b9e687d6e5fbb11b4422b0a8de69c16018f314f6c3f2a826aa38f3bc",
       "documents": 1,
       "id": "lee-news",
-      "last_modified": "Wed, 04 Nov 2026 01:02:20 GMT",
+      "last_modified": "Thu, 05 Nov 2026 06:06:30 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "no_articles",
@@ -193,17 +202,17 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.liverpoolfc.com/news/andoni-iraola-explains-ryan-gravenberch-injury-and-timeframe": {},
-        "https://www.liverpoolfc.com/news/andoni-iraola-press-conference-fenerbahce-challenge-istanbul-trey-nyoni": {},
+        "https://www.liverpoolfc.com/news/andoni-iraola-fenerbahce-champions-league-press-conference": {},
         "https://www.liverpoolfc.com/news/fenerbahce-v-liverpool-team-news-champions-league": {},
         "https://www.liverpoolfc.com/news/listing/mens-team-news": {},
-        "https://www.liverpoolfc.com/news/watch-liverpool-fenerbahce-press-conference-champions-league": {}
+        "https://www.liverpoolfc.com/news/team-news-confirmed-liverpool-line-up-v-fenerbahce": {},
+        "https://www.liverpoolfc.com/news/video-andoni-iraolas-press-conference-after-fenerbahce-liverpool": {}
       },
       "club": "LIV",
-      "content_hash": "a49dd04c646907620631fcde8ae0938b738e873f707bc1765d1b974c5daf34c6",
+      "content_hash": "28b85af6063800f96c817a5d636873862260030073b271db10ad25f851d536a9",
       "documents": 6,
       "id": "liv-news",
-      "last_modified": "Tue, 03 Nov 2026 19:17:26 GMT",
+      "last_modified": "Wed, 04 Nov 2026 21:46:50 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
       "status": "ok",
@@ -212,22 +221,13 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/citytv/mens/enzo-maresca-phil-foden-press-conference-63929309": {},
-        "https://www.mancity.com/citytv/mens/phil-foden-rb-leipzig-press-conference-63929324": {
-          "last_modified": "Wed, 04 Nov 2026 01:20:29 GMT"
-        },
-        "https://www.mancity.com/news/mens/enzo-maresca-rb-leipzig-manchester-city-written-preview-63929323": {
-          "last_modified": "Wed, 04 Nov 2026 01:21:49 GMT"
-        },
-        "https://www.mancity.com/news/mens/phil-foden-rb-leipzig-press-conference-written-63929330": {},
-        "https://www.mancity.com/news/mens/travelling-party-rb-leipzig-manchester-city-63929314": {
-          "last_modified": "Wed, 04 Nov 2026 01:24:59 GMT"
-        }
+        "https://www.mancity.com/citytv/mens/enzo-maresca-post-match-press-conference-rb-leipzig-63929431": {}
       },
       "club": "MCI",
-      "content_hash": "ce4a198a21d80fe9cbd7f7d325bf57a1b227c0934a0b7c85b674611cb893ccdd",
-      "documents": 6,
+      "content_hash": "86bf12008ed3dc07a3daac30593974bddc157df1717875bd2e4246540c9baacd",
+      "documents": 2,
       "id": "mci-news",
+      "last_modified": "Thu, 05 Nov 2026 06:34:16 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
       "status": "ok",
@@ -261,7 +261,7 @@
         "https://www.newcastleunited.com/en/news/how-to-watch-newcastle-united-vs-everton-tv-details-kick-off-time-and-team-news": {}
       },
       "club": "NEW",
-      "content_hash": "f8339f2f3326df5aaeea1b7d7d2214a825654a1f2f48926f04bc8cb6aca3472a",
+      "content_hash": "bf17f7a58b27cee79394ffe872cf069497aa0c8fb0ee2aadb306503310941024",
       "documents": 3,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -274,10 +274,10 @@
       "article_validators": {},
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
-      "documents": 0,
-      "etag": "\"b68549a68746958c772dab0c6ccc3b86\"",
+      "documents": 1,
+      "etag": "\"8868a2d30540f5c1bf9c2c35942af213\"",
       "id": "nfo-news",
-      "last_modified": "Tue, 03 Nov 2026 10:49:39 GMT",
+      "last_modified": "Thu, 05 Nov 2026 02:07:50 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -289,9 +289,9 @@
       "club": "SUN",
       "content_hash": "83ec15aaae3409e9a938b70f4d73928762d5e0ab7390b0daee6538811cc6d630",
       "documents": 1,
-      "etag": "\"13bf866b71cb7c1cb84692cbd1c9c4fd\"",
+      "etag": "\"ec317bfe8db1b1cb5b9c3b9269a13b0c\"",
       "id": "sun-news",
-      "last_modified": "Tue, 03 Nov 2026 17:03:38 GMT",
+      "last_modified": "Thu, 05 Nov 2026 02:06:45 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Sunderland",
       "status": "no_articles",
