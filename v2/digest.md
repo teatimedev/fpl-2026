@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 10
 
-Deadline **Fri 06 Nov, 18:30 UTC** — 1d 11h away.
+Deadline **Fri 06 Nov, 18:30 UTC** — 1d 2h away.
 Projections cover GW10–15.
 
 ## GW9 in review — what happened, and what it does and does not change
 
-_370 players classified: 43 unavailable, 23 minutes loss, 27 minutes watch, 18 minutes gain, 13 role change, 49 variance, 197 on model. Retrospective classes graded: 8 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_370 players classified: 44 unavailable, 23 minutes loss, 27 minutes watch, 18 minutes gain, 13 role change, 49 variance, 196 on model. Retrospective classes graded: 8 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -153,8 +153,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 9.9 | GW14: 10.0 | Hold. Best-looking week for this one is GW14 (10.0 extra points); this week is 9.9. Second copy (GW20–38): best week GW34 (10.9). |
 | Triple Captain | — | GW36: 8.7 (Haaland) | Hold. Best week for this one is GW36: Haaland (8.7 extra). |
-| Free Hit | 2.1 | GW19: 6.8 | Hold. Widest gap left is GW19 (6.8 behind the optimised one-week squad); this week 2.1. |
-| Wildcard | +5.4 over the window | — | Hold. Unlimited transfers now are worth 5.4 over the window. The squad is holding up (gap to the optimised one-week squad 2.1–5.9 over the next weeks). |
+| Free Hit | 2.2 | GW19: 6.8 | Hold. Widest gap left is GW19 (6.8 behind the optimised one-week squad); this week 2.2. |
+| Wildcard | +5.1 over the window | — | Hold. Unlimited transfers now are worth 5.1 over the window. The squad is holding up (gap to the optimised one-week squad 2.2–5.9 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -165,23 +165,28 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Evanilson £6.4 | +21.9% | +458,432 | João Pedro £7.7 | -18.3% | -802,022 |
-| N.Jackson £7.0 ⭑ | +12.3% | +364,913 | Cherki £7.9 | -6.0% | -235,515 |
-| Tavernier £6.6 ⭑ | +9.5% | +298,767 | B.Fernandes £11.7 | -5.4% | -129,450 |
-| Van Hecke £5.0 | +17.5% | +227,910 | Mbeumo £7.9 ⭑ | -4.2% | -96,448 |
-| Isak £9.2 | +8.9% | +219,402 | Gibbs-White £7.8 | -7.6% | -89,198 |
-| Rogers £8.2 | +3.3% | +193,152 | Guéhi £6.0 | -4.7% | -84,295 |
+| Evanilson £6.4 | +22.8% | +481,726 | João Pedro £7.7 | -19.3% | -841,419 |
+| N.Jackson £7.0 ⭑ | +12.8% | +381,058 | Cherki £7.9 | -6.4% | -251,426 |
+| Tavernier £6.6 ⭑ | +10.0% | +318,169 | B.Fernandes £11.7 | -5.6% | -134,899 |
+| Van Hecke £5.0 | +18.3% | +241,104 | Mbeumo £7.9 ⭑ | -4.4% | -101,018 |
+| Isak £9.2 | +9.5% | +236,910 | Gibbs-White £7.8 | -8.4% | -98,686 |
+| Rogers £8.2 | +3.4% | +202,353 | Guéhi £6.0 | -5.0% | -88,630 |
 
 ⭑ = in your squad.
 
 **Price risk if you wait (shadow-only):**
 
-- Target Konsa (net +147k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +147k this event (in 152k / out 6k), sel 23.1% = Q3 (~150k to move), price 4.8 over 51 snaps (+0.3m in window), already +1x0.1m this event]
-- Target De Cuyper (net +162k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +162k this event (in 167k / out 5k), sel 45.1% = Q3 (~150k to move), price 5.4 over 51 snaps (+0.9m in window), already +1x0.1m this event]
-- Squad player Mbeumo (net -88k this event) at fall risk (-0.1m hurts the bank) [net -88k this event (in 13k / out 101k), sel 20.4% = Q3 (~150k to move), price 7.9 over 51 snaps (-0.1m in window)]
+- Target Konsa (net +165k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +165k this event (in 173k / out 8k), sel 23.3% = Q3 (~150k to move), price 4.8 over 52 snaps (+0.3m in window), already +1x0.1m this event]
+- Target De Cuyper (net +183k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +183k this event (in 189k / out 6k), sel 45.2% = Q3 (~150k to move), price 5.4 over 52 snaps (+0.9m in window), already +1x0.1m this event]
+- Squad player Gvardiol (net -79k this event) at fall risk (-0.1m hurts the bank) [net -79k this event (in 18k / out 97k), sel 25.8% = Q3 (~150k to move), price 5.7 over 52 snaps (+0.2m in window)]
+- Squad player Mbeumo (net -96k this event) at fall risk (-0.1m hurts the bank) [net -96k this event (in 16k / out 113k), sel 20.3% = Q3 (~150k to move), price 7.9 over 52 snaps (-0.1m in window)]
 
-_Based on 51 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
+_Based on 52 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
 
 ---
 
-_Generated 2026-11-05 07:22 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-11-05 15:57 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+
+## Scouting
+
+12 sourced observations; 8 API calls. Review these alongside the transfer stress tests in the app.

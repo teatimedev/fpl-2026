@@ -187,7 +187,7 @@
    "weeks": [
     [
      10,
-     2.1
+     2.2
     ],
     [
      11,
@@ -228,18 +228,18 @@
    ],
    "best_gw": 19,
    "best": 6.8,
-   "now": 2.1,
+   "now": 2.2,
    "play": false,
-   "advice": "Hold. Widest gap left is GW19 (6.8 behind the optimised one-week squad); this week 2.1.",
+   "advice": "Hold. Widest gap left is GW19 (6.8 behind the optimised one-week squad); this week 2.2.",
    "last_eligible": 19
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 5.4,
+   "now": 5.1,
    "gap_trend": [
     [
      10,
-     2.1
+     2.2
     ],
     [
      11,
@@ -271,12 +271,12 @@
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 5.4 over the window. The squad is holding up (gap to the optimised one-week squad 2.1\u20135.9 over the next weeks).",
+   "advice": "Hold. Unlimited transfers now are worth 5.1 over the window. The squad is holding up (gap to the optimised one-week squad 2.2\u20135.9 over the next weeks).",
    "last_eligible": 19
   }
  },
  "gaps": {
-  "10": 2.1,
+  "10": 2.2,
   "11": 3.2,
   "12": 3.8,
   "13": 2.6,
