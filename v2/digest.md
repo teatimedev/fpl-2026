@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 10
 
-Deadline **Fri 06 Nov, 18:30 UTC** — 1d 2h away.
+Deadline **Fri 06 Nov, 18:30 UTC** — 0d 20h away.
 Projections cover GW10–15.
 
 ## GW9 in review — what happened, and what it does and does not change
 
-_370 players classified: 44 unavailable, 23 minutes loss, 27 minutes watch, 18 minutes gain, 13 role change, 49 variance, 196 on model. Retrospective classes graded: 8 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_370 players classified: 50 unavailable, 22 minutes loss, 27 minutes watch, 18 minutes gain, 13 role change, 47 variance, 193 on model. Retrospective classes graded: 8 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -89,11 +89,11 @@ The pair adds 7.1 expected captain points including vice fallback; non-appearanc
 
 Gain is the lift to your expected starting XI and captain plus modelled auto-sub cover over GW10–15. The auto-sub term uses each starter's non-appearance risk, not a flat bench weight. A hit costs 4.
 
-**Minutes warning:** Thiaw did not start last week while healthy (0', deadline start estimate 78%) — sell-grade. Best legal same-position replacement: Konsa (+3.0: +2.9 XI/captain, +0.1 auto-sub cover).
+**Minutes warning:** Thiaw did not start last week while healthy (0', deadline start estimate 78%) — sell-grade. Best legal same-position replacement: Maatsen (+2.8: +3.6 XI/captain, -0.8 auto-sub cover).
 
 | out | in | £ | XI + captain | auto-sub | total | net |
 |---|---|---|---|---|---|---|
-| Thiaw (NEW) | Konsa (ARS) | -0.1 | +2.9 | +0.1 | **+3.0** | +3.0 |
+| Thiaw (NEW) | Maatsen (AVL) | -0.5 | +3.6 | -0.8 | **+2.8** | +2.8 |
 | Gvardiol (MCI) | De Cuyper (BHA) | -0.3 | +5.9 | -3.2 | **+2.7** | +2.7 |
 | Tarkowski (EVE) | De Cuyper (BHA) | -0.8 | +2.9 | -0.4 | **+2.5** | +2.5 |
 | Sadiki (SUN) | Rudoni (COV) | +0.1 | -0.2 | +2.1 | **+1.9** | +1.9 |
@@ -103,14 +103,14 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 
 _Last week, for the names above:_
 - Thiaw — minutes loss (dnp): 0 minutes, healthy (status a; deadline start estimate 78%) — second consecutive non-start: sell-grade.
-- Konsa — variance (team): 90', 0.00 xG, 0 goals, 10 pts (proj 3.1). Team (+2.8).
+- Maatsen — variance (team): 90', 0.05 xG, 0 goals, 2 pts (proj 3.5). Team (-1.1).
 - De Cuyper — variance (team): 71', 0.24 xG, 0 goals, 1 assist, 9 pts (proj 3.0). Team (+4.1).
 - Tarkowski — variance (team): 90', 0.00 xG, 0 goals, 6 pts (proj 3.7). Team (+3.6).
 - Rudoni — role change (setpiece): now first on corners (was 5)
 - O'Shea — variance (team): 90', 0.00 xG, 0 goals, 1 pts (proj 3.4). Team (-1.4).
 - Verbruggen — variance (team): 90', 0.00 xG, 0 goals, 11 pts (proj 2.7). Team (+4.1).
 
-**Recommended: hold.** No transfer path tested beats saving by its bar (0.0 points per judgement-call move; selling an unavailable player needs no bar) over GW10–15. You would have 2 free transfers next week.
+**Recommended:** Thiaw→Maatsen this week (+0.3 versus holding/re-planning).
 
 _Minutes check:_ the verdict above is on the numbers; Thiaw is a check-first case (see the review).
 
@@ -118,30 +118,32 @@ _Minutes check:_ the verdict above is on the numbers; Thiaw is a check-first cas
 
 | out | in | £ | XI + captain | auto-sub | total | net |
 |---|---|---|---|---|---|---|
-| Thiaw + Sadiki | Konsa + Gomez | +0.1 | +6.5 | +1.5 | +8.0 | **+4.0** |
 | Thiaw + Sadiki | Maatsen + Gomez | -0.3 | +6.7 | +1.4 | +8.0 | **+4.0** |
 | Gvardiol + Sadiki | De Cuyper + Gomez | -0.1 | +7.9 | -0.1 | +7.8 | **+3.8** |
 | Tarkowski + Sadiki | De Cuyper + Gomez | -0.6 | +6.8 | +0.8 | +7.7 | **+3.7** |
 | Gvardiol + Sadiki | Vuskovic + Gomez | -0.3 | +6.9 | -0.3 | +6.6 | **+2.6** |
+| Tarkowski + Thiaw | De Cuyper + Vuskovic | -0.5 | +8.0 | -1.4 | +6.6 | **+2.6** |
 
 ## The next six weeks, planned
 
-Selected path under the current policy: **390.8** pts (0 hits). Making no move this week and re-planning: 390.8. Selected path versus holding: **+0.0** — not enough; hold.
+
+**GW10 simulation:** the selected GW10 squad beats holding in 53% of 4,000 simulations (average -0.0 points, net of hits). The proposed change does not have a reliable points edge this week. This covers one gameweek; the transfer decision compares the full window.
+Selected path under the current policy: **390.9** pts (0 hits). Making no move this week and re-planning: 390.6. Selected path versus holding: **+0.3**.
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
-| Gvardiol → De Cuyper | -1.72 | 0.0 | no |
-| Thiaw → Konsa | -0.12 | 0.0 | no |
-| Tarkowski → De Cuyper | -0.60 | 0.0 | no |
-| Sadiki, Thiaw → Konsa, Gomez | -1.63 | 0.0 | no |
-| Sadiki, Thiaw → Maatsen, Gomez | -1.21 | 0.0 | no |
+| Gvardiol → De Cuyper | -1.55 | 0.0 | no |
+| Thiaw → Maatsen | +0.29 | 0.0 | yes |
+| Tarkowski → De Cuyper | -0.43 | 0.0 | no |
+| Sadiki, Thiaw → Maatsen, Gomez | -1.04 | 0.0 | no |
+| Sadiki, Gvardiol → De Cuyper, Gomez | -1.38 | 0.0 | no |
 
-- **GW10** 65.6 pts, C Haaland, 1 FT  hold
-- **GW11** 65.9 pts, C Haaland, 2 FT  Tarkowski → De Cuyper, Thiaw → Vuskovic
-- **GW12** 60.8 pts, C Palmer, 1 FT  Gvardiol → Justin
-- **GW13** 64.0 pts, C Haaland, 1 FT  Sadiki → Barnes
-- **GW14** 66.6 pts, C Haaland, 1 FT  hold
-- **GW15** 67.9 pts, C Haaland, 2 FT  Justin → Maatsen, Tavernier → Ødegaard
+- **GW10** 65.5 pts, C Haaland, 1 FT  Thiaw → Maatsen
+- **GW11** 65.6 pts, C Haaland, 1 FT  Tarkowski → De Cuyper
+- **GW12** 60.7 pts, C Palmer, 1 FT  Gvardiol → Muharemović
+- **GW13** 64.4 pts, C Haaland, 1 FT  Sadiki → Ødegaard
+- **GW14** 66.9 pts, C Haaland, 1 FT  hold
+- **GW15** 67.9 pts, C Haaland, 2 FT  Muharemović → Vuskovic, Tavernier → Barnes
 
 _The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
 
@@ -153,8 +155,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 9.9 | GW14: 10.0 | Hold. Best-looking week for this one is GW14 (10.0 extra points); this week is 9.9. Second copy (GW20–38): best week GW34 (10.9). |
 | Triple Captain | — | GW36: 8.7 (Haaland) | Hold. Best week for this one is GW36: Haaland (8.7 extra). |
-| Free Hit | 2.2 | GW19: 6.8 | Hold. Widest gap left is GW19 (6.8 behind the optimised one-week squad); this week 2.2. |
-| Wildcard | +5.1 over the window | — | Hold. Unlimited transfers now are worth 5.1 over the window. The squad is holding up (gap to the optimised one-week squad 2.2–5.9 over the next weeks). |
+| Free Hit | 2.1 | GW19: 6.8 | Hold. Widest gap left is GW19 (6.8 behind the optimised one-week squad); this week 2.1. |
+| Wildcard | +4.7 over the window | — | Hold. Unlimited transfers now are worth 4.7 over the window. The squad is holding up (gap to the optimised one-week squad 2.1–5.8 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -165,28 +167,19 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Evanilson £6.4 | +22.8% | +481,726 | João Pedro £7.7 | -19.3% | -841,419 |
-| N.Jackson £7.0 ⭑ | +12.8% | +381,058 | Cherki £7.9 | -6.4% | -251,426 |
-| Tavernier £6.6 ⭑ | +10.0% | +318,169 | B.Fernandes £11.7 | -5.6% | -134,899 |
-| Van Hecke £5.0 | +18.3% | +241,104 | Mbeumo £7.9 ⭑ | -4.4% | -101,018 |
-| Isak £9.2 | +9.5% | +236,910 | Gibbs-White £7.8 | -8.4% | -98,686 |
-| Rogers £8.2 | +3.4% | +202,353 | Guéhi £6.0 | -5.0% | -88,630 |
+| Evanilson £6.4 | +24.2% | +522,549 | João Pedro £7.7 | -20.8% | -895,293 |
+| N.Jackson £7.0 ⭑ | +13.4% | +403,917 | Cherki £7.9 | -7.0% | -273,580 |
+| Tavernier £6.6 ⭑ | +10.8% | +346,488 | B.Fernandes £11.7 | -5.9% | -142,471 |
+| Isak £9.2 | +10.4% | +261,694 | Gibbs-White £7.8 | -9.7% | -111,873 |
+| Van Hecke £5.0 | +19.3% | +258,488 | Mbeumo £7.9 ⭑ | -4.7% | -107,095 |
+| Rogers £8.2 | +3.6% | +215,274 | Guéhi £6.0 | -5.3% | -94,369 |
 
 ⭑ = in your squad.
 
-**Price risk if you wait (shadow-only):**
-
-- Target Konsa (net +165k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +165k this event (in 173k / out 8k), sel 23.3% = Q3 (~150k to move), price 4.8 over 52 snaps (+0.3m in window), already +1x0.1m this event]
-- Target De Cuyper (net +183k this event) is at rise risk; waiting past the deadline could cost +0.1m [net +183k this event (in 189k / out 6k), sel 45.2% = Q3 (~150k to move), price 5.4 over 52 snaps (+0.9m in window), already +1x0.1m this event]
-- Squad player Gvardiol (net -79k this event) at fall risk (-0.1m hurts the bank) [net -79k this event (in 18k / out 97k), sel 25.8% = Q3 (~150k to move), price 5.7 over 52 snaps (+0.2m in window)]
-- Squad player Mbeumo (net -96k this event) at fall risk (-0.1m hurts the bank) [net -96k this event (in 16k / out 113k), sel 20.3% = Q3 (~150k to move), price 7.9 over 52 snaps (-0.1m in window)]
-
-_Based on 52 price snapshots. This warning is not part of the transfer verdict until at least six weeks of actual rises and falls can calibrate it._
-
 ---
 
-_Generated 2026-11-05 15:57 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-11-05 22:27 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
 
 ## Scouting
 
-12 sourced observations; 8 API calls. Review these alongside the transfer stress tests in the app.
+10 sourced observations; 6 API calls. Review these alongside the transfer stress tests in the app.

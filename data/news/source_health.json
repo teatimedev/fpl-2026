@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-11-05T15:38:19Z",
-  "coverage": 0.4,
+  "checked_at": "2026-11-05T22:07:59Z",
+  "coverage": 0.35,
   "enabled": 20,
   "gw": 10,
-  "healthy": 8,
+  "healthy": 7,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -27,11 +27,11 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "AVL",
-      "content_hash": "aa713f3f4c845f170eeb6635bd0f6e3e3ce857029d3d10a587718d12bc244a37",
+      "content_hash": "c890f831f3e9a3641c4b6f1b19a1f055a2cd9dee634fc5b7fbc900e5f3fdcc99",
       "documents": 1,
-      "etag": "W/\"dQyI8pPFMP\"",
+      "etag": "W/\"gPMk71gFVe\"",
       "id": "avl-news",
-      "last_modified": "Thu, 05 Nov 2026 15:38:20 GMT",
+      "last_modified": "Thu, 05 Nov 2026 22:08:00 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Aston Villa",
       "status": "no_articles",
@@ -74,7 +74,7 @@
       "content_hash": "851824b022246d31723b4dbab6f4bc0e541a05bde41fc877c4d4a92110c9302b",
       "documents": 1,
       "id": "bre-news",
-      "last_modified": "Thu, 05 Nov 2026 15:38:20 GMT",
+      "last_modified": "Thu, 05 Nov 2026 17:11:54 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "no_articles",
@@ -113,7 +113,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"kp6jlvkw2t4fgk\"",
+      "etag": "\"ao4hbsxbnj49as\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -124,20 +124,20 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.evertonfc.com/news/2026/november/05/branthwaite-fitness-update---team-news-for-coventry-test/": {
-          "etag": "W/\"xxBd4YQAOU\"",
-          "last_modified": "Thu, 05 Nov 2026 15:38:08 GMT"
+          "etag": "W/\"HqtfEUSCZ7\"",
+          "last_modified": "Thu, 05 Nov 2026 22:07:16 GMT"
         },
         "https://www.evertonfc.com/news/2026/november/05/watch-moyes--press-conference--1-30pm-gmt----follow-live-blog/": {
-          "etag": "W/\"HRFtB3L6XY\"",
-          "last_modified": "Thu, 05 Nov 2026 15:36:50 GMT"
+          "etag": "W/\"eH5SdnqhAM\"",
+          "last_modified": "Thu, 05 Nov 2026 21:50:58 GMT"
         }
       },
       "club": "EVE",
-      "content_hash": "8f2731e793e1c5b8d4df80e229ad0a71250877847a036559b437adf8708f7347",
+      "content_hash": "b8f9e9c6b5909d5f4357ee9f6fde9675a7ba50b9bdd91448e70b3aab910d797d",
       "documents": 3,
-      "etag": "W/\"AByWJ1bU8S\"",
+      "etag": "W/\"se0congyN2\"",
       "id": "eve-news",
-      "last_modified": "Thu, 05 Nov 2026 15:37:12 GMT",
+      "last_modified": "Thu, 05 Nov 2026 22:07:35 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Everton",
       "status": "ok",
@@ -162,7 +162,7 @@
       "article_validators": {},
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"96f417b264d919b996e257cfe044e1bb\"",
       "id": "hul-news",
       "last_modified": "Thu, 05 Nov 2026 11:40:58 GMT",
@@ -173,21 +173,16 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {
-        "https://www.itfc.co.uk/news/2026/november/05/dara-in-ireland-squad/": {
-          "etag": "\"b332ccce8b8247549c5d240e3d35cab5\"",
-          "last_modified": "Thu, 05 Nov 2026 12:31:18 GMT"
-        }
-      },
+      "article_validators": {},
       "club": "IPS",
-      "content_hash": "28f55c4a7141d942e1bf0b9bc290e6716bec8e5d90d46f785799c1ce862e4a28",
-      "documents": 2,
-      "etag": "\"3013fcab1a28e84d5eaf04315f9a2dba\"",
+      "content_hash": "1f5e17b6f506d3b97562b10da220b53a2e9588a08b710a28ebc250eb61fdd374",
+      "documents": 1,
+      "etag": "\"b5439a9839f7698adb350abec04040ef\"",
       "id": "ips-news",
-      "last_modified": "Thu, 05 Nov 2026 15:04:34 GMT",
+      "last_modified": "Thu, 05 Nov 2026 16:28:59 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
-      "status": "ok",
+      "status": "no_articles",
       "url": "https://www.itfc.co.uk/news/"
     },
     {
@@ -197,10 +192,10 @@
         "https://www.leedsunited.com/en/news/team-news-injury-updates-on-calvert-lewin-okafor-and-stach": {}
       },
       "club": "LEE",
-      "content_hash": "57aa9dafe8b1e0262d8d37842a3e830aa364529d032bc8bf730cc4c943c94be7",
+      "content_hash": "30d11182d14266a8bed137b76bf4e8a3d16783e880f92c10646c08f09262b5e7",
       "documents": 3,
       "id": "lee-news",
-      "last_modified": "Thu, 05 Nov 2026 15:38:21 GMT",
+      "last_modified": "Thu, 05 Nov 2026 22:08:01 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -209,16 +204,15 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.liverpoolfc.com/news/andoni-iraola-fenerbahce-champions-league-press-conference": {},
         "https://www.liverpoolfc.com/news/fantasy-premier-league-preview-virgil-van-dijk-double-value-and-more-reds-in-focus": {},
         "https://www.liverpoolfc.com/news/listing/mens-team-news": {},
         "https://www.liverpoolfc.com/news/watch-andoni-iraola-pre-crystal-palace-press-conference": {}
       },
       "club": "LIV",
-      "content_hash": "17953d69f4fdf60262115a237c57a98e4d8cb5de26afbc651a87f82027820973",
-      "documents": 5,
+      "content_hash": "30a656926c80a054d8179ecffa94b0d5ca275d42c2743670f5faa96595fe0651",
+      "documents": 4,
       "id": "liv-news",
-      "last_modified": "Thu, 05 Nov 2026 15:33:08 GMT",
+      "last_modified": "Thu, 05 Nov 2026 20:55:42 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
       "status": "ok",
@@ -227,13 +221,15 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/citytv/mens/enzo-maresca-post-match-press-conference-rb-leipzig-63929431": {},
-        "https://www.mancity.com/news/mens/nottingham-forest-v-city-match-preview-pl-7-nov-63929404": {}
+        "https://www.mancity.com/news/mens/nottingham-forest-v-city-match-preview-pl-7-nov-63929404": {
+          "last_modified": "Thu, 05 Nov 2026 22:06:23 GMT"
+        }
       },
       "club": "MCI",
-      "content_hash": "9a4db90292049fe9945e8feff203d87adc402a1f73c2f5c74367515225b99ac0",
-      "documents": 3,
+      "content_hash": "907ef860958ce0596752630f8c75c8466d6d2f2488dc6d7e4956591a4cf12f7f",
+      "documents": 2,
       "id": "mci-news",
+      "last_modified": "Thu, 05 Nov 2026 22:01:30 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
       "status": "ok",
@@ -268,7 +264,7 @@
         "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-joelinton-and-fernandez-pardo-latest-ahead-of-fulham-clash": {}
       },
       "club": "NEW",
-      "content_hash": "f6b99794f58bcdb30552b18e61bc32d80b5982f34223b97a50f1ad393d77157b",
+      "content_hash": "82d1032ae213d3a819489399af43f4f4a50df46dff60e4f9553c37d4b58f85e7",
       "documents": 4,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -282,9 +278,9 @@
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
       "documents": 1,
-      "etag": "\"58a88aa72f798f047e2faba757c68e12\"",
+      "etag": "\"13bc2a5a935a4b97581a693dbffb5754\"",
       "id": "nfo-news",
-      "last_modified": "Thu, 05 Nov 2026 14:45:12 GMT",
+      "last_modified": "Thu, 05 Nov 2026 17:57:24 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -296,9 +292,9 @@
       "club": "SUN",
       "content_hash": "83ec15aaae3409e9a938b70f4d73928762d5e0ab7390b0daee6538811cc6d630",
       "documents": 1,
-      "etag": "\"8af6a1e973d86f3a66d21e9ba16ebc86\"",
+      "etag": "\"520c251a11d36905066277f33db57c02\"",
       "id": "sun-news",
-      "last_modified": "Thu, 05 Nov 2026 12:03:26 GMT",
+      "last_modified": "Thu, 05 Nov 2026 16:46:05 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Sunderland",
       "status": "no_articles",
