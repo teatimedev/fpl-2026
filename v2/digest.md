@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 10
 
-Deadline **Fri 06 Nov, 18:30 UTC** — 0d 20h away.
+Deadline **Fri 06 Nov, 18:30 UTC** — 0d 15h away.
 Projections cover GW10–15.
 
 ## GW9 in review — what happened, and what it does and does not change
@@ -110,7 +110,7 @@ _Last week, for the names above:_
 - O'Shea — variance (team): 90', 0.00 xG, 0 goals, 1 pts (proj 3.4). Team (-1.4).
 - Verbruggen — variance (team): 90', 0.00 xG, 0 goals, 11 pts (proj 2.7). Team (+4.1).
 
-**Recommended:** Thiaw→Maatsen this week (+0.3 versus holding/re-planning).
+**Recommended:** Thiaw→Maatsen this week (+0.1 versus holding/re-planning).
 
 _Minutes check:_ the verdict above is on the numbers; Thiaw is a check-first case (see the review).
 
@@ -128,15 +128,15 @@ _Minutes check:_ the verdict above is on the numbers; Thiaw is a check-first cas
 
 
 **GW10 simulation:** the selected GW10 squad beats holding in 53% of 4,000 simulations (average -0.0 points, net of hits). The proposed change does not have a reliable points edge this week. This covers one gameweek; the transfer decision compares the full window.
-Selected path under the current policy: **390.9** pts (0 hits). Making no move this week and re-planning: 390.6. Selected path versus holding: **+0.3**.
+Selected path under the current policy: **390.9** pts (0 hits). Making no move this week and re-planning: 390.8. Selected path versus holding: **+0.1**.
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
-| Gvardiol → De Cuyper | -1.55 | 0.0 | no |
-| Thiaw → Maatsen | +0.29 | 0.0 | yes |
-| Tarkowski → De Cuyper | -0.43 | 0.0 | no |
-| Sadiki, Thiaw → Maatsen, Gomez | -1.04 | 0.0 | no |
-| Sadiki, Gvardiol → De Cuyper, Gomez | -1.38 | 0.0 | no |
+| Gvardiol → De Cuyper | -1.72 | 0.0 | no |
+| Thiaw → Maatsen | +0.12 | 0.0 | yes |
+| Tarkowski → De Cuyper | -0.78 | 0.0 | no |
+| Sadiki, Thiaw → Maatsen, Gomez | -1.21 | 0.0 | no |
+| Sadiki, Gvardiol → De Cuyper, Gomez | -1.55 | 0.0 | no |
 
 - **GW10** 65.5 pts, C Haaland, 1 FT  Thiaw → Maatsen
 - **GW11** 65.6 pts, C Haaland, 1 FT  Tarkowski → De Cuyper
@@ -156,7 +156,7 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 | Bench Boost | 9.9 | GW14: 10.0 | Hold. Best-looking week for this one is GW14 (10.0 extra points); this week is 9.9. Second copy (GW20–38): best week GW34 (10.9). |
 | Triple Captain | — | GW36: 8.7 (Haaland) | Hold. Best week for this one is GW36: Haaland (8.7 extra). |
 | Free Hit | 2.1 | GW19: 6.8 | Hold. Widest gap left is GW19 (6.8 behind the optimised one-week squad); this week 2.1. |
-| Wildcard | +4.7 over the window | — | Hold. Unlimited transfers now are worth 4.7 over the window. The squad is holding up (gap to the optimised one-week squad 2.1–5.8 over the next weeks). |
+| Wildcard | +5.0 over the window | — | Hold. Unlimited transfers now are worth 5.0 over the window. The squad is holding up (gap to the optimised one-week squad 2.1–5.8 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -167,19 +167,15 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Evanilson £6.4 | +24.2% | +522,549 | João Pedro £7.7 | -20.8% | -895,293 |
-| N.Jackson £7.0 ⭑ | +13.4% | +403,917 | Cherki £7.9 | -7.0% | -273,580 |
-| Tavernier £6.6 ⭑ | +10.8% | +346,488 | B.Fernandes £11.7 | -5.9% | -142,471 |
-| Isak £9.2 | +10.4% | +261,694 | Gibbs-White £7.8 | -9.7% | -111,873 |
-| Van Hecke £5.0 | +19.3% | +258,488 | Mbeumo £7.9 ⭑ | -4.7% | -107,095 |
-| Rogers £8.2 | +3.6% | +215,274 | Guéhi £6.0 | -5.3% | -94,369 |
+| Evanilson £6.4 | +25.0% | +545,333 | João Pedro £7.7 | -21.7% | -923,090 |
+| N.Jackson £7.0 ⭑ | +13.8% | +414,819 | Cherki £7.9 | -7.3% | -285,021 |
+| Tavernier £6.6 ⭑ | +11.2% | +361,262 | B.Fernandes £11.7 | -6.1% | -146,157 |
+| Isak £9.2 | +10.8% | +275,448 | Gibbs-White £7.8 | -10.4% | -119,129 |
+| Van Hecke £5.0 | +19.9% | +268,363 | Mbeumo £7.9 ⭑ | -4.9% | -110,562 |
+| Rogers £8.2 | +3.7% | +221,625 | Calvert-Lewin £6.1 | -4.6% | -104,854 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-05 22:27 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
-
-## Scouting
-
-10 sourced observations; 6 API calls. Review these alongside the transfer stress tests in the app.
+_Generated 2026-11-06 02:46 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
