@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 11
 
-Deadline **Sat 21 Nov, 11:00 UTC** — 14d 11h away.
+Deadline **Sat 21 Nov, 11:00 UTC** — 14d 7h away.
 Projections cover GW11–16.
 
 ## Captain: **Haaland** (MCI)
@@ -52,8 +52,7 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 | Tarkowski (EVE) | De Cuyper (BHA) | -0.8 | +4.9 | -0.4 | **+4.4** | +4.4 |
 | Gvardiol (MCI) | De Cuyper (BHA) | -0.3 | +6.1 | -3.1 | **+3.0** | +3.0 |
 | Thiaw (NEW) | Konsa (ARS) | -0.1 | +2.8 | +0.1 | **+2.9** | +2.9 |
-| Sadiki (SUN) | Rudoni (COV) | +0.1 | -0.2 | +2.4 | **+2.2** | +2.2 |
-| Emersonn (IPS) | Barry (EVE) | +0.1 | +1.6 | -0.4 | **+1.2** | +1.2 |
+| Sadiki (SUN) | Rudoni (COV) | +0.1 | -0.4 | +2.4 | **+2.0** | +2.0 |
 | Calafiori (ARS) | De Cuyper (BHA) | -0.5 | +2.7 | -1.6 | **+1.1** | +1.1 |
 | O'Shea (IPS) | Mendy (HUL) | +0.1 | +0.6 | -0.3 | **+0.3** | +0.3 |
 | Leno (FUL) | Verbruggen (BHA) | +0.1 | +0.0 | +0.1 | **+0.1** | +0.1 |
@@ -102,8 +101,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 8.6 | GW14: 10.0 | Hold. Best-looking week for this one is GW14 (10.0 extra points); this week is 8.6. Second copy (GW20–38): best week GW34 (10.8). |
 | Triple Captain | — | GW36: 8.7 (Haaland) | Hold. Best week for this one is GW36: Haaland (8.7 extra). |
-| Free Hit | 2.9 | GW19: 6.9 | Hold. Widest gap left is GW19 (6.9 behind the optimised one-week squad); this week 2.9. |
-| Wildcard | +4.5 over the window | — | Hold. Unlimited transfers now are worth 4.5 over the window. The squad is holding up (gap to the optimised one-week squad 2.9–6.3 over the next weeks). |
+| Free Hit | 3.1 | GW19: 7.0 | Hold. Widest gap left is GW19 (7.0 behind the optimised one-week squad); this week 3.1. |
+| Wildcard | +4.2 over the window | — | Hold. Unlimited transfers now are worth 4.2 over the window. The squad is holding up (gap to the optimised one-week squad 3.1–5.9 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -114,19 +113,15 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Barry £5.6 | +2.0% | +19,829 | João Pedro £7.7 | -0.5% | -18,647 |
-| N.Jackson £7.0 ⭑ | +0.3% | +11,112 | Calvert-Lewin £6.1 | -0.5% | -10,894 |
-| Van Hecke £5.0 | +0.7% | +10,523 | Hall £5.3 | -0.3% | -7,040 |
-| Evanilson £6.4 | +0.3% | +8,365 | Wissa £6.0 | -0.4% | -3,961 |
-| Tavernier £6.6 ⭑ | +0.2% | +7,009 | Cherki £7.9 | -0.1% | -3,475 |
-| Manzambi £6.2 | +0.5% | +5,009 | Schade £6.2 | -0.2% | -3,136 |
+| Barry £5.7 | +2.6% | +26,118 | João Pedro £7.7 | -0.6% | -23,465 |
+| N.Jackson £7.0 ⭑ | +0.4% | +13,795 | Calvert-Lewin £6.0 | -0.7% | -13,569 |
+| Van Hecke £5.0 | +0.9% | +13,316 | Hall £5.2 | -0.4% | -8,637 |
+| Evanilson £6.5 | +0.4% | +9,746 | Wissa £5.9 | -0.5% | -5,043 |
+| Tavernier £6.6 ⭑ | +0.3% | +8,873 | Cherki £7.9 | -0.1% | -4,426 |
+| Manzambi £6.2 | +0.7% | +6,194 | Schade £6.1 | -0.3% | -3,914 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-06 23:30 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
-
-## Scouting
-
-14 sourced observations; 8 API calls. Review these alongside the transfer stress tests in the app.
+_Generated 2026-11-07 03:16 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._

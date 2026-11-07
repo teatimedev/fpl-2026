@@ -183,15 +183,15 @@
    "weeks": [
     [
      11,
-     2.9
+     3.1
     ],
     [
      12,
-     3.9
+     3.8
     ],
     [
      13,
-     2.5
+     2.9
     ],
     [
      14,
@@ -203,43 +203,43 @@
     ],
     [
      16,
-     6.3
+     5.9
     ],
     [
      17,
-     2.2
+     2.3
     ],
     [
      18,
-     2.1
+     1.9
     ],
     [
      19,
-     6.9
+     7.0
     ]
    ],
    "best_gw": 19,
-   "best": 6.9,
-   "now": 2.9,
+   "best": 7.0,
+   "now": 3.1,
    "play": false,
-   "advice": "Hold. Widest gap left is GW19 (6.9 behind the optimised one-week squad); this week 2.9.",
+   "advice": "Hold. Widest gap left is GW19 (7.0 behind the optimised one-week squad); this week 3.1.",
    "last_eligible": 19
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 4.5,
+   "now": 4.2,
    "gap_trend": [
     [
      11,
-     2.9
+     3.1
     ],
     [
      12,
-     3.9
+     3.8
     ],
     [
      13,
-     2.5
+     2.9
     ],
     [
      14,
@@ -251,32 +251,32 @@
     ],
     [
      16,
-     6.3
+     5.9
     ],
     [
      17,
-     2.2
+     2.3
     ],
     [
      18,
-     2.1
+     1.9
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 4.5 over the window. The squad is holding up (gap to the optimised one-week squad 2.9\u20136.3 over the next weeks).",
+   "advice": "Hold. Unlimited transfers now are worth 4.2 over the window. The squad is holding up (gap to the optimised one-week squad 3.1\u20135.9 over the next weeks).",
    "last_eligible": 19
   }
  },
  "gaps": {
-  "11": 2.9,
-  "12": 3.9,
-  "13": 2.5,
+  "11": 3.1,
+  "12": 3.8,
+  "13": 2.9,
   "14": 2.2,
   "15": 4.2,
-  "16": 6.3,
-  "17": 2.2,
-  "18": 2.1,
-  "19": 6.9
+  "16": 5.9,
+  "17": 2.3,
+  "18": 1.9,
+  "19": 7.0
  },
  "method": "Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled."
 }
