@@ -6169,6 +6169,15 @@
       "canonical": "Olutayo Subuloye",
       "club": "CHE",
       "player_id": 670
+    },
+    {
+      "aliases": [
+        "Gunter",
+        "Luca Gunter"
+      ],
+      "canonical": "Luca Gunter",
+      "club": "TOT",
+      "player_id": 671
     }
   ],
   "version": 1
