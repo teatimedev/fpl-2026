@@ -3,9 +3,9 @@
     "MCI"
   ],
   "affected_owned": [],
-  "checked_at": "2026-11-09T01:01:09Z",
-  "claims": 3,
-  "coverage": 0.25,
+  "checked_at": "2026-11-09T18:56:12Z",
+  "claims": 0,
+  "coverage": 0.3,
   "deadline": "2026-11-21T11:00:00Z",
   "gw": 11,
   "notification_key": "1e770a0bfde5a8acec1e",
@@ -1437,9 +1437,9 @@
       "status": "a"
     },
     "356": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "357": {
       "chance": 0,
@@ -3373,25 +3373,7 @@
     }
   },
   "official_fpl_ok": true,
-  "price_changed": [
-    74,
-    112,
-    113,
-    115,
-    165,
-    265,
-    288,
-    294,
-    316,
-    324,
-    379,
-    384,
-    391,
-    392,
-    504,
-    605,
-    668
-  ],
+  "price_changed": [],
   "rebuild_required": true,
   "state_changed": false,
   "status": "red",
