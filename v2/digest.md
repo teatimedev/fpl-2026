@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 11
 
-Deadline **Sat 21 Nov, 11:00 UTC** — 11d 8h away.
+Deadline **Sat 21 Nov, 11:00 UTC** — 10d 4h away.
 Projections cover GW11–16.
 
 ## GW10 in review — what happened, and what it does and does not change
 
-_368 players classified: 25 unavailable, 19 minutes loss, 49 minutes watch, 12 minutes gain, 5 role change, 54 variance, 204 on model. Retrospective classes graded: 9 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_368 players classified: 28 unavailable, 18 minutes loss, 48 minutes watch, 12 minutes gain, 5 role change, 54 variance, 203 on model. Retrospective classes graded: 9 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -43,7 +43,7 @@ _368 players classified: 25 unavailable, 19 minutes loss, 49 minutes watch, 12 m
 **Pool** — ordered by projected points GW11–16, capped at 5 a list, not by last week's residual:
 
 - breakout minutes (started at <= 40%): Lavia (CHE, 0.0 xG, 2 pts; GW11–16 11.5), Torp (COV, 0.2 xG, 4 pts; GW11–16 11.5), Costinha (BHA, 0.1 xG, 6 pts; GW11–16 11.0), Gboho (COV, 0.2 xG, 8 pts; GW11–16 11.0), O'Nien (SUN, 0.0 xG, 5 pts; GW11–16 10.6)
-- lost their place — benched while healthy: Ndoye (NFO, 0.0 xG, 0 pts; GW11–16 17.6), Matheus N. (MCI, 0.0 xG, 1 pts; GW11–16 16.2), Belloumi (HUL, 0.0 xG, 0 pts; GW11–16 16.2), Canvot (CRY, 0.0 xG, 0 pts; GW11–16 15.8), Fatawu (IPS, 0.0 xG, 1 pts; GW11–16 14.9)
+- lost their place — benched while healthy: Ndoye (NFO, 0.0 xG, 0 pts; GW11–16 17.6), Matheus N. (MCI, 0.0 xG, 1 pts; GW11–16 16.2), Canvot (CRY, 0.0 xG, 0 pts; GW11–16 15.8), Fatawu (IPS, 0.0 xG, 1 pts; GW11–16 14.9), White (ARS, 0.0 xG, 0 pts; GW11–16 14.7)
 - hauled on low xG — do not chase: Wirtz (LIV, 0.3 xG, 13 pts; GW11–16 30.3), Mac Allister (LIV, 0.2 xG, 9 pts; GW11–16 24.2), Dewsbury-Hall (EVE, 0.2 xG, 9 pts; GW11–16 23.4), Delap (NFO, 0.2 xG, 13 pts; GW11–16 19.0), Schlager (NFO, 0.0 xG, 7 pts; GW11–16 18.3)
 - blanked on good xG — unchanged as targets: George (EVE, 0.1 xG, 2 pts; GW11–16 16.0)
 
@@ -101,7 +101,6 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 | Tavernier (BOU) | Ødegaard (ARS) | +0.0 | +1.7 | +0.1 | **+1.8** | +1.8 |
 | Calafiori (ARS) | De Cuyper (BHA) | -0.4 | +2.5 | -1.1 | **+1.4** | +1.4 |
 | O'Shea (IPS) | Mendy (HUL) | +0.1 | +1.4 | -0.9 | **+0.5** | +0.5 |
-| Leno (FUL) | Verbruggen (BHA) | +0.1 | +0.0 | +0.1 | **+0.1** | +0.1 |
 
 _Last week, for the names above:_
 - Tarkowski — variance (team): 90', 0.00 xG, 0 goals, 2 pts (proj 5.0). Team (-1.6).
@@ -111,7 +110,6 @@ _Last week, for the names above:_
 - Rudoni — variance (finishing): 85', 0.12 xG, 0 goals, 2 pts (proj 3.3). Finishing (-1.4).
 - Ødegaard — variance (finishing): 90', 0.24 xG, 1 goal, 11 pts (proj 5.9). Finishing (+2.8).
 - O'Shea — variance (team): 90', 0.00 xG, 0 goals, 1 pts (proj 3.0). Team (-1.0).
-- Verbruggen — variance (team): 90', 0.00 xG, 0 goals, 6 pts (proj 3.7). Team (+3.1).
 
 **Recommended:** Tarkowski→De Cuyper, Sadiki→Gomez this week (+2.6 versus holding/re-planning).
 
@@ -138,7 +136,7 @@ Selected path under the current policy: **398.7** pts (0 hits). Making no move t
 | Sadiki, Gvardiol → De Cuyper, Gomez | +2.03 | 0.0 | yes |
 | Tarkowski → De Cuyper | +1.29 | 0.0 | yes |
 | Gvardiol → De Cuyper | +1.61 | 0.0 | yes |
-| Thiaw → Konsa | -0.60 | 0.0 | no |
+| Thiaw → Konsa | -0.50 | 0.0 | no |
 | Sadiki, Tarkowski → De Cuyper, Gomez | +2.62 | 0.0 | yes |
 
 - **GW11** 65.4 pts, C Haaland, 2 FT  Tarkowski → De Cuyper, Sadiki → Gomez
@@ -158,8 +156,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 8.3 | GW15: 9.9 | Hold. Best-looking week for this one is GW15 (9.9 extra points); this week is 8.3. Second copy (GW20–38): best week GW34 (11.2). |
 | Triple Captain | — | GW32: 8.7 (Haaland) | Hold. Best week for this one is GW32: Haaland (8.7 extra). |
-| Free Hit | 4.2 | GW19: 7.3 | Hold. Widest gap left is GW19 (7.3 behind the optimised one-week squad); this week 4.2. |
-| Wildcard | +5.4 over the window | — | Hold. Unlimited transfers now are worth 5.4 over the window. The squad is holding up (gap to the optimised one-week squad 4.2–6.4 over the next weeks). |
+| Free Hit | 4.0 | GW19: 7.3 | Hold. Widest gap left is GW19 (7.3 behind the optimised one-week squad); this week 4.0. |
+| Wildcard | +5.5 over the window | — | Hold. Unlimited transfers now are worth 5.5 over the window. The squad is holding up (gap to the optimised one-week squad 4.0–6.5 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -170,15 +168,15 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| N.Jackson £7.1 ⭑ | +7.0% | +241,558 | João Pedro £7.6 | -7.2% | -260,540 |
-| Barry £5.7 | +15.0% | +178,107 | Gvardiol £5.6 ⭑ | -9.3% | -242,707 |
-| Evanilson £6.5 | +6.0% | +157,460 | Guéhi £6.0 | -7.0% | -113,697 |
-| Van Hecke £5.1 | +8.9% | +144,322 | Calvert-Lewin £6.0 | -4.5% | -90,348 |
-| De Cuyper £5.5 | +2.2% | +117,136 | Thiago £7.8 | -8.0% | -75,217 |
-| Vuskovic £5.3 | +11.5% | +115,586 | Mbeumo £7.9 ⭑ | -2.7% | -58,387 |
+| N.Jackson £7.1 ⭑ | +7.8% | +269,735 | João Pedro £7.6 | -7.9% | -284,772 |
+| Barry £5.7 | +15.7% | +188,001 | Gvardiol £5.6 ⭑ | -10.2% | -263,977 |
+| Evanilson £6.5 | +6.6% | +176,645 | Guéhi £6.0 | -7.9% | -127,003 |
+| Van Hecke £5.1 | +9.6% | +156,420 | Calvert-Lewin £6.0 | -4.9% | -98,152 |
+| Vuskovic £5.3 | +13.0% | +133,067 | Thiago £7.8 | -9.2% | -85,498 |
+| De Cuyper £5.5 | +2.4% | +129,723 | Mbeumo £7.9 ⭑ | -3.0% | -66,008 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-10 02:43 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-11-11 07:11 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
