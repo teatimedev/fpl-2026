@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 11
 
-Deadline **Sat 21 Nov, 11:00 UTC** — 10d 4h away.
+Deadline **Sat 21 Nov, 11:00 UTC** — 9d 6h away.
 Projections cover GW11–16.
 
 ## GW10 in review — what happened, and what it does and does not change
 
-_368 players classified: 28 unavailable, 18 minutes loss, 48 minutes watch, 12 minutes gain, 5 role change, 54 variance, 203 on model. Retrospective classes graded: 9 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_368 players classified: 29 unavailable, 18 minutes loss, 48 minutes watch, 12 minutes gain, 5 role change, 54 variance, 202 on model. Retrospective classes graded: 9 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -136,7 +136,7 @@ Selected path under the current policy: **398.7** pts (0 hits). Making no move t
 | Sadiki, Gvardiol → De Cuyper, Gomez | +2.03 | 0.0 | yes |
 | Tarkowski → De Cuyper | +1.29 | 0.0 | yes |
 | Gvardiol → De Cuyper | +1.61 | 0.0 | yes |
-| Thiaw → Konsa | -0.50 | 0.0 | no |
+| Thiaw → Konsa | -0.60 | 0.0 | no |
 | Sadiki, Tarkowski → De Cuyper, Gomez | +2.62 | 0.0 | yes |
 
 - **GW11** 65.4 pts, C Haaland, 2 FT  Tarkowski → De Cuyper, Sadiki → Gomez
@@ -157,7 +157,7 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 | Bench Boost | 8.3 | GW15: 9.9 | Hold. Best-looking week for this one is GW15 (9.9 extra points); this week is 8.3. Second copy (GW20–38): best week GW34 (11.2). |
 | Triple Captain | — | GW32: 8.7 (Haaland) | Hold. Best week for this one is GW32: Haaland (8.7 extra). |
 | Free Hit | 4.0 | GW19: 7.3 | Hold. Widest gap left is GW19 (7.3 behind the optimised one-week squad); this week 4.0. |
-| Wildcard | +5.5 over the window | — | Hold. Unlimited transfers now are worth 5.5 over the window. The squad is holding up (gap to the optimised one-week squad 4.0–6.5 over the next weeks). |
+| Wildcard | +5.4 over the window | — | Hold. Unlimited transfers now are worth 5.4 over the window. The squad is holding up (gap to the optimised one-week squad 4.0–6.5 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -168,15 +168,15 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| N.Jackson £7.1 ⭑ | +7.8% | +269,735 | João Pedro £7.6 | -7.9% | -284,772 |
-| Barry £5.7 | +15.7% | +188,001 | Gvardiol £5.6 ⭑ | -10.2% | -263,977 |
-| Evanilson £6.5 | +6.6% | +176,645 | Guéhi £6.0 | -7.9% | -127,003 |
-| Van Hecke £5.1 | +9.6% | +156,420 | Calvert-Lewin £6.0 | -4.9% | -98,152 |
-| Vuskovic £5.3 | +13.0% | +133,067 | Thiago £7.8 | -9.2% | -85,498 |
-| De Cuyper £5.5 | +2.4% | +129,723 | Mbeumo £7.9 ⭑ | -3.0% | -66,008 |
+| N.Jackson £7.1 ⭑ | +8.1% | +284,317 | João Pedro £7.6 | -8.3% | -297,875 |
+| Barry £5.7 | +16.0% | +193,078 | Gvardiol £5.6 ⭑ | -10.7% | -275,121 |
+| Evanilson £6.5 | +7.0% | +186,640 | Guéhi £6.0 | -8.4% | -133,985 |
+| Van Hecke £5.1 | +9.9% | +163,063 | Calvert-Lewin £6.0 | -5.1% | -102,021 |
+| Vuskovic £5.3 | +13.7% | +142,006 | Thiago £7.8 | -9.8% | -90,899 |
+| De Cuyper £5.5 | +2.5% | +136,751 | Mbeumo £7.9 ⭑ | -3.2% | -69,616 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-11 07:11 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-11-12 04:16 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._

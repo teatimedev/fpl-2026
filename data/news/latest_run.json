@@ -1,9 +1,9 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-11-11T06:47:56Z",
+  "checked_at": "2026-11-12T03:55:44Z",
   "claims": 1,
-  "coverage": 0.25,
+  "coverage": 0.3,
   "deadline": "2026-11-21T11:00:00Z",
   "gw": 11,
   "notification_key": "ad901febc90f843351ca",
@@ -695,9 +695,9 @@
       "status": "a"
     },
     "222": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Ankle injury - 75% chance of playing",
+      "status": "d"
     },
     "223": {
       "chance": 0,
@@ -3372,9 +3372,7 @@
   },
   "official_fpl_ok": true,
   "price_changed": [
-    109,
-    236,
-    424
+    462
   ],
   "rebuild_required": true,
   "state_changed": false,
