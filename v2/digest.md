@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 11
 
-Deadline **Sat 21 Nov, 11:00 UTC** — 9d 6h away.
+Deadline **Sat 21 Nov, 11:00 UTC** — 8d 8h away.
 Projections cover GW11–16.
 
 ## GW10 in review — what happened, and what it does and does not change
 
-_368 players classified: 29 unavailable, 18 minutes loss, 48 minutes watch, 12 minutes gain, 5 role change, 54 variance, 202 on model. Retrospective classes graded: 9 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_368 players classified: 30 unavailable, 18 minutes loss, 48 minutes watch, 12 minutes gain, 5 role change, 53 variance, 202 on model. Retrospective classes graded: 9 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -156,8 +156,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 8.3 | GW15: 9.9 | Hold. Best-looking week for this one is GW15 (9.9 extra points); this week is 8.3. Second copy (GW20–38): best week GW34 (11.2). |
 | Triple Captain | — | GW32: 8.7 (Haaland) | Hold. Best week for this one is GW32: Haaland (8.7 extra). |
-| Free Hit | 4.0 | GW19: 7.3 | Hold. Widest gap left is GW19 (7.3 behind the optimised one-week squad); this week 4.0. |
-| Wildcard | +5.4 over the window | — | Hold. Unlimited transfers now are worth 5.4 over the window. The squad is holding up (gap to the optimised one-week squad 4.0–6.5 over the next weeks). |
+| Free Hit | 4.0 | GW19: 8.0 | Hold. Widest gap left is GW19 (8.0 behind the optimised one-week squad); this week 4.0. |
+| Wildcard | +5.2 over the window | — | Hold. Unlimited transfers now are worth 5.2 over the window. The squad is holding up (gap to the optimised one-week squad 4.0–6.4 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -168,15 +168,15 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| N.Jackson £7.1 ⭑ | +8.1% | +284,317 | João Pedro £7.6 | -8.3% | -297,875 |
-| Barry £5.7 | +16.0% | +193,078 | Gvardiol £5.6 ⭑ | -10.7% | -275,121 |
-| Evanilson £6.5 | +7.0% | +186,640 | Guéhi £6.0 | -8.4% | -133,985 |
-| Van Hecke £5.1 | +9.9% | +163,063 | Calvert-Lewin £6.0 | -5.1% | -102,021 |
-| Vuskovic £5.3 | +13.7% | +142,006 | Thiago £7.8 | -9.8% | -90,899 |
-| De Cuyper £5.5 | +2.5% | +136,751 | Mbeumo £7.9 ⭑ | -3.2% | -69,616 |
+| N.Jackson £7.1 ⭑ | +8.5% | +297,531 | João Pedro £7.6 | -8.7% | -309,604 |
+| Barry £5.7 | +16.3% | +197,432 | Gvardiol £5.6 ⭑ | -11.1% | -284,899 |
+| Evanilson £6.5 | +7.3% | +195,691 | Guéhi £6.0 | -8.8% | -140,488 |
+| Van Hecke £5.1 | +10.2% | +169,321 | Calvert-Lewin £6.0 | -5.3% | -105,565 |
+| Vuskovic £5.3 | +14.2% | +149,476 | Thiago £7.8 | -10.5% | -95,928 |
+| De Cuyper £5.5 | +2.6% | +142,982 | Mbeumo £7.9 ⭑ | -3.4% | -72,791 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-12 04:16 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-11-13 02:23 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._

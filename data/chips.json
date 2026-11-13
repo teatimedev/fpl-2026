@@ -191,7 +191,7 @@
     ],
     [
      13,
-     2.9
+     2.6
     ],
     [
      14,
@@ -203,11 +203,11 @@
     ],
     [
      16,
-     6.5
+     6.4
     ],
     [
      17,
-     2.0
+     2.2
     ],
     [
      18,
@@ -215,19 +215,19 @@
     ],
     [
      19,
-     7.3
+     8.0
     ]
    ],
    "best_gw": 19,
-   "best": 7.3,
+   "best": 8.0,
    "now": 4.0,
    "play": false,
-   "advice": "Hold. Widest gap left is GW19 (7.3 behind the optimised one-week squad); this week 4.0.",
+   "advice": "Hold. Widest gap left is GW19 (8.0 behind the optimised one-week squad); this week 4.0.",
    "last_eligible": 19
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 5.4,
+   "now": 5.2,
    "gap_trend": [
     [
      11,
@@ -239,7 +239,7 @@
     ],
     [
      13,
-     2.9
+     2.6
     ],
     [
      14,
@@ -251,11 +251,11 @@
     ],
     [
      16,
-     6.5
+     6.4
     ],
     [
      17,
-     2.0
+     2.2
     ],
     [
      18,
@@ -263,20 +263,20 @@
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 5.4 over the window. The squad is holding up (gap to the optimised one-week squad 4.0\u20136.5 over the next weeks).",
+   "advice": "Hold. Unlimited transfers now are worth 5.2 over the window. The squad is holding up (gap to the optimised one-week squad 4.0\u20136.4 over the next weeks).",
    "last_eligible": 19
   }
  },
  "gaps": {
   "11": 4.0,
   "12": 5.6,
-  "13": 2.9,
+  "13": 2.6,
   "14": 2.6,
   "15": 4.6,
-  "16": 6.5,
-  "17": 2.0,
+  "16": 6.4,
+  "17": 2.2,
   "18": 2.3,
-  "19": 7.3
+  "19": 8.0
  },
  "method": "Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled."
 }
