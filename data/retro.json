@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-13T02:05:11Z",
+ "generated": "2026-11-14T06:52:53Z",
  "latest_gw": 10,
  "gws": [
   {
@@ -139,7 +139,7 @@
     "minutes_watch": 48,
     "minutes_gain": 12
    },
-   "generated": "2026-11-13T02:05:11Z"
+   "generated": "2026-11-14T06:52:53Z"
   }
  ],
  "classes_graded_gws": 9,

@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 11
 
-Deadline **Sat 21 Nov, 11:00 UTC** — 8d 8h away.
+Deadline **Sat 21 Nov, 11:00 UTC** — 7d 4h away.
 Projections cover GW11–16.
 
 ## GW10 in review — what happened, and what it does and does not change
@@ -43,6 +43,7 @@ _368 players classified: 30 unavailable, 18 minutes loss, 48 minutes watch, 12 m
 **Pool** — ordered by projected points GW11–16, capped at 5 a list, not by last week's residual:
 
 - breakout minutes (started at <= 40%): Lavia (CHE, 0.0 xG, 2 pts; GW11–16 11.5), Torp (COV, 0.2 xG, 4 pts; GW11–16 11.5), Costinha (BHA, 0.1 xG, 6 pts; GW11–16 11.0), Gboho (COV, 0.2 xG, 8 pts; GW11–16 11.0), O'Nien (SUN, 0.0 xG, 5 pts; GW11–16 10.6)
+- set-piece duty changed: E.Le Fée (SUN, 0.8 xG, 11 pts; GW11–16 26.0), McGinn (AVL, 0.8 xG, 10 pts; GW11–16 20.7)
 - lost their place — benched while healthy: Ndoye (NFO, 0.0 xG, 0 pts; GW11–16 17.6), Matheus N. (MCI, 0.0 xG, 1 pts; GW11–16 16.2), Canvot (CRY, 0.0 xG, 0 pts; GW11–16 15.8), Fatawu (IPS, 0.0 xG, 1 pts; GW11–16 14.9), White (ARS, 0.0 xG, 0 pts; GW11–16 14.7)
 - hauled on low xG — do not chase: Wirtz (LIV, 0.3 xG, 13 pts; GW11–16 30.3), Mac Allister (LIV, 0.2 xG, 9 pts; GW11–16 24.2), Dewsbury-Hall (EVE, 0.2 xG, 9 pts; GW11–16 23.4), Delap (NFO, 0.2 xG, 13 pts; GW11–16 19.0), Schlager (NFO, 0.0 xG, 7 pts; GW11–16 18.3)
 - blanked on good xG — unchanged as targets: George (EVE, 0.1 xG, 2 pts; GW11–16 16.0)
@@ -156,8 +157,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 8.3 | GW15: 9.9 | Hold. Best-looking week for this one is GW15 (9.9 extra points); this week is 8.3. Second copy (GW20–38): best week GW34 (11.2). |
 | Triple Captain | — | GW32: 8.7 (Haaland) | Hold. Best week for this one is GW32: Haaland (8.7 extra). |
-| Free Hit | 4.0 | GW19: 8.0 | Hold. Widest gap left is GW19 (8.0 behind the optimised one-week squad); this week 4.0. |
-| Wildcard | +5.2 over the window | — | Hold. Unlimited transfers now are worth 5.2 over the window. The squad is holding up (gap to the optimised one-week squad 4.0–6.4 over the next weeks). |
+| Free Hit | 4.0 | GW19: 7.3 | Hold. Widest gap left is GW19 (7.3 behind the optimised one-week squad); this week 4.0. |
+| Wildcard | +3.4 over the window | — | Hold. Unlimited transfers now are worth 3.4 over the window. The squad is holding up (gap to the optimised one-week squad 4.0–6.4 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -168,15 +169,15 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| N.Jackson £7.1 ⭑ | +8.5% | +297,531 | João Pedro £7.6 | -8.7% | -309,604 |
-| Barry £5.7 | +16.3% | +197,432 | Gvardiol £5.6 ⭑ | -11.1% | -284,899 |
-| Evanilson £6.5 | +7.3% | +195,691 | Guéhi £6.0 | -8.8% | -140,488 |
-| Van Hecke £5.1 | +10.2% | +169,321 | Calvert-Lewin £6.0 | -5.3% | -105,565 |
-| Vuskovic £5.3 | +14.2% | +149,476 | Thiago £7.8 | -10.5% | -95,928 |
-| De Cuyper £5.5 | +2.6% | +142,982 | Mbeumo £7.9 ⭑ | -3.4% | -72,791 |
+| N.Jackson £7.1 ⭑ | +8.9% | +313,015 | João Pedro £7.6 | -9.0% | -322,673 |
+| Evanilson £6.5 | +7.6% | +205,835 | Gvardiol £5.6 ⭑ | -11.6% | -295,816 |
+| Barry £5.7 | +16.5% | +201,612 | Guéhi £6.0 | -9.3% | -147,487 |
+| Van Hecke £5.1 | +10.6% | +176,611 | Calvert-Lewin £6.0 | -5.5% | -109,568 |
+| Vuskovic £5.3 | +14.8% | +157,373 | Thiago £7.8 | -11.1% | -101,537 |
+| De Cuyper £5.5 | +2.8% | +149,712 | Mbeumo £7.9 ⭑ | -3.5% | -76,356 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-13 02:23 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-11-14 07:11 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._

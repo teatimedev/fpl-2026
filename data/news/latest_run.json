@@ -1,12 +1,14 @@
 {
-  "affected_clubs": [],
+  "affected_clubs": [
+    "MCI"
+  ],
   "affected_owned": [],
-  "checked_at": "2026-11-13T01:57:46Z",
-  "claims": 1,
-  "coverage": 0.25,
+  "checked_at": "2026-11-14T06:45:28Z",
+  "claims": 0,
+  "coverage": 0.3,
   "deadline": "2026-11-21T11:00:00Z",
   "gw": 11,
-  "notification_key": "ad901febc90f843351ca",
+  "notification_key": "1e770a0bfde5a8acec1e",
   "notify_required": false,
   "official_fpl": {
     "1": {
@@ -3371,7 +3373,9 @@
     }
   },
   "official_fpl_ok": true,
-  "price_changed": [],
+  "price_changed": [
+    529
+  ],
   "rebuild_required": true,
   "state_changed": false,
   "status": "red",
