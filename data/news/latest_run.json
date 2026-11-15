@@ -3,7 +3,7 @@
     "MCI"
   ],
   "affected_owned": [],
-  "checked_at": "2026-11-14T06:45:28Z",
+  "checked_at": "2026-11-15T02:51:01Z",
   "claims": 0,
   "coverage": 0.3,
   "deadline": "2026-11-21T11:00:00Z",
@@ -1767,9 +1767,9 @@
       "status": "a"
     },
     "415": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Hamstring injury - 75% chance of playing",
+      "status": "d"
     },
     "416": {
       "chance": 100,
@@ -2872,9 +2872,9 @@
       "status": "a"
     },
     "614": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "615": {
       "chance": null,
@@ -3007,9 +3007,9 @@
       "status": "a"
     },
     "639": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Hip injury - 75% chance of playing",
+      "status": "d"
     },
     "64": {
       "chance": null,
@@ -3374,7 +3374,9 @@
   },
   "official_fpl_ok": true,
   "price_changed": [
-    529
+    31,
+    111,
+    357
   ],
   "rebuild_required": true,
   "state_changed": false,
