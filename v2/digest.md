@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 11
 
-Deadline **Sat 21 Nov, 11:00 UTC** — 6d 8h away.
+Deadline **Sat 21 Nov, 11:00 UTC** — 5d 8h away.
 Projections cover GW11–16.
 
 ## GW10 in review — what happened, and what it does and does not change
 
-_368 players classified: 31 unavailable, 18 minutes loss, 47 minutes watch, 12 minutes gain, 5 role change, 53 variance, 202 on model. Retrospective classes graded: 9 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_368 players classified: 32 unavailable, 18 minutes loss, 47 minutes watch, 12 minutes gain, 5 role change, 52 variance, 202 on model. Retrospective classes graded: 9 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -45,7 +45,7 @@ _368 players classified: 31 unavailable, 18 minutes loss, 47 minutes watch, 12 m
 - breakout minutes (started at <= 40%): Lavia (CHE, 0.0 xG, 2 pts; GW11–16 11.5), Torp (COV, 0.2 xG, 4 pts; GW11–16 11.5), Costinha (BHA, 0.1 xG, 6 pts; GW11–16 11.0), Gboho (COV, 0.2 xG, 8 pts; GW11–16 11.0), O'Nien (SUN, 0.0 xG, 5 pts; GW11–16 10.6)
 - set-piece duty changed: E.Le Fée (SUN, 0.8 xG, 11 pts; GW11–16 26.0), McGinn (AVL, 0.8 xG, 10 pts; GW11–16 20.7)
 - lost their place — benched while healthy: Ndoye (NFO, 0.0 xG, 0 pts; GW11–16 17.6), Matheus N. (MCI, 0.0 xG, 1 pts; GW11–16 16.2), Canvot (CRY, 0.0 xG, 0 pts; GW11–16 15.8), Fatawu (IPS, 0.0 xG, 1 pts; GW11–16 14.9), White (ARS, 0.0 xG, 0 pts; GW11–16 14.7)
-- hauled on low xG — do not chase: Wirtz (LIV, 0.3 xG, 13 pts; GW11–16 30.3), Mac Allister (LIV, 0.2 xG, 9 pts; GW11–16 24.2), Dewsbury-Hall (EVE, 0.2 xG, 9 pts; GW11–16 23.4), Delap (NFO, 0.2 xG, 13 pts; GW11–16 19.0), Schlager (NFO, 0.0 xG, 7 pts; GW11–16 18.3)
+- hauled on low xG — do not chase: Wirtz (LIV, 0.3 xG, 13 pts; GW11–16 30.3), Mac Allister (LIV, 0.2 xG, 9 pts; GW11–16 24.2), Dewsbury-Hall (EVE, 0.2 xG, 9 pts; GW11–16 23.4), Delap (NFO, 0.2 xG, 13 pts; GW11–16 19.0), Tielemans (MUN, 0.3 xG, 7 pts; GW11–16 17.6)
 - blanked on good xG — unchanged as targets: George (EVE, 0.1 xG, 2 pts; GW11–16 16.0)
 
 ## Captain: **Haaland** (MCI)
@@ -157,8 +157,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 8.3 | GW15: 9.9 | Hold. Best-looking week for this one is GW15 (9.9 extra points); this week is 8.3. Second copy (GW20–38): best week GW34 (11.2). |
 | Triple Captain | — | GW32: 8.7 (Haaland) | Hold. Best week for this one is GW32: Haaland (8.7 extra). |
-| Free Hit | 4.0 | GW19: 7.3 | Hold. Widest gap left is GW19 (7.3 behind the optimised one-week squad); this week 4.0. |
-| Wildcard | +5.8 over the window | — | Hold. Unlimited transfers now are worth 5.8 over the window. The squad is holding up (gap to the optimised one-week squad 4.0–6.5 over the next weeks). |
+| Free Hit | 4.5 | GW19: 7.2 | Hold. Widest gap left is GW19 (7.2 behind the optimised one-week squad); this week 4.5. |
+| Wildcard | +4.8 over the window | — | Hold. Unlimited transfers now are worth 4.8 over the window. The squad is holding up (gap to the optimised one-week squad 4.5–6.5 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -169,15 +169,15 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| N.Jackson £7.1 ⭑ | +9.1% | +322,316 | João Pedro £7.6 | -9.3% | -331,003 |
-| Evanilson £6.5 | +7.9% | +211,999 | Gvardiol £5.6 ⭑ | -11.9% | -302,382 |
-| Barry £5.7 | +16.8% | +204,323 | Guéhi £6.0 | -9.6% | -151,682 |
-| Van Hecke £5.1 | +10.8% | +180,960 | Calvert-Lewin £6.0 | -5.7% | -111,867 |
-| Vuskovic £5.3 | +15.3% | +162,170 | Thiago £7.8 | -11.6% | -104,902 |
-| De Cuyper £5.5 | +2.8% | +153,826 | Mbeumo £7.9 ⭑ | -3.7% | -78,355 |
+| N.Jackson £7.1 ⭑ | +9.3% | +330,836 | João Pedro £7.6 | -9.5% | -338,391 |
+| Evanilson £6.5 | +8.0% | +217,577 | Gvardiol £5.6 ⭑ | -12.1% | -308,497 |
+| Barry £5.7 | +16.9% | +206,511 | Guéhi £6.0 | -9.8% | -155,753 |
+| Van Hecke £5.1 | +11.1% | +184,950 | Calvert-Lewin £6.0 | -5.8% | -113,785 |
+| Vuskovic £5.3 | +15.5% | +166,831 | Thiago £7.8 | -12.0% | -107,990 |
+| De Cuyper £5.5 | +2.9% | +157,946 | Mbeumo £7.9 ⭑ | -3.7% | -80,061 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-15 03:16 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-11-16 03:09 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
