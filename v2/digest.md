@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 11
 
-Deadline **Sat 21 Nov, 11:00 UTC** — 5d 8h away.
+Deadline **Sat 21 Nov, 11:00 UTC** — 4d 6h away.
 Projections cover GW11–16.
 
 ## GW10 in review — what happened, and what it does and does not change
 
-_368 players classified: 32 unavailable, 18 minutes loss, 47 minutes watch, 12 minutes gain, 5 role change, 52 variance, 202 on model. Retrospective classes graded: 9 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_368 players classified: 36 unavailable, 18 minutes loss, 46 minutes watch, 12 minutes gain, 5 role change, 52 variance, 199 on model. Retrospective classes graded: 9 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -101,7 +101,6 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 | Sadiki (SUN) | Rudoni (COV) | +0.1 | +1.7 | +0.9 | **+2.6** | +2.6 |
 | Tavernier (BOU) | Ødegaard (ARS) | +0.0 | +1.7 | +0.1 | **+1.8** | +1.8 |
 | Calafiori (ARS) | De Cuyper (BHA) | -0.4 | +2.5 | -1.1 | **+1.4** | +1.4 |
-| O'Shea (IPS) | Mendy (HUL) | +0.1 | +1.4 | -0.9 | **+0.5** | +0.5 |
 
 _Last week, for the names above:_
 - Tarkowski — variance (team): 90', 0.00 xG, 0 goals, 2 pts (proj 5.0). Team (-1.6).
@@ -110,7 +109,6 @@ _Last week, for the names above:_
 - Sadiki — variance (defcon): 90', 0.00 xG, 0 goals, 5 pts (proj 2.9). Defcon (+1.7).
 - Rudoni — variance (finishing): 85', 0.12 xG, 0 goals, 2 pts (proj 3.3). Finishing (-1.4).
 - Ødegaard — variance (finishing): 90', 0.24 xG, 1 goal, 11 pts (proj 5.9). Finishing (+2.8).
-- O'Shea — variance (team): 90', 0.00 xG, 0 goals, 1 pts (proj 3.0). Team (-1.0).
 
 **Recommended:** Tarkowski→De Cuyper, Sadiki→Gomez this week (+2.6 versus holding/re-planning).
 
@@ -157,8 +155,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 8.3 | GW15: 9.9 | Hold. Best-looking week for this one is GW15 (9.9 extra points); this week is 8.3. Second copy (GW20–38): best week GW34 (11.2). |
 | Triple Captain | — | GW32: 8.7 (Haaland) | Hold. Best week for this one is GW32: Haaland (8.7 extra). |
-| Free Hit | 4.5 | GW19: 7.2 | Hold. Widest gap left is GW19 (7.2 behind the optimised one-week squad); this week 4.5. |
-| Wildcard | +4.8 over the window | — | Hold. Unlimited transfers now are worth 4.8 over the window. The squad is holding up (gap to the optimised one-week squad 4.5–6.5 over the next weeks). |
+| Free Hit | 4.8 | GW19: 7.3 | Hold. Widest gap left is GW19 (7.3 behind the optimised one-week squad); this week 4.8. |
+| Wildcard | +6.0 over the window | — | Hold. Unlimited transfers now are worth 6.0 over the window. The squad is holding up (gap to the optimised one-week squad 4.8–7.0 over the next weeks). |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -169,15 +167,15 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| N.Jackson £7.1 ⭑ | +9.3% | +330,836 | João Pedro £7.6 | -9.5% | -338,391 |
-| Evanilson £6.5 | +8.0% | +217,577 | Gvardiol £5.6 ⭑ | -12.1% | -308,497 |
-| Barry £5.7 | +16.9% | +206,511 | Guéhi £6.0 | -9.8% | -155,753 |
-| Van Hecke £5.1 | +11.1% | +184,950 | Calvert-Lewin £6.0 | -5.8% | -113,785 |
-| Vuskovic £5.3 | +15.5% | +166,831 | Thiago £7.8 | -12.0% | -107,990 |
-| De Cuyper £5.5 | +2.9% | +157,946 | Mbeumo £7.9 ⭑ | -3.7% | -80,061 |
+| N.Jackson £7.1 ⭑ | +9.7% | +344,786 | João Pedro £7.6 | -9.8% | -348,393 |
+| Evanilson £6.5 | +8.3% | +225,291 | Gvardiol £5.6 ⭑ | -12.6% | -318,799 |
+| Barry £5.7 | +17.0% | +209,376 | Guéhi £6.0 | -10.3% | -161,653 |
+| Van Hecke £5.1 | +11.5% | +192,900 | Calvert-Lewin £6.0 | -6.0% | -117,528 |
+| Vuskovic £5.3 | +16.0% | +173,931 | Thiago £7.8 | -12.6% | -112,669 |
+| De Cuyper £5.5 | +3.0% | +164,347 | Mbeumo £7.9 ⭑ | -3.9% | -82,969 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-16 03:09 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-11-17 04:55 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
