@@ -1,13 +1,15 @@
 {
   "affected_clubs": [],
-  "affected_owned": [],
-  "checked_at": "2026-11-20T13:14:03Z",
-  "claims": 3,
-  "coverage": 0.45,
+  "affected_owned": [
+    391
+  ],
+  "checked_at": "2026-11-20T21:18:57Z",
+  "claims": 10,
+  "coverage": 0.5,
   "deadline": "2026-11-21T11:00:00Z",
   "gw": 11,
-  "notification_key": "ad901febc90f843351ca",
-  "notify_required": false,
+  "notification_key": "8c198fa485b330f39035",
+  "notify_required": true,
   "official_fpl": {
     "1": {
       "chance": null,
@@ -20,9 +22,9 @@
       "status": "a"
     },
     "100": {
-      "chance": 0,
-      "news": "Knock - Expected back 23 Nov",
-      "status": "i"
+      "chance": 75,
+      "news": "Knock - 75% chance of playing",
+      "status": "d"
     },
     "101": {
       "chance": 100,
@@ -35,9 +37,9 @@
       "status": "a"
     },
     "103": {
-      "chance": 25,
-      "news": "Hamstring injury - 25% chance of playing",
-      "status": "d"
+      "chance": 0,
+      "news": "Hamstring injury - Unknown return date",
+      "status": "i"
     },
     "104": {
       "chance": 75,
@@ -275,13 +277,13 @@
       "status": "u"
     },
     "147": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Calf injury - Expected back 29 Nov",
+      "status": "i"
     },
     "148": {
       "chance": 0,
-      "news": "Unspecified injury - Unknown return date",
+      "news": "Back injury - Unknown return date",
       "status": "i"
     },
     "149": {
@@ -300,9 +302,9 @@
       "status": "u"
     },
     "151": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "152": {
       "chance": 100,
@@ -340,9 +342,9 @@
       "status": "i"
     },
     "159": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "16": {
       "chance": 100,
@@ -1010,9 +1012,9 @@
       "status": "a"
     },
     "28": {
-      "chance": 75,
-      "news": "Head injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "280": {
       "chance": 100,
@@ -1045,9 +1047,9 @@
       "status": "a"
     },
     "286": {
-      "chance": 75,
-      "news": "Hamstring injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "287": {
       "chance": 0,
@@ -1235,9 +1237,9 @@
       "status": "u"
     },
     "32": {
-      "chance": 75,
-      "news": "Concussion - 75% chance of playing",
-      "status": "d"
+      "chance": 0,
+      "news": "Concussion - Expected back 28 Nov",
+      "status": "i"
     },
     "320": {
       "chance": null,
@@ -1265,9 +1267,9 @@
       "status": "a"
     },
     "325": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "326": {
       "chance": 0,
@@ -1435,14 +1437,14 @@
       "status": "a"
     },
     "356": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "357": {
-      "chance": 0,
-      "news": "Hamstring injury - Unknown return date",
-      "status": "i"
+      "chance": 75,
+      "news": "Hamstring injury - 75% chance of playing",
+      "status": "d"
     },
     "358": {
       "chance": null,
@@ -1611,13 +1613,13 @@
     },
     "388": {
       "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
+      "news": "Hip injury - 75% chance of playing",
       "status": "d"
     },
     "389": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 50,
+      "news": "Unspecified injury - 50% chance of playing",
+      "status": "d"
     },
     "39": {
       "chance": 0,
@@ -1630,9 +1632,9 @@
       "status": "a"
     },
     "391": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "392": {
       "chance": null,
@@ -1640,9 +1642,9 @@
       "status": "a"
     },
     "393": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 50,
+      "news": "Unspecified injury - 50% chance of playing",
+      "status": "d"
     },
     "394": {
       "chance": 0,
@@ -1700,9 +1702,9 @@
       "status": "u"
     },
     "403": {
-      "chance": 0,
-      "news": "Muscular injury - Expected back 21 Nov",
-      "status": "i"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "404": {
       "chance": 0,
@@ -1800,9 +1802,9 @@
       "status": "a"
     },
     "421": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "422": {
       "chance": 100,
@@ -2315,9 +2317,9 @@
       "status": "i"
     },
     "514": {
-      "chance": 75,
-      "news": "Ankle injury - 75% chance of playing",
-      "status": "d"
+      "chance": 0,
+      "news": "Ankle injury - Expected back 6 Dec",
+      "status": "i"
     },
     "515": {
       "chance": 100,
@@ -2350,9 +2352,9 @@
       "status": "a"
     },
     "520": {
-      "chance": 0,
-      "news": "Knee injury - Unknown return date",
-      "status": "i"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "521": {
       "chance": 100,
@@ -2400,9 +2402,9 @@
       "status": "a"
     },
     "53": {
-      "chance": 75,
-      "news": "Calf injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "530": {
       "chance": 0,
@@ -2710,9 +2712,9 @@
       "status": "a"
     },
     "586": {
-      "chance": 75,
-      "news": "Knee injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "587": {
       "chance": null,
@@ -2855,9 +2857,9 @@
       "status": "u"
     },
     "611": {
-      "chance": 50,
-      "news": "Hamstring injury - 50% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "612": {
       "chance": 100,
@@ -3285,9 +3287,9 @@
       "status": "a"
     },
     "84": {
-      "chance": 75,
-      "news": "Knee injury - 75% chance of playing",
-      "status": "d"
+      "chance": 0,
+      "news": "Knee injury - Expected back 2 Dec",
+      "status": "i"
     },
     "85": {
       "chance": 100,
@@ -3320,9 +3322,9 @@
       "status": "a"
     },
     "90": {
-      "chance": 75,
-      "news": "Hamstring injury - 75% chance of playing",
-      "status": "d"
+      "chance": 0,
+      "news": "Hamstring injury - Expected back 2 Dec",
+      "status": "i"
     },
     "91": {
       "chance": null,
@@ -3374,7 +3376,7 @@
   "price_changed": [],
   "rebuild_required": true,
   "state_changed": false,
-  "status": "red",
+  "status": "amber",
   "urgent": false,
   "version": 1
 }
