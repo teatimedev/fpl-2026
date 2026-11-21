@@ -1,15 +1,13 @@
 {
   "affected_clubs": [],
-  "affected_owned": [
-    391
-  ],
-  "checked_at": "2026-11-20T21:18:57Z",
+  "affected_owned": [],
+  "checked_at": "2026-11-21T02:33:38Z",
   "claims": 10,
   "coverage": 0.5,
   "deadline": "2026-11-21T11:00:00Z",
   "gw": 11,
-  "notification_key": "8c198fa485b330f39035",
-  "notify_required": true,
+  "notification_key": "ad901febc90f843351ca",
+  "notify_required": false,
   "official_fpl": {
     "1": {
       "chance": null,
@@ -3373,7 +3371,19 @@
     }
   },
   "official_fpl_ok": true,
-  "price_changed": [],
+  "price_changed": [
+    1,
+    20,
+    46,
+    195,
+    268,
+    366,
+    388,
+    427,
+    438,
+    497,
+    574
+  ],
   "rebuild_required": true,
   "state_changed": false,
   "status": "amber",
