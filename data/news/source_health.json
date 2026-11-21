@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-11-21T02:33:38Z",
-  "coverage": 0.5,
+  "checked_at": "2026-11-21T19:30:39Z",
+  "coverage": 0.4,
   "enabled": 20,
-  "gw": 11,
-  "healthy": 10,
+  "gw": 12,
+  "healthy": 8,
   "official_fpl_ok": true,
   "sources": [
     {
@@ -16,35 +16,32 @@
       "club": "ARS",
       "content_hash": "3a63c00aa91f6a67be1459aa19d9728ec2c9798bacb903cabee804b03342cd0a",
       "documents": 2,
+      "error": "HTTP Error 503: Service Unavailable",
       "etag": "\"yywpic26eq1rx7\"",
       "id": "ars-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Arsenal",
-      "status": "ok",
+      "status": "error",
       "url": "https://www.arsenal.com/news"
     },
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.avfc.co.uk/news/2026/november/20/prematch-emery-previews-sunderland-encounter/": {
-          "etag": "W/\"XyehKGXwKj\"",
-          "last_modified": "Sat, 21 Nov 2026 02:33:40 GMT"
+        "https://www.avfc.co.uk/news/2026/november/21/news-sunderland-team-news/": {
+          "etag": "W/\"hrA97LINIM\"",
+          "last_modified": "Sat, 21 Nov 2026 19:30:47 GMT"
         },
-        "https://www.avfc.co.uk/news/2026/november/20/prematch-sunderland-fpl-preview/": {
-          "etag": "W/\"qO5d79dWcy\"",
-          "last_modified": "Sat, 21 Nov 2026 02:32:28 GMT"
-        },
-        "https://www.avfc.co.uk/news/2026/november/20/prematch-team-news-for-black-cats-battle/": {
-          "etag": "W/\"QL401w7p5v\"",
-          "last_modified": "Sat, 21 Nov 2026 02:33:08 GMT"
+        "https://www.avfc.co.uk/news/2026/november/21/womenplayer-availability-update--charlton-athletic/": {
+          "etag": "W/\"VrlOsicXRT\"",
+          "last_modified": "Sat, 21 Nov 2026 19:30:49 GMT"
         }
       },
       "club": "AVL",
-      "content_hash": "be77182eb66d60aff703403a7653e44d4645cb1e069c7b773f4fd81cd418f144",
-      "documents": 4,
-      "etag": "W/\"jZoPRi3quo\"",
+      "content_hash": "667c98002061b562e3f1c642e9ed11b41caf655b7f73eef8545f8e12a201c781",
+      "documents": 3,
+      "etag": "W/\"ZubdrsJ6ou\"",
       "id": "avl-news",
-      "last_modified": "Sat, 21 Nov 2026 02:32:08 GMT",
+      "last_modified": "Sat, 21 Nov 2026 19:30:46 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Aston Villa",
       "status": "ok",
@@ -90,10 +87,10 @@
         "https://www.brentfordfc.com/en/news/match-previews-brentford-v-everton-premier-league-23-11-2026": {}
       },
       "club": "BRE",
-      "content_hash": "d2d779a1fe231065b2f21e145732f42953b8f0ed66db37106d223343e8dce24e",
-      "documents": 5,
+      "content_hash": "92512ef462e9a0dece4eaf3cbdfbad06fe7d289220fa5d16b7bcbbb0b0675405",
+      "documents": 6,
       "id": "bre-news",
-      "last_modified": "Fri, 20 Nov 2026 18:51:02 GMT",
+      "last_modified": "Sat, 21 Nov 2026 14:20:12 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "ok",
@@ -108,7 +105,7 @@
       "club": "CHE",
       "content_hash": "b61979eb5d84aea6da30811bd26cc4492be453c08e8d767845d335a66edebdf9",
       "documents": 1,
-      "error": "all discovered team-news articles failed to load",
+      "error": "HTTP Error 500: Internal Server Error",
       "id": "che-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Chelsea",
@@ -120,7 +117,7 @@
       "article_validators": {},
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"2459f1885e9a9d780c9343977ce221cf\"",
       "id": "cov-news",
       "last_modified": "Sat, 21 Nov 2026 02:03:25 GMT",
@@ -135,7 +132,7 @@
       "club": "CRY",
       "content_hash": "096e42154051e5393a25458a154b58142ec3d8c1fd8d4af38b53aa15a0074ca8",
       "documents": 1,
-      "etag": "\"17tgf1lzq8n4k1l\"",
+      "etag": "\"a3i13lxxbd45pt\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -146,20 +143,20 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.evertonfc.com/news/2026/november/20/moyes-reveals-everton-team-news-for-brentford/": {
-          "etag": "W/\"vFiXsbLcUp\"",
-          "last_modified": "Sat, 21 Nov 2026 02:33:13 GMT"
+          "etag": "W/\"mp74x92dKG\"",
+          "last_modified": "Sat, 21 Nov 2026 19:30:22 GMT"
         },
         "https://www.evertonfc.com/news/2026/november/20/watch-moyes--press-conference--1-30pm-gmt----follow-live-blog/": {
-          "etag": "W/\"tPfaajFu0B\"",
-          "last_modified": "Sat, 21 Nov 2026 02:33:41 GMT"
+          "etag": "W/\"2r4hBu80bR\"",
+          "last_modified": "Sat, 21 Nov 2026 19:30:44 GMT"
         }
       },
       "club": "EVE",
-      "content_hash": "8f74d58744513daa43a347f87a0c2a5307c9799e97b208f17785db2664157546",
+      "content_hash": "5a6a1790edcdd5bba1476f3bafc229297b080a7b4c1303af612a74beacd7aeb6",
       "documents": 3,
-      "etag": "W/\"Bzikma2hGT\"",
+      "etag": "W/\"DcUvp7lvl1\"",
       "id": "eve-news",
-      "last_modified": "Sat, 21 Nov 2026 02:33:23 GMT",
+      "last_modified": "Sat, 21 Nov 2026 19:29:33 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Everton",
       "status": "ok",
@@ -170,7 +167,7 @@
       "article_validators": {},
       "club": "FUL",
       "content_hash": "8408c6124d807047950e21e167dbc0c906db562bac8f712424e2d6e68d53383b",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"e2d9cb5fb5399fa798f0f04d51d4ca96\"",
       "id": "ful-news",
       "last_modified": "Sat, 21 Nov 2026 02:04:07 GMT",
@@ -184,7 +181,7 @@
       "article_validators": {},
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"278d3f46eda981f3b6fcb0899aa10d00\"",
       "id": "hul-news",
       "last_modified": "Sat, 21 Nov 2026 02:04:15 GMT",
@@ -196,21 +193,21 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.itfc.co.uk/news/2026/november/20/Early-Ipswich-Town-team-news-for-Tottenham-fixture/": {
-          "etag": "\"d962ab976a0f1e4f685e3a67bb94d894\"",
-          "last_modified": "Sat, 21 Nov 2026 02:11:48 GMT"
-        },
         "https://www.itfc.co.uk/news/2026/november/20/matchday-guide-tottenham-hotspur-a-/": {
           "etag": "\"6120d1aa8fb073ac0fabf3ace086a4e6\"",
           "last_modified": "Sat, 21 Nov 2026 02:11:48 GMT"
+        },
+        "https://www.itfc.co.uk/news/2026/november/21/Ipswich-Town-team-news-Tottenham-Hotspur-Premier-League/": {
+          "etag": "\"54a04580d9f956e87e4265dba18a4b5d\"",
+          "last_modified": "Sat, 21 Nov 2026 13:52:08 GMT"
         }
       },
       "club": "IPS",
-      "content_hash": "56a05eb42bb4598cf46c176c37d9ba16a42eda2bd1b20c73302a153dd975dfbd",
-      "documents": 3,
-      "etag": "\"ba9e8b0fbb6643bef60dfbaae4455c85\"",
+      "content_hash": "736256c5ae13313ac38b3130e981903ac2abc71cfdcd1145ee7d25b57a0e3790",
+      "documents": 2,
+      "etag": "\"63bcf0b60aee9aad2675ace5bc21d9fd\"",
       "id": "ips-news",
-      "last_modified": "Sat, 21 Nov 2026 02:11:48 GMT",
+      "last_modified": "Sat, 21 Nov 2026 16:57:35 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
       "status": "ok",
@@ -218,32 +215,30 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {
-        "https://www.leedsunited.com/en/news/chelsea-vs-leeds-united-team-news-key-stats-and-everything-you-need-to-know": {}
-      },
+      "article_validators": {},
       "club": "LEE",
-      "content_hash": "be24b1e86e62b317ebd620d9eddb94ebf6fc226861bdad3f14b3b8a39b0c4aca",
-      "documents": 2,
+      "content_hash": "0548f80344ed8f11632951713d11fcab4af3a503a52318be1f48a85a92675d6c",
+      "documents": 1,
       "id": "lee-news",
-      "last_modified": "Sat, 21 Nov 2026 02:10:09 GMT",
+      "last_modified": "Sat, 21 Nov 2026 18:45:38 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
-      "status": "ok",
+      "status": "no_articles",
       "url": "https://www.leedsunited.com/en/news"
     },
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.liverpoolfc.com/news/andoni-iraola-manchester-united-press-conference-premier-league": {},
-        "https://www.liverpoolfc.com/news/lfc-fitness-update-frimpong-gravenberch-szoboszlai-van-dijk-and-more": {},
+        "https://www.liverpoolfc.com/news/hugo-ekitike-injury-update-21112026": {},
         "https://www.liverpoolfc.com/news/listing/mens-team-news": {},
-        "https://www.liverpoolfc.com/news/watch-andoni-iraola-liverpool-manchester-united-press-conference": {}
+        "https://www.liverpoolfc.com/news/liverpool-v-manchester-united-team-news-premier-league-112026": {},
+        "https://www.liverpoolfc.com/news/we-know-what-this-game-means-virgil-van-dijk-previews-liverpool-manchester-united": {}
       },
       "club": "LIV",
-      "content_hash": "3bff5b2d6d76a4d65497db22aee1ee6258d7bfb04463ce601239d73871648f44",
-      "documents": 4,
+      "content_hash": "a972c57d5e92c5ef52c79ab805f90d47c5545df87a371c4ac8524b8efb5cce96",
+      "documents": 5,
       "id": "liv-news",
-      "last_modified": "Fri, 20 Nov 2026 19:22:38 GMT",
+      "last_modified": "Sat, 21 Nov 2026 19:27:57 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
       "status": "ok",
@@ -252,17 +247,11 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/news/mens/enzo-maresca-21-november-fulham-press-conference-63930777": {
-          "last_modified": "Sat, 21 Nov 2026 02:14:02 GMT"
-        },
-        "https://www.mancity.com/news/mens/fulham-premier-league-november-2026-match-preview-63930344": {},
-        "https://www.mancity.com/news/mens/manchester-city-v-fulham-enzo-maresca-preview-written-20-nov-63930779": {
-          "last_modified": "Sat, 21 Nov 2026 02:20:21 GMT"
-        }
+        "https://www.mancity.com/citytv/mens/enzo-maresca-post-fulham-press-conference-november-2026-63930872": {}
       },
       "club": "MCI",
-      "content_hash": "50a2b13c7e3648da6943178c382512e200ff9d0aa704d5f938278cb20cff08a2",
-      "documents": 4,
+      "content_hash": "f78b0ef9dba51c84e908f739cdcc86c93607f569c9ba0658a998fb8f63830c11",
+      "documents": 2,
       "id": "mci-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
@@ -293,13 +282,14 @@
     {
       "article_errors": 0,
       "article_validators": {
+        "https://www.newcastleunited.com/en/news/arsenal-h-team-news-26-27": {},
         "https://www.newcastleunited.com/en/news/fpl-gameweek-11-tips-lewis-hall-impressing-at-both-ends-of-the-pitch": {},
-        "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-joelinton-and-livramento-latest-ahead-of-arsenal-visit": {},
+        "https://www.newcastleunited.com/en/news/how-to-watch-newcastle-united-vs-arsenal-tv-channel-kick-off-time-and-team-news": {},
         "https://www.newcastleunited.com/en/news/nuw-international-call-ups-november-2026": {}
       },
       "club": "NEW",
-      "content_hash": "22793fc07df7309ae00b68ede783d80ca2b59a0e98167459d8630fd787f29349",
-      "documents": 4,
+      "content_hash": "7d246f8b0ef3b458a3723d65d64ec68794490ab25e47e98009308c60d865cfc9",
+      "documents": 5,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Newcastle United",
@@ -312,9 +302,9 @@
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
       "documents": 1,
-      "etag": "\"d579a9273896f930dec8c32e326d1444\"",
+      "etag": "\"83ff1ed603ffd07a7737f28ca5737aca\"",
       "id": "nfo-news",
-      "last_modified": "Sat, 21 Nov 2026 02:04:37 GMT",
+      "last_modified": "Sat, 21 Nov 2026 18:45:00 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -326,9 +316,9 @@
       "club": "SUN",
       "content_hash": "83ec15aaae3409e9a938b70f4d73928762d5e0ab7390b0daee6538811cc6d630",
       "documents": 1,
-      "etag": "\"b6f61e85b35b74af9bfd33fe5ae81ebf\"",
+      "etag": "\"6780fc2dfbf2a2b30ecd9df492cdc6b9\"",
       "id": "sun-news",
-      "last_modified": "Sat, 21 Nov 2026 02:05:31 GMT",
+      "last_modified": "Sat, 21 Nov 2026 18:03:52 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Sunderland",
       "status": "no_articles",
@@ -338,7 +328,7 @@
       "article_errors": 0,
       "article_validators": {},
       "club": "TOT",
-      "content_hash": "9013918ff86b47b76f70a9fb7f5770f71bcd61ad0c31dbb0978bff73b60a6856",
+      "content_hash": "2db523a5e0c2b4c80f188a5f952ff12983346086a263a94537b118cc8164bfcf",
       "documents": 1,
       "id": "tot-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -347,6 +337,6 @@
       "url": "https://www.tottenhamhotspur.com/news/"
     }
   ],
-  "status": "amber",
+  "status": "red",
   "version": 1
 }

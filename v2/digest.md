@@ -1,152 +1,101 @@
-# FPL weekly — Gameweek 11
+# FPL weekly — Gameweek 12
 
-Deadline **Sat 21 Nov, 11:00 UTC** — 0d 8h away.
-Projections cover GW11–16.
+Deadline **Fri 27 Nov, 18:30 UTC** — 5d 22h away.
+Projections cover GW12–17.
 
-## GW10 in review — what happened, and what it does and does not change
+## Captain: **Mbeumo** (MUN)
 
-_368 players classified: 36 unavailable, 19 minutes loss, 47 minutes watch, 12 minutes gain, 5 role change, 52 variance, 197 on model. Retrospective classes graded: 9 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
-
-**Act on**
-
-- **Haaland** (MCI) — last 3 starts: 1.47 xGI vs 2.57 expected, below the 80% band (+-0.89) — reassess Projection GW11: 8.3 (start estimate unchanged).
-
-**Hold — variance, no action**
-
-- **Mbeumo** (MUN) — 82', 0.39 xG, 0 goals, 2 pts (proj 5.8). Finishing (-2.0). Projection GW11: 5.1 (start estimate unchanged).
-- **Tarkowski** (EVE) — 90', 0.00 xG, 0 goals, 2 pts (proj 5.0). Team (-1.6). Projection GW11: 3.6 (start estimate unchanged).
-- **Sadiki** (SUN) — 90', 0.00 xG, 0 goals, 5 pts (proj 2.9). Defcon (+1.7). Projection GW11: 2.8 (start estimate unchanged).
-- **O'Shea** (IPS) — 90', 0.00 xG, 0 goals, 1 pts (proj 3.0). Team (-1.0). Projection GW11: 2.7 (start estimate unchanged).
-
-**Watch**
-
-- **Gvardiol** (MCI) — minutes watch (hooked): started, hooked on 45' Projection GW11: 4.0 (start estimate 72% -> 77%).
-- **Emersonn** (IPS) — minutes watch (hooked): started, hooked on 53' Projection GW11: 3.5 (start estimate 95% -> 90%).
-
-| player | proj | actual | mins | Δ | minutes / chance / finishing / team / bonus | class |
-|---|---|---|---|---|---|---|
-| N.Jackson | 4.3 | 11 | 85 | +6.7 | +0.4 / +3.1 / +1.7 / +0.0 / +1.4 | on model |
-| Groß | 4.9 | 10 | 90 | +5.1 | +0.4 / +4.4 / -1.3 / +0.7 / +1.4 | on model |
-| Haaland | 6.9 | 2 | 90 | -4.9 | +0.4 / -2.2 / -2.1 / +0.0 / -1.0 | role change (xgi) |
-| Palmer | 6.2 | 2 | 90 | -4.2 | +0.5 / -3.1 / -0.4 / -0.4 / -0.7 | on model |
-| Mbeumo | 5.8 | 2 | 82 | -3.8 | +0.0 / -0.7 / -2.0 / -0.3 / -0.5 | variance (finishing) |
-| Gvardiol | 3.5 | 0 | 45 | -3.5 | +0.4 / -0.6 / +0.0 / -2.2 / -0.1 | minutes watch (hooked) |
-| Tarkowski | 5.0 | 2 | 90 | -3.0 | +0.2 / -0.6 / +0.0 / -1.6 / -0.2 | variance (team) |
-| Emersonn | 4.0 | 1 | 53 | -3.0 | -0.4 / -0.9 / -0.2 / +0.0 / -0.4 | minutes watch (hooked) |
-| Tavernier | 5.2 | 3 | 90 | -2.2 | +0.6 / +0.2 / -2.8 / -0.3 / -0.4 | on model |
-| Sadiki | 2.9 | 5 | 90 | +2.1 | +0.2 / -0.2 / -0.2 / +0.8 / -0.1 | variance (defcon) |
-| O'Shea | 3.0 | 1 | 90 | -2.0 | +0.1 / -0.2 / -0.0 / -1.0 / -0.2 | variance (team) |
-| Calafiori | 5.1 | 6 | 68 | +0.9 | +0.6 / -1.2 / -0.0 / +1.6 / -0.2 | on model |
-| Raya | 5.3 | 6 | 90 | +0.7 | +0.2 / -0.0 / +0.0 / +1.4 / -0.3 | on model |
-| Leno | 3.7 | 3 | 90 | -0.7 | +0.1 / -0.0 / +0.0 / -0.7 / -0.3 | on model |
-| Thiaw | 2.6 | 2 | 84 | -0.6 | +1.2 / -0.7 / +0.0 / -0.5 / -0.2 | on model |
-
-**Pool** — ordered by projected points GW11–16, capped at 5 a list, not by last week's residual:
-
-- breakout minutes (started at <= 40%): Torp (COV, 0.2 xG, 4 pts; GW11–16 11.5), Lavia (CHE, 0.0 xG, 2 pts; GW11–16 11.5), Costinha (BHA, 0.1 xG, 6 pts; GW11–16 11.1), Gboho (COV, 0.2 xG, 8 pts; GW11–16 11.0), O'Nien (SUN, 0.0 xG, 5 pts; GW11–16 10.5)
-- set-piece duty changed: E.Le Fée (SUN, 0.8 xG, 11 pts; GW11–16 26.1), McGinn (AVL, 0.8 xG, 10 pts; GW11–16 20.8)
-- lost their place — benched while healthy: Ndoye (NFO, 0.0 xG, 0 pts; GW11–16 17.6), Belloumi (HUL, 0.0 xG, 0 pts; GW11–16 16.2), Canvot (CRY, 0.0 xG, 0 pts; GW11–16 15.6), Fatawu (IPS, 0.0 xG, 1 pts; GW11–16 14.9), White (ARS, 0.0 xG, 0 pts; GW11–16 14.6)
-- hauled on low xG — do not chase: Wirtz (LIV, 0.3 xG, 13 pts; GW11–16 30.3), Mac Allister (LIV, 0.2 xG, 9 pts; GW11–16 24.3), Dewsbury-Hall (EVE, 0.2 xG, 9 pts; GW11–16 23.6), Delap (NFO, 0.2 xG, 13 pts; GW11–16 19.0), Tielemans (MUN, 0.3 xG, 7 pts; GW11–16 17.6)
-- blanked on good xG — unchanged as targets: George (EVE, 0.1 xG, 2 pts; GW11–16 16.1)
-
-## Captain: **Haaland** (MCI)
-
-Projected 8.3 this week, doubled to 16.7. Vice: Palmer (6.4).
-The pair adds 8.5 expected captain points including vice fallback; non-appearances are assumed independent.
+Projected 5.8 this week, doubled to 11.7. Vice: Palmer (5.7).
+The pair adds 6.0 expected captain points including vice fallback; non-appearances are assumed independent.
 
 | rank | player | club | this GW | captain bonus incl. vice | start % |
 |---|---|---|---|---|---|
-| 1 | Haaland | MCI | 8.3 | 8.5 | 97 |
-| 2 | Palmer | CHE | 6.4 | 6.8 | 95 |
-| 3 | Groß | BHA | 5.3 | 5.7 | 95 |
-| 4 | Gvardiol | MCI | 4.0 | 5.6 | 77 |
+| 1 | Mbeumo | MUN | 5.8 | 6.0 | 97 |
+| 2 | Palmer | CHE | 5.7 | 5.9 | 95 |
+| 3 | N.Jackson | AVL | 5.1 | 5.5 | 92 |
+| 4 | Groß | BHA | 5.2 | 5.4 | 95 |
 
 ## Starting XI
 
-| pos | player | club | this GW | GW11–16 |
+| pos | player | club | this GW | GW12–17 |
 |---|---|---|---|---|
-| GKP | Raya | ARS | 4.2 | 26.9 |
-| DEF | Calafiori | ARS | 4.1 | 25.6 |
-| DEF | Gvardiol | MCI | 4.0 | 21.8 |
-| DEF | Tarkowski | EVE | 3.6 | 23.1 |
-| MID | Palmer (V) | CHE | 6.4 | 37.1 |
-| MID | Groß | BHA | 5.3 | 30.7 |
-| MID | Mbeumo | MUN | 5.1 | 33.3 |
-| MID | Tavernier | BOU | 5.1 | 29.3 |
-| FWD | Haaland (C) | MCI | 8.3 | 44.1 |
-| FWD | N.Jackson | AVL | 5.0 | 29.8 |
-| FWD | Emersonn | IPS | 3.5 | 21.4 |
+| GKP | Raya | ARS | 3.2 | 22.0 |
+| DEF | Calafiori | ARS | 4.0 | 26.0 |
+| DEF | Tarkowski | EVE | 3.9 | 24.4 |
+| DEF | Gvardiol | MCI | 2.2 | 17.4 |
+| MID | Mbeumo (C) | MUN | 5.8 | 34.2 |
+| MID | Palmer (V) | CHE | 5.7 | 37.2 |
+| MID | Groß | BHA | 5.2 | 30.1 |
+| MID | Tavernier | BOU | 4.6 | 29.3 |
+| FWD | N.Jackson | AVL | 5.1 | 28.9 |
+| FWD | Haaland | MCI | 5.0 | 42.9 |
+| FWD | Emersonn | IPS | 3.0 | 17.5 |
 
-**Bench order:** Leno (2.5), Thiaw (2.3), Sadiki (2.8), O'Shea (2.7)
+**Bench order:** Leno (3.8), Sadiki (3.1), Thiaw (2.3), O'Shea (3.0)
 
-## Your lineup vs the model  (FPL entry 3415101, picks from GW10)
+## Your lineup vs the model  (FPL entry 3415101, picks from GW11)
 
-- **Bench → start:** Emersonn (3.5) is on your bench; the model starts him over Thiaw (2.3), +1.2.
+- **Captain:** you have Haaland (5.0); the model prefers Mbeumo (5.8) — +0.8 in projected captain bonus including vice fallback.
+- **Vice:** Palmer (5.7); the best fallback for your captain is Mbeumo (5.8).
+- **Bench → start:** Emersonn (3.0) is on your bench; the model starts him over Thiaw (2.3), +0.7.
+- **Bench order:** your first sub is O'Shea (3.0); Sadiki (3.1) is the better first man off.
 
 ## Check before the deadline
 
-- **Haaland** (MCI, XI) — role: last 3 starts: 1.47 xGI vs 2.57 expected, below the 80% band (+-0.89) — reassess
 - **N.Jackson** (AVL, XI) — new signing — role still settling
-- **Gvardiol** (MCI, XI) — starts only 77% of the time; minutes watch: started, hooked on 45' last week
-- **Emersonn** (IPS, XI) — new signing — role still settling; minutes watch: started, hooked on 53' last week
+- **Raya** (ARS, XI) — status d; 75% chance; "Unspecified injury - 75% chance of playing" (2026-11-21)
+- **Emersonn** (IPS, XI) — starts only 72% of the time; new signing — role still settling
+- **Gvardiol** (MCI, XI) — starts only 62% of the time
 
-## Transfers  (£0.1m in the bank, 2 free)
+## Transfers  (£0.1m in the bank, 3 free)
 
-Gain is the lift to your expected starting XI and captain plus modelled auto-sub cover over GW11–16. The auto-sub term uses each starter's non-appearance risk, not a flat bench weight. A hit costs 4.
+Gain is the lift to your expected starting XI and captain plus modelled auto-sub cover over GW12–17. The auto-sub term uses each starter's non-appearance risk, not a flat bench weight. A hit costs 4.
 
 | out | in | £ | XI + captain | auto-sub | total | net |
 |---|---|---|---|---|---|---|
-| Tarkowski (EVE) | De Cuyper (BHA) | -0.7 | +5.7 | -0.1 | **+5.5** | +5.5 |
-| Gvardiol (MCI) | De Cuyper (BHA) | -0.1 | +6.5 | -2.5 | **+4.1** | +4.1 |
-| Thiaw (NEW) | Konsa (ARS) | +0.0 | +2.8 | +0.2 | **+3.0** | +3.0 |
-| Sadiki (SUN) | Rudoni (COV) | +0.1 | +1.2 | +1.6 | **+2.8** | +2.8 |
-| Tavernier (BOU) | Ødegaard (ARS) | +0.0 | +1.8 | +0.1 | **+1.9** | +1.9 |
-| Calafiori (ARS) | De Cuyper (BHA) | -0.4 | +2.7 | -1.2 | **+1.6** | +1.6 |
-| O'Shea (IPS) | Mendy (HUL) | +0.1 | +0.6 | -0.2 | **+0.4** | +0.4 |
+| Gvardiol (MCI) | De Cuyper (BHA) | -0.1 | +10.2 | -4.5 | **+5.7** | +5.7 |
+| Thiaw (NEW) | Konsa (ARS) | +0.0 | +4.9 | -1.4 | **+3.4** | +3.4 |
+| Tarkowski (EVE) | De Cuyper (BHA) | -0.7 | +4.2 | -0.8 | **+3.4** | +3.4 |
+| Sadiki (SUN) | Rudoni (COV) | +0.1 | +4.7 | -1.4 | **+3.3** | +3.3 |
+| Tavernier (BOU) | Ødegaard (ARS) | +0.0 | +1.7 | +0.1 | **+1.8** | +1.8 |
+| O'Shea (IPS) | Mendy (HUL) | +0.1 | +1.1 | -0.4 | **+0.6** | +0.6 |
+| Calafiori (ARS) | De Cuyper (BHA) | -0.4 | +1.6 | -1.1 | **+0.5** | +0.5 |
+| Emersonn (IPS) | Awoniyi (COV) | +0.0 | -2.2 | +2.6 | **+0.4** | +0.4 |
 
-_Last week, for the names above:_
-- Tarkowski — variance (team): 90', 0.00 xG, 0 goals, 2 pts (proj 5.0). Team (-1.6).
-- Gvardiol — minutes watch (hooked): started, hooked on 45'
-- Konsa — unavailable: status d at the deadline
-- Sadiki — variance (defcon): 90', 0.00 xG, 0 goals, 5 pts (proj 2.9). Defcon (+1.7).
-- Rudoni — variance (finishing): 85', 0.12 xG, 0 goals, 2 pts (proj 3.3). Finishing (-1.4).
-- Ødegaard — variance (finishing): 90', 0.24 xG, 1 goal, 11 pts (proj 5.9). Finishing (+2.8).
-- O'Shea — variance (team): 90', 0.00 xG, 0 goals, 1 pts (proj 3.0). Team (-1.0).
-
-**Recommended:** Tarkowski→De Cuyper, Thiaw→Vuskovic this week (+3.1 versus holding/re-planning).
+**Recommended:** Raya→Trafford, Gvardiol→Justin, Sadiki→Ødegaard this week (+2.3 versus holding/re-planning).
 
 **Best two-move combinations** (net of any hit):
 
 | out | in | £ | XI + captain | auto-sub | total | net |
 |---|---|---|---|---|---|---|
-| Tarkowski + Sadiki | De Cuyper + Gomez | -0.4 | +11.2 | +1.3 | +12.4 | **+12.4** |
-| Tarkowski + Emersonn | De Cuyper + Kostoulas | -0.3 | +11.1 | -0.1 | +11.0 | **+11.0** |
-| Thiaw + Tarkowski | De Cuyper + Vuskovic | -0.3 | +12.2 | -1.3 | +10.9 | **+10.9** |
-| Thiaw + Tarkowski | Vuskovic + De Cuyper | -0.3 | +12.2 | -1.3 | +10.9 | **+10.9** |
-| Tarkowski + Sadiki | Vuskovic + Gomez | -0.6 | +8.3 | +1.9 | +10.2 | **+10.2** |
+| Gvardiol + Sadiki | Vuskovic + Gomez | -0.0 | +15.7 | -5.2 | +10.6 | **+10.6** |
+| Tarkowski + Sadiki | De Cuyper + Gomez | -0.4 | +12.3 | -1.9 | +10.4 | **+10.4** |
+| Tarkowski + Emersonn | De Cuyper + Kostoulas | -0.3 | +12.1 | -2.7 | +9.5 | **+9.5** |
+| Gvardiol + Emersonn | Vuskovic + Kostoulas | +0.1 | +15.6 | -6.1 | +9.5 | **+9.5** |
+| Gvardiol + Sadiki | Silva + Gomez | -0.2 | +15.0 | -6.0 | +9.0 | **+9.0** |
 
 
 ## The next six weeks, planned
 
 
-**GW11 simulation:** the selected GW11 squad beats holding in 60% of 4,000 simulations (average +3.2 points, net of hits). The advantage is both likely and large enough to clear the 0.0-point bar for 2 moves. This covers one gameweek; the transfer decision compares the full window.
-Selected path under the current policy: **401.9** pts (0 hits). Making no move this week and re-planning: 398.8. Selected path versus holding: **+3.1** across 2 moves.
+**GW12 simulation:** the selected GW12 squad beats holding in 63% of 4,000 simulations (average +3.8 points, net of hits). The advantage is both likely and large enough to clear the 0.0-point bar for 3 moves. This covers one gameweek; the transfer decision compares the full window.
+Selected path under the current policy: **397.1** pts (0 hits). Making no move this week and re-planning: 394.7. Selected path versus holding: **+2.3** across 3 moves.
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
-| Tarkowski, Thiaw → De Cuyper, Vuskovic | +3.10 | 0.0 | yes |
-| Tarkowski → De Cuyper | +1.59 | 0.0 | yes |
-| Gvardiol → De Cuyper | +0.70 | 0.0 | yes |
-| Thiaw → Konsa | -0.63 | 0.0 | no |
-| Sadiki, Tarkowski → De Cuyper, Gomez | +2.40 | 0.0 | yes |
-| Tarkowski, Emersonn → De Cuyper, Kostoulas | +2.58 | 0.0 | yes |
+| Raya, Sadiki, Gvardiol → Ødegaard, Justin, Trafford | +2.33 | 0.0 | yes |
+| Sadiki, Gvardiol → Gomez, Vuskovic | -0.23 | 0.0 | no |
+| Gvardiol → De Cuyper | +1.78 | 0.0 | yes |
+| Thiaw → Konsa | +1.22 | 0.0 | yes |
+| Tarkowski → De Cuyper | +0.87 | 0.0 | yes |
+| Sadiki, Tarkowski → De Cuyper, Gomez | +0.25 | 0.0 | yes |
 
-- **GW11** 68.1 pts, C Haaland, 2 FT  Tarkowski → De Cuyper, Thiaw → Vuskovic
-- **GW12** 61.3 pts, C Mbeumo, 1 FT  Gvardiol → Justin
-- **GW13** 64.2 pts, C Haaland, 1 FT  Sadiki → Barnes
-- **GW14** 67.2 pts, C Mbeumo, 1 FT  hold
-- **GW15** 68.1 pts, C Haaland, 2 FT  Tavernier → Ødegaard
-- **GW16** 72.9 pts, C Haaland, 2 FT  Mbeumo → Tavernier, Emersonn → Evanilson
+- **GW12** 61.2 pts, C Mbeumo, 3 FT  Raya → Trafford, Gvardiol → Justin, Sadiki → Ødegaard
+- **GW13** 62.7 pts, C Palmer, 1 FT  Thiaw → Silva
+- **GW14** 68.4 pts, C Mbeumo, 1 FT  hold
+- **GW15** 65.8 pts, C Haaland, 2 FT  Tarkowski → De Cuyper, Justin → Vuskovic
+- **GW16** 73.1 pts, C Haaland, 1 FT  N.Jackson → Evanilson
+- **GW17** 65.9 pts, C Haaland, 1 FT  Trafford → Pickford
 
 _The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
 
@@ -156,10 +105,10 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 
 | chip | this week | best week left | advice |
 |---|---|---|---|
-| Bench Boost | 8.4 | GW13: 10.3 | Hold. Best-looking week for this one is GW13 (10.3 extra points); this week is 8.4. Second copy (GW20–38): best week GW34 (11.2). |
+| Bench Boost | 8.4 | GW17: 8.7 | Hold. Best-looking week for this one is GW17 (8.7 extra points); this week is 8.4. Second copy (GW20–38): best week GW34 (10.2). |
 | Triple Captain | — | GW32: 8.7 (Haaland) | Hold. Best week for this one is GW32: Haaland (8.7 extra). |
-| Free Hit | 4.4 | GW19: 8.6 | Hold. Widest gap left is GW19 (8.6 behind the optimised one-week squad); this week 4.4. |
-| Wildcard | +2.6 over the window | — | Hold. Unlimited transfers now are worth 2.6 over the window. The squad is holding up (gap to the optimised one-week squad 4.4–6.2 over the next weeks). |
+| Free Hit | 5.5 | GW19: 9.7 | Hold. Widest gap left is GW19 (9.7 behind the optimised one-week squad); this week 5.5. |
+| Wildcard | +7.9 over the window | — | Hold. Unlimited transfers now are worth 7.9 over the window. The squad is decaying: gap to the optimised one-week squad 5.5 → 9.7 by GW19. |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -170,15 +119,19 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| N.Jackson £7.2 ⭑ | +16.8% | +652,994 | João Pedro £7.6 | -16.3% | -544,468 |
-| Van Hecke £5.1 | +22.3% | +431,704 | Gvardiol £5.6 ⭑ | -21.1% | -494,972 |
-| Evanilson £6.5 | +12.9% | +369,345 | Guéhi £5.9 | -18.8% | -273,894 |
-| Vuskovic £5.3 | +25.1% | +307,030 | Thiago £7.8 | -25.3% | -203,319 |
-| De Cuyper £5.5 | +5.4% | +297,808 | Calvert-Lewin £6.0 | -10.8% | -202,569 |
-| Barry £5.7 | +20.4% | +263,301 | Mbeumo £7.8 ⭑ | -7.8% | -161,347 |
+| Evanilson £6.5 | +1.0% | +30,624 | Cherki £7.9 | -0.9% | -33,844 |
+| N.Jackson £7.2 ⭑ | +0.5% | +19,062 | Gvardiol £5.6 ⭑ | -1.1% | -26,344 |
+| Tavernier £6.7 ⭑ | +0.5% | +18,929 | Haaland £15.8 ⭑ | -0.3% | -23,797 |
+| Okafor £5.7 | +32.9% | +18,629 | João Pedro £7.6 | -0.7% | -21,594 |
+| Van Hecke £5.1 | +0.7% | +15,106 | Palmer £9.8 ⭑ | -0.3% | -9,085 |
+| Isak £9.3 | +0.5% | +13,590 | Thiago £7.8 | -0.8% | -5,960 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-21 02:53 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-11-21 19:47 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+
+## Scouting
+
+16 sourced observations; 8 API calls. Review these alongside the transfer stress tests in the app.
