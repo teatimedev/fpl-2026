@@ -6187,6 +6187,24 @@
       "canonical": "Modou K\u00e9ba Ciss\u00e9",
       "club": "AVL",
       "player_id": 672
+    },
+    {
+      "aliases": [
+        "Browne",
+        "Alan Browne"
+      ],
+      "canonical": "Alan Browne",
+      "club": "SUN",
+      "player_id": 673
+    },
+    {
+      "aliases": [
+        "Kaiser",
+        "Dino Kaiser"
+      ],
+      "canonical": "Dino Kaiser",
+      "club": "FUL",
+      "player_id": 674
     }
   ],
   "version": 1
