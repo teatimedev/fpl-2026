@@ -1,15 +1,13 @@
 {
   "affected_clubs": [],
-  "affected_owned": [
-    1
-  ],
-  "checked_at": "2026-11-22T08:12:47Z",
-  "claims": 5,
+  "affected_owned": [],
+  "checked_at": "2026-11-23T03:48:44Z",
+  "claims": 3,
   "coverage": 0.4,
   "deadline": "2026-11-27T18:30:00Z",
   "gw": 12,
-  "notification_key": "f3b4d520a1a4d0b92277",
-  "notify_required": true,
+  "notification_key": "f65f7d77c59fffcdc208",
+  "notify_required": false,
   "official_fpl": {
     "1": {
       "chance": 75,
@@ -122,9 +120,9 @@
       "status": "u"
     },
     "119": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Suspended until 2 Dec",
+      "status": "s"
     },
     "12": {
       "chance": 0,
@@ -797,9 +795,9 @@
       "status": "u"
     },
     "240": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Hamstring injury - 75% chance of playing",
+      "status": "d"
     },
     "241": {
       "chance": null,
@@ -1442,9 +1440,9 @@
       "status": "a"
     },
     "357": {
-      "chance": 75,
-      "news": "Hamstring injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "358": {
       "chance": null,
@@ -1497,9 +1495,9 @@
       "status": "a"
     },
     "367": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Calf injury - 75% chance of playing",
+      "status": "d"
     },
     "368": {
       "chance": 100,
@@ -1767,9 +1765,9 @@
       "status": "a"
     },
     "415": {
-      "chance": 75,
-      "news": "Hamstring injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "416": {
       "chance": 100,
@@ -1782,9 +1780,9 @@
       "status": "a"
     },
     "418": {
-      "chance": 75,
-      "news": "Back injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "419": {
       "chance": 100,
@@ -1797,14 +1795,14 @@
       "status": "a"
     },
     "420": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Suspended until 2 Dec",
+      "status": "s"
     },
     "421": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "422": {
       "chance": 100,
@@ -3384,25 +3382,22 @@
   },
   "official_fpl_ok": true,
   "price_changed": [
-    40,
-    79,
-    93,
-    112,
-    134,
-    135,
-    189,
-    190,
-    221,
-    237,
-    241,
-    286,
-    306,
-    309,
-    347,
-    358,
-    385,
-    397,
-    565
+    10,
+    41,
+    96,
+    138,
+    148,
+    166,
+    301,
+    364,
+    366,
+    391,
+    399,
+    418,
+    421,
+    469,
+    562,
+    595
   ],
   "rebuild_required": true,
   "state_changed": false,
