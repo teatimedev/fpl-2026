@@ -1,16 +1,13 @@
 {
   "affected_clubs": [],
-  "affected_owned": [
-    1,
-    229
-  ],
-  "checked_at": "2026-11-24T02:22:35Z",
-  "claims": 3,
-  "coverage": 0.4,
+  "affected_owned": [],
+  "checked_at": "2026-11-24T23:07:17Z",
+  "claims": 0,
+  "coverage": 0.3,
   "deadline": "2026-11-27T18:30:00Z",
   "gw": 12,
-  "notification_key": "eb49506a215237ca64f5",
-  "notify_required": true,
+  "notification_key": "f65f7d77c59fffcdc208",
+  "notify_required": false,
   "official_fpl": {
     "1": {
       "chance": 50,
@@ -1464,7 +1461,7 @@
     },
     "360": {
       "chance": 0,
-      "news": "Knee injury - Unknown return date",
+      "news": "Knee injury - Expected back 12 Dec",
       "status": "i"
     },
     "361": {
@@ -1479,7 +1476,7 @@
     },
     "363": {
       "chance": 0,
-      "news": "Knee injury - Unknown return date",
+      "news": "Knee injury - Expected back 12 Dec",
       "status": "i"
     },
     "364": {
@@ -1513,9 +1510,9 @@
       "status": "a"
     },
     "37": {
-      "chance": 75,
-      "news": "Illness - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "370": {
       "chance": 100,
@@ -1798,9 +1795,9 @@
       "status": "a"
     },
     "420": {
-      "chance": 0,
-      "news": "Suspended until 2 Dec",
-      "status": "s"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "421": {
       "chance": 100,
@@ -1813,9 +1810,9 @@
       "status": "a"
     },
     "423": {
-      "chance": 0,
-      "news": "Unspecified injury - Unknown return date",
-      "status": "i"
+      "chance": 75,
+      "news": "Unspecified injury - 75% chance of playing",
+      "status": "d"
     },
     "424": {
       "chance": null,
@@ -3384,13 +3381,7 @@
     }
   },
   "official_fpl_ok": true,
-  "price_changed": [
-    68,
-    183,
-    277,
-    352,
-    490
-  ],
+  "price_changed": [],
   "rebuild_required": true,
   "state_changed": false,
   "status": "red",

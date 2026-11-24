@@ -1,7 +1,46 @@
 # FPL weekly — Gameweek 12
 
-Deadline **Fri 27 Nov, 18:30 UTC** — 3d 16h away.
+Deadline **Fri 27 Nov, 18:30 UTC** — 2d 19h away.
 Projections cover GW12–17.
+
+## GW11 in review — what happened, and what it does and does not change
+
+_370 players classified: 30 unavailable, 34 minutes loss, 44 minutes watch, 25 minutes gain, 8 role change, 65 variance, 164 on model. Retrospective classes graded: 10 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+
+**Act on**
+
+- **Gvardiol** (MCI) — 12 minutes, healthy (status a; deadline start estimate 77%) First non-start of a regular: check Friday's presser; two in a row is sell-grade. Projection GW12: 2.2 (start estimate 77% -> 62%).
+- **Emersonn** (IPS) — 16 minutes, healthy (status a; deadline start estimate 90%) First non-start of a regular: check Friday's presser; two in a row is sell-grade. Projection GW12: 3.0 (start estimate 90% -> 72%).
+- **Groß** (BHA) — last 3 starts: 2.02 xGI vs 1.13 expected, above the 80% band (+-0.89) — reassess Projection GW12: 5.2 (start estimate unchanged).
+
+**Watch**
+
+- **Mbeumo** (MUN) — minutes watch (hooked): started, hooked on 21' Projection GW12: 5.5 (start estimate unchanged).
+
+| player | proj | actual | mins | Δ | minutes / chance / finishing / team / bonus | class |
+|---|---|---|---|---|---|---|
+| Tarkowski | 3.6 | -4 | 39 | -7.6 | -1.0 / -0.2 / +0.0 / -2.3 / -0.1 | unavailable |
+| Haaland | 8.3 | 2 | 90 | -6.3 | +0.6 / -1.5 / -4.3 / +0.0 / -1.0 | on model |
+| Thiaw | 2.3 | 7 | 90 | +4.7 | +0.9 / +1.2 / +4.3 / -0.9 / -0.2 | on model |
+| Palmer | 6.4 | 2 | 90 | -4.4 | +0.5 / -3.4 / -0.4 / -0.4 / -0.6 | on model |
+| Mbeumo | 5.1 | 1 | 21 | -4.1 | -2.0 / -0.6 / +0.0 / -0.2 / -0.1 | minutes watch (hooked) |
+| Raya | 4.2 | 1 | 69 | -3.2 | -0.1 / -0.0 / +0.0 / -2.5 / -0.2 | unavailable |
+| Calafiori | 4.1 | 1 | 90 | -3.1 | +0.9 / -1.0 / -0.3 / -2.3 / -0.2 | on model |
+| Gvardiol | 4.0 | 1 | 12 | -3.0 | -2.8 / -0.2 / +0.0 / +0.0 / -0.0 | minutes loss (cameo) |
+| N.Jackson | 5.0 | 2 | 72 | -3.0 | -0.0 / -1.3 / -1.1 / +0.0 / -0.5 | on model |
+| Tavernier | 5.1 | 8 | 90 | +2.9 | +0.5 / +0.7 / -0.0 / +0.6 / +1.6 | on model |
+| Emersonn | 3.5 | 1 | 16 | -2.5 | -2.0 / -0.2 / +0.0 / +0.0 / -0.1 | minutes loss (cameo) |
+| Groß | 5.3 | 4 | 90 | -1.3 | +0.4 / -0.9 / -1.4 / -0.5 / -0.6 | role change (xgi) |
+| Leno | 2.5 | 2 | 90 | -0.5 | +0.1 / -0.0 / +0.0 / +0.5 / -0.3 | on model |
+| O'Shea | 2.7 | 3 | 90 | +0.3 | +0.1 / -0.1 / -0.1 / -0.7 / -0.2 | on model |
+| Sadiki | 2.8 | 3 | 90 | +0.2 | +0.2 / -0.3 / -0.1 / +0.8 / -0.1 | on model |
+
+**Pool** — ordered by projected points GW12–17, capped at 5 a list, not by last week's residual:
+
+- breakout minutes (started at <= 40%): Foden (MCI, 0.1 xG, 2 pts; GW12–17 19.3), O'Reilly (MCI, 0.1 xG, 2 pts; GW12–17 16.4), Eze (ARS, 0.5 xG, 10 pts; GW12–17 16.3), Harwood-Bellis (AVL, 0.1 xG, 7 pts; GW12–17 12.0), Estêvão (CHE, 0.0 xG, 2 pts; GW12–17 12.0)
+- lost their place — benched while healthy: Kostoulas (BHA, 0.3 xG, 1 pts; GW12–17 21.5), Enzo (MCI, 0.0 xG, 1 pts; GW12–17 21.4), Cherki (MCI, 0.1 xG, 1 pts; GW12–17 21.4), Schade (BRE, 0.1 xG, 1 pts; GW12–17 20.7), Neto (CHE, 0.0 xG, 1 pts; GW12–17 19.4)
+- hauled on low xG — do not chase: Barnes (NEW, 0.3 xG, 7 pts; GW12–17 28.1), Anderson (MCI, 0.2 xG, 10 pts; GW12–17 23.9), Rudoni (COV, 0.1 xG, 10 pts; GW12–17 22.2), Janelt (BRE, 0.0 xG, 10 pts; GW12–17 20.2), Sakamoto (COV, 0.2 xG, 7 pts; GW12–17 15.8)
+- blanked on good xG — unchanged as targets: B.Fernandes (MUN, 0.4 xG, 2 pts; GW12–17 33.0), Ndiaye (MCI, 0.0 xG, 2 pts; GW12–17 25.1)
 
 ## Captain: **Palmer** (CHE)
 
@@ -41,6 +80,8 @@ The pair adds 5.9 expected captain points including vice fallback; non-appearanc
 
 ## Check before the deadline
 
+- **Mbeumo** (MUN, XI) — minutes watch: started, hooked on 21' last week
+- **Groß** (BHA, XI) — role: last 3 starts: 2.02 xGI vs 1.13 expected, above the 80% band (+-0.89) — reassess
 - **N.Jackson** (AVL, XI) — new signing — role still settling
 - **Emersonn** (IPS, XI) — starts only 72% of the time; new signing — role still settling
 - **Thiaw** (NEW, XI) — starts only 77% of the time
@@ -54,6 +95,10 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 
 **Availability warning:** Tarkowski has effectively no credible route to minutes in GW12. De Cuyper is the best legal same-position replacement (+8.2: +7.8 XI/captain, +0.4 auto-sub cover).
 
+**Minutes warning:** Gvardiol did not start last week while healthy (12', deadline start estimate 77%) — check first. Best legal same-position replacement: De Cuyper (+6.6: +10.2 XI/captain, -3.5 auto-sub cover).
+
+**Minutes warning:** Emersonn did not start last week while healthy (16', deadline start estimate 90%) — check first. Best legal same-position replacement: McBurnie (+1.3: +4.2 XI/captain, -2.9 auto-sub cover).
+
 | out | in | £ | XI + captain | auto-sub | total | net |
 |---|---|---|---|---|---|---|
 | Tarkowski (EVE) | De Cuyper (BHA) | -0.7 | +7.8 | +0.4 | **+8.2** | +8.2 |
@@ -65,7 +110,17 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 | O'Shea (IPS) | Mendy (HUL) | +0.1 | +1.1 | -0.1 | **+1.0** | +1.0 |
 | Calafiori (ARS) | De Cuyper (BHA) | -0.4 | +0.9 | -0.6 | **+0.4** | +0.4 |
 
+_Last week, for the names above:_
+- Tarkowski — unavailable: red card
+- De Cuyper — variance (team): 90', 0.00 xG, 0 goals, 1 pts (proj 5.1). Team (-2.4).
+- Gvardiol — minutes loss (cameo): 12 minutes, healthy (status a; deadline start estimate 77%) First non-start of a regular: check Friday's presser; two in a row is sell-grade.
+- Konsa — variance (team): 90', 0.00 xG, 0 goals, 1 pts (proj 3.5). Team (-2.3).
+- Emersonn — minutes loss (cameo): 16 minutes, healthy (status a; deadline start estimate 90%) First non-start of a regular: check Friday's presser; two in a row is sell-grade.
+- Mendy — variance (team): 90', 0.04 xG, 0 goals, 5 pts (proj 2.6). Team (+4.2).
+
 **Recommended:** Raya→Trafford, Tarkowski→De Cuyper, Gvardiol→Jacquet this week (+4.3 versus holding/re-planning).
+
+_Minutes check:_ the verdict above is on the numbers; Gvardiol, Emersonn are a check-first case (see the review).
 
 **Best two-move combinations** (net of any hit):
 
@@ -88,11 +143,11 @@ Selected path under the current policy: **394.8** pts (0 hits). Making no move t
 |---|---|---|---|
 | Raya, Tarkowski, Gvardiol → De Cuyper, Jacquet, Trafford | +4.33 | 0.0 | yes |
 | Sadiki, Tarkowski → De Cuyper, Gomez | +3.18 | 0.0 | yes |
-| Tarkowski → De Cuyper | +2.33 | 0.0 | yes |
-| Gvardiol → De Cuyper | +2.09 | 0.0 | yes |
+| Tarkowski → De Cuyper | +2.09 | 0.0 | yes |
+| Gvardiol → De Cuyper | +1.60 | 0.0 | yes |
 | Thiaw → Konsa | +1.52 | 0.0 | yes |
-| Sadiki, Tarkowski → Gomez, Vuskovic | +0.99 | 0.0 | yes |
-| Raya, Tarkowski, Gvardiol → De Cuyper, Justin, Trafford | +3.64 | 0.0 | yes |
+| Sadiki, Tarkowski → Gomez, Vuskovic | +1.15 | 0.0 | yes |
+| Raya, Tarkowski, Gvardiol → De Cuyper, Jacquet, Trafford | +4.33 | 0.0 | yes |
 
 - **GW12** 59.4 pts, C Palmer, 3 FT  Raya → Trafford, Tarkowski → De Cuyper, Gvardiol → Jacquet
 - **GW13** 63.6 pts, C Palmer, 1 FT  Sadiki → Ødegaard
@@ -123,15 +178,19 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Wirtz £7.4 | +23.7% | +249,663 | Cherki £7.8 | -4.7% | -170,775 |
-| Evanilson £6.6 | +4.1% | +125,574 | Raya £6.3 ⭑ | -3.1% | -161,855 |
-| Van Hecke £5.2 | +4.4% | +95,763 | João Pedro £7.6 | -3.0% | -94,740 |
-| Tavernier £6.8 ⭑ | +2.5% | +93,937 | Gvardiol £5.5 ⭑ | -4.0% | -89,633 |
-| Okafor £5.7 | +68.5% | +85,313 | Haaland £15.8 ⭑ | -1.0% | -86,084 |
-| Trafford £5.1 | +9.7% | +83,799 | Palmer £9.8 ⭑ | -2.3% | -70,420 |
+| Wirtz £7.4 | +29.0% | +327,999 | Raya £6.3 ⭑ | -4.1% | -213,443 |
+| Evanilson £6.6 | +4.9% | +153,484 | Cherki £7.8 | -5.7% | -204,773 |
+| Van Hecke £5.2 | +5.9% | +129,699 | João Pedro £7.6 | -3.8% | -117,742 |
+| Tavernier £6.8 ⭑ | +3.0% | +112,390 | Tarkowski £6.2 ⭑ | -5.8% | -116,264 |
+| Trafford £5.1 | +11.9% | +106,689 | Haaland £15.8 ⭑ | -1.2% | -105,583 |
+| Hill £5.6 | +20.0% | +99,789 | Gvardiol £5.5 ⭑ | -4.7% | -104,087 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-24 02:43 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-11-24 23:27 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+
+## Scouting
+
+6 sourced observations; 6 API calls. Review these alongside the transfer stress tests in the app.
