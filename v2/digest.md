@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 12
 
-Deadline **Fri 27 Nov, 18:30 UTC** — 2d 19h away.
+Deadline **Fri 27 Nov, 18:30 UTC** — 2d 12h away.
 Projections cover GW12–17.
 
 ## GW11 in review — what happened, and what it does and does not change
@@ -142,9 +142,9 @@ Selected path under the current policy: **394.8** pts (0 hits). Making no move t
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
 | Raya, Tarkowski, Gvardiol → De Cuyper, Jacquet, Trafford | +4.33 | 0.0 | yes |
-| Sadiki, Tarkowski → De Cuyper, Gomez | +3.18 | 0.0 | yes |
+| Sadiki, Tarkowski → De Cuyper, Gomez | +2.99 | 0.0 | yes |
 | Tarkowski → De Cuyper | +2.09 | 0.0 | yes |
-| Gvardiol → De Cuyper | +1.60 | 0.0 | yes |
+| Gvardiol → De Cuyper | +1.95 | 0.0 | yes |
 | Thiaw → Konsa | +1.52 | 0.0 | yes |
 | Sadiki, Tarkowski → Gomez, Vuskovic | +1.15 | 0.0 | yes |
 | Raya, Tarkowski, Gvardiol → De Cuyper, Jacquet, Trafford | +4.33 | 0.0 | yes |
@@ -178,19 +178,15 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Wirtz £7.4 | +29.0% | +327,999 | Raya £6.3 ⭑ | -4.1% | -213,443 |
-| Evanilson £6.6 | +4.9% | +153,484 | Cherki £7.8 | -5.7% | -204,773 |
-| Van Hecke £5.2 | +5.9% | +129,699 | João Pedro £7.6 | -3.8% | -117,742 |
-| Tavernier £6.8 ⭑ | +3.0% | +112,390 | Tarkowski £6.2 ⭑ | -5.8% | -116,264 |
-| Trafford £5.1 | +11.9% | +106,689 | Haaland £15.8 ⭑ | -1.2% | -105,583 |
-| Hill £5.6 | +20.0% | +99,789 | Gvardiol £5.5 ⭑ | -4.7% | -104,087 |
+| Wirtz £7.4 | +29.3% | +335,492 | Raya £6.3 ⭑ | -4.2% | -218,047 |
+| Evanilson £6.6 | +5.0% | +155,993 | Cherki £7.8 | -5.8% | -207,830 |
+| Van Hecke £5.2 | +6.0% | +132,987 | Tarkowski £6.2 ⭑ | -6.0% | -121,067 |
+| Tavernier £6.8 ⭑ | +3.0% | +113,901 | João Pedro £7.6 | -3.8% | -119,987 |
+| Trafford £5.1 | +12.1% | +108,605 | Haaland £15.8 ⭑ | -1.2% | -107,924 |
+| Hill £5.7 | +20.0% | +101,807 | Gvardiol £5.5 ⭑ | -4.8% | -105,616 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-24 23:27 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
-
-## Scouting
-
-6 sourced observations; 6 API calls. Review these alongside the transfer stress tests in the app.
+_Generated 2026-11-25 05:42 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
