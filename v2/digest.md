@@ -1,11 +1,11 @@
 # FPL weekly — Gameweek 12
 
-Deadline **Fri 27 Nov, 18:30 UTC** — 1d 16h away.
+Deadline **Fri 27 Nov, 18:30 UTC** — 0d 22h away.
 Projections cover GW12–17.
 
 ## GW11 in review — what happened, and what it does and does not change
 
-_370 players classified: 31 unavailable, 34 minutes loss, 44 minutes watch, 25 minutes gain, 8 role change, 64 variance, 164 on model. Retrospective classes graded: 10 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
+_370 players classified: 30 unavailable, 34 minutes loss, 45 minutes watch, 25 minutes gain, 8 role change, 64 variance, 164 on model. Retrospective classes graded: 10 weeks. A blank is printed with its xG; a haul with its xG; selection is a fact, finishing is a sample._
 
 **Act on**
 
@@ -118,7 +118,7 @@ _Last week, for the names above:_
 - Emersonn — minutes loss (cameo): 16 minutes, healthy (status a; deadline start estimate 90%) First non-start of a regular: check Friday's presser; two in a row is sell-grade.
 - Mendy — variance (team): 90', 0.04 xG, 0 goals, 5 pts (proj 2.6). Team (+4.2).
 
-**Recommended:** Raya→Trafford, Tarkowski→De Cuyper, Gvardiol→Jacquet this week (+4.2 versus holding/re-planning).
+**Recommended:** Raya→Trafford, Tarkowski→De Cuyper, Gvardiol→Jacquet this week (+4.8 versus holding/re-planning).
 
 _Minutes check:_ the verdict above is on the numbers; Gvardiol, Emersonn are a check-first case (see the review).
 
@@ -137,17 +137,17 @@ _Minutes check:_ the verdict above is on the numbers; Gvardiol, Emersonn are a c
 
 
 **GW12 simulation:** the selected GW12 squad beats holding in 67% of 4,000 simulations (average +3.8 points, net of hits). The advantage is both likely and large enough to clear the 0.0-point bar for 3 moves. This covers one gameweek; the transfer decision compares the full window.
-Selected path under the current policy: **394.8** pts (0 hits). Making no move this week and re-planning: 390.7. Selected path versus holding: **+4.2** across 3 moves.
+Selected path under the current policy: **394.8** pts (0 hits). Making no move this week and re-planning: 390.0. Selected path versus holding: **+4.8** across 3 moves.
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
-| Raya, Tarkowski, Gvardiol → De Cuyper, Jacquet, Trafford | +4.18 | 0.0 | yes |
-| Sadiki, Tarkowski → De Cuyper, Gomez | +1.84 | 0.0 | yes |
-| Tarkowski → De Cuyper | +2.09 | 0.0 | yes |
-| Gvardiol → De Cuyper | +1.58 | 0.0 | yes |
-| Thiaw → Konsa | +1.38 | 0.0 | yes |
-| Sadiki, Tarkowski → Gomez, Vuskovic | +1.01 | 0.0 | yes |
-| Raya, Tarkowski, Gvardiol → De Cuyper, Jacquet, Trafford | +4.18 | 0.0 | yes |
+| Raya, Tarkowski, Gvardiol → De Cuyper, Jacquet, Trafford | +4.84 | 0.0 | yes |
+| Sadiki, Tarkowski → De Cuyper, Gomez | +2.29 | 0.0 | yes |
+| Tarkowski → De Cuyper | +2.92 | 0.0 | yes |
+| Gvardiol → De Cuyper | +2.60 | 0.0 | yes |
+| Thiaw → Konsa | +2.03 | 0.0 | yes |
+| Sadiki, Tarkowski → Gomez, Vuskovic | +1.66 | 0.0 | yes |
+| Raya, Tarkowski, Gvardiol → De Cuyper, Justin, Trafford | +4.26 | 0.0 | yes |
 
 - **GW12** 59.4 pts, C Palmer, 3 FT  Raya → Trafford, Tarkowski → De Cuyper, Gvardiol → Jacquet
 - **GW13** 63.6 pts, C Palmer, 1 FT  Sadiki → Ødegaard
@@ -178,15 +178,19 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Wirtz £7.4 | +33.2% | +409,488 | Raya £6.2 ⭑ | -5.1% | -262,345 |
-| Evanilson £6.6 | +5.6% | +173,802 | Cherki £7.8 | -6.5% | -232,673 |
-| Van Hecke £5.2 | +7.0% | +155,518 | Tarkowski £6.2 ⭑ | -7.9% | -155,313 |
-| Trafford £5.1 | +13.9% | +127,596 | João Pedro £7.6 | -4.4% | -136,833 |
-| Tavernier £6.8 ⭑ | +3.3% | +124,444 | Haaland £15.8 ⭑ | -1.5% | -132,066 |
-| Hill £5.7 | +22.1% | +114,954 | Gvardiol £5.5 ⭑ | -5.4% | -117,813 |
+| Wirtz £7.4 | +39.3% | +543,763 | Raya £6.2 ⭑ | -6.4% | -321,541 |
+| Evanilson £6.6 | +6.2% | +197,520 | Cherki £7.8 | -7.9% | -277,730 |
+| Van Hecke £5.2 | +8.4% | +191,410 | Tarkowski £6.2 ⭑ | -10.6% | -203,201 |
+| Isak £9.4 | +5.0% | +156,512 | Haaland £15.8 ⭑ | -2.0% | -178,029 |
+| Trafford £5.1 | +16.0% | +154,031 | João Pedro £7.6 | -5.2% | -161,670 |
+| Calvert-Lewin £6.0 | +7.1% | +145,484 | Gvardiol £5.5 ⭑ | -6.5% | -140,024 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-26 02:06 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+_Generated 2026-11-26 20:38 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
+
+## Scouting
+
+7 sourced observations; 7 API calls. Review these alongside the transfer stress tests in the app.
