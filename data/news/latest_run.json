@@ -1,7 +1,7 @@
 {
   "affected_clubs": [],
   "affected_owned": [],
-  "checked_at": "2026-11-26T20:17:42Z",
+  "checked_at": "2026-11-27T02:58:06Z",
   "claims": 0,
   "coverage": 0.45,
   "deadline": "2026-11-27T18:30:00Z",
@@ -2860,9 +2860,9 @@
       "status": "a"
     },
     "612": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Illness - 75% chance of playing",
+      "status": "d"
     },
     "613": {
       "chance": null,
@@ -3260,9 +3260,9 @@
       "status": "a"
     },
     "78": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Illness - 75% chance of playing",
+      "status": "d"
     },
     "79": {
       "chance": null,
@@ -3381,7 +3381,18 @@
     }
   },
   "official_fpl_ok": true,
-  "price_changed": [],
+  "price_changed": [
+    51,
+    106,
+    115,
+    334,
+    336,
+    366,
+    411,
+    496,
+    534,
+    552
+  ],
   "rebuild_required": true,
   "state_changed": false,
   "status": "red",
