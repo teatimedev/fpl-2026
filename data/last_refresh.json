@@ -1,11 +1,7 @@
 {
- "gw": 12,
+ "gw": 13,
  "done": [
-  "post-deadline",
-  "daily",
-  "graded",
-  "T-24h",
-  "manual-full"
+  "post-deadline"
  ],
- "at": "2026-11-27T17:26:03Z"
+ "at": "2026-11-27T22:27:38Z"
 }

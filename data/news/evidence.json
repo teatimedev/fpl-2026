@@ -2,16 +2,16 @@
   "claims": [
     {
       "availability_scope_verified": false,
-      "checked_at": "2026-11-27T17:04:51Z",
+      "checked_at": "2026-11-27T22:08:36Z",
       "claim_type": "late_test",
       "club": "LIV",
       "confidence": "review",
       "decision": "candidate",
       "excerpt": "Gravenberch last appeared at the end of October and remains a doubt for Sunday's Merseyside derby at Everton.",
       "extraction_version": "explicit-fixture-subject-v3",
-      "gw": 12,
-      "id": "ev-0f10e3d0e8cc0381",
-      "observed_at": "2026-11-27T17:04:51Z",
+      "gw": 13,
+      "id": "ev-22c53cbdda81aef5",
+      "observed_at": "2026-11-27T22:08:36Z",
       "player": "Ryan Gravenberch",
       "player_id": 371,
       "published_at": null,
@@ -23,16 +23,16 @@
     },
     {
       "availability_scope_verified": false,
-      "checked_at": "2026-11-27T17:04:51Z",
+      "checked_at": "2026-11-27T22:08:36Z",
       "claim_type": "available",
       "club": "MCI",
       "confidence": "review",
       "decision": "candidate",
       "excerpt": "Enzo Maresca says Antoine Semenyo is back in training at the City Football Academy and \u2018quite close\u2019 to a return to action.",
       "extraction_version": "explicit-fixture-subject-v3",
-      "gw": 12,
-      "id": "ev-f4074eb192194bd8",
-      "observed_at": "2026-11-27T17:04:51Z",
+      "gw": 13,
+      "id": "ev-57e7c828d6f19e07",
+      "observed_at": "2026-11-27T22:08:36Z",
       "player": "Antoine Semenyo",
       "player_id": 397,
       "published_at": "2026-11-27T13:30:00+00:00",
@@ -43,8 +43,8 @@
       "url": "https://www.mancity.com/news/mens/enzo-maresca-arsenal-manchester-city-press-conference-injury-news-63931375"
     }
   ],
-  "deadline": "2026-11-27T18:30:00Z",
-  "gw": 12,
+  "deadline": "2026-12-01T18:30:00Z",
+  "gw": 13,
   "policy": "explicit absences auto-apply; nuanced claims are review candidates",
   "version": 1
 }

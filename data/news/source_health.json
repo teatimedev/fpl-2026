@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-11-27T17:04:51Z",
+  "checked_at": "2026-11-27T22:08:36Z",
   "coverage": 0.45,
   "enabled": 20,
-  "gw": 12,
+  "gw": 13,
   "healthy": 9,
   "official_fpl_ok": true,
   "sources": [
@@ -28,24 +28,24 @@
       "article_errors": 0,
       "article_validators": {
         "https://www.avfc.co.uk/news/2026/november/26/prematch-ipswich-fpl-preview/": {
-          "etag": "W/\"V3Z5Tykg2k\"",
-          "last_modified": "Fri, 27 Nov 2026 17:04:54 GMT"
+          "etag": "W/\"bmmZyeTEz6\"",
+          "last_modified": "Fri, 27 Nov 2026 21:55:24 GMT"
         },
         "https://www.avfc.co.uk/news/2026/november/27/prematch-emery-previews-ipswich-encounter/": {
-          "etag": "W/\"fwbHxq9Y1y\"",
-          "last_modified": "Fri, 27 Nov 2026 17:04:48 GMT"
+          "etag": "W/\"NI5D3Wco8G\"",
+          "last_modified": "Fri, 27 Nov 2026 21:52:48 GMT"
         },
         "https://www.avfc.co.uk/news/2026/november/27/prematch-team-news-for-tractor-boys-test/": {
-          "etag": "W/\"smnjclWSdd\"",
-          "last_modified": "Fri, 27 Nov 2026 17:01:50 GMT"
+          "etag": "W/\"y697BnAMxu\"",
+          "last_modified": "Fri, 27 Nov 2026 22:04:16 GMT"
         }
       },
       "club": "AVL",
-      "content_hash": "98bd72119576a5078903fcbc3397ae54db5a6bcbc628a73d63ef2c78a0713d91",
+      "content_hash": "e51debdce97c42ed745495d6fe07b0993706c61bd3854a5673f1af8666dca9c0",
       "documents": 4,
-      "etag": "W/\"yVaHwPDWju\"",
+      "etag": "W/\"drLD4Fsukh\"",
       "id": "avl-news",
-      "last_modified": "Fri, 27 Nov 2026 17:04:52 GMT",
+      "last_modified": "Fri, 27 Nov 2026 22:07:53 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Aston Villa",
       "status": "ok",
@@ -92,7 +92,7 @@
       },
       "club": "BRE",
       "content_hash": "dffd640d7a294d3776602405808665ef475c468ff69d998ff06b2ae00c4d0c6d",
-      "documents": 6,
+      "documents": 5,
       "id": "bre-news",
       "last_modified": "Fri, 27 Nov 2026 17:04:51 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -103,12 +103,12 @@
     {
       "article_errors": 1,
       "article_validators": {
-        "https://www.chelseafc.com/en/news/article/xabi-alonso-confirms-chelsea-team-news-for-nottingham-forest": {}
+        "https://www.chelseafc.com/en/news/article/nottingham-forest-vs-chelsea-preview-tv-channel-kick-off-time-watch-26-27": {}
       },
       "club": "CHE",
       "content_hash": "b61979eb5d84aea6da30811bd26cc4492be453c08e8d767845d335a66edebdf9",
       "documents": 1,
-      "error": "HTTP Error 500: Internal Server Error",
+      "error": "all discovered team-news articles failed to load",
       "id": "che-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Chelsea",
@@ -137,7 +137,7 @@
       },
       "club": "CRY",
       "content_hash": "a67520675fe82481dd7229cd2f804622ddcee893921ba56fbd8fc5ed3e620a08",
-      "documents": 3,
+      "documents": 2,
       "etag": "\"17ev2lw1ffx8rj3\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -164,10 +164,10 @@
       "article_validators": {},
       "club": "FUL",
       "content_hash": "8408c6124d807047950e21e167dbc0c906db562bac8f712424e2d6e68d53383b",
-      "documents": 0,
-      "etag": "\"e68bc8a6349079ce6791ce123aae9ef7\"",
+      "documents": 1,
+      "etag": "\"696c54567737d5956feefa6626509858\"",
       "id": "ful-news",
-      "last_modified": "Fri, 27 Nov 2026 02:04:00 GMT",
+      "last_modified": "Fri, 27 Nov 2026 17:11:50 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Fulham",
       "status": "no_articles",
@@ -197,7 +197,7 @@
       },
       "club": "IPS",
       "content_hash": "4632caba48e4e43ac0c19997b633aad0c8a1f3d28f0ec3906940341f1c6b4851",
-      "documents": 2,
+      "documents": 0,
       "etag": "\"adb29c25bddf027d222bdfec99caedef\"",
       "id": "ips-news",
       "last_modified": "Fri, 27 Nov 2026 17:03:41 GMT",
@@ -209,14 +209,15 @@
     {
       "article_errors": 0,
       "article_validators": {
+        "https://www.leedsunited.com/en/news/good-business-for-leeds-lukas-nmecha-on-patience-fitness-and-his-time-at-elland-road": {},
         "https://www.leedsunited.com/en/news/leeds-united-vs-coventry-city-team-news-key-stats-and-everything-you-need-to-know": {},
         "https://www.leedsunited.com/en/news/we-are-good-in-our-dna-watch-daniels-pre-coventry-press-conference": {}
       },
       "club": "LEE",
-      "content_hash": "d606898c9f743dd1435a613d9d1a99ffc32966a0e2477762cfde1d884760ed3b",
-      "documents": 3,
+      "content_hash": "b66d58a73d67befb40855cea1ed21750f3845c5a3f92f48207ee421117a9ece1",
+      "documents": 4,
       "id": "lee-news",
-      "last_modified": "Fri, 27 Nov 2026 16:19:35 GMT",
+      "last_modified": "Fri, 27 Nov 2026 21:12:09 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -232,10 +233,10 @@
         "https://www.liverpoolfc.com/news/watch-andoni-iraola-press-conference-everton-liverpool": {}
       },
       "club": "LIV",
-      "content_hash": "023df2dd264ec4af4afcfb8cdc176666ec0554e67bd8965eaba0329d7d89e195",
+      "content_hash": "6a49ed8a6654deb7ab8538d64ac245196c400f1bfd43e1061aaaa32cfecf7ccf",
       "documents": 6,
       "id": "liv-news",
-      "last_modified": "Fri, 27 Nov 2026 17:03:27 GMT",
+      "last_modified": "Fri, 27 Nov 2026 19:12:01 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
       "status": "ok",
@@ -244,15 +245,15 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/citytv/mens/enzo-maresca-arsenal-press-conference-63931378": {},
-        "https://www.mancity.com/news/mens/arsenal-v-city-match-preview-pl-29-nov-63931129": {},
-        "https://www.mancity.com/news/mens/enzo-maresca-arsenal-manchester-city-manager-preview-63931387": {
-          "last_modified": "Fri, 27 Nov 2026 16:45:03 GMT"
+        "https://www.mancity.com/citytv/mens/enzo-maresca-arsenal-press-conference-63931378": {
+          "last_modified": "Fri, 27 Nov 2026 21:58:41 GMT"
         },
+        "https://www.mancity.com/news/mens/arsenal-v-city-match-preview-pl-29-nov-63931129": {},
+        "https://www.mancity.com/news/mens/enzo-maresca-arsenal-manchester-city-manager-preview-63931387": {},
         "https://www.mancity.com/news/mens/enzo-maresca-arsenal-manchester-city-press-conference-injury-news-63931375": {}
       },
       "club": "MCI",
-      "content_hash": "c3ef9790202a30b7eca0c94a66f544b6a889358e855820d5bdedde519645fc29",
+      "content_hash": "6f5fc164f2a4200f5643800625f1c6a7b7be0c169adfaaa7ef6c0e07acf9d4ae",
       "documents": 5,
       "id": "mci-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -288,7 +289,7 @@
         "https://www.newcastleunited.com/en/news/nuw-international-call-ups-november-2026": {}
       },
       "club": "NEW",
-      "content_hash": "473adde941ca469cdb0dfc686dd30136340484c1d23d90ea53b0468136bf70b1",
+      "content_hash": "5ca2f97825513c6f725eec95ff59062c8ef71a40ebe8e8755f3bd20f8cafd00d",
       "documents": 3,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
@@ -302,9 +303,9 @@
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
       "documents": 1,
-      "etag": "\"1cf7611d50b22a1b07de5354f1a67d14\"",
+      "etag": "\"79bed2c5364a3e2b4d827a56c0597deb\"",
       "id": "nfo-news",
-      "last_modified": "Fri, 27 Nov 2026 15:53:32 GMT",
+      "last_modified": "Fri, 27 Nov 2026 18:48:12 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
