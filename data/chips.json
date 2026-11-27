@@ -14,7 +14,7 @@
    "weeks": [
     [
      12,
-     5.1
+     5.7
     ],
     [
      13,
@@ -47,9 +47,9 @@
    ],
    "best_gw": 17,
    "best": 8.9,
-   "now": 5.1,
+   "now": 5.7,
    "play": false,
-   "advice": "Hold. Best-looking week for this one is GW17 (8.9 extra points); this week is 5.1. Second copy (GW20\u201338): best week GW34 (10.5).",
+   "advice": "Hold. Best-looking week for this one is GW17 (8.9 extra points); this week is 5.7. Second copy (GW20\u201338): best week GW34 (10.5).",
    "last_eligible": 19,
    "later": [
     {
@@ -179,7 +179,7 @@
    "weeks": [
     [
      12,
-     7.1
+     8.0
     ],
     [
      13,
@@ -187,7 +187,7 @@
     ],
     [
      14,
-     6.3
+     4.7
     ],
     [
      15,
@@ -199,11 +199,11 @@
     ],
     [
      17,
-     4.2
+     4.4
     ],
     [
      18,
-     2.8
+     2.9
     ],
     [
      19,
@@ -212,18 +212,18 @@
    ],
    "best_gw": 19,
    "best": 10.7,
-   "now": 7.1,
+   "now": 8.0,
    "play": false,
-   "advice": "Hold. Widest gap left is GW19 (10.7 behind the optimised one-week squad); this week 7.1.",
+   "advice": "Hold. Widest gap left is GW19 (10.7 behind the optimised one-week squad); this week 8.0.",
    "last_eligible": 19
   },
   "wildcard": {
    "name": "Wildcard",
-   "now": 10.1,
+   "now": 8.3,
    "gap_trend": [
     [
      12,
-     7.1
+     8.0
     ],
     [
      13,
@@ -231,7 +231,7 @@
     ],
     [
      14,
-     6.3
+     4.7
     ],
     [
      15,
@@ -243,11 +243,11 @@
     ],
     [
      17,
-     4.2
+     4.4
     ],
     [
      18,
-     2.8
+     2.9
     ],
     [
      19,
@@ -255,18 +255,18 @@
     ]
    ],
    "play": false,
-   "advice": "Hold. Unlimited transfers now are worth 10.1 over the window. The squad is decaying: gap to the optimised one-week squad 7.1 \u2192 10.7 by GW19.",
+   "advice": "Hold. Unlimited transfers now are worth 8.3 over the window. The squad is holding up (gap to the optimised one-week squad 8.0\u201310.7 over the next weeks).",
    "last_eligible": 19
   }
  },
  "gaps": {
-  "12": 7.1,
+  "12": 8.0,
   "13": 4.7,
-  "14": 6.3,
+  "14": 4.7,
   "15": 6.1,
   "16": 7.7,
-  "17": 4.2,
-  "18": 2.8,
+  "17": 4.4,
+  "18": 2.9,
   "19": 10.7
  },
  "method": "Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled."

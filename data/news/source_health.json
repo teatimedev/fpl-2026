@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-27T02:58:06Z",
+  "checked_at": "2026-11-27T17:04:51Z",
   "coverage": 0.45,
   "enabled": 20,
   "gw": 12,
@@ -16,27 +16,36 @@
       "club": "ARS",
       "content_hash": "3a63c00aa91f6a67be1459aa19d9728ec2c9798bacb903cabee804b03342cd0a",
       "documents": 2,
+      "error": "HTTP Error 503: Service Unavailable",
       "etag": "\"134rgw6h7o91ru3\"",
       "id": "ars-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Arsenal",
-      "status": "ok",
+      "status": "error",
       "url": "https://www.arsenal.com/news"
     },
     {
       "article_errors": 0,
       "article_validators": {
         "https://www.avfc.co.uk/news/2026/november/26/prematch-ipswich-fpl-preview/": {
-          "etag": "W/\"ylB4M9JVVs\"",
-          "last_modified": "Fri, 27 Nov 2026 02:58:08 GMT"
+          "etag": "W/\"V3Z5Tykg2k\"",
+          "last_modified": "Fri, 27 Nov 2026 17:04:54 GMT"
+        },
+        "https://www.avfc.co.uk/news/2026/november/27/prematch-emery-previews-ipswich-encounter/": {
+          "etag": "W/\"fwbHxq9Y1y\"",
+          "last_modified": "Fri, 27 Nov 2026 17:04:48 GMT"
+        },
+        "https://www.avfc.co.uk/news/2026/november/27/prematch-team-news-for-tractor-boys-test/": {
+          "etag": "W/\"smnjclWSdd\"",
+          "last_modified": "Fri, 27 Nov 2026 17:01:50 GMT"
         }
       },
       "club": "AVL",
-      "content_hash": "e6027dcc8c8212b16a4cff3758f285d51905b406a827fd3c5146d1fe70541a1d",
-      "documents": 2,
-      "etag": "W/\"xlBH6is5Hh\"",
+      "content_hash": "98bd72119576a5078903fcbc3397ae54db5a6bcbc628a73d63ef2c78a0713d91",
+      "documents": 4,
+      "etag": "W/\"yVaHwPDWju\"",
       "id": "avl-news",
-      "last_modified": "Fri, 27 Nov 2026 02:50:07 GMT",
+      "last_modified": "Fri, 27 Nov 2026 17:04:52 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Aston Villa",
       "status": "ok",
@@ -82,10 +91,10 @@
         "https://www.brentfordfc.com/en/news/first-team-news-brighton-v-brentford-premier-league-josh-dasilva": {}
       },
       "club": "BRE",
-      "content_hash": "719f9a3b9b66c5783bb50339b08322514c769ec47bacd469f84fe13432d3653a",
+      "content_hash": "dffd640d7a294d3776602405808665ef475c468ff69d998ff06b2ae00c4d0c6d",
       "documents": 6,
       "id": "bre-news",
-      "last_modified": "Thu, 26 Nov 2026 19:29:39 GMT",
+      "last_modified": "Fri, 27 Nov 2026 17:04:51 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Brentford",
       "status": "ok",
@@ -111,7 +120,7 @@
       "article_validators": {},
       "club": "COV",
       "content_hash": "8b41959fe8f62b1ed2790b3c87abcf6142b0c860ac6470ace1cb87e65cdc9366",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"336e9a616995adba80837a5e20f46c83\"",
       "id": "cov-news",
       "last_modified": "Fri, 27 Nov 2026 02:03:22 GMT",
@@ -123,14 +132,13 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.cpfc.co.uk/news/first-team/team-news-five-changes-for-real-sociedad-test/": {},
-        "https://www.cpfc.co.uk/news/match-previews/": {},
-        "https://www.cpfc.co.uk/news/match-previews/the-opposite-view-sociedad-centre-back-sarr-declares-must-win-game/": {}
+        "https://www.cpfc.co.uk/news/first-team/team-news-frank-provides-an-update-ahead-of-real-sociedad/": {},
+        "https://www.cpfc.co.uk/news/information/how-to-watch-our-pre-real-sociedad-press-conference-live-today/": {}
       },
       "club": "CRY",
-      "content_hash": "0e1a648a018f2ea6f963686a4682b6ff78725faf273517d850b907ed9d600083",
-      "documents": 4,
-      "etag": "\"1533vglog708q54\"",
+      "content_hash": "a67520675fe82481dd7229cd2f804622ddcee893921ba56fbd8fc5ed3e620a08",
+      "documents": 3,
+      "etag": "\"17ev2lw1ffx8rj3\"",
       "id": "cry-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Crystal Palace",
@@ -142,7 +150,7 @@
       "article_validators": {},
       "club": "EVE",
       "content_hash": "54e2021d53c5959c4e3dc30111359c37658673c2e65215e1aaabf24197933129",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"af4382a74f0a8b9b11f77e118f7b4960\"",
       "id": "eve-news",
       "last_modified": "Fri, 27 Nov 2026 02:03:19 GMT",
@@ -156,7 +164,7 @@
       "article_validators": {},
       "club": "FUL",
       "content_hash": "8408c6124d807047950e21e167dbc0c906db562bac8f712424e2d6e68d53383b",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"e68bc8a6349079ce6791ce123aae9ef7\"",
       "id": "ful-news",
       "last_modified": "Fri, 27 Nov 2026 02:04:00 GMT",
@@ -170,7 +178,7 @@
       "article_validators": {},
       "club": "HUL",
       "content_hash": "ae5dba8159856b9013af68f9132af53df5ab7c82a18dddd39bb9c0ef4a2b3379",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"3ddde36425d2c6d930cf0f2de90681f3\"",
       "id": "hul-news",
       "last_modified": "Fri, 27 Nov 2026 02:05:14 GMT",
@@ -181,28 +189,34 @@
     },
     {
       "article_errors": 0,
-      "article_validators": {},
+      "article_validators": {
+        "https://www.itfc.co.uk/news/2026/november/27/Leif-Davis-fitness-update-Ipswich-Town-Aston-Villa/": {
+          "etag": "\"7b1941a2d5783b8e39b51921c571b1b8\"",
+          "last_modified": "Fri, 27 Nov 2026 14:00:55 GMT"
+        }
+      },
       "club": "IPS",
-      "content_hash": "da2c9e1ea80fe2b711c0ce7418be21839af140cae3fb46ab8fa69a75c2b1ab78",
-      "documents": 1,
-      "etag": "\"116431410385234164522c1fb1c2ad90\"",
+      "content_hash": "4632caba48e4e43ac0c19997b633aad0c8a1f3d28f0ec3906940341f1c6b4851",
+      "documents": 2,
+      "etag": "\"adb29c25bddf027d222bdfec99caedef\"",
       "id": "ips-news",
-      "last_modified": "Fri, 27 Nov 2026 02:10:53 GMT",
+      "last_modified": "Fri, 27 Nov 2026 17:03:41 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Ipswich Town",
-      "status": "no_articles",
+      "status": "ok",
       "url": "https://www.itfc.co.uk/news/"
     },
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.leedsunited.com/en/news/the-latest-team-news-and-daniel-farkes-coventry-expectations": {}
+        "https://www.leedsunited.com/en/news/leeds-united-vs-coventry-city-team-news-key-stats-and-everything-you-need-to-know": {},
+        "https://www.leedsunited.com/en/news/we-are-good-in-our-dna-watch-daniels-pre-coventry-press-conference": {}
       },
       "club": "LEE",
-      "content_hash": "1c8109c62a18f9c87be60a3910dfa8765c1b8abb2d08a2df1d4ed699dea8f17d",
-      "documents": 2,
+      "content_hash": "d606898c9f743dd1435a613d9d1a99ffc32966a0e2477762cfde1d884760ed3b",
+      "documents": 3,
       "id": "lee-news",
-      "last_modified": "Fri, 27 Nov 2026 02:16:32 GMT",
+      "last_modified": "Fri, 27 Nov 2026 16:19:35 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Leeds United",
       "status": "ok",
@@ -211,14 +225,17 @@
     {
       "article_errors": 0,
       "article_validators": {
+        "https://www.liverpoolfc.com/news/andoni-iraola-merseyside-derby-everton-press-conference": {},
         "https://www.liverpoolfc.com/news/listing/mens-team-news": {},
+        "https://www.liverpoolfc.com/news/liverpools-injury-list-suspensions-and-availability": {},
+        "https://www.liverpoolfc.com/news/pre-everton-injury-update-victor-munoz-cody-gakpo-and-ryan-gravenberch": {},
         "https://www.liverpoolfc.com/news/watch-andoni-iraola-press-conference-everton-liverpool": {}
       },
       "club": "LIV",
-      "content_hash": "0bee379fc468dae4ae9b9fbeab0d8d9817f3b01ebf377a4079bac1f8104f301a",
-      "documents": 3,
+      "content_hash": "023df2dd264ec4af4afcfb8cdc176666ec0554e67bd8965eaba0329d7d89e195",
+      "documents": 6,
       "id": "liv-news",
-      "last_modified": "Thu, 26 Nov 2026 18:51:33 GMT",
+      "last_modified": "Fri, 27 Nov 2026 17:03:27 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Liverpool",
       "status": "ok",
@@ -227,11 +244,16 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.mancity.com/news/mens/arsenal-v-city-match-preview-pl-29-nov-63931129": {}
+        "https://www.mancity.com/citytv/mens/enzo-maresca-arsenal-press-conference-63931378": {},
+        "https://www.mancity.com/news/mens/arsenal-v-city-match-preview-pl-29-nov-63931129": {},
+        "https://www.mancity.com/news/mens/enzo-maresca-arsenal-manchester-city-manager-preview-63931387": {
+          "last_modified": "Fri, 27 Nov 2026 16:45:03 GMT"
+        },
+        "https://www.mancity.com/news/mens/enzo-maresca-arsenal-manchester-city-press-conference-injury-news-63931375": {}
       },
       "club": "MCI",
-      "content_hash": "d1c5b08ca18c726cc1ebc8ba6e5122891d6760b4ebbe76913f7133eb43bf3b5a",
-      "documents": 2,
+      "content_hash": "c3ef9790202a30b7eca0c94a66f544b6a889358e855820d5bdedde519645fc29",
+      "documents": 5,
       "id": "mci-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Manchester City",
@@ -262,11 +284,12 @@
     {
       "article_errors": 0,
       "article_validators": {
-        "https://www.newcastleunited.com/en/news/arsenal-h-team-news-26-27": {}
+        "https://www.newcastleunited.com/en/news/matthias-jaissles-team-news-update-livramento-on-his-way-back-ahead-of-brighton-battle": {},
+        "https://www.newcastleunited.com/en/news/nuw-international-call-ups-november-2026": {}
       },
       "club": "NEW",
-      "content_hash": "ef3bee49aff7f25e316288a0010bc533d5c463c391aa005343630b104b1c33f5",
-      "documents": 2,
+      "content_hash": "473adde941ca469cdb0dfc686dd30136340484c1d23d90ea53b0468136bf70b1",
+      "documents": 3,
       "id": "new-news",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Newcastle United",
@@ -279,9 +302,9 @@
       "club": "NFO",
       "content_hash": "7e8d3ccef16c588705fe6cd8ac05f4850fda11480d3be8f3046c35028994a835",
       "documents": 1,
-      "etag": "\"69112f03271e3c90a1e7b3bc480ff453\"",
+      "etag": "\"1cf7611d50b22a1b07de5354f1a67d14\"",
       "id": "nfo-news",
-      "last_modified": "Fri, 27 Nov 2026 02:03:39 GMT",
+      "last_modified": "Fri, 27 Nov 2026 15:53:32 GMT",
       "parser_version": "public-article-v2+explicit-fixture-subject-v3",
       "publisher": "Nottingham Forest",
       "status": "no_articles",
@@ -292,7 +315,7 @@
       "article_validators": {},
       "club": "SUN",
       "content_hash": "83ec15aaae3409e9a938b70f4d73928762d5e0ab7390b0daee6538811cc6d630",
-      "documents": 1,
+      "documents": 0,
       "etag": "\"9a0495835e659b6c6ed848ed919b503e\"",
       "id": "sun-news",
       "last_modified": "Fri, 27 Nov 2026 02:03:17 GMT",
