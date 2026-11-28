@@ -1,6 +1,6 @@
 # FPL weekly — Gameweek 13
 
-Deadline **Tue 01 Dec, 18:30 UTC** — 3d 20h away.
+Deadline **Tue 01 Dec, 18:30 UTC** — 3d 14h away.
 Projections cover GW13–18.
 
 ## Captain: **Palmer** (CHE)
@@ -63,7 +63,7 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 | Emersonn (IPS) | McBurnie (HUL) | +0.1 | +4.0 | -3.0 | **+1.0** | +1.0 |
 | O'Shea (IPS) | Mendy (HUL) | +0.1 | +0.0 | +0.9 | **+0.9** | +0.9 |
 
-**Recommended:** Raya→Petrović, Tarkowski→Silva, Gvardiol→Mendy, Emersonn→Isak this week (+1.0 versus holding/re-planning).
+**Recommended:** Thiaw→Konsa this week (+1.2 versus holding/re-planning).
 
 **Best two-move combinations** (net of any hit):
 
@@ -71,33 +71,33 @@ Gain is the lift to your expected starting XI and captain plus modelled auto-sub
 |---|---|---|---|---|---|---|
 | Tarkowski + Sadiki | De Cuyper + Gomez | -0.3 | +13.9 | -0.4 | +13.5 | **+13.5** |
 | Tarkowski + Sadiki | Konsa + Barnes | -0.1 | +12.7 | -0.6 | +12.1 | **+12.1** |
-| Tarkowski + Sadiki | Vuskovic + Ndiaye | +0.0 | +10.7 | +0.9 | +11.6 | **+11.6** |
 | Tarkowski + Sadiki | De Cuyper + Mac Allister | +0.0 | +11.4 | +0.1 | +11.4 | **+11.4** |
-| Tarkowski + Sadiki | Vuskovic + Gomez | -0.6 | +11.1 | +0.4 | +11.4 | **+11.4** |
+| Tarkowski + Sadiki | Vuskovic + Gomez | -0.5 | +11.1 | +0.4 | +11.4 | **+11.4** |
+| Tarkowski + Sadiki | Silva + Ndiaye | -0.2 | +10.7 | +0.6 | +11.3 | **+11.3** |
 
 
 ## The next six weeks, planned
 
 
-**GW13 simulation:** the selected GW13 squad beats holding in 60% of 4,000 simulations (average +2.6 points, net of hits). The advantage is both likely and large enough to clear the 0.0-point bar for 4 moves. This covers one gameweek; the transfer decision compares the full window.
-Selected path under the current policy: **398.7** pts (0 hits). Making no move this week and re-planning: 397.7. Selected path versus holding: **+1.0** across 4 moves.
+**GW13 simulation:** the selected GW13 squad beats holding in 58% of 4,000 simulations (average +0.0 points, net of hits). The proposed change does not have a reliable points edge this week. This covers one gameweek; the transfer decision compares the full window.
+Selected path under the current policy: **398.7** pts (0 hits). Making no move this week and re-planning: 397.5. Selected path versus holding: **+1.2**.
 
 | action tested now | window gain vs hold | policy buffer | clears buffer |
 |---|---|---|---|
-| Raya, Tarkowski, Emersonn, Gvardiol → Silva, Petrović, Mendy, Isak | +0.96 | 0.0 | yes |
-| Sadiki, Tarkowski → De Cuyper, Gomez | +0.80 | 0.0 | yes |
-| Tarkowski → De Cuyper | +0.64 | 0.0 | yes |
-| Gvardiol → De Cuyper | -0.10 | 0.0 | no |
-| Thiaw → Konsa | -0.47 | 0.0 | no |
-| Sadiki, Tarkowski → Konsa, Barnes | +0.92 | 0.0 | yes |
-| Raya, Tarkowski, Emersonn, Gvardiol → Silva, Petrović, Mendy, Isak | +0.74 | 0.0 | yes |
+| Raya, Tarkowski, Emersonn, Gvardiol → Silva, Petrović, Mendy, Isak | +1.16 | 0.0 | yes |
+| Sadiki, Tarkowski → De Cuyper, Gomez | +0.94 | 0.0 | yes |
+| Tarkowski → De Cuyper | +0.23 | 0.0 | yes |
+| Gvardiol → De Cuyper | -0.31 | 0.0 | no |
+| Thiaw → Konsa | +1.22 | 0.0 | yes |
+| Sadiki, Tarkowski → Konsa, Barnes | +1.11 | 0.0 | yes |
+| Raya, Tarkowski, Emersonn, Gvardiol → Silva, Petrović, Mendy, Isak | +1.16 | 0.0 | yes |
 
-- **GW13** 64.0 pts, C Palmer, 4 FT  Raya → Petrović, Tarkowski → Silva, Gvardiol → Mendy, Emersonn → Isak
-- **GW14** 66.7 pts, C Haaland, 1 FT  hold
-- **GW15** 65.2 pts, C Haaland, 2 FT  Thiaw → De Cuyper, Mbeumo → Ødegaard
-- **GW16** 72.7 pts, C Haaland, 1 FT  hold
-- **GW17** 64.9 pts, C Haaland, 2 FT  De Cuyper → Van den Berg, N.Jackson → Thiago
-- **GW18** 65.2 pts, C Palmer, 1 FT  Leno → Trafford
+- **GW13** 61.4 pts, C Palmer, 4 FT  Thiaw → Konsa
+- **GW14** 66.8 pts, C Haaland, 4 FT  Raya → Trafford, Tarkowski → Silva, Gvardiol → De Cuyper, Sadiki → Ødegaard
+- **GW15** 65.4 pts, C Haaland, 1 FT  hold
+- **GW16** 74.6 pts, C Haaland, 2 FT  Mbeumo → Gomez, N.Jackson → Isak
+- **GW17** 65.8 pts, C Haaland, 1 FT  Trafford → Pickford
+- **GW18** 64.7 pts, C Palmer, 1 FT  Pickford → Trafford
 
 _The multiweek planner uses a linear bench proxy and small fixture swings can cause churn; treat future moves as directional rather than scripted._
 
@@ -109,8 +109,8 @@ No double or blank gameweeks in the fixture list yet — they appear when cup ti
 |---|---|---|---|
 | Bench Boost | 5.9 | GW17: 8.8 | Hold. Best-looking week for this one is GW17 (8.8 extra points); this week is 5.9. Second copy (GW20–38): best week GW32 (10.5). |
 | Triple Captain | — | GW32: 8.8 (Haaland) | Hold. Best week for this one is GW32: Haaland (8.8 extra). |
-| Free Hit | 4.6 | GW19: 10.9 | Hold. Widest gap left is GW19 (10.9 behind the optimised one-week squad); this week 4.6. |
-| Wildcard | +6.4 over the window | — | Hold. Unlimited transfers now are worth 6.4 over the window. The squad is decaying: gap to the optimised one-week squad 4.6 → 10.9 by GW19. |
+| Free Hit | 4.7 | GW19: 10.7 | Hold. Widest gap left is GW19 (10.7 behind the optimised one-week squad); this week 4.7. |
+| Wildcard | +6.1 over the window | — | Hold. Unlimited transfers now are worth 6.1 over the window. The squad is decaying: gap to the optimised one-week squad 4.7 → 10.7 by GW19. |
 
 _Thresholds are heuristics: bench ≥ 12, captain extra ≥ 8, free-hit gap ≥ 12, wildcard ≥ 20 over the window, and "as good as any week left" means within 10%. The season outlook holds minutes constant, so weeks far out are fixture strength, not form._
 Incremental points relative to ordinary XI, captain fallback and autosubs. Free Hit uses a linear candidate search followed by full lineup scoring. Timing assumes the current squad and forecasts persist; future transfers and joint chip scheduling are not modelled.
@@ -121,19 +121,15 @@ Net transfer flow this gameweek; ownership pressure is shown only where its deno
 
 | rising | pressure | net | falling | pressure | net |
 |---|---|---|---|---|---|
-| Wirtz £7.5 | +1.1% | +20,359 | Palmer £9.8 ⭑ | -0.4% | -10,990 |
-| Gibbs-White £7.8 | +0.8% | +7,936 | Tarkowski £6.2 ⭑ | -0.5% | -8,264 |
-| Isak £9.4 | +0.1% | +4,811 | Rogers £8.3 | -0.1% | -5,678 |
-| Van Hecke £5.2 | +0.2% | +4,615 | João Pedro £7.6 | -0.2% | -4,755 |
-| Evanilson £6.6 | +0.1% | +3,496 | Raya £6.2 ⭑ | -0.1% | -4,072 |
-| Tavernier £6.8 ⭑ | +0.1% | +2,479 | Schade £6.1 | -0.3% | -3,788 |
+| Wirtz £7.6 | +1.9% | +37,750 | Palmer £9.7 ⭑ | -0.8% | -23,709 |
+| Gibbs-White £7.8 | +1.7% | +17,136 | Tarkowski £6.2 ⭑ | -0.8% | -13,234 |
+| Van Hecke £5.2 | +0.3% | +7,926 | Rogers £8.3 | -0.2% | -12,301 |
+| Isak £9.4 | +0.2% | +7,873 | João Pedro £7.5 | -0.3% | -8,044 |
+| Evanilson £6.6 | +0.2% | +5,682 | Schade £6.0 | -0.6% | -7,011 |
+| Tavernier £6.8 ⭑ | +0.1% | +4,349 | Raya £6.2 ⭑ | -0.1% | -6,038 |
 
 ⭑ = in your squad.
 
 ---
 
-_Generated 2026-11-27 22:26 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
-
-## Scouting
-
-6 sourced observations; 4 API calls. Review these alongside the transfer stress tests in the app.
+_Generated 2026-11-28 04:26 UTC. Forecasts and simulation probabilities are estimates. The historical rate benchmark does not validate the complete live decision system; use the archived deadline scorecard to track its forward results._
